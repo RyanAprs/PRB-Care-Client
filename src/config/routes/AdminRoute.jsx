@@ -1,14 +1,11 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginAdmin from "../../pages/admin/login/LoginAdmin";
 
 const AdminRoute = () => {
   return (
     <Router>
       <Routes>
-        <Route />
+        <Route path="/admin/login" element={<LoginAdmin />} />
       </Routes>
     </Router>
   );

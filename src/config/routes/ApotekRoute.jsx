@@ -1,16 +1,14 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginApotek from "../../pages/apotek/login/LoginApotek";
 
 const ApotekRoute = () => {
-return (
+  return (
     <Router>
       <Routes>
-        <Route />
+        <Route path="/apotek/login" element={<LoginApotek />  } />
       </Routes>
     </Router>
-  );};
+  );
+};
 
 export default ApotekRoute;
