@@ -1,3 +1,5 @@
+import React from "react";
+import DynamicAddress from "./components/dynamicAddress/DynamicAddress";
 import AdminRoute from "./config/routes/AdminRoute";
 import ApotekRoute from "./config/routes/ApotekRoute";
 import PuskesmasRoute from "./config/routes/PuskesmasRoute";
@@ -10,6 +12,7 @@ function App() {
       <PuskesmasRoute />
       <ApotekRoute />
       <UserRoute />
+      <DynamicAddress />
     </div>
   );
 }
