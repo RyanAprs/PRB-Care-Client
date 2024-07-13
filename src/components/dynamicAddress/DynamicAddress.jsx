@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from "react";
+import { Button, Select, SelectItem } from "@nextui-org/react";
+import React, { useState, useEffect, useContext } from "react";
+import { AddressContext } from "../../config/context/AdressContext";
 
 const DynamicAddress = () => {
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
-  const [selectedProvince, setSelectedProvince] = useState("");
-  const [selectedRegency, setSelectedRegency] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
+
+  const { address, setAddress } = useContext(AddressContext);
 
   useEffect(() => {
     fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
@@ -16,77 +17,117 @@ const DynamicAddress = () => {
   }, []);
 
   const handleProvinceChange = (e) => {
-    const provinceId = e.target.value;
-    setSelectedProvince(provinceId);
-    console.log(provinceId);
-    fetch(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinceId}.json`
-    )
-      .then((response) => response.json())
-      .then((data) => setRegencies(data));
+    const provinsiId = e.target.value;
+    const province = provinces.find((prov) => prov.id === provinsiId);
+    if (province) {
+      setAddress((prev) => ({
+        ...prev,
+        province: province.name,
+      }));
+      fetch(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province.id}.json`
+      )
+        .then((response) => response.json())
+        .then((data) => setRegencies(data));
+    }
   };
 
   const handleRegencyChange = (e) => {
-    const regencyId = e.target.value;
-    setSelectedRegency(regencyId);
-    fetch(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${regencyId}.json`
-    )
-      .then((response) => response.json())
-      .then((data) => setDistricts(data));
+    const kabupatenId = e.target.value;
+    const regency = regencies.find((reg) => reg.id === kabupatenId);
+    if (regency) {
+      setAddress((prev) => ({
+        ...prev,
+        regency: regency.name,
+      }));
+      fetch(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${regency.id}.json`
+      )
+        .then((response) => response.json())
+        .then((data) => setDistricts(data));
+    }
   };
 
   const handleDistrictChange = (e) => {
-    const districtId = e.target.value;
-    setSelectedDistrict(districtId);
-    fetch(
-      `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${districtId}.json`
-    )
-      .then((response) => response.json())
-      .then((data) => setVillages(data));
+    const kecamatanId = e.target.value;
+    const district = districts.find((dist) => dist.id === kecamatanId);
+    if (district) {
+      setAddress((prev) => ({
+        ...prev,
+        district: district.name,
+      }));
+      fetch(
+        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${district.id}.json`
+      )
+        .then((response) => response.json())
+        .then((data) => setVillages(data));
+    }
+  };
+
+  const handleVillageChange = (e) => {
+    const desaId = e.target.value;
+    const village = villages.find((village) => village.id === desaId);
+    if (village) {
+      setAddress((prev) => ({
+        ...prev,
+        village: village.name,
+      }));
+    }
   };
 
   return (
-    <div>
-      <label>Provinsi:</label>
-      <select onChange={handleProvinceChange} value={selectedProvince}>
-        <option value="">Pilih Provinsi</option>
+    <div className="h-auto w-full flex flex-wrap md:flex-nowrap p-8 gap-4 items-center justify-center">
+      <Select
+        className="w-full"
+        onChange={handleProvinceChange}
+        value={address.province?.id || ""}
+        label="Pilih Provinsi"
+      >
         {provinces.map((prov) => (
-          <option key={prov.id} value={prov.id}>
+          <SelectItem key={prov.id} value={prov.id}>
             {prov.name}
-          </option>
+          </SelectItem>
         ))}
-      </select>
+      </Select>
 
-      <label>Kabupaten/Kota:</label>
-      <select onChange={handleRegencyChange} value={selectedRegency}>
-        <option value="">Pilih Kabupaten/Kota</option>
+      <Select
+        onChange={handleRegencyChange}
+        value={address.regency?.id || ""}
+        label="Pilih Kabupaten"
+      >
         {regencies.map((reg) => (
-          <option key={reg.id} value={reg.id}>
+          <SelectItem key={reg.id} value={reg.id}>
             {reg.name}
-          </option>
+          </SelectItem>
         ))}
-      </select>
+      </Select>
 
-      <label>Kecamatan:</label>
-      <select onChange={handleDistrictChange} value={selectedDistrict}>
-        <option value="">Pilih Kecamatan</option>
+      <Select
+        onChange={handleDistrictChange}
+        value={address.district?.id || ""}
+        label="Pilih Kecamatan"
+      >
         {districts.map((dist) => (
-          <option key={dist.id} value={dist.id}>
+          <SelectItem key={dist.id} value={dist.id}>
             {dist.name}
-          </option>
+          </SelectItem>
         ))}
-      </select>
+      </Select>
 
-      <label>Desa/Kelurahan:</label>
-      <select>
-        <option value="">Pilih Desa/Kelurahan</option>
+      <Select
+        onChange={handleVillageChange}
+        value={address.village?.id || ""}
+        label="Pilih Desa"
+      >
         {villages.map((village) => (
-          <option key={village.id} value={village.id}>
+          <SelectItem key={village.id} value={village.id}>
             {village.name}
-          </option>
+          </SelectItem>
         ))}
-      </select>
+      </Select>
+      <Button onClick={() => console.log(address)} variant="bordered">
+        Submit
+      </Button>
     </div>
   );
 };
