@@ -8,7 +8,7 @@ const LoginUser = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <div className="flex w-full flex-col gap-6 md:w-1/2">
         <div className="flex flex-col w-full justify-center items-center">
-          <img className="h-48 w-48" src={logo} alt="" />
+          <img className="h-auto w-48" src={logo} alt="" />
         </div>
         <div className="flex flex-col w-full gap-4">
           <Input type="text" variant="bordered" label="Username" />
