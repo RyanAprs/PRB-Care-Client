@@ -4,6 +4,7 @@ import ApotekRoute from "./config/routes/ApotekRoute";
 import PuskesmasRoute from "./config/routes/PuskesmasRoute";
 import UserRoute from "./config/routes/UserRoute";
 import { AdminAuthContextProvider } from "./config/context/AdminAuthContext";
+import { PuskesmasAuthContextProvider } from "./config/context/PuskesmasAuthContext";
 
 function App() {
   return (
@@ -11,7 +12,11 @@ function App() {
       <AdminAuthContextProvider>
         <AdminRoute />
       </AdminAuthContextProvider>
-      <PuskesmasRoute />
+
+      <PuskesmasAuthContextProvider>
+        <PuskesmasRoute />
+      </PuskesmasAuthContextProvider>
+
       <ApotekRoute />
       <UserRoute />
     </div>

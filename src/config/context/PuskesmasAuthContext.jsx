@@ -1,7 +1,7 @@
 import { createContext, useEffect, useReducer } from "react";
 import Cookies from "js-cookie";
 
-export const AdminAuthContext = createContext();
+export const PuskesmasAuthContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
@@ -17,7 +17,7 @@ export const authReducer = (state, action) => {
   }
 };
 
-export const AdminAuthContextProvider = ({ children }) => {
+export const PuskesmasAuthContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
     token: null,
     role: null,
@@ -36,8 +36,8 @@ export const AdminAuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AdminAuthContext.Provider value={{ ...state, dispatch }}>
+    <PuskesmasAuthContext.Provider value={{ ...state, dispatch }}>
       {state.isLoading ? <div>Loading...</div> : children}
-    </AdminAuthContext.Provider>
+    </PuskesmasAuthContext.Provider>
   );
 };

@@ -5,13 +5,22 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
 import LoginAdmin from "../../pages/admin/login/LoginAdmin";
 import HomeAdmin from "../../pages/admin/home/HomeAdmin";
 import { AdminAuthContext } from "../context/AdminAuthContext";
 
+const PrivateRoute = ({ children, role }) => {
+  const { token, role: userRole } = useContext(AdminAuthContext);
+
+  if (!token || userRole !== role) {
+    return <Navigate to="/admin/login" />;
+  }
+
+  return children;
+};
+
 const AdminRoute = () => {
-  const { token, role, isLoading } = useContext(AdminAuthContext);
+  const { isLoading } = useContext(AdminAuthContext);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -21,15 +30,12 @@ const AdminRoute = () => {
     <Router>
       <Routes>
         <Route path="/admin/login" element={<LoginAdmin />} />
-
         <Route
           path="/admin/home"
           element={
-            token && role === "admin" ? (
+            <PrivateRoute role="admin">
               <HomeAdmin />
-            ) : (
-              <Navigate to="/admin/login" />
-            )
+            </PrivateRoute>
           }
         />
       </Routes>
