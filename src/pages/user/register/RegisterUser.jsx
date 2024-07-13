@@ -19,20 +19,20 @@ const RegisterUser = () => {
         <div className="flex flex-col w-full gap-4">
           <Button
             color="default"
-            className=" text-white bg-buttonCollor font-bold"
+            className=" text-white bg-buttonCollor "
             type="submit"
             radius="sm"
             size="lg"
           >
             Daftar
           </Button>
-          <div className="flex items-center justify-center font-bold text-sm text-darkColor">
+          <div className="flex items-center justify-center  text-sm text-darkColor">
             ATAU
           </div>
           <Link to="/user/login" className="w-full">
             <Button
               variant="bordered"
-              className=" text-buttonCollor font-bold w-full"
+              className=" text-buttonCollor w-full"
               radius="sm"
               size="lg"
             >

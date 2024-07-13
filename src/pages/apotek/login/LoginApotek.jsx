@@ -16,7 +16,7 @@ const LoginApotek = () => {
         <div className="flex flex-col w-full gap-4">
           <Button
             color="default"
-            className=" text-white bg-buttonCollor font-bold"
+            className=" text-white bg-buttonCollor"
             type="submit"
             radius="sm"
             size="lg"

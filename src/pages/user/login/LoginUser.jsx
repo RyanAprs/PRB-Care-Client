@@ -17,14 +17,14 @@ const LoginUser = () => {
         <div className="flex flex-col w-full gap-4">
           <Button
             color="default"
-            className=" text-white bg-buttonCollor font-bold"
+            className=" text-white bg-buttonCollor "
             type="submit"
             radius="sm"
             size="lg"
           >
             Masuk
           </Button>
-          <div className="flex items-center justify-center font-bold text-sm text-darkColor">
+          <div className="flex items-center justify-center text-sm text-darkColor">
             ATAU
           </div>
 
@@ -33,7 +33,7 @@ const LoginUser = () => {
               variant="bordered"
               radius="sm"
               size="lg"
-              className=" text-buttonCollor font-bold w-full"
+              className=" text-buttonCollor w-full"
             >
               Daftar
             </Button>
