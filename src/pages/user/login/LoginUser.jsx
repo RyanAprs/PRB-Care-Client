@@ -17,24 +17,27 @@ const LoginUser = () => {
         <div className="flex flex-col w-full gap-4">
           <Button
             color="default"
-            className=" text-white bg-black font-bold"
+            className=" text-white bg-buttonCollor font-bold"
             type="submit"
             radius="sm"
             size="lg"
           >
             Masuk
           </Button>
-          <div className="flex items-center justify-center font-bold text-sm">
+          <div className="flex items-center justify-center font-bold text-sm text-darkColor">
             ATAU
           </div>
-          <Button
-            variant="bordered"
-            radius="sm"
-            size="lg"
-            className=" text-black font-bold"
-          >
-            <Link to="/user/register">Daftar</Link>
-          </Button>
+
+          <Link to="/user/register" className=" w-full">
+            <Button
+              variant="bordered"
+              radius="sm"
+              size="lg"
+              className=" text-buttonCollor font-bold w-full"
+            >
+              Daftar
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
