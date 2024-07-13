@@ -22,7 +22,7 @@ const DynamicAddress = () => {
     if (province) {
       setAddress((prev) => ({
         ...prev,
-        province: province.name,
+        provinsi: province.name,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province.id}.json`
@@ -38,7 +38,7 @@ const DynamicAddress = () => {
     if (regency) {
       setAddress((prev) => ({
         ...prev,
-        regency: regency.name,
+        kabupaten: regency.name,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${regency.id}.json`
@@ -54,7 +54,7 @@ const DynamicAddress = () => {
     if (district) {
       setAddress((prev) => ({
         ...prev,
-        district: district.name,
+        kecamatan: district.name,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${district.id}.json`
@@ -70,7 +70,7 @@ const DynamicAddress = () => {
     if (village) {
       setAddress((prev) => ({
         ...prev,
-        village: village.name,
+        desa: village.name,
       }));
     }
   };

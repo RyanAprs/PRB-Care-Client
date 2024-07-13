@@ -4,10 +4,10 @@ export const AddressContext = createContext();
 
 export const AddressProvider = ({ children }) => {
   const [address, setAddress] = useState({
-    province: "",
-    regency: "",
-    district: "",
-    village: "",
+    provinsi: "",
+    kabupaten: "",
+    kecamatan: "",
+    desa: "",
   });
 
   return (
