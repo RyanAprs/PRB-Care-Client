@@ -17,14 +17,15 @@ export const usePuskesmasLogin = () => {
 
       if (response.status === 200) {
         const { token } = response.data;
-        const { role } = "nakes";
-        dispatch({ type: "LOGIN", payload: token, role });
+        const role = "nakes";
+
+        dispatch({ type: "LOGIN", payload: { token, role } });
         navigate("/puskesmas/home");
       } else {
         throw new Error("Failed to login. Please check your credentials.");
       }
     } catch (error) {
-      console.error("Admin login failed:", error);
+      console.error("Nakes login failed:", error);
       throw error;
     }
   };
