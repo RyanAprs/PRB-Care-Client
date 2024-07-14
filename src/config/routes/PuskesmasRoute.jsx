@@ -8,12 +8,17 @@ import {
 import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import HomePuskesmas from "../../pages/puskesmas/home/HomePuskesmas";
 import { PuskesmasAuthContext } from "../context/PuskesmasAuthContext";
+import NotFound from "../../pages/NotFound";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(PuskesmasAuthContext);
 
-  if (!token || userRole !== role) {
+  if (!token) {
     return <Navigate to="/puskesmas/login" />;
+  }
+
+  if (userRole !== role) {
+    return <Navigate to="/page/not-found" />;
   }
 
   return children;
@@ -32,6 +37,7 @@ const PuskesmasRoute = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
     </Router>
   );

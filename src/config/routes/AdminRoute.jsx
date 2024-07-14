@@ -8,12 +8,17 @@ import {
 import LoginAdmin from "../../pages/admin/login/LoginAdmin";
 import HomeAdmin from "../../pages/admin/home/HomeAdmin";
 import { AdminAuthContext } from "../context/AdminAuthContext";
+import NotFound from "../../pages/NotFound";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AdminAuthContext);
 
-  if (!token || userRole !== role) {
+  if (!token) {
     return <Navigate to="/admin/login" />;
+  }
+
+  if (userRole !== role) {
+    return <Navigate to="/page/not-found" />;
   }
 
   return children;
@@ -38,6 +43,7 @@ const AdminRoute = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
     </Router>
   );
