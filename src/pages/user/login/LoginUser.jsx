@@ -76,13 +76,13 @@ const LoginUser = () => {
             >
               {isLoading ? <Spinner color="default" size="md" /> : "Masuk"}
             </Button>
-            <div className="flex items-center justify-center  text-sm text-darkColor">
+            <div className="flex items-center justify-center  text-sm font-semibold text-darkColor">
               ATAU
             </div>
             <Link to="/user/register" className="w-full">
               <Button
                 variant="bordered"
-                className=" text-buttonCollor w-full"
+                className="text-buttonCollor w-full"
                 radius="sm"
                 size="lg"
               >

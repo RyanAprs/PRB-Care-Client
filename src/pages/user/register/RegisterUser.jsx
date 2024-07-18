@@ -136,6 +136,7 @@ const RegisterUser = () => {
           <h1 className="text-3xl font-bold">Daftar Pengguna</h1>
         </div>
         <div className="flex flex-col w-full gap-4">
+          Data Pengguna
           <Input
             type="text"
             variant="bordered"
@@ -147,7 +148,6 @@ const RegisterUser = () => {
           {error.namaLengkap && (
             <span className="text-red-500">{error.namaLengkap}</span>
           )}
-
           <Input
             type="text"
             variant="bordered"
@@ -159,7 +159,6 @@ const RegisterUser = () => {
           {error.telepon && (
             <span className="text-red-500">{error.telepon}</span>
           )}
-
           <Input
             type="text"
             variant="bordered"
@@ -171,7 +170,6 @@ const RegisterUser = () => {
           {error.teleponKeluarga && (
             <span className="text-red-500">{error.teleponKeluarga}</span>
           )}
-
           <Input
             type="text"
             variant="bordered"
@@ -183,7 +181,6 @@ const RegisterUser = () => {
           {error.username && (
             <span className="text-red-500">{error.username}</span>
           )}
-
           <Input
             type="password"
             variant="bordered"
@@ -195,7 +192,6 @@ const RegisterUser = () => {
           {error.password && (
             <span className="text-red-500">{error.password}</span>
           )}
-
           <Input
             type="password"
             variant="bordered"
@@ -207,7 +203,6 @@ const RegisterUser = () => {
           {error.confirmPassword && (
             <span className="text-red-500">{error.confirmPassword}</span>
           )}
-
           <DynamicAddress />
           {error.alamat && <p className="text-red-500">{error.alamat}</p>}
         </div>
@@ -223,13 +218,13 @@ const RegisterUser = () => {
           >
             {isLoading ? <Spinner color="default" size="md" /> : "Daftar"}
           </Button>
-          <div className="flex items-center justify-center text-sm text-darkColor">
+          <div className="flex items-center justify-center text-sm text-darkColor font-semibold">
             ATAU
           </div>
           <Link to="/user/login" className="w-full">
             <Button
               variant="bordered"
-              className="text-buttonColor w-full"
+              className="text-buttonCollor w-full"
               radius="sm"
               size="lg"
             >

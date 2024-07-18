@@ -45,7 +45,7 @@ const LoginApotek = () => {
       <div className="flex w-full flex-col gap-6 md:w-1/2">
         <div className="flex flex-col w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="PRB CARE Logo" />
-          <h1 className="text-3xl font-bold">APOTEK LOGIN</h1>
+          <h1 className="text-3xl font-bold">Masuk Apotek</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
           {error && <p className="text-red-500">{error}</p>}
