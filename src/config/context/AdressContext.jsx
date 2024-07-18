@@ -8,6 +8,7 @@ export const AddressProvider = ({ children }) => {
     kabupaten: "",
     kecamatan: "",
     desa: "",
+    detail: ""
   });
 
   return (

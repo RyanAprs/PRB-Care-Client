@@ -8,6 +8,7 @@ import { PuskesmasAuthContextProvider } from "./config/context/PuskesmasAuthCont
 import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "./firebase";
 import { ApotekAuthContextProvider } from "./config/context/ApotekAuthContext";
+import { UserAuthContextProvider } from "./config/context/UserAuthContext";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -81,7 +82,9 @@ function App() {
         <ApotekRoute />
       </ApotekAuthContextProvider>
 
-      <UserRoute />
+      <UserAuthContextProvider>
+        <UserRoute />
+      </UserAuthContextProvider>
 
       {/* <div className="p-48 w-full flex items-center justify-center">
         {token}
