@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
-import logo from "../../../assets/PRB-CARE-LOGO.png";
+// import logo from "../../../assets/PRB-CARE-LOGO.png";
+import logo from "../../../assets/PRB-CARE-ICON.png";
 import { UseAdminLogin } from "../../../config/hooks/UseAdminLogin";
 import { z } from "zod";
 
