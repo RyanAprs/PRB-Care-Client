@@ -58,6 +58,8 @@ module.exports = {
         buttonCollor: "#40916C",
         buttonCollor2: "#52b788",
         darkColor: "#081C15",
+        whiteHover: "#EEEEEE",
+        blackHover: "#231C28",
       },
       borderRadius: {
         lg: "var(--radius)",

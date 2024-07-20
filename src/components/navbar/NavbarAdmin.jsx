@@ -1,6 +1,7 @@
 import {
   AlignLeft,
   BarChart2Icon,
+  BarChart4Icon,
   Hospital,
   HousePlus,
   LogOut,
@@ -10,6 +11,7 @@ import {
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import icon from "../../assets/PRB-CARE-ICON.png";
+import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -50,9 +52,7 @@ const NavbarAdmin = ({ children }) => {
       {isSidebarOpen && (
         <div
           ref={overlayRef}
-          className={`fixed inset-0 ${
-            isSidebarOpen ? "bg-black bg-opacity-50" : "bg-transparent"
-          } md:bg-transparent md:bg-opacity-0 z-40`}
+          className="fixed inset-0 md:bg-transparent md:bg-opacity-0"
           onClick={toggleSidebar}
         ></div>
       )}
@@ -60,12 +60,12 @@ const NavbarAdmin = ({ children }) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={` fixed top-0 left-0 bg-buttonCollor p-4  flex-col transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-72"
-        } md:relative md:translate-x-0 md:w-72 z-50 gap-8 h-full overflow-y-auto`}
+        className={` fixed top-0 left-0 dark:bg-black bg-white dark:text-white text-black p-4  flex-col transition-transform duration-300 ease-in-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-96"
+        } md:relative md:translate-x-0 md:w-96 w-3/4 z-50 gap-8 h-full overflow-y-auto border-1 border-gray-300 dark:border-blackHover`}
       >
-        <div className="flex flex-col text-white h-full gap-8">
-          <div className="flex flex-col text-black font-bold text-lg mb-4  items-center justify-center">
+        <div className="flex flex-col  h-full gap-8">
+          <div className="flex flex-col  font-bold text-lg mb-4  items-center justify-center">
             <img src={icon} alt="LOGO PRB CARE" className="w-16 h-16" />
             <h1>PRB CARE</h1>
           </div>
@@ -73,20 +73,20 @@ const NavbarAdmin = ({ children }) => {
             <div className="flex flex-col h-full gap-2">
               <Link
                 to="/admin/dashboard"
-                className={`flex px-8 py-4 gap-4 hover:bg-buttonCollor2 ${
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/dashboard"
-                    ? "bg-buttonCollor2"
+                    ? "bg-gray-200 dark:bg-blackHover"
                     : ""
                 } rounded transition-all`}
               >
-                <BarChart2Icon />
+                <BarChart4Icon />
                 <h1>Dashboard</h1>
               </Link>
               <Link
                 to="/admin/data-puskesmas"
-                className={`flex px-8 py-4 gap-4 hover:bg-buttonCollor2 ${
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/data-puskesmas"
-                    ? "bg-buttonCollor2"
+                    ? "bg-gray-200 dark:bg-blackHover"
                     : ""
                 } rounded transition-all`}
               >
@@ -95,9 +95,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/apotek"
-                className={`flex px-8 py-4 gap-4 hover:bg-buttonCollor2 ${
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/data-apotek"
-                    ? "bg-buttonCollor2"
+                    ? "bg-gray-200 dark:bg-blackHover"
                     : ""
                 } rounded transition-all`}
               >
@@ -106,9 +106,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/pasien"
-                className={`flex px-8 py-4 gap-4 hover:bg-buttonCollor2 ${
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/data-pasien"
-                    ? "bg-buttonCollor2"
+                    ? "bg-gray-200 dark:bg-blackHover"
                     : ""
                 } rounded transition-all`}
               >
@@ -116,10 +116,11 @@ const NavbarAdmin = ({ children }) => {
                 <h1>Pasien</h1>
               </Link>
             </div>
+
             <div>
               <Link
                 to=""
-                className="flex px-8 py-4 gap-4 hover:bg-buttonCollor2 rounded transition-all"
+                className="flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover rounded transition-all"
               >
                 <LogOut />
                 <h1>Logout</h1>
@@ -131,27 +132,35 @@ const NavbarAdmin = ({ children }) => {
 
       <div className="flex flex-col w-full">
         {/* Navbar */}
-        <div className="h-20 w-full bg-white flex items-center px-8 justify-between fixed md:relative z-46 shadow-xl">
+        <div className="h-20 w-full  flex items-center px-8 justify-between fixed md:relative z-40 shadow-md dark:shadow-blackHover  dark:bg-black bg-white text-black dark:text-white">
           <div className="flex justify-center items-center gap-4">
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />
             </button>
-            <h1 className="text-black text-xl">
+            <h1 className=" text-xl md:block hidden">
               {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
               {location.pathname === "/admin/data-puskesmas" ? "Puskesmas" : ""}
               {location.pathname === "/admin/data-apotek" ? "Apotek" : ""}
               {location.pathname === "/admin/data-pasien" ? "Pasien" : ""}
             </h1>
           </div>
-          <div className="flex gap-4 justify-center items-center">
-            <p>Admin</p>
-            <Link to="" className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full">
-              <User />
-            </Link>
+          <div className="flex justify-between items-center">
+            <div>
+              <ThemeSwitcher />
+            </div>
+            <div className="flex gap-4 justify-center items-center">
+              <p className="md:block hidden">Admin</p>
+              <Link
+                to=""
+                className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full"
+              >
+                <User className="text-black" />
+              </Link>
+            </div>
           </div>
         </div>
         {/* Content */}
-        <div className="flex-grow bg-gray-200 mt-24 md:mt-0 h-full w-full overflow-y-auto">
+        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white md:pt-2 pt-20 h-full w-full overflow-y-auto z-10">
           {children}
         </div>
       </div>

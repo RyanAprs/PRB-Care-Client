@@ -4,35 +4,38 @@ import { Hospital, HousePlus, UserPlus } from "lucide-react";
 const DashboardAdmin = () => {
   const list = [
     {
-      icon: <Hospital size={54} color="black" />,
+      icon: <Hospital size={54} />,
       total: 10,
       title: "Puskesmas",
     },
     {
-      icon: <HousePlus size={54} color="black" />,
+      icon: <HousePlus size={54} />,
       total: 43,
       title: "Apotek",
     },
     {
-      icon: <UserPlus size={54} color="black" />,
+      icon: <UserPlus size={54} />,
       total: 157,
       title: "Pasien",
     },
   ];
 
   return (
-    <div className="flex flex-col p-8 gap-8">
-      <div className="text-3xl">
-        Halo, Selamat Datang Kembali!!
-      </div>
-      <div className="gap-4 grid grid-cols-1 sm:grid-cols-3">
+    <div className="flex flex-col p-8 gap-8 ">
+      <div className="text-3xl">Halo, Selamat Datang Kembali!!</div>
+      <div className="gap-4 grid grid-cols-1 sm:grid-cols-3 ">
         {list.map((item, index) => (
-          <Card shadow="sm" key={index} isPressable>
+          <Card
+            shadow="sm"
+            key={index}
+            isPressable
+            className="bg-white dark:bg-blackHover"
+          >
             <CardBody className=" overflow-visible p-16">
               <div className="flex gap-8 justify-center items-center">
                 <div>{item.icon}</div>
                 <div>
-                  <div className="text-3xl text-buttonCollor">{item.total}</div>
+                  <div className="text-3xl ">{item.total}</div>
                   <div>{item.title}</div>
                 </div>
               </div>
