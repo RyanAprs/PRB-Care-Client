@@ -16,7 +16,7 @@ const RegisterUser = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [telepon, setTelepon] = useState("");
   const [teleponKeluarga, setTeleponKeluarga] = useState("");
-  const [error, setError] = useState({});
+  const [error, setError] = useState("");
   const [isLoading, setLoading] = useState(false);
 
   const { address } = useContext(AddressContext);

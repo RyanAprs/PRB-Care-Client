@@ -9,32 +9,36 @@ import { z } from "zod";
 const LoginAdmin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
   const { adminLogin } = UseAdminLogin();
 
   const loginSchema = z.object({
-    username: z.string().min(1, "Username dan password tidak boleh kosong"),
-    password: z.string().min(1, ""),
+    username: z.string().min(1, "Username tidak boleh kosong"),
+    password: z.string().min(1, "Password tidak boleh kosong"),
   });
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
     setLoading(true);
 
     const result = loginSchema.safeParse({ username, password });
 
     if (!result.success) {
       setLoading(false);
-      setError(result.error.errors.map((err) => err.message).join(""));
+      const newErrors = {};
+      result.error.errors.forEach((err) => {
+        newErrors[err.path[0]] = err.message;
+      });
+      setErrors(newErrors);
       return;
     }
 
     try {
       await adminLogin(username, password);
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setErrors({ form: "Login failed. Please check your credentials." });
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -49,7 +53,7 @@ const LoginAdmin = () => {
           <h1 className="text-3xl font-bold">Masuk Admin</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
-          {error && <p className="text-red-500">{error}</p>}
+          {errors.form && <p className="text-red-500">{errors.form}</p>}
           <Input
             type="text"
             variant="bordered"
@@ -57,6 +61,9 @@ const LoginAdmin = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          {errors.username && (
+            <span className="text-red-500">{errors.username}</span>
+          )}
           <Input
             type="password"
             variant="bordered"
@@ -64,6 +71,9 @@ const LoginAdmin = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {errors.password && (
+            <span className="text-red-500">{errors.password}</span>
+          )}
           <Button
             color="default"
             className="text-white bg-buttonCollor "

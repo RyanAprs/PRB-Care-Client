@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
-import logo from "../../../assets/PRB-CARE-LOGO.png";
+// import logo from "../../../assets/PRB-CARE-LOGO.png";
 import icon from "../../../assets/PRB-CARE-ICON.png";
 import { z } from "zod";
 import { usePuskesmasLogin } from "../../../config/hooks/usePuskesmasLogin";
@@ -9,32 +9,36 @@ import { usePuskesmasLogin } from "../../../config/hooks/usePuskesmasLogin";
 const LoginPuskesmas = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
   const { puskesmasLogin } = usePuskesmasLogin();
 
   const loginSchema = z.object({
-    username: z.string().min(1, "Username dan password tidak boleh kosong"),
-    password: z.string().min(1, ""),
+    username: z.string().min(1, "Username tidak boleh kosong"),
+    password: z.string().min(1, "Password tidak boleh kosong"),
   });
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    setErrors({});
     setLoading(true);
 
     const result = loginSchema.safeParse({ username, password });
 
     if (!result.success) {
       setLoading(false);
-      setError(result.error.errors.map((err) => err.message).join(""));
+      const newErrors = {};
+      result.error.errors.forEach((err) => {
+        newErrors[err.path[0]] = err.message;
+      });
+      setErrors(newErrors);
       return;
     }
 
     try {
       await puskesmasLogin(username, password);
     } catch (error) {
-      setError("Login failed. Please check your credentials.");
+      setErrors({ form: "Login failed. Please check your credentials." });
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -49,7 +53,6 @@ const LoginPuskesmas = () => {
           <h1 className="text-3xl font-bold">Masuk Puskesmas</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
-          {error && <p className="text-red-500">{error}</p>}
           <Input
             type="text"
             variant="bordered"
@@ -57,6 +60,9 @@ const LoginPuskesmas = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+          {errors.username && (
+            <span className="text-red-500">{errors.username}</span>
+          )}
           <Input
             type="password"
             variant="bordered"
@@ -64,6 +70,9 @@ const LoginPuskesmas = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {errors.password && (
+            <span className="text-red-500">{errors.password}</span>
+          )}
           <Button
             color="default"
             className="text-white bg-buttonCollor "
