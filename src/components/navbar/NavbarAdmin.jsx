@@ -1,6 +1,7 @@
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlignLeft,
-  BarChart2Icon,
   BarChart4Icon,
   Hospital,
   HousePlus,
@@ -8,17 +9,31 @@ import {
   User,
   UserRoundPlus,
 } from "lucide-react";
-import React, { useState, useRef, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
 import icon from "../../assets/PRB-CARE-ICON.png";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+import Cookies from "js-cookie";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const overlayRef = useRef(null);
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isProfileOpen,
+    onOpen: onProfileOpen,
+    onOpenChange: onProfileOpenChange,
+  } = useDisclosure();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -46,6 +61,11 @@ const NavbarAdmin = ({ children }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isSidebarOpen]);
+
+  const handleLogout = () => {
+    Cookies.remove("auth");
+    navigate("/admin/login");
+  };
 
   return (
     <div className="flex h-screen">
@@ -120,6 +140,7 @@ const NavbarAdmin = ({ children }) => {
             <div>
               <Link
                 to=""
+                onClick={onOpen}
                 className="flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover rounded transition-all"
               >
                 <LogOut />
@@ -152,6 +173,7 @@ const NavbarAdmin = ({ children }) => {
               <p className="md:block hidden">Admin</p>
               <Link
                 to=""
+                onClick={onProfileOpen}
                 className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full"
               >
                 <User className="text-black" />
@@ -164,6 +186,93 @@ const NavbarAdmin = ({ children }) => {
           {children}
         </div>
       </div>
+
+      {/* Modal Logout*/}
+      <Modal
+        backdrop="opaque"
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        placement="center"
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Apakah anda yakin akan melakukan logout?
+              </ModalHeader>
+              <ModalFooter>
+                <Button color="default" variant="light" onPress={onClose}>
+                  Tidak
+                </Button>
+                <Button color="danger" onPress={onClose} onClick={handleLogout}>
+                  Ya
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
+      {/* Modal Profile*/}
+      <Modal
+        backdrop="opaque"
+        isOpen={isProfileOpen}
+        onOpenChange={onProfileOpenChange}
+        className="fixed top-0 right-0"
+        size="xs"
+        motionProps={{
+          variants: {
+            enter: {
+              y: 0,
+              opacity: 1,
+              transition: {
+                duration: 0.3,
+                ease: "easeOut",
+              },
+            },
+            exit: {
+              y: -20,
+              opacity: 0,
+              transition: {
+                duration: 0.2,
+                ease: "easeIn",
+              },
+            },
+          },
+        }}
+      >
+        <ModalContent>
+          <ModalHeader>
+            Admin
+          </ModalHeader>
+          <ModalBody>
+            <Link to="/admin/profile">
+                Profile
+            </Link>
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
