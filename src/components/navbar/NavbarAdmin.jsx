@@ -238,7 +238,7 @@ const NavbarAdmin = ({ children }) => {
         backdrop="opaque"
         isOpen={isProfileOpen}
         onOpenChange={onProfileOpenChange}
-        className="fixed top-0 right-0"
+        className="fixed md:top-0 top-16 md:right-0 right-4"
         size="xs"
         motionProps={{
           variants: {
@@ -262,15 +262,10 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <ModalContent>
-          <ModalHeader>
-            Admin
-          </ModalHeader>
+          <ModalHeader>Admin</ModalHeader>
           <ModalBody>
-            <Link to="/admin/profile">
-                Profile
-            </Link>
+            <Link to="/admin/profile">Profile</Link>
           </ModalBody>
-
         </ModalContent>
       </Modal>
     </div>
