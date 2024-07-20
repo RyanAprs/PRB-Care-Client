@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
+    "feather-icons-react": "^0.7.0",
     "firebase": "^10.12.3",
     "framer-motion": "^11.3.2",
     "http-proxy-middleware": "^3.0.0",

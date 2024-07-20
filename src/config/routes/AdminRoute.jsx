@@ -6,9 +6,11 @@ import {
   Navigate,
 } from "react-router-dom";
 import LoginAdmin from "../../pages/admin/login/LoginAdmin";
-import HomeAdmin from "../../pages/admin/home/HomeAdmin";
 import { AdminAuthContext } from "../context/AdminAuthContext";
 import NotFound from "../../pages/NotFound";
+import DashboardAdmin from "../../pages/admin/dashboard/DashboardAdmin";
+import NavbarAdmin from "../../components/navbar/NavbarAdmin";
+import DataPuskesmas from "../../pages/admin/dataPuskesmas/DataPuskesmas";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AdminAuthContext);
@@ -36,10 +38,22 @@ const AdminRoute = () => {
       <Routes>
         <Route path="/admin/login" element={<LoginAdmin />} />
         <Route
-          path="/admin/home"
+          path="/admin/dashboard"
           element={
             <PrivateRoute role="admin">
-              <HomeAdmin />
+              <NavbarAdmin>
+                <DashboardAdmin />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/data-puskesmas"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataPuskesmas />
+              </NavbarAdmin>
             </PrivateRoute>
           }
         />

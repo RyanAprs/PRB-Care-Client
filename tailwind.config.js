@@ -56,6 +56,7 @@ module.exports = {
 
         // CUSTOM COLOR
         buttonCollor: "#40916C",
+        buttonCollor2: "#52b788",
         darkColor: "#081C15",
       },
       borderRadius: {

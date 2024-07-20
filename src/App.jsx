@@ -69,7 +69,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-center font-poppins">
+    <div className="font-poppins">
       <AdminAuthContextProvider>
         <AdminRoute />
       </AdminAuthContextProvider>

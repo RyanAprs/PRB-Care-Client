@@ -20,7 +20,7 @@ export const UseAdminLogin = () => {
         const role = "admin";
 
         dispatch({ type: "LOGIN", payload: { token, role } });
-        navigate("/admin/home");
+        navigate("/admin/dashboard");
       } else {
         throw new Error("Failed to login. Please check your credentials.");
       }
