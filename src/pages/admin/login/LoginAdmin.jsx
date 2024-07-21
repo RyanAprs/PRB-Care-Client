@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
-// import logo from "../../../assets/PRB-CARE-LOGO.png";
-import logo from "../../../assets/PRB-CARE-ICON.png";
+import icon from "../../../assets/prbcare.svg";
 import { UseAdminLogin } from "../../../config/hooks/UseAdminLogin";
 import { z } from "zod";
 
@@ -49,7 +48,7 @@ const LoginAdmin = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <div className="flex w-full flex-col gap-6 md:w-1/2">
         <div className="flex flex-col w-full justify-center items-center">
-          <img className="h-auto w-48" src={logo} alt="PRB CARE Logo" />
+          <img className="h-auto w-48" src={icon} alt="PRB CARE Logo" />
           <h1 className="text-3xl font-bold">Masuk Admin</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4 ">

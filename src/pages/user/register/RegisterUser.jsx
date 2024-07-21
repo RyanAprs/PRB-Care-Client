@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Input, Button, Spinner } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
-import icon from "../../../assets/PRB-CARE-ICON.png";
+import icon from "../../../assets/prbcare.svg";
 import { z } from "zod";
 import DynamicAddress, {
   validateAddress,
