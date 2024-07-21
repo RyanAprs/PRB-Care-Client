@@ -9,7 +9,7 @@ import {
   User,
   UserRoundPlus,
 } from "lucide-react";
-import icon from "../../assets/PRB-CARE-ICON.png";
+import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import {
   Button,
@@ -86,7 +86,7 @@ const NavbarAdmin = ({ children }) => {
       >
         <div className="flex flex-col  h-full gap-8">
           <div className="flex flex-col  font-bold text-lg mb-4  items-center justify-center">
-            <img src={icon} alt="LOGO PRB CARE" className="w-16 h-16" />
+            <img src={icon} alt="LOGO PRB CARE" className="w-auto h-20" />
             <h1>PRB CARE</h1>
           </div>
           <div className="flex flex-col h-full justify-around ">
@@ -114,7 +114,7 @@ const NavbarAdmin = ({ children }) => {
                 <h1>Puskesmas</h1>
               </Link>
               <Link
-                to="/admin/apotek"
+                to="/admin/data-apotek"
                 className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/data-apotek"
                     ? "bg-gray-200 dark:bg-blackHover"
@@ -125,7 +125,7 @@ const NavbarAdmin = ({ children }) => {
                 <h1>Apotek</h1>
               </Link>
               <Link
-                to="/admin/pasien"
+                to="/admin/data-pasien"
                 className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
                   location.pathname === "/admin/data-pasien"
                     ? "bg-gray-200 dark:bg-blackHover"
@@ -134,6 +134,17 @@ const NavbarAdmin = ({ children }) => {
               >
                 <UserRoundPlus />
                 <h1>Pasien</h1>
+              </Link>
+              <Link
+                to="/admin/data-user"
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                  location.pathname === "/admin/data-user"
+                    ? "bg-gray-200 dark:bg-blackHover"
+                    : ""
+                } rounded transition-all`}
+              >
+                <User />
+                <h1>User</h1>
               </Link>
             </div>
 
@@ -160,9 +171,10 @@ const NavbarAdmin = ({ children }) => {
             </button>
             <h1 className=" text-xl md:block hidden">
               {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
-              {location.pathname === "/admin/data-puskesmas" ? "Puskesmas" : ""}
-              {location.pathname === "/admin/data-apotek" ? "Apotek" : ""}
-              {location.pathname === "/admin/data-pasien" ? "Pasien" : ""}
+              {location.pathname === "/admin/data-puskesmas" ? "Data Puskesmas" : ""}
+              {location.pathname === "/admin/data-apotek" ? "Data Apotek" : ""}
+              {location.pathname === "/admin/data-pasien" ? "Data Pasien" : ""}
+              {location.pathname === "/admin/data-user" ? "Data User" : ""}
             </h1>
           </div>
           <div className="flex justify-between items-center">

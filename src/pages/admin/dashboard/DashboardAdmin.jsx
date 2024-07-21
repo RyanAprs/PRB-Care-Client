@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@nextui-org/react";
-import { Hospital, HousePlus, UserPlus } from "lucide-react";
+import { Hospital, HousePlus, User2Icon, UserPlus } from "lucide-react";
 
 const DashboardAdmin = () => {
   const list = [
@@ -17,6 +17,11 @@ const DashboardAdmin = () => {
       icon: <UserPlus size={54} />,
       total: 157,
       title: "Pasien",
+    },
+    {
+      icon: <User2Icon size={54} />,
+      total: 200,
+      title: "User",
     },
   ];
 
