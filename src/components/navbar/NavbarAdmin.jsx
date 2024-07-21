@@ -63,7 +63,8 @@ const NavbarAdmin = ({ children }) => {
   }, [isSidebarOpen]);
 
   const handleLogout = () => {
-    Cookies.remove("auth");
+    Cookies.remove("token");
+    Cookies.remove("role");
     navigate("/admin/login");
   };
 
@@ -171,7 +172,9 @@ const NavbarAdmin = ({ children }) => {
             </button>
             <h1 className=" text-xl md:block hidden">
               {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
-              {location.pathname === "/admin/data-puskesmas" ? "Data Puskesmas" : ""}
+              {location.pathname === "/admin/data-puskesmas"
+                ? "Data Puskesmas"
+                : ""}
               {location.pathname === "/admin/data-apotek" ? "Data Apotek" : ""}
               {location.pathname === "/admin/data-pasien" ? "Data Pasien" : ""}
               {location.pathname === "/admin/data-user" ? "Data User" : ""}

@@ -1,47 +1,55 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
 import icon from "../../../assets/prbcare.svg";
-import { z } from "zod";
-import { useUserLogin } from "../../../config/hooks/useUserLogin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserAuthContext } from "../../../config/context/UserAuthContext";
 
 const LoginUser = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
-  const { userLogin } = useUserLogin();
-
-  const loginSchema = z.object({
-    username: z.string().min(1, "Username tidak boleh kosong"),
-    password: z.string().min(1, "Password tidak boleh kosong"),
-  });
+  const { dispatch } = useContext(UserAuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
 
-    const result = loginSchema.safeParse({ username, password });
-
-    if (!result.success) {
+    if (!username && !password) {
+      setErrors({ form: "Username dan password tidak boleh kosong" });
       setLoading(false);
-      const newErrors = {};
-      result.error.errors.forEach((err) => {
-        newErrors[err.path[0]] = err.message;
-      });
-      setErrors(newErrors);
-      return;
-    }
+    } else {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URI}/api/pengguna/login`,
+          { username, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    try {
-      await userLogin(username, password);
-    } catch (error) {
-      setErrors("Login failed. Please check your credentials.");
-      console.error("Login error:", error);
-    } finally {
-      setLoading(false);
+        if (response.status === 200) {
+          navigate("/user/home");
+          dispatch({
+            type: "LOGIN",
+            payload: { token: response.data.token, role: "user" },
+          });
+        } else if (response.status === 401) {
+          setErrors({ form: "Username atau password salah." });
+        } else if (response.status === 400) {
+          setErrors({ form: "Username atau password salah." });
+        }
+      } catch (error) {
+        setErrors({ form: "Username atau password salah." });
+      } finally {
+        setLoading(false);
+      }
     }
   };
   return (
@@ -52,6 +60,9 @@ const LoginUser = () => {
           <h1 className="text-3xl font-bold">Masuk Pengguna</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
+          {errors.form && (
+            <span className="text-red-500">{errors.form}</span>
+          )}
           <Input
             type="text"
             variant="bordered"
@@ -59,9 +70,6 @@ const LoginUser = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {errors.username && (
-            <span className="text-red-500">{errors.username}</span>
-          )}
           <Input
             type="password"
             variant="bordered"
@@ -69,9 +77,6 @@ const LoginUser = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && (
-            <span className="text-red-500">{errors.password}</span>
-          )}
 
           <div className="flex flex-col w-full gap-4">
             <Button

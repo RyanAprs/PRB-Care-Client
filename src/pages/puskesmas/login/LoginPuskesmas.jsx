@@ -1,46 +1,55 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
 import icon from "../../../assets/prbcare.svg";
-import { z } from "zod";
-import { usePuskesmasLogin } from "../../../config/hooks/usePuskesmasLogin";
+import axios from "axios";
+import { PuskesmasAuthContext } from "../../../config/context/PuskesmasAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginPuskesmas = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
-  const { puskesmasLogin } = usePuskesmasLogin();
-
-  const loginSchema = z.object({
-    username: z.string().min(1, "Username tidak boleh kosong"),
-    password: z.string().min(1, "Password tidak boleh kosong"),
-  });
+  const { dispatch } = useContext(PuskesmasAuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
 
-    const result = loginSchema.safeParse({ username, password });
-
-    if (!result.success) {
+    if (!username && !password) {
+      setErrors({ form: "Username dan password tidak boleh kosong" });
       setLoading(false);
-      const newErrors = {};
-      result.error.errors.forEach((err) => {
-        newErrors[err.path[0]] = err.message;
-      });
-      setErrors(newErrors);
-      return;
-    }
+    } else {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas/login`,
+          { username, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    try {
-      await puskesmasLogin(username, password);
-    } catch (error) {
-      setErrors({ form: "Login failed. Please check your credentials." });
-      console.error("Login error:", error);
-    } finally {
-      setLoading(false);
+        if (response.status === 200) {
+          navigate("/puskesmas/home");
+          dispatch({
+            type: "LOGIN",
+            payload: { token: response.data.token, role: "nakes" },
+          });
+        } else if (response.status === 401) {
+          setErrors({ form: "Username atau password salah." });
+        } else if (response.status === 400) {
+          setErrors({ form: "Username atau password salah." });
+        }
+      } catch (error) {
+        setErrors({ form: "Username atau password salah." });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -52,6 +61,7 @@ const LoginPuskesmas = () => {
           <h1 className="text-3xl font-bold">Masuk Puskesmas</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
+          {errors.form && <span className="text-red-500">{errors.form}</span>}
           <Input
             type="text"
             variant="bordered"
@@ -59,9 +69,7 @@ const LoginPuskesmas = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {errors.username && (
-            <span className="text-red-500">{errors.username}</span>
-          )}
+
           <Input
             type="password"
             variant="bordered"
@@ -69,9 +77,7 @@ const LoginPuskesmas = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && (
-            <span className="text-red-500">{errors.password}</span>
-          )}
+
           <Button
             color="default"
             className="text-white bg-buttonCollor "

@@ -1,46 +1,55 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input } from "@nextui-org/input";
 import { Button, Spinner } from "@nextui-org/react";
 import icon from "../../../assets/prbcare.svg";
-import { UseAdminLogin } from "../../../config/hooks/UseAdminLogin";
-import { z } from "zod";
+import axios from "axios";
+import { AdminAuthContext } from "../../../config/context/AdminAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const LoginAdmin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
-  const { adminLogin } = UseAdminLogin();
-
-  const loginSchema = z.object({
-    username: z.string().min(1, "Username tidak boleh kosong"),
-    password: z.string().min(1, "Password tidak boleh kosong"),
-  });
+  const { dispatch } = useContext(AdminAuthContext);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
 
-    const result = loginSchema.safeParse({ username, password });
-
-    if (!result.success) {
+    if (!username && !password) {
+      setErrors({ form: "Username dan password tidak boleh kosong" });
       setLoading(false);
-      const newErrors = {};
-      result.error.errors.forEach((err) => {
-        newErrors[err.path[0]] = err.message;
-      });
-      setErrors(newErrors);
-      return;
-    }
+    } else {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URI}/api/admin-super/login`,
+          { username, password },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-    try {
-      await adminLogin(username, password);
-    } catch (error) {
-      setErrors({ form: "Login failed. Please check your credentials." });
-      console.error("Login error:", error);
-    } finally {
-      setLoading(false);
+        if (response.status === 200) {
+          navigate("/admin/dashboard");
+          dispatch({
+            type: "LOGIN",
+            payload: { token: response.data.token, role: "admin" },
+          });
+        } else if (response.status === 401) {
+          setErrors({ form: "Username atau password salah." });
+        } else if (response.status === 400) {
+          setErrors({ form: "Username atau password salah." });
+        }
+      } catch (error) {
+        setErrors({ form: "Username atau password salah." });
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -52,6 +61,7 @@ const LoginAdmin = () => {
           <h1 className="text-3xl font-bold">Masuk Admin</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col w-full gap-4 ">
+          {errors.form && <span className="text-red-500">{errors.form}</span>}
           <Input
             type="text"
             variant="bordered"
