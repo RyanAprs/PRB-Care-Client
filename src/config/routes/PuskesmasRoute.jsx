@@ -9,6 +9,7 @@ import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import HomePuskesmas from "../../pages/puskesmas/home/HomePuskesmas";
 import { PuskesmasAuthContext } from "../context/PuskesmasAuthContext";
 import NotFound from "../../pages/NotFound";
+import useDarkMode from "use-dark-mode";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(PuskesmasAuthContext);
@@ -25,20 +26,25 @@ const PrivateRoute = ({ children, role }) => {
 };
 
 const PuskesmasRoute = () => {
+  const darkMode = useDarkMode(false);
   return (
     <Router>
       <Routes>
         <Route path="/puskesmas/login" element={<LoginPuskesmas />} />
-        <Route
-          path="/puskesmas/home"
-          element={
-            <PrivateRoute role="nakes">
-              <HomePuskesmas />
-            </PrivateRoute>
-          }
-        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
+      <div className={`${darkMode.value ? "dark" : ""}`}>
+        <Routes>
+          <Route
+            path="/puskesmas/home"
+            element={
+              <PrivateRoute role="nakes">
+                <HomePuskesmas />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
     </Router>
   );
 };

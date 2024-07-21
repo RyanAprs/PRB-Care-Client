@@ -9,6 +9,7 @@ import NotFound from "../../pages/NotFound";
 import { ApotekAuthContext } from "../context/ApotekAuthContext";
 import LoginApotek from "../../pages/apotek/login/LoginApotek";
 import HomeApotek from "../../pages/apotek/home/HomeApotek";
+import useDarkMode from "use-dark-mode";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(ApotekAuthContext);
@@ -25,6 +26,7 @@ const PrivateRoute = ({ children, role }) => {
 };
 
 const ApotekRoute = () => {
+  const darkMode = useDarkMode(false);
   const { isLoading } = useContext(ApotekAuthContext);
 
   if (isLoading) {
@@ -35,16 +37,20 @@ const ApotekRoute = () => {
     <Router>
       <Routes>
         <Route path="/apotek/login" element={<LoginApotek />} />
-        <Route
-          path="/apotek/home"
-          element={
-            <PrivateRoute role="apoteker">
-              <HomeApotek />
-            </PrivateRoute>
-          }
-        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
+      <div className={`${darkMode.value ? "dark" : ""}`}>
+        <Routes>
+          <Route
+            path="/apotek/home"
+            element={
+              <PrivateRoute role="apoteker">
+                <HomeApotek />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
     </Router>
   );
 };

@@ -52,8 +52,7 @@ const LoginAdmin = () => {
           <img className="h-auto w-48" src={logo} alt="PRB CARE Logo" />
           <h1 className="text-3xl font-bold">Masuk Admin</h1>
         </div>
-        <form onSubmit={handleLogin} className="flex flex-col w-full gap-4">
-          {errors.form && <p className="text-red-500">{errors.form}</p>}
+        <form onSubmit={handleLogin} className="flex flex-col w-full gap-4 ">
           <Input
             type="text"
             variant="bordered"

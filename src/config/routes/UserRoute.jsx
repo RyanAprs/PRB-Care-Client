@@ -10,6 +10,7 @@ import { UserAuthContext } from "../context/UserAuthContext";
 import LoginUser from "../../pages/user/login/LoginUser";
 import RegisterUser from "../../pages/user/register/RegisterUser";
 import HomeUser from "../../pages/user/home/HomeUser";
+import useDarkMode from "use-dark-mode";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(UserAuthContext);
@@ -26,21 +27,26 @@ const PrivateRoute = ({ children, role }) => {
 };
 
 const UserRoute = () => {
+  const darkMode = useDarkMode(false);
   return (
     <Router>
       <Routes>
         <Route path="/user/register" element={<RegisterUser />} />
         <Route path="/user/login" element={<LoginUser />} />
-        <Route
-          path="/user/home"
-          element={
-            <PrivateRoute role="user">
-              <HomeUser />
-            </PrivateRoute>
-          }
-        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
+      <div className={`${darkMode.value ? "dark" : ""}`}>
+        <Routes>
+          <Route
+            path="/user/home"
+            element={
+              <PrivateRoute role="user">
+                <HomeUser />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </div>
     </Router>
   );
 };

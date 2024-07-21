@@ -9,7 +9,6 @@ import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "./firebase";
 import { ApotekAuthContextProvider } from "./config/context/ApotekAuthContext";
 import { UserAuthContextProvider } from "./config/context/UserAuthContext";
-import useDarkMode from "use-dark-mode";
 
 window.global = window;
 
@@ -31,7 +30,6 @@ if ("serviceWorker" in navigator) {
 
 function App() {
   const [token, setToken] = useState();
-  const darkMode = useDarkMode(false);
 
   useEffect(() => {
     const requestPermission = async () => {
@@ -73,7 +71,7 @@ function App() {
   }, []);
 
   return (
-    <div className={`font-poppins ${darkMode.value ? "dark" : ""}`}>
+    <div className="font-poppins">
       <AdminAuthContextProvider>
         <AdminRoute />
       </AdminAuthContextProvider>
