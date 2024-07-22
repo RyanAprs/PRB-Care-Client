@@ -6,6 +6,9 @@ import {
   Hospital,
   HousePlus,
   LogOut,
+  Pill,
+  ShoppingCart,
+  Stethoscope,
   User,
   UserRoundPlus,
 } from "lucide-react";
@@ -146,6 +149,39 @@ const NavbarAdmin = ({ children }) => {
               >
                 <User />
                 <h1>User</h1>
+              </Link>
+              <Link
+                to="/admin/data-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                  location.pathname === "/admin/data-obat"
+                    ? "bg-gray-200 dark:bg-blackHover"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Pill />
+                <h1>Obat</h1>
+              </Link>
+              <Link
+                to="/admin/data-kontrol-balik"
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                  location.pathname === "/admin/data-obat"
+                    ? "bg-gray-200 dark:bg-blackHover"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Stethoscope />
+                <h1>Kontrol Balik</h1>
+              </Link>
+              <Link
+                to="/admin/data-pengambilan-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                  location.pathname === "/admin/data-obat"
+                    ? "bg-gray-200 dark:bg-blackHover"
+                    : ""
+                } rounded transition-all`}
+              >
+                <ShoppingCart />
+                <h1>Pengambilan Obat</h1>
               </Link>
             </div>
 
