@@ -109,7 +109,6 @@ const DynamicAddress = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <h1>Alamat KTP</h1>
       <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
         <Select
           className="w-full"

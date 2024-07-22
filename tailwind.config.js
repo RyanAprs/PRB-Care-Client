@@ -55,8 +55,9 @@ module.exports = {
         },
 
         // CUSTOM COLOR
-        buttonCollor: "#40916C",
-        buttonCollor2: "#52b788",
+        darkGreen: "#0E6251",
+        mainGreen: "#40916C",
+        lightGreen: "#52b788",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
         blackHover: "#231C28",

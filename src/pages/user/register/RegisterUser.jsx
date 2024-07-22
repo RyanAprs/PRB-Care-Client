@@ -210,7 +210,7 @@ const RegisterUser = () => {
           <Button
             onClick={handleRegister}
             color="default"
-            className="text-white bg-buttonCollor "
+            className="text-white bg-mainGreen "
             type="submit"
             radius="sm"
             size="lg"
@@ -224,7 +224,7 @@ const RegisterUser = () => {
           <Link to="/user/login" className="w-full">
             <Button
               variant="bordered"
-              className="text-buttonCollor w-full"
+              className="text-mainGrebg-mainGreen w-full"
               radius="sm"
               size="lg"
             >

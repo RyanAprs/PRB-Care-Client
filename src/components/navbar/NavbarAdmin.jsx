@@ -84,12 +84,12 @@ const NavbarAdmin = ({ children }) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={` fixed top-0 left-0 dark:bg-black bg-white dark:text-white text-black p-4  flex-col transition-transform duration-300 ease-in-out ${
+        className={` fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white  p-4  flex-col transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
         } md:relative md:translate-x-0 md:w-96 w-3/4 z-50 gap-8 h-full overflow-y-auto border-1 border-gray-300 dark:border-blackHover`}
       >
         <div className="flex flex-col  h-full gap-8">
-          <div className="flex flex-col  font-bold text-lg mb-4  items-center justify-center">
+          <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4  items-center justify-center">
             <img src={icon} alt="LOGO PRB CARE" className="w-auto h-20" />
             <h1>PRB CARE</h1>
           </div>
@@ -97,9 +97,9 @@ const NavbarAdmin = ({ children }) => {
             <div className="flex flex-col h-full gap-2">
               <Link
                 to="/admin/dashboard"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/dashboard"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -108,9 +108,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-puskesmas"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-puskesmas"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -119,9 +119,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-apotek"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-apotek"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -130,9 +130,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-pasien"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-pasien"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -141,9 +141,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-user"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-user"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -152,9 +152,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-obat"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-obat"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -163,9 +163,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-kontrol-balik"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-obat"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -174,9 +174,9 @@ const NavbarAdmin = ({ children }) => {
               </Link>
               <Link
                 to="/admin/data-pengambilan-obat"
-                className={`flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover ${
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/admin/data-obat"
-                    ? "bg-gray-200 dark:bg-blackHover"
+                    ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
@@ -189,7 +189,7 @@ const NavbarAdmin = ({ children }) => {
               <Link
                 to=""
                 onClick={onOpen}
-                className="flex px-8 py-4 gap-4 hover:bg-gray-200 dark:hover:bg-blackHover rounded transition-all"
+                className="flex px-8 py-4 gap-4 hover:bg-lightGreen rounded transition-all dark:hover:bg-mainGreen"
               >
                 <LogOut />
                 <h1>Logout</h1>
@@ -201,7 +201,7 @@ const NavbarAdmin = ({ children }) => {
 
       <div className="flex flex-col w-full">
         {/* Navbar */}
-        <div className="h-20 w-full  flex items-center px-8 justify-between fixed md:relative z-40 shadow-md dark:shadow-blackHover  dark:bg-black bg-white text-black dark:text-white">
+        <div className="h-20 w-full  flex items-center px-8 justify-between fixed md:relative z-40 shadow-md dark:shadow-blackHover  dark:bg-darkGreen bg-mainGreen text-white">
           <div className="flex justify-center items-center gap-4">
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />

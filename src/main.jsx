@@ -6,11 +6,11 @@ import { NextUIProvider } from "@nextui-org/react";
 import { AddressProvider } from "./config/context/AdressContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <NextUIProvider>
-      <AddressProvider>
+  <NextUIProvider>
+    <AddressProvider>
+      <main className="font-poppins">
         <App />
-      </AddressProvider>
-    </NextUIProvider>
-  </React.StrictMode>
+      </main>
+    </AddressProvider>
+  </NextUIProvider>
 );
