@@ -34,6 +34,8 @@ const LoginAdmin = () => {
           }
         );
 
+        console.log(response);
+
         if (response.status === 200) {
           navigate("/admin/dashboard");
           dispatch({

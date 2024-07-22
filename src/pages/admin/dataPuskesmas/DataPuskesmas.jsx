@@ -7,6 +7,7 @@ import Table from "../../../components/Table/Table";
 const DataPuskesmas = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = Cookies.get("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,12 +16,11 @@ const DataPuskesmas = () => {
           `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
           {
             headers: {
-              "API-Key": `${Cookies.get("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         setData(response.data.data);
-        console.log(response.data.data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,7 +50,6 @@ const DataPuskesmas = () => {
   );
 
   const handleUpdate = (data) => {
-    // Implement update logic here
     console.log("Update for:", data);
   };
 
@@ -60,16 +59,15 @@ const DataPuskesmas = () => {
         `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas/${data.id}`,
         {
           headers: {
-            "API-Key": `${Cookies.get("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      // Refresh the data after delete
       const response = await axios.get(
         `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
         {
           headers: {
-            "API-Key": `${Cookies.get("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -88,6 +86,7 @@ const DataPuskesmas = () => {
         data={data}
         onUpdate={handleUpdate}
         onDelete={handleDelete}
+        dataTitle="Puskesmas"
       />
     </div>
   );

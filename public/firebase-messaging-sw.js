@@ -6,7 +6,7 @@ importScripts(
 firebase.initializeApp({
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
-  projectId: "x`x ",
+  projectId: "prb-care-v1-70a29",
   storageBucket: "prb-care-v1-70a29.appspot.com",
   messagingSenderId: "665778315877",
   appId: "1:665778315877:web:0271e8ba4b02529d951c8c",
@@ -21,7 +21,7 @@ messaging.onBackgroundMessage((payload) => {
   const notificationTitle = notification.title;
   const notificationOptions = {
     body: notification.body,
-    // icon: notification.icon, 
+    // icon: notification.icon,
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);

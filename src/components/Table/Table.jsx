@@ -1,4 +1,5 @@
 // TableComponent.jsx
+import { Input } from "@nextui-org/input";
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,10 +11,18 @@ import {
 import React from "react";
 import { useTable, usePagination, useGlobalFilter } from "react-table";
 
-// Fungsi filter global
-const GlobalFilter = ({ globalFilter, setGlobalFilter }) => <></>;
+const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
+  return (
+    <input
+      placeholder="Cari"
+      className="border dark:border-white border-gray-400 dark:bg-blackHover rounded-xl p-3 w-full"
+      value={globalFilter || ""}
+      onChange={(e) => setGlobalFilter(e.target.value)}
+    />
+  );
+};
 
-const Table = ({ columns, data, onUpdate, onDelete }) => {
+const Table = ({ columns, data, onUpdate, onDelete, dataTitle }) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -39,33 +48,43 @@ const Table = ({ columns, data, onUpdate, onDelete }) => {
     usePagination
   );
 
+  const startItem = pageIndex * pageSize + 1;
+  const endItem = Math.min(startItem + pageSize - 1, data.length);
+
   return (
     <div className="p-8 bg-white dark:bg-blackHover">
-      <GlobalFilter
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-      />
-      <div className="mb-4 flex items-center">
-        <label htmlFor="pageSize" className="mr-2 text-sm ">
-          Show
-        </label>
-        <select
-          id="pageSize"
-          value={pageSize}
-          onChange={(e) => setPageSize(Number(e.target.value))}
-          className="p-2 border dark:border-black border-gray-300 rounded"
-        >
-          {[10, 20, 30, 40, 50].map((size) => (
-            <option key={size} value={size}>
-              {size} rows
-            </option>
-          ))}
-        </select>
+      <div className="py-4 flex w-full md:flex-row flex-col gap-4 md:gap-0 items-center justify-center md:justify-between">
+        <div className="flex items-center w-full">
+          <label htmlFor="pageSize" className="mr-2 text-sm ">
+            Tampilkan
+          </label>
+          <select
+            id="pageSize"
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            className="p-2 border dark:border-white border-gray-300 rounded"
+          >
+            {[10, 25, 50, 75, 100].map((size) => (
+              <option key={size} value={size}>
+                {size} baris
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="w-full">
+          Menampilkan {startItem}-{endItem} dari {data.length} data {dataTitle}
+        </div>
+        <div className="flex items-center  md:w-1/2 w-full">
+          <GlobalFilter
+            globalFilter={globalFilter}
+            setGlobalFilter={setGlobalFilter}
+          />
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table
           {...getTableProps()}
-          className="w-full border-collapse border dark:border-black border-gray-200"
+          className="w-full border-collapse border dark:border-white border-gray-200"
         >
           <thead>
             {headerGroups.map((headerGroup, index) => (
@@ -73,13 +92,13 @@ const Table = ({ columns, data, onUpdate, onDelete }) => {
                 {headerGroup.headers.map((column, index) => (
                   <th
                     {...column.getHeaderProps()}
-                    className="border dark:border-black dark:bg-blackHover border-gray-300 p-2 text-left text-sm font-medium"
+                    className="border dark:border-white dark:bg-blackHover border-gray-300 p-6 text-left text-sm font-medium"
                     key={index}
                   >
                     {column.render("Header")}
                   </th>
                 ))}
-                <th className="border dark:border-black dark:bg-blackHover border-gray-300 p-2 text-left text-sm font-medium">
+                <th className="border dark:border-white dark:bg-blackHover border-gray-300 p-6 text-left text-sm font-medium">
                   Aksi
                 </th>
               </tr>
@@ -93,13 +112,13 @@ const Table = ({ columns, data, onUpdate, onDelete }) => {
                   {row.cells.map((cell, index) => (
                     <td
                       {...cell.getCellProps()}
-                      className="border dark:border-black border-gray-300 p-2 text-sm"
+                      className="border dark:border-white border-gray-300 p-4 text-sm"
                       key={index}
                     >
                       {cell.render("Cell")}
                     </td>
                   ))}
-                  <td className="border dark:border-black border-gray-300 p-2 text-sm flex justify-evenly">
+                  <td className="border dark:border-white border-gray-300 p-4 text-sm flex justify-evenly">
                     <button onClick={() => onUpdate(row.original)} className="">
                       <Edit />
                     </button>
@@ -120,14 +139,14 @@ const Table = ({ columns, data, onUpdate, onDelete }) => {
         <button
           onClick={() => gotoPage(0)}
           disabled={!canPreviousPage}
-          className="p-2 border border-gray-300 rounded dark:border-black"
+          className="p-2 border border-gray-300 rounded dark:border-white"
         >
           <ChevronsLeft />
         </button>
         <button
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
-          className="p-2 border border-gray-300 rounded dark:border-black"
+          className="p-2 border border-gray-300 rounded dark:border-white"
         >
           <ChevronLeft />
         </button>
@@ -137,14 +156,14 @@ const Table = ({ columns, data, onUpdate, onDelete }) => {
         <button
           onClick={() => nextPage()}
           disabled={!canNextPage}
-          className="p-2 border border-gray-300 rounded dark:border-black"
+          className="p-2 border border-gray-300 rounded dark:border-white"
         >
           <ChevronRight />
         </button>
         <button
           onClick={() => gotoPage(pageOptions.length - 1)}
           disabled={!canNextPage}
-          className="p-2 border border-gray-300 rounded dark:border-black"
+          className="p-2 border border-gray-300 rounded dark:border-white"
         >
           <ChevronsRight />
         </button>
