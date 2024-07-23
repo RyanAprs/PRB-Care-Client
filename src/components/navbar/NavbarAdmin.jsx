@@ -10,6 +10,7 @@ import {
   ShoppingCart,
   Stethoscope,
   User,
+  User2Icon,
   UserRoundPlus,
 } from "lucide-react";
 import icon from "../../assets/prbcare.svg";
@@ -17,7 +18,6 @@ import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import {
   Button,
   Modal,
-  ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
@@ -88,7 +88,7 @@ const NavbarAdmin = ({ children }) => {
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
         } md:relative md:translate-x-0 md:w-96 w-3/4 z-50 gap-8 h-full overflow-y-auto border-1 border-gray-300 dark:border-blackHover`}
       >
-        <div className="flex flex-col  h-full gap-8">
+        <div className="flex flex-col  h-full gap-4">
           <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4  items-center justify-center">
             <img src={icon} alt="LOGO PRB CARE" className="w-auto h-20" />
             <h1>PRB CARE</h1>
@@ -182,17 +182,6 @@ const NavbarAdmin = ({ children }) => {
               >
                 <ShoppingCart />
                 <h1>Pengambilan Obat</h1>
-              </Link>
-            </div>
-
-            <div>
-              <Link
-                to=""
-                onClick={onOpen}
-                className="flex px-8 py-4 gap-4 hover:bg-lightGreen rounded transition-all dark:hover:bg-mainGreen"
-              >
-                <LogOut />
-                <h1>Logout</h1>
               </Link>
             </div>
           </div>
@@ -313,10 +302,16 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <ModalContent>
-          <ModalHeader>Admin</ModalHeader>
-          <ModalBody>
-            <Link to="/admin/profile">Profile</Link>
-          </ModalBody>
+          <div className="m-6 flex flex-col gap-8">
+            <Link to="/admin/profile" className="flex gap-6 items-center ">
+              <User2Icon />
+              <h1>Profile</h1>
+            </Link>
+            <div onClick={onOpen} className="flex items-center gap-6 cursor-pointer">
+              <LogOut />
+              <h1>Logout</h1>
+            </div>
+          </div>
         </ModalContent>
       </Modal>
     </div>

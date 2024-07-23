@@ -16,14 +16,6 @@ import {
 } from "@nextui-org/react";
 import { ChevronDown, Delete, Edit, Plus, SearchIcon } from "lucide-react";
 
-const INITIAL_VISIBLE_COLUMNS = [
-  "id",
-  "namaPuskesmas",
-  "telepon",
-  "alamat",
-  "actions",
-];
-
 export default function ReusableTable({
   columns,
   data,
@@ -31,11 +23,12 @@ export default function ReusableTable({
   onDelete,
   onUpdate,
   onCreate,
+  initialVisibleColumns,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(initialVisibleColumns)
   );
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [sortDescriptor, setSortDescriptor] = React.useState({
@@ -141,7 +134,7 @@ export default function ReusableTable({
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4 ">
+      <div className="flex flex-col gap-4 w-full">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -270,7 +263,9 @@ export default function ReusableTable({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell className="p-4">{renderCell(item, columnKey)}</TableCell>
+              <TableCell className="p-4">
+                {renderCell(item, columnKey)}
+              </TableCell>
             )}
           </TableRow>
         )}
