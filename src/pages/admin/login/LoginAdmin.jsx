@@ -86,7 +86,7 @@ const LoginAdmin = () => {
           )}
           <Button
             color="default"
-            className="text-white bg-buttonCollor "
+            className="text-white bg-mainGreen "
             type="submit"
             radius="sm"
             size="lg"

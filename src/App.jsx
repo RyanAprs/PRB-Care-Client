@@ -9,6 +9,7 @@ import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "./firebase";
 import { ApotekAuthContextProvider } from "./config/context/ApotekAuthContext";
 import { UserAuthContextProvider } from "./config/context/UserAuthContext";
+import { Toaster } from "react-hot-toast";
 
 window.global = window;
 
@@ -73,6 +74,7 @@ function App() {
   return (
     <div className="font-poppins">
       <AdminAuthContextProvider>
+        <Toaster position="top-right" />
         <AdminRoute />
       </AdminAuthContextProvider>
 

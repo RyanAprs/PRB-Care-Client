@@ -141,12 +141,12 @@ export default function ReusableTable({
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 ">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Cari..."
+            placeholder="Cari nama puskesmas"
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
@@ -159,7 +159,7 @@ export default function ReusableTable({
                   endContent={<ChevronDown className="text-small" />}
                   variant="flat"
                 >
-                  Columns
+                  Kolom
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
@@ -171,18 +171,17 @@ export default function ReusableTable({
                 onSelectionChange={setVisibleColumns}
               >
                 {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
+                  <DropdownItem
+                    key={column.uid}
+                    className="capitalize"
+                    variant="flat"
+                  >
                     {column.name}
                   </DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
-              color="primary"
-              variant="bordered"
-              endContent={<Plus />}
-              onPress={onCreate}
-            >
+            <Button variant="flat" endContent={<Plus />} onPress={onCreate}>
               Tambah {dataTitle}
             </Button>
           </div>
@@ -261,6 +260,7 @@ export default function ReusableTable({
             key={column.uid}
             allowsSorting={column.sortable}
             width={column.uid === "actions" ? 150 : "auto"}
+            className="p-4"
           >
             {column.name}
           </TableColumn>
@@ -270,7 +270,7 @@ export default function ReusableTable({
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+              <TableCell className="p-4">{renderCell(item, columnKey)}</TableCell>
             )}
           </TableRow>
         )}

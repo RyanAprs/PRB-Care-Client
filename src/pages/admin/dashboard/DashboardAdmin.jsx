@@ -57,7 +57,7 @@ const DashboardAdmin = () => {
             shadow="sm"
             key={index}
             isPressable
-            className="bg-white dark:bg-blackHover"
+            className="bg-mainGreen dark:bg-darkGreen text-white shadow-lg"
           >
             <CardBody className=" overflow-visible p-10">
               <div className="flex flex-col gap-4 justify-center items-center">

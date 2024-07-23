@@ -14,6 +14,7 @@ import {
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { AddressContext } from "../../../config/context/AdressContext";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
+import toast from "react-hot-toast";
 
 const DataPuskesmas = () => {
   const [data, setData] = useState([]);
@@ -82,6 +83,7 @@ const DataPuskesmas = () => {
 
         if (response.status === 201) {
           onClose();
+          toast.success("Data puskesmas berhasil ditambahkan");
           const dataResponse = await axios.get(
             `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
             {
@@ -93,7 +95,6 @@ const DataPuskesmas = () => {
           setData(dataResponse.data.data);
         }
       } catch (error) {
-        console.error("Error:", error.response?.status);
         if (error.response) {
           switch (error.response.status) {
             case 400:
@@ -150,7 +151,7 @@ const DataPuskesmas = () => {
 
   const handleDelete = async (data) => {
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas/${data.id}`,
         {
           headers: {
@@ -158,17 +159,50 @@ const DataPuskesmas = () => {
           },
         }
       );
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setData(response.data.data);
+
+      if (response.status === 200) {
+        toast.success("Data Puskesmas berhasil dihapus.");
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setData(response.data.data);
+      }
     } catch (error) {
-      console.error("Error deleting data:", error);
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            toast.error("Data gagal dihapus. Mohon periksa kembali.");
+            break;
+          case 401:
+            toast.error(
+              "Anda tidak memiliki akses untuk menambah data. Silahkan login terlebih dahulu."
+            );
+            break;
+          case 404:
+            toast.error("Data tidak ditemukan");
+            break;
+          case 409:
+            toast.error(
+              "Gagal menghapus data.Admin puskesmas ini masih terkait dengan data lain. Mohon periksa kembali"
+            );
+            break;
+          case 500:
+            toast.error(
+              "Terjadi kesalahan pada server. Mohon coba lagi nanti."
+            );
+            break;
+          default:
+            toast.error("Terjadi kesalahan, coba lagi nanti.");
+            break;
+        }
+      } else {
+        toast.error("Terjadi kesalahan jaringan. Mohon coba lagi nanti.");
+      }
     }
   };
 
@@ -201,7 +235,7 @@ const DataPuskesmas = () => {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">
+              <ModalHeader className="flex flex-col gap-1 ">
                 Buat Puskesmas
               </ModalHeader>
               <ModalBody className="overflow-auto">
@@ -245,10 +279,10 @@ const DataPuskesmas = () => {
                 <DynamicAddress />
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button color="danger" onPress={onClose}>
                   Batal
                 </Button>
-                <Button color="primary" onClick={handleCreate}>
+                <Button variant="flat" onClick={handleCreate}>
                   Buat
                 </Button>
               </ModalFooter>

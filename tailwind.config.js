@@ -55,7 +55,7 @@ module.exports = {
         },
 
         // CUSTOM COLOR
-        darkGreen: "#0E6251",
+        darkGreen: "#0a5c4b",
         mainGreen: "#40916C",
         lightGreen: "#52b788",
         darkColor: "#081C15",
