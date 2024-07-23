@@ -138,7 +138,7 @@ const DataPuskesmas = () => {
               break;
             case 409:
               setErrors(
-                "Username sudah digunakan atau nomor telepon sudah digunakan. Mohon periksa kembali."
+                "Username atau nomor telepon sudah digunakan. Mohon periksa kembali."
               );
               break;
             case 500:
@@ -340,6 +340,7 @@ const DataPuskesmas = () => {
         onUpdate={handleModalUpdate}
         onCreate={handleModalCreate}
         initialVisibleColumns={initialVisibleColumns}
+        searchFilter="namaPuskesmas"
       />
 
       <Modal
@@ -352,7 +353,7 @@ const DataPuskesmas = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1 ">
-                {isEditMode ? "Edit Puskesmas" : "Buat Puskesmas"}
+                {isEditMode ? "Edit Data Puskesmas" : "Tambah Data Puskesmas"}
               </ModalHeader>
               <ModalBody className="overflow-auto">
                 {errors && <p className="text-red-500">{errors}</p>}
@@ -387,8 +388,9 @@ const DataPuskesmas = () => {
                   }
                 />
                 <span className="font-light -mt-4">
-                  *password harus kombinasi huruf kecil, kapital, angka, dan
-                  simbol.
+                  {isEditMode
+                    ? "Jika password apotek tidak diubah, biarkan kosong."
+                    : "*password harus kombinasi huruf kecil, kapital, angka, dansimbol."}
                 </span>
                 <Input
                   type="number"

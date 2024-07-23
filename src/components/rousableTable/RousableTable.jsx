@@ -24,6 +24,7 @@ export default function ReusableTable({
   onUpdate,
   onCreate,
   initialVisibleColumns,
+  searchFilter,
 }) {
   const [filterValue, setFilterValue] = React.useState("");
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -52,12 +53,12 @@ export default function ReusableTable({
 
     if (hasSearchFilter) {
       filteredData = filteredData.filter((item) =>
-        item.namaPuskesmas.toLowerCase().includes(filterValue.toLowerCase())
+        item[searchFilter].toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
     return filteredData;
-  }, [data, filterValue]);
+  }, [data, filterValue, searchFilter]);
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -139,7 +140,7 @@ export default function ReusableTable({
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Cari nama puskesmas"
+            placeholder={`Cari ${dataTitle} ...`}
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
