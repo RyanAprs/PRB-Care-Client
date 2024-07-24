@@ -46,15 +46,15 @@ const DataPasien = () => {
     { label: "Status", key: "status" },
   ];
 
+    if (loading) return <p>Loading...</p>;
+
+
   return (
     <div className="flex items-center justify-center">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
+      
         <div className="p-4">
           <ReusableTableWithNestedData columns={columns} data={data} />
         </div>
-      )}
     </div>
   );
 };

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
 
-const DataObat = () => {
+const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -11,15 +11,27 @@ const DataObat = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/obat`,
+          `${import.meta.env.VITE_API_BASE_URI}/api/pengambilan-obat`,
           {
             headers: {
               Authorization: `Bearer ${Cookies.get("token")}`,
             },
           }
         );
-        setData(response.data.data);
-        console.log(response.data.data);
+
+        const formattedData = response.data.data.map((item) => {
+          const date = new Date(item.pasien.tanggalPeriksa);
+
+          const formattedDate = date.toLocaleDateString("id-ID", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          return { ...item, tanggalPeriksa: formattedDate };
+        });
+
+        setData(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -31,14 +43,15 @@ const DataObat = () => {
   }, []);
 
   const columns = [
-    { label: "Nama Apotek", key: "adminApotek.namaApotek" },
-    { label: "Nama Obat", key: "namaObat" },
-    { label: "jumlah", key: "Jumlah" },
+    { label: "No Rekam Medis", key: "pasien.noRekamMedis" },
+    { label: "Nama", key: "pasien.pengguna.namaLengkap" },
+    { label: "Puskesmas", key: "pasien.adminPuskesmas.namaPuskesmas" },
+    { label: "Obat", key: "obat.namaObat" },
+    { label: "Status", key: "status" },
   ];
 
   if (loading) return <p>Loading...</p>;
-
   return <ReusableTableWithNestedData columns={columns} data={data} />;
 };
 
-export default DataObat;
+export default DataPengambilanObat;

@@ -15,6 +15,9 @@ import useDarkMode from "use-dark-mode";
 import DataUser from "../../pages/admin/dataUser/DataUser";
 import DataPasien from "../../pages/admin/dataPasien/DataPasien";
 import DataApotek from "../../pages/admin/dataApotek/DataApotek";
+import DataObat from "../../pages/admin/dataObat/DataObat";
+import DataKontrolBalik from "../../pages/admin/dataKontrolBalik/DataKontrolBalik";
+import DataPengambilanObat from "../../pages/admin/dataPengambilanObat/DataPengambilanObat";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AdminAuthContext);
@@ -92,6 +95,36 @@ const AdminRoute = () => {
               <PrivateRoute role="admin">
                 <NavbarAdmin>
                   <DataUser />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/data-obat"
+            element={
+              <PrivateRoute role="admin">
+                <NavbarAdmin>
+                  <DataObat />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/data-kontrol-balik"
+            element={
+              <PrivateRoute role="admin">
+                <NavbarAdmin>
+                  <DataKontrolBalik />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/data-pengambilan-obat"
+            element={
+              <PrivateRoute role="admin">
+                <NavbarAdmin>
+                  <DataPengambilanObat />
                 </NavbarAdmin>
               </PrivateRoute>
             }

@@ -203,6 +203,9 @@ const NavbarAdmin = ({ children }) => {
               {location.pathname === "/admin/data-apotek" ? "Data Apotek" : ""}
               {location.pathname === "/admin/data-pasien" ? "Data Pasien" : ""}
               {location.pathname === "/admin/data-user" ? "Data User" : ""}
+              {location.pathname === "/admin/data-obat" ? "Data Obat" : ""}
+              {location.pathname === "/admin/data-kontrol-balik" ? "Data Kontrol Balik" : ""}
+              {location.pathname === "/admin/data-pengambilan-obat" ? "Data Pengambilan Obat" : ""}
             </h1>
           </div>
           <div className="flex justify-between items-center">
