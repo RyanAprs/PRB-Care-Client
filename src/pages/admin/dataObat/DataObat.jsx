@@ -33,7 +33,7 @@ const DataObat = () => {
   const columns = [
     { label: "Nama Apotek", key: "adminApotek.namaApotek" },
     { label: "Nama Obat", key: "namaObat" },
-    { label: "jumlah", key: "Jumlah" },
+    { label: "jumlah", key: "jumlah" },
   ];
 
   if (loading) return <p>Loading...</p>;

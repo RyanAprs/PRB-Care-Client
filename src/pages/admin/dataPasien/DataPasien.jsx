@@ -1,8 +1,10 @@
-// src/components/DataPasien.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
+import { timeStampToHuman } from "../../../utils/DateConverter";
+
+
 
 const DataPasien = () => {
   const [data, setData] = useState([]);
@@ -20,8 +22,13 @@ const DataPasien = () => {
             },
           }
         );
-        setData(response.data.data);
+        const formattedData = response.data.data.map((item) => ({
+          ...item,
+          tanggalPeriksa: timeStampToHuman(item.tanggalPeriksa),
+        }));
+
         console.log(response.data.data);
+        setData(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -46,15 +53,13 @@ const DataPasien = () => {
     { label: "Status", key: "status" },
   ];
 
-    if (loading) return <p>Loading...</p>;
-
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="flex items-center justify-center">
-      
-        <div className="p-4">
-          <ReusableTableWithNestedData columns={columns} data={data} />
-        </div>
+      <div className="p-4">
+        <ReusableTableWithNestedData columns={columns} data={data} />
+      </div>
     </div>
   );
 };

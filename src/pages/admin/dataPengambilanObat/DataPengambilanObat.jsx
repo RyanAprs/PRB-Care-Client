@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
+import { timeStampToHuman } from "../../../utils/DateConverter";
 
 const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
@@ -19,20 +20,13 @@ const DataPengambilanObat = () => {
           }
         );
 
-        const formattedData = response.data.data.map((item) => {
-          const date = new Date(item.tanggalPengambilan);
+        const formattedData = response.data.data.map((item) => ({
+          ...item,
+          tanggalPengambilan: timeStampToHuman(item.tanggalPengambilan),
+        }));
 
-          const formattedDate = date.toLocaleDateString("id-ID", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-
-          return { ...item, tanggalPengambilan: formattedDate };
-        });
-
+        console.log(response.data.data);
         setData(formattedData);
-        console.log(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -6,7 +6,6 @@ import "datatables.net-responsive-dt/css/responsive.dataTables.css";
 import "datatables.net-responsive";
 import { Delete, Edit } from "lucide-react";
 
-// Component for handling nested data
 const ReusableTableWithNestedData = ({ columns, data, onEdit, onDelete }) => {
   const tableRef = useRef();
 

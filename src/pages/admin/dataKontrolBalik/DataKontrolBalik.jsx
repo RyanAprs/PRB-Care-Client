@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
+import { timeStampToHuman } from "../../../utils/DateConverter";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -19,18 +20,12 @@ const DataKontrolBalik = () => {
           }
         );
 
-        const formattedData = response.data.data.map((item) => {
-          const date = new Date(item.tanggalKontrol);
+        const formattedData = response.data.data.map((item) => ({
+          ...item,
+          tanggalKontrol: timeStampToHuman(item.tanggalKontrol),
+        }));
 
-          const formattedDate = date.toLocaleDateString("id-ID", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-          });
-
-          return { ...item, tanggalKontrol: formattedDate };
-        });
-
+        console.log(response.data.data);
         setData(formattedData);
         setLoading(false);
       } catch (error) {
