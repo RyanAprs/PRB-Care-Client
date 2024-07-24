@@ -20,7 +20,7 @@ const DataPengambilanObat = () => {
         );
 
         const formattedData = response.data.data.map((item) => {
-          const date = new Date(item.pasien.tanggalPeriksa);
+          const date = new Date(item.tanggalPengambilan);
 
           const formattedDate = date.toLocaleDateString("id-ID", {
             year: "numeric",
@@ -28,10 +28,11 @@ const DataPengambilanObat = () => {
             day: "numeric",
           });
 
-          return { ...item, tanggalPeriksa: formattedDate };
+          return { ...item, tanggalPengambilan: formattedDate };
         });
 
         setData(formattedData);
+        console.log(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -47,6 +48,7 @@ const DataPengambilanObat = () => {
     { label: "Nama", key: "pasien.pengguna.namaLengkap" },
     { label: "Puskesmas", key: "pasien.adminPuskesmas.namaPuskesmas" },
     { label: "Obat", key: "obat.namaObat" },
+    { label: "Tanggal Pengambilan", key: "tanggalPengambilan" },
     { label: "Status", key: "status" },
   ];
 
