@@ -2,14 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
-import { timeStampToHuman } from "../../../utils/DateConverter";
-
-
 
 const DataPasien = () => {
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const token = Cookies.get("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,26 +13,20 @@ const DataPasien = () => {
           `${import.meta.env.VITE_API_BASE_URI}/api/pasien`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              "API-Key": `${Cookies.get("token")}`,
             },
           }
         );
-        const formattedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPeriksa: timeStampToHuman(item.tanggalPeriksa),
-        }));
-
+        setData(response.data.data);
         console.log(response.data.data);
-        setData(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   const columns = [
     { label: "Nomor Rekam Medis", key: "noRekamMedis" },
@@ -53,13 +42,15 @@ const DataPasien = () => {
     { label: "Status", key: "status" },
   ];
 
-  if (loading) return <p>Loading...</p>;
-
   return (
     <div className="flex items-center justify-center">
-      <div className="p-4">
-        <ReusableTableWithNestedData columns={columns} data={data} />
-      </div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="p-4">
+          <ReusableTableWithNestedData columns={columns} data={data} />
+        </div>
+      )}
     </div>
   );
 };

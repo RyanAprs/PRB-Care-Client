@@ -11,10 +11,10 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { AddressContext } from "../../../config/context/AdressContext";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import toast from "react-hot-toast";
-import { ReusableTable } from "../../../components/rousableTable/RousableTable";
 
 const DataPuskesmas = () => {
   const [data, setData] = useState([]);
@@ -314,20 +314,33 @@ const DataPuskesmas = () => {
   };
 
   const columns = [
-    { label: "Nama Puskesmas", key: "namaPuskesmas" },
-    { label: "Telepon", key: "telepon" },
-    { label: "Alamat", key: "alamat" },
+    { name: "Nama Puskesmas", uid: "namaPuskesmas", sortable: true },
+    { name: "Telepon", uid: "telepon", sortable: true },
+    { name: "Alamat", uid: "alamat", sortable: true },
+    { name: "Aksi", uid: "actions" },
+  ];
+
+  const initialVisibleColumns = [
+    "id",
+    "namaPuskesmas",
+    "telepon",
+    "alamat",
+    "actions",
   ];
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col gap-4 p-4 items-center justify-center">
+    <div className="flex flex-col gap-4 p-4">
       <ReusableTable
         columns={columns}
         data={data}
-        onEdit={handleModalUpdate}
+        dataTitle="Puskesmas"
         onDelete={handleModalDelete}
+        onUpdate={handleModalUpdate}
+        onCreate={handleModalCreate}
+        initialVisibleColumns={initialVisibleColumns}
+        searchFilter="namaPuskesmas"
       />
 
       <Modal

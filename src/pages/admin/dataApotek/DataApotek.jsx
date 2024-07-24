@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
   Button,
   Input,
@@ -14,7 +15,6 @@ import {
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import toast from "react-hot-toast";
 import { AddressContext } from "../../../config/context/AdressContext";
-import { ReusableTable } from "../../../components/rousableTable/RousableTable";
 
 const DataApotek = () => {
   const [data, setData] = useState([]);
@@ -50,15 +50,13 @@ const DataApotek = () => {
           }
         );
         setData(response.data.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setLoading(false);
       }
     };
 
     fetchData();
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     const formattedAddress = [
@@ -312,20 +310,30 @@ const DataApotek = () => {
     }
   };
   const columns = [
-    { label: "Nama Apotek", key: "namaApotek" },
-    { label: "Telepon", key: "telepon" },
-    { label: "Alamat", key: "alamat" },
+    { name: "Nama Apotek", uid: "namaApotek", sortable: true },
+    { name: "Telepon", uid: "telepon", sortable: true },
+    { name: "Alamat", uid: "alamat", sortable: true },
+    { name: "Aksi", uid: "actions" },
   ];
 
-  if (loading) return <p>Loading...</p>;
-
+  const initialVisibleColumns = [
+    "id",
+    "namaApotek",
+    "telepon",
+    "alamat",
+    "actions",
+  ];
   return (
     <div className="flex flex-col gap-4 p-4">
       <ReusableTable
         columns={columns}
         data={data}
-        onEdit={handleModalUpdate}
+        dataTitle="Apotek"
         onDelete={handleModalDelete}
+        onUpdate={handleModalUpdate}
+        onCreate={handleModalCreate}
+        initialVisibleColumns={initialVisibleColumns}
+        searchFilter="namaApotek"
       />
 
       <Modal

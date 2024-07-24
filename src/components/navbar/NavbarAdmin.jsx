@@ -72,7 +72,7 @@ const NavbarAdmin = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen">
       {isSidebarOpen && (
         <div
           ref={overlayRef}
@@ -84,16 +84,16 @@ const NavbarAdmin = ({ children }) => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white p-4 flex-col transition-transform duration-300 ease-in-out ${
+        className={` fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white  p-4  flex-col transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-96"
         } md:relative md:translate-x-0 md:w-96 w-3/4 z-50 gap-8 h-full overflow-y-auto border-1 border-gray-300 dark:border-blackHover`}
       >
-        <div className="flex flex-col h-full gap-4">
-          <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4 items-center justify-center">
+        <div className="flex flex-col  h-full gap-4">
+          <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4  items-center justify-center">
             <img src={icon} alt="LOGO PRB CARE" className="w-auto h-20" />
             <h1>PRB CARE</h1>
           </div>
-          <div className="flex flex-col h-full justify-around">
+          <div className="flex flex-col h-full justify-around ">
             <div className="flex flex-col h-full gap-2">
               <Link
                 to="/admin/dashboard"
@@ -164,7 +164,7 @@ const NavbarAdmin = ({ children }) => {
               <Link
                 to="/admin/data-kontrol-balik"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/admin/data-kontrol-balik"
+                  location.pathname === "/admin/data-obat"
                     ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
@@ -175,7 +175,7 @@ const NavbarAdmin = ({ children }) => {
               <Link
                 to="/admin/data-pengambilan-obat"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/admin/data-pengambilan-obat"
+                  location.pathname === "/admin/data-obat"
                     ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
@@ -190,12 +190,12 @@ const NavbarAdmin = ({ children }) => {
 
       <div className="flex flex-col w-full">
         {/* Navbar */}
-        <div className="h-20 w-full flex items-center px-8 justify-between fixed md:relative z-40 shadow-md dark:shadow-blackHover dark:bg-darkGreen bg-mainGreen text-white">
+        <div className="h-20 w-full  flex items-center px-8 justify-between fixed md:relative z-40 shadow-md dark:shadow-blackHover  dark:bg-darkGreen bg-mainGreen text-white">
           <div className="flex justify-center items-center gap-4">
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />
             </button>
-            <h1 className="text-xl md:block hidden">
+            <h1 className=" text-xl md:block hidden">
               {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
               {location.pathname === "/admin/data-puskesmas"
                 ? "Data Puskesmas"
@@ -225,7 +225,7 @@ const NavbarAdmin = ({ children }) => {
           </div>
         </div>
         {/* Content */}
-        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white md:pt-2 pt-20 overflow-auto z-10">
+        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white md:pt-2 pt-20 h-full w-full overflow-y-auto z-10">
           {children}
         </div>
       </div>
@@ -306,14 +306,11 @@ const NavbarAdmin = ({ children }) => {
       >
         <ModalContent>
           <div className="m-6 flex flex-col gap-8">
-            <Link to="/admin/profile" className="flex gap-6 items-center">
+            <Link to="/admin/profile" className="flex gap-6 items-center ">
               <User2Icon />
               <h1>Profile</h1>
             </Link>
-            <div
-              onClick={onOpen}
-              className="flex items-center gap-6 cursor-pointer"
-            >
+            <div onClick={onOpen} className="flex items-center gap-6 cursor-pointer">
               <LogOut />
               <h1>Logout</h1>
             </div>
