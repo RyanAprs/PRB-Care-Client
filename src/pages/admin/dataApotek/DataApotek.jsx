@@ -32,6 +32,8 @@ const DataApotek = () => {
   const [currentId, setCurrentId] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { address } = useContext(AddressContext);
+  const [currentName, setCurrentName] = useState("");
+
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onDeleteOpen,
@@ -50,13 +52,15 @@ const DataApotek = () => {
           }
         );
         setData(response.data.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const formattedAddress = [
@@ -248,6 +252,7 @@ const DataApotek = () => {
 
   const handleModalDelete = (data) => {
     setCurrentId(data.id);
+    setCurrentName(data.namaApotek);
     onDeleteOpen();
   };
 
@@ -309,32 +314,26 @@ const DataApotek = () => {
       }
     }
   };
+
   const columns = [
-    { name: "Nama Apotek", uid: "namaApotek", sortable: true },
-    { name: "Telepon", uid: "telepon", sortable: true },
-    { name: "Alamat", uid: "alamat", sortable: true },
-    { name: "Aksi", uid: "actions" },
+    { field: "namaApotek", header: "Nama Apotek" },
+    { field: "telepon", header: "Telepon" },
+    { field: "alamat", header: "Alamat" },
   ];
 
-  const initialVisibleColumns = [
-    "id",
-    "namaApotek",
-    "telepon",
-    "alamat",
-    "actions",
-  ];
+  if (loading) return <p>Loading...</p>;
+
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <ReusableTable
-        columns={columns}
-        data={data}
-        dataTitle="Apotek"
-        onDelete={handleModalDelete}
-        onUpdate={handleModalUpdate}
-        onCreate={handleModalCreate}
-        initialVisibleColumns={initialVisibleColumns}
-        searchFilter="namaApotek"
-      />
+    <div className="flex flex-col gap-4 p-4 z-10 ">
+      <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
+        <ReusableTable
+          columns={columns}
+          data={data}
+          onDelete={handleModalDelete}
+          onEdit={handleModalUpdate}
+          onCreate={handleModalCreate}
+        />
+      </div>
 
       <Modal
         size="lg"
@@ -423,7 +422,7 @@ const DataApotek = () => {
           {(onDeleteClose) => (
             <>
               <ModalBody className="overflow-auto">
-                Apakah anda yakin ingin menghapus data ini?
+                Apakah anda yakin ingin menghapus data {currentName}?
               </ModalBody>
               <ModalFooter>
                 <Button color="flat" onPress={onDeleteClose}>

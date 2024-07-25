@@ -11,10 +11,10 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { AddressContext } from "../../../config/context/AdressContext";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import toast from "react-hot-toast";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 
 const DataPuskesmas = () => {
   const [data, setData] = useState([]);
@@ -29,6 +29,7 @@ const DataPuskesmas = () => {
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
+  const [currentName, setCurrentName] = useState("");
   const token = Cookies.get("token");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { address } = useContext(AddressContext);
@@ -237,6 +238,7 @@ const DataPuskesmas = () => {
         setDatas({
           namaPuskesmas: dataResponse.namaPuskesmas,
           username: dataResponse.username,
+          password: "",
           alamat: dataResponse.alamat,
           telepon: dataResponse.telepon,
         });
@@ -251,6 +253,7 @@ const DataPuskesmas = () => {
 
   const handleModalDelete = async (data) => {
     setCurrentId(data.id);
+    setCurrentName(data.namaPuskesmas);
     onDeleteOpen();
   };
 
@@ -314,134 +317,120 @@ const DataPuskesmas = () => {
   };
 
   const columns = [
-    { name: "Nama Puskesmas", uid: "namaPuskesmas", sortable: true },
-    { name: "Telepon", uid: "telepon", sortable: true },
-    { name: "Alamat", uid: "alamat", sortable: true },
-    { name: "Aksi", uid: "actions" },
-  ];
-
-  const initialVisibleColumns = [
-    "id",
-    "namaPuskesmas",
-    "telepon",
-    "alamat",
-    "actions",
+    { field: "namaPuskesmas", header: "Nama Puskesmas" },
+    { field: "telepon", header: "Telepon" },
+    { field: "alamat", header: "Alamat" },
   ];
 
   if (loading) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <ReusableTable
-        columns={columns}
-        data={data}
-        dataTitle="Puskesmas"
-        onDelete={handleModalDelete}
-        onUpdate={handleModalUpdate}
-        onCreate={handleModalCreate}
-        initialVisibleColumns={initialVisibleColumns}
-        searchFilter="namaPuskesmas"
-      />
-
+    <div className="flex flex-col gap-4 p-4 z-10 ">
+      <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
+        <ReusableTable
+          columns={columns}
+          data={data}
+          onCreate={handleModalCreate}
+          onEdit={handleModalUpdate}
+          onDelete={handleModalDelete}
+        />
+      </div>
       <Modal
-        size="lg"
-        className="max-h-screen"
         isOpen={isOpen}
         onClose={onClose}
+        placement="center"
+        className="max-h-screen"
       >
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 ">
-                {isEditMode ? "Edit Data Puskesmas" : "Tambah Data Puskesmas"}
-              </ModalHeader>
-              <ModalBody className="overflow-auto">
-                {errors && <p className="text-red-500">{errors}</p>}
-                <Input
-                  type="text"
-                  label="Nama Puskesmas"
-                  variant="bordered"
-                  value={datas.namaPuskesmas}
-                  onChange={(e) =>
-                    setDatas((prev) => ({
-                      ...prev,
-                      namaPuskesmas: e.target.value,
-                    }))
-                  }
-                />
-                <Input
-                  type="text"
-                  label="Username Puskesmas"
-                  variant="bordered"
-                  value={datas.username}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, username: e.target.value }))
-                  }
-                />
-                <Input
-                  type="password"
-                  label="Password Puskesmas"
-                  variant="bordered"
-                  value={datas.password}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, password: e.target.value }))
-                  }
-                />
-                <span className="font-light -mt-4">
-                  {isEditMode
-                    ? "Jika password apotek tidak diubah, biarkan kosong."
-                    : "*password harus kombinasi huruf kecil, kapital, angka, dansimbol."}
-                </span>
-                <Input
-                  type="number"
-                  label="Nomor Telepon Puskesmas"
-                  variant="bordered"
-                  value={datas.telepon}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, telepon: e.target.value }))
-                  }
-                />
-                <h1>Alamat Puskesmas</h1>
-                <DynamicAddress />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onPress={onClose}>
-                  Batal
-                </Button>
-                <Button
-                  variant="flat"
-                  onClick={isEditMode ? handleUpdate : handleCreate}
-                >
-                  {isEditMode ? "Update" : "Buat"}
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          <ModalHeader>
+            {isEditMode ? "Update Puskesmas" : "Tambah Puskesmas"}
+          </ModalHeader>
+          <ModalBody className="overflow-auto">
+            {errors && <p className="text-red-500">{errors}</p>}
+            <Input
+              type="text"
+              label="Nama Puskesmas"
+              variant="bordered"
+              value={datas.namaPuskesmas}
+              onChange={(e) =>
+                setDatas((prev) => ({
+                  ...prev,
+                  namaPuskesmas: e.target.value,
+                }))
+              }
+            />
+            <Input
+              label="Username"
+              variant="bordered"
+              value={datas.username}
+              onChange={(e) =>
+                setDatas((prev) => ({
+                  ...prev,
+                  username: e.target.value,
+                }))
+              }
+            />
+            <Input
+              label="Password"
+              variant="bordered"
+              value={datas.password}
+              type="password"
+              onChange={(e) =>
+                setDatas((prev) => ({
+                  ...prev,
+                  password: e.target.value,
+                }))
+              }
+            />
+            <span className="font-light -mt-4">
+              {isEditMode
+                ? "Jika password apotek tidak diubah, biarkan kosong."
+                : "*password harus kombinasi huruf kecil, kapital, angka, dansimbol."}
+            </span>
+            <Input
+              label="Telepon"
+              variant="bordered"
+              value={datas.telepon}
+              onChange={(e) =>
+                setDatas((prev) => ({ ...prev, telepon: e.target.value }))
+              }
+            />
+            <DynamicAddress />
+
+            {errors && <p style={{ color: "red" }}>{errors}</p>}
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={onClose}>
+              Tutup
+            </Button>
+            <Button
+              color="primary"
+              onPress={isEditMode ? handleUpdate : handleCreate}
+            >
+              {isEditMode ? "Update" : "Tambah"}
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
 
       <Modal
-        size="lg"
-        className="max-h-screen"
         isOpen={isDeleteModalOpen}
         onClose={onDeleteClose}
+        placement="center"
       >
         <ModalContent>
-          {(onDeleteClose) => (
-            <>
-              <ModalBody className="overflow-auto">
-                Apakah anda yakin ingin menghapus data ini?
-              </ModalBody>
-              <ModalFooter>
-                <Button color="flat" onPress={onDeleteClose}>
-                  Batal
-                </Button>
-                <Button variant="danger" onClick={handleDelete}>
-                  Hapus
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          <ModalHeader>Konfirmasi Hapus</ModalHeader>
+          <ModalBody>
+            Apakah anda yakin ingin menghapus data {currentName} ?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" variant="light" onPress={onDeleteClose}>
+              Batal
+            </Button>
+            <Button color="primary" onPress={handleDelete}>
+              Hapus
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>

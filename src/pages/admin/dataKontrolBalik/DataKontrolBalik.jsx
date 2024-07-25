@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
 import { timeStampToHuman } from "../../../utils/DateConverter";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -38,15 +38,34 @@ const DataKontrolBalik = () => {
   }, []);
 
   const columns = [
-    { label: "No Rekam Medis", key: "pasien.noRekamMedis" },
-    { label: "Nama", key: "pasien.pengguna.namaLengkap" },
-    { label: "Puskesmas", key: "pasien.adminPuskesmas.namaPuskesmas" },
-    { label: "Tanggal Kontrol", key: "tanggalKontrol" },
-    { label: "Status", key: "status" },
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+    { header: "Nama", field: "pasien.pengguna.namaLengkap" },
+    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
+    { header: "Status", field: "status" },
+  ];
+
+  const statuses = [
+    { key: "menunggu", label: "Menunggu" },
+    { key: "berhasil", label: "Berhasil" },
+    { key: "batal", label: "Batal" },
   ];
 
   if (loading) return <p>Loading...</p>;
-  return <ReusableTableWithNestedData columns={columns} data={data} />;
+  return (
+    <div className="flex flex-col gap-4 p-4 z-10 ">
+      <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
+        <ReusableTable
+          columns={columns}
+          data={data}
+          onDelete=""
+          onUpdate=""
+          onCreate=""
+          statuses={statuses}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default DataKontrolBalik;

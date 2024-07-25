@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { ReusableTableWithNestedData } from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 
 const DataObat = () => {
   const [data, setData] = useState([]);
@@ -31,14 +31,25 @@ const DataObat = () => {
   }, []);
 
   const columns = [
-    { label: "Nama Apotek", key: "adminApotek.namaApotek" },
-    { label: "Nama Obat", key: "namaObat" },
-    { label: "jumlah", key: "jumlah" },
+    { header: "Nama Obat", field: "namaObat" },
+    { header: "jumlah", field: "jumlah" },
+    { header: "Nama Apotek", field: "adminApotek.namaApotek" },
   ];
 
   if (loading) return <p>Loading...</p>;
 
-  return <ReusableTableWithNestedData columns={columns} data={data} />;
+  return (
+    <div className="flex flex-col gap-4 p-4 min-h-screen ">
+      <ReusableTable
+        columns={columns}
+        data={data}
+        onDelete=""
+        onUpdate=""
+        onCreate=""
+        statusOptions=""
+      />
+    </div>
+  );
 };
 
 export default DataObat;
