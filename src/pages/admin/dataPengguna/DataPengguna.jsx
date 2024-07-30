@@ -1,93 +1,97 @@
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
+import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
+import { AddressContext } from "../../../config/context/AdressContext";
+import { Toast } from "primereact/toast";
+import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { Dropdown } from "primereact/dropdown";
 import { ZodError } from "zod";
-import { Toast } from "primereact/toast";
+import { userSchema } from "../../../validations/PenggunaSchema";
+import {
+  createPengguna,
+  deletePengguna,
+  getAllPengguna,
+  getPenggunaById,
+  updatePengguna,
+} from "../../../services/PenggunaService";
 import {
   handleApiError,
   handleDeleteError,
 } from "../../../utils/ApiErrorHandlers";
-import {
-  createObat,
-  deleteObat,
-  getAllObat,
-  getObatById,
-  updateObat,
-} from "../../../services/ObatService";
-import { obatSchema } from "../../../validations/ObatSchema";
 import { ProgressSpinner } from "primereact/progressspinner";
 
-const DataObat = () => {
+const DataPengguna = () => {
   const [data, setData] = useState([]);
-  const [dataAdminApotek, setDataAdminApotek] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = useState(false);
-  const [visibleDelete, setVisibleDelete] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const token = Cookies.get("token");
   const [datas, setDatas] = useState({
-    namaObat: "",
-    jumlah: 0,
-    idAdminApotek: "",
+    namaLengkap: "",
+    username: "",
+    password: "",
+    telepon: "",
+    teleponKeluarga: "",
+    alamat: "",
   });
+  const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
+  const token = Cookies.get("token");
+  const { address } = useContext(AddressContext);
   const [currentName, setCurrentName] = useState("");
   const toast = useRef(null);
-  const title = "Obat";
+  const [visible, setVisible] = useState(false);
+  const [visibleDelete, setVisibleDelete] = useState(false);
   const [errors, setErrors] = useState({});
+  const title = "Pengguna";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/obat`,
+          `${import.meta.env.VITE_API_BASE_URI}/api/pengguna`,
           {
             headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         setData(response.data.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
 
-    const fetchDataAdminApotek = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          }
-        );
-        setDataAdminApotek(response.data.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchDataAdminApotek();
     fetchData();
   }, [token]);
+
+  useEffect(() => {
+    const formattedAddress = [
+      address.detail,
+      address.desa,
+      address.kecamatan,
+      address.kabupaten,
+      address.provinsi,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    setDatas((prev) => ({
+      ...prev,
+      alamat: formattedAddress,
+    }));
+  }, [address]);
 
   const handleModalCreate = () => {
     setErrors({});
     setDatas({
-      namaObat: "",
-      jumlah: 0,
-      idAdminApotek: "",
+      namaLengkap: "",
+      username: "",
+      password: "",
+      telepon: "",
+      teleponKeluarga: "",
+      alamat: "",
     });
     setVisible(true);
     setIsEditMode(false);
@@ -95,17 +99,18 @@ const DataObat = () => {
 
   const handleCreate = async () => {
     try {
-      obatSchema.parse(datas);
-      const response = await createObat(datas);
+      userSchema.parse(datas);
+      const response = await createPengguna(datas);
+
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Data obat ditambahkan",
+          detail: "Data Pengguna ditambahkan",
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllObat();
+        const dataResponse = await getAllPengguna();
         setData(dataResponse);
       }
     } catch (error) {
@@ -124,12 +129,15 @@ const DataObat = () => {
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
-      const dataResponse = await getObatById(data.id);
+      const dataResponse = await getPenggunaById(data.id);
       if (dataResponse) {
         setDatas({
-          namaObat: dataResponse.namaObat,
-          jumlah: dataResponse.jumlah,
-          idAdminApotek: dataResponse.idAdminApotek,
+          namaLengkap: dataResponse.namaLengkap,
+          username: dataResponse.username,
+          password: "",
+          alamat: dataResponse.alamat,
+          telepon: dataResponse.telepon,
+          teleponKeluarga: dataResponse.teleponKeluarga,
         });
         setCurrentId(data.id);
         setVisible(true);
@@ -142,17 +150,27 @@ const DataObat = () => {
 
   const handleUpdate = async () => {
     try {
-      obatSchema.pick({ namaObat: true, jumlah: true }).parse(datas);
-      const response = await updateObat(currentId, datas);
+      userSchema
+        .pick({
+          namaLengkap: true,
+          username: true,
+          telepon: true,
+          teleponKeluarga: true,
+          alamat: true,
+        })
+        .parse(datas);
+
+      const response = await updatePengguna(currentId, datas);
+
       if (response.status === 200) {
+        setVisible(false);
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Data obat diperbarui",
+          detail: "Data Pengguna diperbarui",
           life: 3000,
         });
-        setVisible(false);
-        const dataResponse = await getAllObat();
+        const dataResponse = await getAllPengguna();
         setData(dataResponse);
       }
     } catch (error) {
@@ -170,23 +188,23 @@ const DataObat = () => {
 
   const handleModalDelete = async (data) => {
     setCurrentId(data.id);
-    setCurrentName(data.namaObat);
+    setCurrentName(data.namaLengkap);
     setVisibleDelete(true);
   };
 
   const handleDelete = async () => {
     setVisibleDelete(false);
     try {
-      const response = await deleteObat(currentId);
+      const response = await deletePengguna(currentId);
 
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Data Obat dihapus",
+          detail: "Data Pengguna dihapus",
           life: 3000,
         });
-        const response = await getAllObat();
+        const response = await getAllPengguna();
         setData(response);
       }
     } catch (error) {
@@ -195,9 +213,10 @@ const DataObat = () => {
   };
 
   const columns = [
-    { header: "Nama Obat", field: "namaObat" },
-    { header: "jumlah", field: "jumlah" },
-    { header: "Nama Apotek", field: "adminApotek.namaApotek" },
+    { field: "namaLengkap", header: "Nama Pengguna" },
+    { field: "telepon", header: "Telepon" },
+    { field: "teleponKeluarga", header: "Telepon Keluarga" },
+    { field: "alamat", header: "Alamat" },
   ];
 
   if (loading)
@@ -206,9 +225,8 @@ const DataObat = () => {
         <ProgressSpinner />
       </div>
     );
-
   return (
-    <div className="flex flex-col gap-4 p-4 min-h-screen ">
+    <div className="flex flex-col gap-4 p-4 z-10 ">
       <Toast ref={toast} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
@@ -217,12 +235,11 @@ const DataObat = () => {
           onDelete={handleModalDelete}
           onEdit={handleModalUpdate}
           onCreate={handleModalCreate}
-          statusOptions=""
         />
       </div>
 
       <Dialog
-        header={isEditMode ? "Ubah Data Obat" : "Tambah Data Obat"}
+        header={isEditMode ? "Ubah Data Pengguna" : "Tambah Data Pengguna"}
         visible={visible}
         maximizable
         className="md:w-1/2 w-full "
@@ -232,61 +249,91 @@ const DataObat = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
-          <Dropdown
-            value={
-              dataAdminApotek.find(
-                (apotek) => apotek.id === datas.idAdminApotek
-              ) || null
-            }
-            options={dataAdminApotek}
-            filter
-            optionLabel="namaApotek"
-            placeholder="Pilih Apotek"
-            className=" p-2 rounded"
+          <InputText
+            type="text"
+            placeholder="Nama Lengkap Pengguna"
+            className="p-input text-lg p-3  rounded"
+            value={datas.namaLengkap}
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
-                idAdminApotek: e.value.id,
+                namaLengkap: e.target.value,
               }))
             }
           />
-          {errors.idAdminApotek && (
+          {errors.namaLengkap && (
             <small className="p-error -mt-3 text-sm">
-              {errors.idAdminApotek}
+              {errors.namaLengkap}
             </small>
+          )}
+          <InputText
+            type="text"
+            placeholder="Username"
+            className="p-input text-lg p-3  rounded"
+            value={datas.username}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                username: e.target.value,
+              }))
+            }
+          />
+          {errors.username && (
+            <small className="p-error -mt-3 text-sm">{errors.username}</small>
+          )}
+          <InputText
+            type="password"
+            placeholder="Password"
+            className="p-input text-lg p-3  rounded"
+            value={datas.password}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
+            }
+          />
+          {errors.password && (
+            <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
 
           <InputText
             type="text"
-            placeholder="Nama Obat"
+            placeholder="Telepon"
             className="p-input text-lg p-3  rounded"
-            value={datas.namaObat}
+            value={datas.telepon}
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
-                namaObat: e.target.value,
+                telepon: e.target.value,
               }))
             }
           />
-          {errors.namaObat && (
-            <small className="p-error -mt-3 text-sm">{errors.namaObat}</small>
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
           <InputText
-            type="number"
-            placeholder="Jumlah"
+            type="text"
+            placeholder="Telepon Keluarga"
             className="p-input text-lg p-3  rounded"
-            value={datas.jumlah}
+            value={datas.teleponKeluarga}
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
-                jumlah: parseInt(e.target.value, 10) || 0,
+                teleponKeluarga: e.target.value,
               }))
             }
           />
-          {errors.jumlah && (
-            <small className="p-error -mt-3 text-sm">{errors.jumlah}</small>
+          {errors.teleponKeluarga && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.teleponKeluarga}
+            </small>
           )}
-
+          <span>Alamat Pengguna</span>
+          <DynamicAddress />
+          {errors.alamat && (
+            <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
             className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
@@ -296,10 +343,13 @@ const DataObat = () => {
       </Dialog>
 
       <Dialog
-        header="Hapus Data Puskesmas"
+        header="Hapus Data Pengguna"
         visible={visibleDelete}
-        className="md:w-1/2 w-full"
-        onHide={() => setVisibleDelete(false)}
+        className="md:w-1/2 w-full "
+        onHide={() => {
+          if (!visibleDelete) return;
+          setVisibleDelete(false);
+        }}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -319,4 +369,4 @@ const DataObat = () => {
   );
 };
 
-export default DataObat;
+export default DataPengguna;

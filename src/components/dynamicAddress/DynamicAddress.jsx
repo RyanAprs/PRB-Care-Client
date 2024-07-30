@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Input, Select, SelectItem } from "@nextui-org/react";
 import { z } from "zod";
 import { AddressContext } from "../../config/context/AdressContext";
+
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 
 const DynamicAddress = () => {
   const [provinces, setProvinces] = useState([]);
@@ -27,12 +29,13 @@ const DynamicAddress = () => {
   }, []);
 
   const handleProvinceChange = (e) => {
-    const provinsiId = e.target.value;
+    const provinsiId = e.value;
     const province = provinces.find((prov) => prov.id === provinsiId);
     if (province) {
       setAddress((prev) => ({
         ...prev,
         provinsi: province.name,
+        provinsiId: provinsiId,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province.id}.json`
@@ -43,12 +46,13 @@ const DynamicAddress = () => {
   };
 
   const handleRegencyChange = (e) => {
-    const kabupatenId = e.target.value;
+    const kabupatenId = e.value;
     const regency = regencies.find((reg) => reg.id === kabupatenId);
     if (regency) {
       setAddress((prev) => ({
         ...prev,
         kabupaten: regency.name,
+        kabupatenId: kabupatenId,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${regency.id}.json`
@@ -59,12 +63,13 @@ const DynamicAddress = () => {
   };
 
   const handleDistrictChange = (e) => {
-    const kecamatanId = e.target.value;
+    const kecamatanId = e.value;
     const district = districts.find((dist) => dist.id === kecamatanId);
     if (district) {
       setAddress((prev) => ({
         ...prev,
         kecamatan: district.name,
+        kecamatanId: kecamatanId,
       }));
       fetch(
         `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${district.id}.json`
@@ -75,12 +80,13 @@ const DynamicAddress = () => {
   };
 
   const handleVillageChange = (e) => {
-    const desaId = e.target.value;
+    const desaId = e.value;
     const village = villages.find((village) => village.id === desaId);
     if (village) {
       setAddress((prev) => ({
         ...prev,
         desa: village.name,
+        desaId: desaId,
       }));
     }
   };
@@ -110,80 +116,72 @@ const DynamicAddress = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
-        <Select
-          className="w-full"
+        <Dropdown
+          value={address.provinsiId || ""}
+          options={provinces.map((prov) => ({
+            label: prov.name,
+            value: prov.id,
+          }))}
           onChange={handleProvinceChange}
-          value={address.provinsi || ""}
-          label="Pilih Provinsi"
-          variant="bordered"
+          placeholder="Pilih Provinsi"
+          filter
+          className="w-full p-2 text-sm"
           required
-        >
-          {provinces.map((prov) => (
-            <SelectItem key={prov.id} value={prov.id}>
-              {prov.name}
-            </SelectItem>
-          ))}
-        </Select>
+        />
         {errors.provinsi && (
           <span className="text-red-500">{errors.provinsi}</span>
         )}
 
-        <Select
+        <Dropdown
+          value={address.kabupatenId || ""}
+          options={regencies.map((reg) => ({ label: reg.name, value: reg.id }))}
           onChange={handleRegencyChange}
-          value={address.kabupaten || ""}
-          label="Pilih Kabupaten"
-          variant="bordered"
+          placeholder="Pilih Kabupaten"
+          filter
+          className="w-full p-2 text-sm "
           required
-        >
-          {regencies.map((reg) => (
-            <SelectItem key={reg.id} value={reg.id}>
-              {reg.name}
-            </SelectItem>
-          ))}
-        </Select>
+        />
         {errors.kabupaten && (
           <span className="text-red-500">{errors.kabupaten}</span>
         )}
 
-        <Select
+        <Dropdown
+          value={address.kecamatanId || ""}
+          options={districts.map((dist) => ({
+            label: dist.name,
+            value: dist.id,
+          }))}
           onChange={handleDistrictChange}
-          value={address.kecamatan || ""}
-          label="Pilih Kecamatan"
-          variant="bordered"
+          placeholder="Pilih Kecamatan"
+          filter
+          className="w-full p-2 text-sm"
           required
-        >
-          {districts.map((dist) => (
-            <SelectItem key={dist.id} value={dist.id}>
-              {dist.name}
-            </SelectItem>
-          ))}
-        </Select>
+        />
         {errors.kecamatan && (
           <span className="text-red-500">{errors.kecamatan}</span>
         )}
 
-        <Select
+        <Dropdown
+          value={address.desaId || ""}
+          options={villages.map((village) => ({
+            label: village.name,
+            value: village.id,
+          }))}
           onChange={handleVillageChange}
-          value={address.desa || ""}
-          label="Pilih Desa"
-          variant="bordered"
+          placeholder="Pilih Desa"
+          filter
+          className="w-full p-2 text-sm "
           required
-        >
-          {villages.map((village) => (
-            <SelectItem key={village.id} value={village.id}>
-              {village.name}
-            </SelectItem>
-          ))}
-        </Select>
+        />
         {errors.desa && <span className="text-red-500">{errors.desa}</span>}
 
-        <Input
+        <InputText
           type="text"
-          variant="bordered"
-          label="Detail Alamat"
           value={address.detail || ""}
+          placeholder="Detail Alamat"
           name="detail"
           onChange={handleInputChange}
+          className="w-full p-3 text-slg "
           required
         />
         {errors.detail && <span className="text-red-500">{errors.detail}</span>}

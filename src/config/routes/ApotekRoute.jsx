@@ -6,13 +6,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
-import { ApotekAuthContext } from "../context/ApotekAuthContext";
 import LoginApotek from "../../pages/apotek/login/LoginApotek";
 import HomeApotek from "../../pages/apotek/home/HomeApotek";
 import useDarkMode from "use-dark-mode";
+import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ children, role }) => {
-  const { token, role: userRole } = useContext(ApotekAuthContext);
+  const { token, role: userRole } = useContext(AuthContext);
 
   if (!token) {
     return <Navigate to="/apotek/login" />;
@@ -27,7 +27,7 @@ const PrivateRoute = ({ children, role }) => {
 
 const ApotekRoute = () => {
   const darkMode = useDarkMode(false);
-  const { isLoading } = useContext(ApotekAuthContext);
+  const { isLoading } = useContext(AuthContext);
 
   if (isLoading) {
     return <div>Loading...</div>;

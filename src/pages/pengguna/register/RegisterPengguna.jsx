@@ -9,7 +9,7 @@ import DynamicAddress, {
 import { AddressContext } from "../../../config/context/AdressContext";
 import axios from "axios";
 
-const RegisterUser = () => {
+const RegisterPengguna = () => {
   const [namaLengkap, setnamaLengkap] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -245,4 +245,4 @@ const RegisterUser = () => {
   );
 };
 
-export default RegisterUser;
+export default RegisterPengguna;

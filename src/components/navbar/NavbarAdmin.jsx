@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlignLeft,
@@ -14,28 +14,20 @@ import {
 } from "lucide-react";
 import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
-import {
-  Button,
-  Modal,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
-import Cookies from "js-cookie";
+import { AuthContext } from "../../config/context/AuthContext";
+import { Dialog } from "primereact/dialog";
+import { Button } from "primereact/button";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const overlayRef = useRef(null);
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const {
-    isOpen: isProfileOpen,
-    onOpen: onProfileOpen,
-    onOpenChange: onProfileOpenChange,
-  } = useDisclosure();
+  const [visible, setVisible] = useState(false);
+  const [visibleLogout, setVisibleLogout] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const { dispatch } = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -65,17 +57,17 @@ const NavbarAdmin = ({ children }) => {
   }, [isSidebarOpen]);
 
   const handleLogout = () => {
-    Cookies.remove("token");
-    Cookies.remove("role");
+    dispatch({ type: "LOGOUT" });
     navigate("/admin/login");
   };
 
   const Sidebar = () => (
     <div
       ref={sidebarRef}
-      className={`fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white p-4 flex-col transition-transform duration-300 ease-in-out ${
-        isSidebarOpen ? "translate-x-0" : "-translate-x-96"
-      }  md:translate-x-0 md:w-80 overflow-y-auto z-50 gap-8 h-full border-1 border-gray-300 dark:border-blackHover`}
+      style={{ willChange: "transform" }}
+      className={`fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white p-4 flex-col transition-transform duration-500 ease-in-out ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0 md:w-80 overflow-y-auto z-50 gap-8 h-full border-1 border-gray-300 dark:border-blackHover`}
     >
       <div className="flex flex-col h-full gap-4">
         <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4 items-center justify-center">
@@ -118,15 +110,15 @@ const NavbarAdmin = ({ children }) => {
               <h1>Apotek</h1>
             </Link>
             <Link
-              to="/admin/data-user"
+              to="/admin/data-pengguna"
               className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-user"
+                location.pathname === "/admin/data-pengguna"
                   ? "bg-lightGreen dark:bg-mainGreen"
                   : ""
               } rounded transition-all`}
             >
               <User />
-              <h1>User</h1>
+              <h1>Pengguna</h1>
             </Link>
             <Link
               to="/admin/data-pasien"
@@ -187,10 +179,8 @@ const NavbarAdmin = ({ children }) => {
           onClick={toggleSidebar}
         ></div>
       )}
-
       {/* Sidebar */}
       <Sidebar />
-
       <div className="flex flex-col w-full">
         {/* Navbar */}
         <div className="h-20 w-full flex items-center px-8 justify-between fixed  z-40 shadow-md dark:shadow-blackHover dark:bg-darkGreen bg-mainGreen text-white">
@@ -198,14 +188,16 @@ const NavbarAdmin = ({ children }) => {
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />
             </button>
-            <h1 className="text-xl md:block hidden">
+            <h1 className="text-xl">
               {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
               {location.pathname === "/admin/data-puskesmas"
                 ? "Data Puskesmas"
                 : ""}
               {location.pathname === "/admin/data-apotek" ? "Data Apotek" : ""}
               {location.pathname === "/admin/data-pasien" ? "Data Pasien" : ""}
-              {location.pathname === "/admin/data-user" ? "Data User" : ""}
+              {location.pathname === "/admin/data-pengguna"
+                ? "Data Pengguna"
+                : ""}
               {location.pathname === "/admin/data-obat" ? "Data Obat" : ""}
               {location.pathname === "/admin/data-kontrol-balik"
                 ? "Data Kontrol Balik"
@@ -215,15 +207,14 @@ const NavbarAdmin = ({ children }) => {
                 : ""}
             </h1>
           </div>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-4">
             <div>
               <ThemeSwitcher />
             </div>
-            <div className="flex gap-4 justify-center items-center">
-              <p className="md:block hidden">Admin</p>
+            <div className="flex gap-4 justify-center  items-center">
+              <p className="md:block hidden text-xl">Admin</p>
               <div
-                to=""
-                onClick={onProfileOpen}
+                onClick={() => setVisible(true)}
                 className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full cursor-pointer"
               >
                 <User className="text-black" />
@@ -236,106 +227,57 @@ const NavbarAdmin = ({ children }) => {
           {children}
         </div>
       </div>
-
       {/* Modal Profile */}
-      <Modal
-        isOpen={isProfileOpen}
-        onOpenChange={onProfileOpenChange}
-        className="w-52 p-3  mt-20  mr-6"
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 20,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-              placeContent: "end",
-              placeItems: "start",
-            },
-            exit: {
-              y: 1,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: "easeIn",
-              },
-            },
-          },
+      <Dialog
+        header="Menu"
+        visible={visible}
+        className="fixed top-20 right-8"
+        modal={false}
+        style={{ width: "20vw", height: "auto" }}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
         }}
       >
-        <ModalContent>
-          <div className="flex flex-col justify-between">
-            <div className="text-md hover:bg-gray-300 transition-all rounded-xl p-2 cursor-pointer">
-              Profile
-            </div>
-            <div
-              onClick={onOpen}
-              className="text-md hover:bg-gray-300 transition-all rounded-xl p-2 cursor-pointer"
-            >
-              Logout
-            </div>
-          </div>
-        </ModalContent>
-      </Modal>
+        <div className="flex flex-col text-lg ">
+          <Link to="" className="mb-4 w-full flex gap-4">
+            <User />
+            <h1>Profile</h1>
+          </Link>
+          <Link
+            to=""
+            className="mb-4 w-full flex gap-4"
+            onClick={() => setVisibleLogout(true)}
+          >
+            <LogOut />
+            <h1>Logout</h1>
+          </Link>
+        </div>
+      </Dialog>
 
       {/* Modal Logout */}
-      <Modal
-        backdrop="opaque"
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        placement="center"
-        motionProps={{
-          variants: {
-            enter: {
-              y: 0,
-              opacity: 1,
-              transition: {
-                duration: 0.3,
-                ease: "easeOut",
-              },
-            },
-            exit: {
-              y: 20,
-              opacity: 0,
-              transition: {
-                duration: 0.2,
-                ease: "easeIn",
-              },
-            },
-          },
+      <Dialog
+        header="Logout"
+        visible={visibleLogout}
+        className="md:w-1/2 w-full "
+        onHide={() => {
+          if (!visibleLogout) return;
+          setVisibleLogout(false);
+          setVisible(false);
         }}
       >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                <span className="text-lg">Logout</span>
-              </ModalHeader>
-              <div className="flex flex-col gap-4 p-6">
-                <p className="text-md">
-                  Are you sure you want to logout from the application?
-                </p>
-              </div>
-              <ModalFooter>
-                <Button
-                  color="danger"
-                  onPress={() => {
-                    handleLogout();
-                    onClose();
-                  }}
-                >
-                  Logout
-                </Button>
-                <Button color="default" onPress={onClose}>
-                  Cancel
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
+        <div className="flex flex-col gap-8">
+          <div className="text-xl">Apakah anda yakin ingin logout?</div>
+          <div className="flex gap-4 items-end justify-end">
+            <Button
+              label="Batal"
+              onClick={() => setVisibleLogout(false) || setVisible(false)}
+              className="p-button-text"
+            />
+            <Button label="Logout" onClick={handleLogout} autoFocus />
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

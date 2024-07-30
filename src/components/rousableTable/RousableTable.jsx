@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { Select, SelectItem } from "@nextui-org/react";
-import { Delete, Edit } from "lucide-react";
-import "primereact/resources/themes/saga-blue/theme.css";
-import "primereact/resources/primereact.min.css";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { Check, ClipboardCheck, Delete, Edit, X } from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -14,64 +12,116 @@ export default function ReusableTable({
   onCreate,
   onEdit,
   onDelete,
+  onDone,
+  onCancelled,
   statuses,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
+
+  useEffect(() => {
+    if (statuses && statuses.length > 0 && statuses[0].key !== "all") {
+      statuses.unshift({ key: "all", label: "Semua" });
+    }
+  }, [statuses]);
 
   const onGlobalFilterChange = (e) => {
     setGlobalFilter(e.target.value);
   };
 
-  const onStatusFilterChange = (value) => {
-    setStatusFilter(value);
+  const onStatusFilterChange = (e) => {
+    setSelectedStatus(e.value);
   };
 
-  const statusRowFilterTemplate = statuses && statuses.length > 0 && (
-    <Select
-      placeholder="Pilih status"
-      value={statusFilter}
-      onChange={(e) => onStatusFilterChange(e.target.value)}
-      className="w-36"
-      size="lg"
-    >
-      {statuses.map((status) => (
-        <SelectItem key={status.key} value={status.key}>
-          {status.label}
-        </SelectItem>
-      ))}
-    </Select>
+  const filteredData = data.filter((item) => {
+    return (
+      !selectedStatus ||
+      selectedStatus.key === "all" ||
+      item.status.toLowerCase() === selectedStatus.key.toLowerCase()
+    );
+  });
+
+  const statusRowFilterTemplate = (
+    <Dropdown
+      value={selectedStatus}
+      options={statuses}
+      onChange={onStatusFilterChange}
+      placeholder="Pilih Status"
+      optionLabel="label"
+      className="w-full"
+    />
   );
 
   const actionBodyTemplate = (rowData) => {
-    return (
-      <div className="flex justify-center gap-2">
-        <Button size="sm" onClick={() => onEdit(rowData)}>
-          <Edit />
-        </Button>
-        <Button size="sm" onClick={() => onDelete(rowData)}>
-          <Delete />
-        </Button>
-      </div>
-    );
+    const status = rowData.status;
+
+    if (!statuses) {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+            <Edit />
+          </Button>
+          <Button size="sm" severity="danger" onClick={() => onDelete(rowData)}>
+            <Delete />
+          </Button>
+        </div>
+      );
+    } else if (
+      status === "selesai" ||
+      status === "batal" ||
+      status === "diambil"
+    ) {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="danger" onClick={() => onDelete(rowData)}>
+            <Delete />
+          </Button>
+        </div>
+      );
+    } else if (status === "menunggu") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+            <Edit />
+          </Button>
+          <Button size="sm" severity="success" onClick={() => onDone(rowData)}>
+            <Check />
+          </Button>
+          <Button
+            size="sm"
+            severity="danger"
+            onClick={() => onCancelled(rowData)}
+          >
+            <X />
+          </Button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+            <Edit />
+          </Button>
+          <Button severity="success" size="sm" onClick={() => onDone(rowData)}>
+            <Check />
+          </Button>
+        </div>
+      );
+    }
   };
 
-  const filteredData = data.filter((item) =>
-    statusFilter ? item.status === statusFilter : true
-  );
-
   return (
-    <div className="p-4">
-      <div className="card p-6 bg-white dark:bg-blackHover w-full">
-        <div className="flex justify-between items-center mb-4 px-4">
+    <div className="p-4 w-full">
+      <div className="card p-6 bg-white dark:bg-blackHover w-full flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
           <InputText
-            className="border bg-gray-100  dark:bg-blackHover p-3 rounded-xl"
+            className="border w-full md:w-1/2 bg-gray-100 dark:bg-blackHover p-3 rounded-xl "
             type="search"
             value={globalFilter}
             onChange={onGlobalFilterChange}
             placeholder="Search..."
           />
-          <div className="flex gap-4">
+          <div className="flex gap-4  items-end">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}
@@ -79,8 +129,8 @@ export default function ReusableTable({
               onClick={onCreate}
               text
               raised
-              className="px-4 py-2 bg-lightGreen text-white rounded-xl"
-              label="Tambah Data"
+              className=" bg-lightGreen md:text-lg text-sm text-white rounded-xl"
+              label="Tambah"
             />
           </div>
         </div>
@@ -108,7 +158,7 @@ export default function ReusableTable({
                   ? statusRowFilterTemplate
                   : null
               }
-              className="p-4  "
+              className="p-4 "
             />
           ))}
           <Column

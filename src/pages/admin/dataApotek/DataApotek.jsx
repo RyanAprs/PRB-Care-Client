@@ -1,26 +1,32 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import ReusableTable from "../../../components/rousableTable/RousableTable";
+import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
+import { AddressContext } from "../../../config/context/AdressContext";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { Toast } from "primereact/toast";
+import { ZodError } from "zod";
+
+import {
+  handleApiError,
+  handleDeleteError,
+} from "../../../utils/ApiErrorHandlers";
+import { apotekSchema } from "../../../validations/ApotekSchema";
 import axios from "axios";
 import Cookies from "js-cookie";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import { ProgressSpinner } from "primereact/progressspinner";
 import {
-  Button,
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  useDisclosure,
-} from "@nextui-org/react";
-import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
-import toast from "react-hot-toast";
-import { AddressContext } from "../../../config/context/AdressContext";
+  createApotek,
+  deleteApotek,
+  getAllApotek,
+  getApotekById,
+  updateApotek,
+} from "../../../services/ApotekService";
 
 const DataApotek = () => {
   const [data, setData] = useState([]);
-  const token = Cookies.get("token");
   const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState("");
   const [datas, setDatas] = useState({
     namaApotek: "",
     username: "",
@@ -28,17 +34,33 @@ const DataApotek = () => {
     telepon: "",
     alamat: "",
   });
+  const [errors, setErrors] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const { address } = useContext(AddressContext);
   const [currentName, setCurrentName] = useState("");
+  const toast = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [visibleDelete, setVisibleDelete] = useState(false);
+  const title = "Apotek";
+  const token = Cookies.get("token");
 
-  const {
-    isOpen: isDeleteModalOpen,
-    onOpen: onDeleteOpen,
-    onClose: onDeleteClose,
-  } = useDisclosure();
+  useEffect(() => {
+    const formattedAddress = [
+      address.detail,
+      address.desa,
+      address.kecamatan,
+      address.kabupaten,
+      address.provinsi,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    setDatas((prev) => ({
+      ...prev,
+      alamat: formattedAddress,
+    }));
+  }, [address]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,25 +84,8 @@ const DataApotek = () => {
     fetchData();
   }, [token]);
 
-  useEffect(() => {
-    const formattedAddress = [
-      address.detail,
-      address.desa,
-      address.kecamatan,
-      address.kabupaten,
-      address.provinsi,
-    ]
-      .filter(Boolean)
-      .join(", ");
-
-    setDatas((prev) => ({
-      ...prev,
-      alamat: formattedAddress,
-    }));
-  }, [address]);
-
   const handleModalCreate = () => {
-    setErrors("");
+    setErrors({});
     setDatas({
       namaApotek: "",
       username: "",
@@ -89,89 +94,43 @@ const DataApotek = () => {
       telepon: "",
     });
     setIsEditMode(false);
-    onOpen();
+    setVisible(true);
   };
 
   const handleCreate = async () => {
-    console.log(datas);
-    setErrors("");
-    if (
-      !datas.namaApotek ||
-      !datas.username ||
-      !datas.password ||
-      !datas.telepon ||
-      !datas.alamat
-    ) {
-      setErrors("Pastikan semua kolom terisi. Mohon periksa kembali.");
-      return;
-    } else {
-      try {
-        const response = await axios.post(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-          datas,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+    try {
+      apotekSchema.parse(datas);
+      const response = await createApotek(datas);
 
-        if (response.status === 201) {
-          onClose();
-          toast.success("Data apotek berhasil ditambahkan");
-          const dataResponse = await axios.get(
-            `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setData(dataResponse.data.data);
-        }
-      } catch (error) {
-        if (error.response) {
-          switch (error.response.status) {
-            case 400:
-              setErrors("Data gagal ditambahkan. Mohon periksa kembali.");
-              break;
-            case 401:
-              setErrors(
-                "Anda tidak memiliki akses untuk menambah data. Silahkan login terlebih dahulu."
-              );
-              break;
-            case 409:
-              setErrors(
-                "Username atau nomor telepon sudah digunakan. Mohon periksa kembali."
-              );
-              break;
-            case 500:
-              setErrors(
-                "Terjadi kesalahan pada server. Mohon coba lagi nanti."
-              );
-              break;
-            default:
-              setErrors("Terjadi kesalahan yang tidak terduga.");
-              break;
-          }
-        } else {
-          setErrors("Terjadi kesalahan jaringan. Mohon coba lagi nanti.");
-        }
+      if (response.status === 201) {
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Data apotek ditambahkan.",
+          life: 3000,
+        });
+        setVisible(false);
+        const data = await getAllApotek();
+        setData(data);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        handleApiError(error, toast);
       }
     }
   };
+
   const handleModalUpdate = async (data) => {
+    setErrors({});
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek/${data.id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const dataResponse = response.data.data;
-      if (response.status === 200) {
+      const dataResponse = await getApotekById(data.id);
+      if (dataResponse) {
         setDatas({
           namaApotek: dataResponse.namaApotek,
           username: dataResponse.username,
@@ -179,73 +138,47 @@ const DataApotek = () => {
           telepon: dataResponse.telepon,
         });
         setCurrentId(data.id);
+        setIsEditMode(true);
+        setVisible(true);
       }
     } catch (error) {
-      console.log(error);
+      handleApiError(error, toast);
     }
-    onOpen();
-    setIsEditMode(true);
   };
 
   const handleUpdate = async () => {
-    setErrors("");
+    try {
+      apotekSchema
+        .pick({
+          namaApotek: true,
+          username: true,
+          alamat: true,
+          telepon: true,
+        })
+        .parse(datas);
 
-    if (!datas.namaApotek || !datas.telepon || !datas.alamat) {
-      setErrors("Pastikan semua kolom terisi. Mohon periksa kembali.");
-      return;
-    } else {
-      try {
-        const response = await axios.patch(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek/${currentId}`,
-          datas,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+      const response = await updateApotek(currentId, datas);
 
-        if (response.status === 201) {
-          onClose();
-          toast.success("Data Apotek berhasil diperbarui");
-          const dataResponse = await axios.get(
-            `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setData(dataResponse.data.data);
-        }
-      } catch (error) {
-        if (error.response) {
-          switch (error.response.status) {
-            case 400:
-              setErrors("Data gagal diperbarui. Mohon periksa kembali.");
-              break;
-            case 401:
-              setErrors(
-                "Anda tidak memiliki akses untuk memperbarui data. Silahkan login terlebih dahulu."
-              );
-              break;
-            case 409:
-              setErrors(
-                "Username sudah digunakan atau nomor telepon sudah digunakan. Mohon periksa kembali."
-              );
-              break;
-            case 500:
-              setErrors(
-                "Terjadi kesalahan pada server. Mohon coba lagi nanti."
-              );
-              break;
-            default:
-              setErrors("Terjadi kesalahan yang tidak terduga.");
-              break;
-          }
-        } else {
-          setErrors("Terjadi kesalahan jaringan. Mohon coba lagi nanti.");
-        }
+      if (response.status === 200) {
+        setVisible(false);
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Data apotek diperbarui.",
+          life: 3000,
+        });
+        const data = await getAllApotek();
+        setData(data);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        handleApiError(error, toast);
       }
     }
   };
@@ -253,65 +186,26 @@ const DataApotek = () => {
   const handleModalDelete = (data) => {
     setCurrentId(data.id);
     setCurrentName(data.namaApotek);
-    onDeleteOpen();
+    setVisibleDelete(true);
   };
 
   const handleDelete = async () => {
+    setVisibleDelete(false);
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek/${currentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await deleteApotek(currentId);
 
-      if (response.status === 201) {
-        onDeleteClose();
-        toast.success("Data Apotek berhasil dihapus.");
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setData(response.data.data);
+      if (response.status === 200) {
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Data apotek dihapus.",
+          life: 3000,
+        });
+        const data = await getAllApotek();
+        setData(data);
       }
     } catch (error) {
-      if (error.response) {
-        onDeleteClose();
-        switch (error.response.status) {
-          case 400:
-            toast.error("Data gagal dihapus. Mohon periksa kembali.");
-            break;
-          case 401:
-            toast.error(
-              "Anda tidak memiliki akses untuk menambah data. Silahkan login terlebih dahulu."
-            );
-            break;
-          case 404:
-            toast.error("Data tidak ditemukan");
-            break;
-          case 409:
-            toast.error(
-              "Gagal menghapus data.Admin Apotek ini masih terkait dengan data lain. Mohon periksa kembali"
-            );
-            break;
-          case 500:
-            toast.error(
-              "Terjadi kesalahan pada server. Mohon coba lagi nanti."
-            );
-            break;
-          default:
-            toast.error("Terjadi kesalahan, coba lagi nanti.");
-            break;
-        }
-      } else {
-        toast.error("Terjadi kesalahan jaringan. Mohon coba lagi nanti.");
-      }
+      handleDeleteError(error, toast, title);
     }
   };
 
@@ -321,10 +215,15 @@ const DataApotek = () => {
     { field: "alamat", header: "Alamat" },
   ];
 
-  if (loading) return <p>Loading...</p>;
-
+  if (loading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div>
+    );
   return (
-    <div className="flex flex-col gap-4 p-4 z-10 ">
+    <div className="flex flex-col gap-4 p-4 z-10">
+      <Toast ref={toast} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}
@@ -335,107 +234,118 @@ const DataApotek = () => {
         />
       </div>
 
-      <Modal
-        size="lg"
-        className="max-h-screen"
-        isOpen={isOpen}
-        onClose={onClose}
+      <Dialog
+        header={isEditMode ? "Ubah Data Apotek" : "Tambah Data Apotek"}
+        visible={visible}
+        maximizable
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
       >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1 ">
-                {isEditMode ? "Edit Data Apotek" : "Tambah Data Apotek"}
-              </ModalHeader>
-              <ModalBody className="overflow-auto">
-                {errors && <p className="text-red-500">{errors}</p>}
-                <Input
-                  type="text"
-                  label="Nama Apotek"
-                  variant="bordered"
-                  value={datas.namaApotek}
-                  onChange={(e) =>
-                    setDatas((prev) => ({
-                      ...prev,
-                      namaApotek: e.target.value,
-                    }))
-                  }
-                />
-                <Input
-                  type="text"
-                  label="Username Apotek"
-                  variant="bordered"
-                  value={datas.username}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, username: e.target.value }))
-                  }
-                />
-                <Input
-                  type="password"
-                  label="Password Apotek"
-                  variant="bordered"
-                  value={datas.password}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, password: e.target.value }))
-                  }
-                />
-                <span className="font-light -mt-4">
-                  {isEditMode
-                    ? "Jika password apotek tidak diubah, biarkan kosong."
-                    : "*password harus kombinasi huruf kecil, kapital, angka, dansimbol."}
-                </span>
-                <Input
-                  type="number"
-                  label="Nomor Telepon Apotek"
-                  variant="bordered"
-                  value={datas.telepon}
-                  onChange={(e) =>
-                    setDatas((prev) => ({ ...prev, telepon: e.target.value }))
-                  }
-                />
-                <h1>Alamat Apotek</h1>
-                <DynamicAddress />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" onPress={onClose}>
-                  Batal
-                </Button>
-                <Button
-                  variant="flat"
-                  onClick={isEditMode ? handleUpdate : handleCreate}
-                >
-                  {isEditMode ? "Update" : "Buat"}
-                </Button>
-              </ModalFooter>
-            </>
+        <div className="flex flex-col p-4 gap-4">
+          <InputText
+            type="text"
+            placeholder="Nama Apotek"
+            className="p-input text-lg p-3 rounded"
+            value={datas.namaApotek}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                namaApotek: e.target.value,
+              }))
+            }
+          />
+          {errors.namaApotek && (
+            <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
           )}
-        </ModalContent>
-      </Modal>
 
-      <Modal
-        size="lg"
-        className="max-h-screen"
-        isOpen={isDeleteModalOpen}
-        onClose={onDeleteClose}
-      >
-        <ModalContent>
-          {(onDeleteClose) => (
-            <>
-              <ModalBody className="overflow-auto">
-                Apakah anda yakin ingin menghapus data {currentName}?
-              </ModalBody>
-              <ModalFooter>
-                <Button color="flat" onPress={onDeleteClose}>
-                  Batal
-                </Button>
-                <Button variant="danger" onClick={handleDelete}>
-                  Hapus
-                </Button>
-              </ModalFooter>
-            </>
+          <InputText
+            type="text"
+            placeholder="Username"
+            className="p-input text-lg p-3 rounded"
+            value={datas.username}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                username: e.target.value,
+              }))
+            }
+          />
+          {errors.username && (
+            <small className="p-error -mt-3 text-sm">{errors.username}</small>
           )}
-        </ModalContent>
-      </Modal>
+
+          <InputText
+            type="password"
+            placeholder="Password"
+            className="p-input text-lg p-3 rounded"
+            value={datas.password}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
+            }
+          />
+          {errors.password && (
+            <small className="p-error -mt-3 text-sm">{errors.password}</small>
+          )}
+
+          <InputText
+            type="text"
+            placeholder="Telepon"
+            className="p-input text-lg p-3 rounded"
+            value={datas.telepon}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                telepon: e.target.value,
+              }))
+            }
+          />
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
+          )}
+
+          <span>Alamat Apotek</span>
+          <DynamicAddress />
+          {errors.alamat && (
+            <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
+
+          <Button
+            label={isEditMode ? "Edit" : "Simpan"}
+            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            onClick={isEditMode ? handleUpdate : handleCreate}
+          />
+        </div>
+      </Dialog>
+
+      <Dialog
+        header="Hapus Data Apotek"
+        visible={visibleDelete}
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visibleDelete) return;
+          setVisibleDelete(false);
+        }}
+      >
+        <div className="flex flex-col gap-8">
+          <div className="text-xl">
+            Apakah anda yakin ingin menghapus data {currentName}?
+          </div>
+          <div className="flex gap-4 items-end justify-end">
+            <Button
+              label="Batal"
+              onClick={() => setVisibleDelete(false)}
+              className="p-button-text"
+            />
+            <Button label="Hapus" onClick={handleDelete} autoFocus />
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

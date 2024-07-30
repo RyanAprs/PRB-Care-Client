@@ -1,4 +1,3 @@
-import { Card, CardBody } from "@nextui-org/react";
 import {
   Hospital,
   HousePlus,
@@ -8,6 +7,7 @@ import {
   User2Icon,
   UserPlus,
 } from "lucide-react";
+import { Card } from "primereact/card";
 
 const DashboardAdmin = () => {
   const list = [
@@ -54,19 +54,15 @@ const DashboardAdmin = () => {
       <div className="gap-4 grid grid-cols-1 sm:grid-cols-3 ">
         {list.map((item, index) => (
           <Card
-            shadow="sm"
+            title={item.title}
             key={index}
-            isPressable
-            className="bg-mainGreen dark:bg-darkGreen text-white shadow-lg"
+            className="bg-mainGreen rounded dark:bg-darkGreen text-white shadow-lg"
           >
-            <CardBody className=" overflow-visible p-10">
-              <div className="flex flex-col gap-4 justify-center items-center">
-                <div className="text-xl font-semibold">{item.title}</div>
-                <div>
-                  <div>{item.desc}</div>
-                </div>
+            <div className="py-2 overflow-visible">
+              <div className="text-xl flex items-center justify-center">
+                {item.desc}
               </div>
-            </CardBody>
+            </div>
           </Card>
         ))}
       </div>

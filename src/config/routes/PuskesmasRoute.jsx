@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import HomePuskesmas from "../../pages/puskesmas/home/HomePuskesmas";
-import { PuskesmasAuthContext } from "../context/PuskesmasAuthContext";
 import NotFound from "../../pages/NotFound";
 import useDarkMode from "use-dark-mode";
+import { AuthContext } from "../context/AuthContext";
 
 const PrivateRoute = ({ children, role }) => {
-  const { token, role: userRole } = useContext(PuskesmasAuthContext);
+  const { token, role: userRole } = useContext(AuthContext);
 
   if (!token) {
     return <Navigate to="/puskesmas/login" />;

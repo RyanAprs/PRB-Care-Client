@@ -6,17 +6,17 @@ import {
   Navigate,
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
-import { UserAuthContext } from "../context/UserAuthContext";
-import LoginUser from "../../pages/user/login/LoginUser";
-import RegisterUser from "../../pages/user/register/RegisterUser";
-import HomeUser from "../../pages/user/home/HomeUser";
 import useDarkMode from "use-dark-mode";
+import { AuthContext } from "../context/AuthContext";
+import LoginPengguna from "../../pages/pengguna/login/LoginPengguna";
+import RegisterPengguna from "../../pages/pengguna/register/RegisterPengguna";
+import HomePengguna from "../../pages/pengguna/home/HomePengguna";
 
 const PrivateRoute = ({ children, role }) => {
-  const { token, role: userRole } = useContext(UserAuthContext);
+  const { token, role: userRole } = useContext(AuthContext);
 
   if (!token) {
-    return <Navigate to="/user/login" />;
+    return <Navigate to="/pengguna/login" />;
   }
 
   if (userRole !== role) {
@@ -26,22 +26,22 @@ const PrivateRoute = ({ children, role }) => {
   return children;
 };
 
-const UserRoute = () => {
+const PenggunaRoute = () => {
   const darkMode = useDarkMode(false);
   return (
     <Router>
       <Routes>
-        <Route path="/user/register" element={<RegisterUser />} />
-        <Route path="/user/login" element={<LoginUser />} />
+        <Route path="/pengguna/register" element={<RegisterPengguna />} />
+        <Route path="/pengguna/login" element={<LoginPengguna />} />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
       <div className={`${darkMode.value ? "dark" : ""}`}>
         <Routes>
           <Route
-            path="/user/home"
+            path="/pengguna/home"
             element={
-              <PrivateRoute role="user">
-                <HomeUser />
+              <PrivateRoute role="pengguna">
+                <HomePengguna />
               </PrivateRoute>
             }
           />
@@ -51,4 +51,4 @@ const UserRoute = () => {
   );
 };
 
-export default UserRoute;
+export default PenggunaRoute;

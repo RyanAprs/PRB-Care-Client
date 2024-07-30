@@ -1,11 +1,57 @@
-export const timeStampToHuman = (timestamp) => {
-  // Periksa apakah timestamp dalam detik (jika lebih besar dari 1000000000) atau milidetik
-  const isInSeconds = timestamp.toString().length <= 10;
+export const convertUnixToHuman = (unixTimestamp) => {
+  const date = new Date(unixTimestamp * 1000);
 
-  // Konversi timestamp sesuai unitnya
-  const date = new Date(isInSeconds ? timestamp * 1000 : timestamp);
+  const formattedDate = date.toLocaleString("en-CA", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    // hour: "2-digit",
+    // minute: "2-digit",
+    // second: "2-digit",
+  });
 
-  // Format tanggal sesuai dengan format yang diinginkan
-  const options = { day: "numeric", month: "long", year: "numeric" };
-  return date.toLocaleDateString("id-ID", options);
+  return formattedDate;
+};
+
+export const convertHumanToUnix = (dateString) => {
+  const date = new Date(dateString);
+  const unixTimestamp = Math.floor(date.getTime() / 1000);
+  return unixTimestamp;
+};
+
+export const dateLocaleId = {
+  firstDayOfWeek: 0,
+  dayNames: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+  dayNamesShort: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+  dayNamesMin: ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+  monthNames: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+  monthNamesShort: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Agu",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Des",
+  ],
+  today: "Hari ini",
+  clear: "Bersihkan",
 };
