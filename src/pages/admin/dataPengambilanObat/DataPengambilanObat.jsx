@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
@@ -18,7 +17,10 @@ import {
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
-import { pengambilanObatSchema } from "../../../validations/PengambilanObatSchema";
+import {
+  pengambilanObatCreateSchema,
+  pengambilanObatUpdateSchema,
+} from "../../../validations/PengambilanObatSchema";
 import { Toast } from "primereact/toast";
 import {
   createPengambilanObat,
@@ -29,6 +31,8 @@ import {
   PengambilanObatDone,
   updatePengambilanObat,
 } from "../../../services/PengambilanObatService";
+import { getAllPasien } from "../../../services/PasienService";
+import { getAllObat } from "../../../services/ObatService";
 
 const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
@@ -57,21 +61,9 @@ const DataPengambilanObat = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pengambilan-obat`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
 
-        const formattedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPengambilan: convertUnixToHuman(item.tanggalPengambilan),
-        }));
-
-        setData(formattedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -81,19 +73,8 @@ const DataPengambilanObat = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pasien?status=aktif`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const processedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
-        }));
-        setPasien(processedData);
+        const responseData = await getAllPasien();
+        setPasien(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -103,22 +84,15 @@ const DataPengambilanObat = () => {
 
     const fetchDataObat = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/obat`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        setObat(response.data.data);
+        const responseData = await getAllObat();
+        setObat(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
+
     fetchDataObat();
     fetchDataPasien();
     fetchData();
@@ -128,18 +102,17 @@ const DataPengambilanObat = () => {
     setIsEditMode(false);
     setErrors({});
     setDatas({
-      idObat: "",
-      idPasien: "",
+      idObat: 0,
+      idPasien: 0,
       jumlah: "",
-      tanggalPengambilan: "",
+      tanggalPengambilan: 0,
     });
     setVisible(true);
   };
 
   const handleCreate = async () => {
     try {
-      const schema = pengambilanObatSchema.parse(datas);
-      console.log(schema);
+      pengambilanObatCreateSchema.parse(datas);
       const response = await createPengambilanObat(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -149,8 +122,8 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllPengambilanObat();
-        setData(dataResponse);
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -188,7 +161,15 @@ const DataPengambilanObat = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await updatePengambilanObat(currentId, datas);
+      pengambilanObatUpdateSchema.parse(datas);
+
+      const updatedData = {
+        ...datas,
+        tanggalPengambilan: convertHumanToUnix(selectedDate),
+      };
+
+      const response = await updatePengambilanObat(currentId, updatedData);
+
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -196,9 +177,11 @@ const DataPengambilanObat = () => {
           detail: "Data pengembalian obat diperbarui",
           life: 3000,
         });
+
         setVisible(false);
-        const dataResponse = await getAllPengambilanObat();
-        setData(dataResponse);
+
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -230,8 +213,9 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisibleDelete(false);
-        const dataResponse = await getAllPengambilanObat();
-        setData(dataResponse);
+
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -254,8 +238,8 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisibleDone(false);
-        const dataResponse = await getAllPengambilanObat();
-        setData(dataResponse);
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -278,8 +262,9 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisibleCancelled(false);
-        const dataResponse = await getAllPengambilanObat();
-        setData(dataResponse);
+
+        const responseData = await getAllPengambilanObat();
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -291,7 +276,7 @@ const DataPengambilanObat = () => {
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Apotek", field: "obat.adminApotek.namaApotek" },
     { header: "Obat", field: "obat.namaObat" },
-    { header: "Jumlah Obat", field: "obat.jumlah" },
+    { header: "Jumlah Obat", field: "jumlah" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
     { header: "Status", field: "status" },
   ];
@@ -397,8 +382,8 @@ const DataPengambilanObat = () => {
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"
-            placeholder="Pilih Tanggal Kontrol"
-            value={isEditMode ? datas.tanggalPengambilan : selectedDate}
+            placeholder="Pilih Tanggal Pengambilan"
+            value={selectedDate}
             onChange={(e) => {
               setSelectedDate(e.value);
               const initialDate = e.value;

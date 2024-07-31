@@ -19,7 +19,11 @@ import {
   getObatById,
   updateObat,
 } from "../../../services/ObatService";
-import { obatSchema } from "../../../validations/ObatSchema";
+import {
+  createObatSchema,
+  // obatSchema,
+  updateObatSchema,
+} from "../../../validations/ObatSchema";
 import { ProgressSpinner } from "primereact/progressspinner";
 
 const DataObat = () => {
@@ -44,15 +48,8 @@ const DataObat = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/obat`,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          }
-        );
-        setData(response.data.data);
+        const responseData = await getAllObat();
+        setData(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -87,7 +84,7 @@ const DataObat = () => {
     setDatas({
       namaObat: "",
       jumlah: 0,
-      idAdminApotek: "",
+      idAdminApotek: 0,
     });
     setVisible(true);
     setIsEditMode(false);
@@ -95,7 +92,7 @@ const DataObat = () => {
 
   const handleCreate = async () => {
     try {
-      obatSchema.parse(datas);
+      createObatSchema.parse(datas);
       const response = await createObat(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -142,7 +139,7 @@ const DataObat = () => {
 
   const handleUpdate = async () => {
     try {
-      obatSchema.pick({ namaObat: true, jumlah: true }).parse(datas);
+      updateObatSchema.parse(datas);
       const response = await updateObat(currentId, datas);
       if (response.status === 200) {
         toast.current.show({

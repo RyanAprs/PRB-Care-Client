@@ -7,7 +7,10 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { ZodError } from "zod";
-import { puskesmasSchema } from "../../../validations/PuskesmasSchema";
+import {
+  puskesmasCreateSchema,
+  puskesmasUpdateSchema,
+} from "../../../validations/PuskesmasSchema";
 import {
   createPuskesmas,
   deletepuskesmas,
@@ -85,6 +88,7 @@ const DataPuskesmas = () => {
   }, [token]);
 
   const handleModalCreate = () => {
+    setErrors({});
     setDatas({
       namaPuskesmas: "",
       username: "",
@@ -92,14 +96,13 @@ const DataPuskesmas = () => {
       alamat: "",
       telepon: "",
     });
-    setErrors({});
     setIsEditMode(false);
     setVisible(true);
   };
 
   const handleCreate = async () => {
     try {
-      puskesmasSchema.parse(datas);
+      puskesmasCreateSchema.parse(datas);
 
       const response = await createPuskesmas(datas);
 
@@ -128,6 +131,7 @@ const DataPuskesmas = () => {
   };
 
   const handleModalUpdate = async (data) => {
+    setErrors({});
     try {
       const dataResponse = await getPuskesmasById(data.id);
       if (dataResponse) {
@@ -148,15 +152,7 @@ const DataPuskesmas = () => {
 
   const handleUpdate = async () => {
     try {
-      puskesmasSchema
-        .pick({
-          namaPuskesmas: true,
-          username: true,
-          password: true,
-          telepon: true,
-          alamat: true,
-        })
-        .parse(datas);
+      puskesmasUpdateSchema.parse(datas);
 
       const response = await updatePuskesmas(currentId, datas);
 
@@ -287,6 +283,9 @@ const DataPuskesmas = () => {
               }))
             }
           />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan password jika tidak ingin diubah" : null}
+          </span>
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
@@ -307,6 +306,9 @@ const DataPuskesmas = () => {
           )}
           <span className="font-medium">Alamat Puskesmas</span>
           <DynamicAddress />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
+          </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}

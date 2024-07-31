@@ -50,7 +50,9 @@ const DashboardAdmin = () => {
 
   return (
     <div className="flex flex-col p-8  gap-8 ">
-      <div className="text-3xl">Halo, Selamat Datang Kembali!!</div>
+      <div className="text-3xl font-semibold">
+        Halo, Selamat Datang Kembali!!
+      </div>
       <div className="gap-4 grid grid-cols-1 sm:grid-cols-3 ">
         {list.map((item, index) => (
           <Card

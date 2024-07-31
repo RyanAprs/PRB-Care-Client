@@ -16,3 +16,51 @@ export const pengambilanObatSchema = z.object({
     })
     .positive(),
 });
+
+export const pengambilanObatCreateSchema = z.object({
+  idPasien: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pasien tidak boleh kosong"),
+  idObat: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Obat tidak boleh kosong"),
+  jumlah: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Jumlah obat harus lebih dari 0"),
+  tanggalPengambilan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Pengambilan harus diisi"),
+  idAdminPuskesmas: z.number().int().positive().optional(),
+});
+
+export const pengambilanObatUpdateSchema = z.object({
+  idPasien: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pasien tidak boleh kosong"),
+  idObat: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Obat tidak boleh kosong"),
+  jumlah: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Jumlah obat harus lebih dari 0"),
+  tanggalPengambilan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Pengambilan harus diisi"),
+  idAdminPuskesmas: z.number().int().positive().optional(),
+});

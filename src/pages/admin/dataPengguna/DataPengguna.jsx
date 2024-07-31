@@ -9,7 +9,10 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { ZodError } from "zod";
-import { userSchema } from "../../../validations/PenggunaSchema";
+import {
+  penggunaCreateSchema,
+  penggunaUpdateSchema,
+} from "../../../validations/PenggunaSchema";
 import {
   createPengguna,
   deletePengguna,
@@ -99,7 +102,7 @@ const DataPengguna = () => {
 
   const handleCreate = async () => {
     try {
-      userSchema.parse(datas);
+      penggunaCreateSchema.parse(datas);
       const response = await createPengguna(datas);
 
       if (response.status === 201) {
@@ -150,15 +153,7 @@ const DataPengguna = () => {
 
   const handleUpdate = async () => {
     try {
-      userSchema
-        .pick({
-          namaLengkap: true,
-          username: true,
-          telepon: true,
-          teleponKeluarga: true,
-          alamat: true,
-        })
-        .parse(datas);
+      penggunaUpdateSchema.parse(datas);
 
       const response = await updatePengguna(currentId, datas);
 
@@ -293,6 +288,9 @@ const DataPengguna = () => {
               }))
             }
           />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan password jika tidak ingin diubah" : null}
+          </span>
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
@@ -331,6 +329,9 @@ const DataPengguna = () => {
           )}
           <span>Alamat Pengguna</span>
           <DynamicAddress />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
+          </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { z } from "zod";
 import { AddressContext } from "../../config/context/AdressContext";
-
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 
@@ -132,59 +131,80 @@ const DynamicAddress = () => {
           <span className="text-red-500">{errors.provinsi}</span>
         )}
 
-        <Dropdown
-          value={address.kabupatenId || ""}
-          options={regencies.map((reg) => ({ label: reg.name, value: reg.id }))}
-          onChange={handleRegencyChange}
-          placeholder="Pilih Kabupaten"
-          filter
-          className="w-full p-2 text-sm "
-          required
-        />
-        {errors.kabupaten && (
-          <span className="text-red-500">{errors.kabupaten}</span>
+        {address.provinsiId && (
+          <>
+            <Dropdown
+              value={address.kabupatenId || ""}
+              options={regencies.map((reg) => ({
+                label: reg.name,
+                value: reg.id,
+              }))}
+              onChange={handleRegencyChange}
+              placeholder="Pilih Kabupaten"
+              filter
+              className="w-full p-2 text-sm "
+              required
+            />
+            {errors.kabupaten && (
+              <span className="text-red-500">{errors.kabupaten}</span>
+            )}
+          </>
         )}
 
-        <Dropdown
-          value={address.kecamatanId || ""}
-          options={districts.map((dist) => ({
-            label: dist.name,
-            value: dist.id,
-          }))}
-          onChange={handleDistrictChange}
-          placeholder="Pilih Kecamatan"
-          filter
-          className="w-full p-2 text-sm"
-          required
-        />
-        {errors.kecamatan && (
-          <span className="text-red-500">{errors.kecamatan}</span>
+        {address.kabupatenId && (
+          <>
+            <Dropdown
+              value={address.kecamatanId || ""}
+              options={districts.map((dist) => ({
+                label: dist.name,
+                value: dist.id,
+              }))}
+              onChange={handleDistrictChange}
+              placeholder="Pilih Kecamatan"
+              filter
+              className="w-full p-2 text-sm"
+              required
+            />
+            {errors.kecamatan && (
+              <span className="text-red-500">{errors.kecamatan}</span>
+            )}
+          </>
         )}
 
-        <Dropdown
-          value={address.desaId || ""}
-          options={villages.map((village) => ({
-            label: village.name,
-            value: village.id,
-          }))}
-          onChange={handleVillageChange}
-          placeholder="Pilih Desa"
-          filter
-          className="w-full p-2 text-sm "
-          required
-        />
-        {errors.desa && <span className="text-red-500">{errors.desa}</span>}
+        {address.kecamatanId && (
+          <>
+            <Dropdown
+              value={address.desaId || ""}
+              options={villages.map((village) => ({
+                label: village.name,
+                value: village.id,
+              }))}
+              onChange={handleVillageChange}
+              placeholder="Pilih Desa"
+              filter
+              className="w-full p-2 text-sm "
+              required
+            />
+            {errors.desa && <span className="text-red-500">{errors.desa}</span>}
+          </>
+        )}
 
-        <InputText
-          type="text"
-          value={address.detail || ""}
-          placeholder="Detail Alamat"
-          name="detail"
-          onChange={handleInputChange}
-          className="w-full p-3 text-slg "
-          required
-        />
-        {errors.detail && <span className="text-red-500">{errors.detail}</span>}
+        {address.desaId && (
+          <>
+            <InputText
+              type="text"
+              value={address.detail || ""}
+              placeholder="Detail Alamat"
+              name="detail"
+              onChange={handleInputChange}
+              className="w-full p-3 text-slg "
+              required
+            />
+            {errors.detail && (
+              <span className="text-red-500">{errors.detail}</span>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

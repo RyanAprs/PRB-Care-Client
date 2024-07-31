@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { convertUnixToHuman } from "../utils/DateConverter";
 
 const API_BASE_URI = import.meta.env.VITE_API_BASE_URI;
 
@@ -11,7 +12,12 @@ export const getAllPengambilanObat = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data.data;
+  const formattedData = response.data.data.map((item) => ({
+    ...item,
+    tanggalPengambilan: convertUnixToHuman(item.tanggalPengambilan),
+  }));
+
+  return formattedData;
 };
 
 export const getPengambilanObatById = async (id) => {

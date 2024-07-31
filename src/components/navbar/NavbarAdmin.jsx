@@ -1,10 +1,11 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlignLeft,
   BarChart4Icon,
   Hospital,
   HousePlus,
+  Lock,
   LogOut,
   Pill,
   ShoppingCart,
@@ -17,6 +18,12 @@ import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { Toast } from "primereact/toast";
+import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
+import { ZodError } from "zod";
+import { handleChangePasswordError } from "../../utils/ApiErrorHandlers";
+import { updatePassword } from "../../services/SuperAdminService";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -24,8 +31,16 @@ const NavbarAdmin = ({ children }) => {
   const overlayRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
+  const [visibleChangePassword, setVisibleChangePassword] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const [datas, setDatas] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState({});
+  const toast = useRef(null);
 
   const { dispatch } = useContext(AuthContext);
 
@@ -67,7 +82,7 @@ const NavbarAdmin = ({ children }) => {
       style={{ willChange: "transform" }}
       className={`fixed top-0 left-0 dark:bg-darkGreen bg-mainGreen text-white p-4 flex-col transition-transform duration-500 ease-in-out ${
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } md:translate-x-0 md:w-80 overflow-y-auto z-50 gap-8 h-full border-1 border-gray-300 dark:border-blackHover`}
+      } md:translate-x-0 md:w-80 overflow-y-auto z-50 gap-8 h-full dark:border-blackHover`}
     >
       <div className="flex flex-col h-full gap-4">
         <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4 items-center justify-center">
@@ -170,8 +185,41 @@ const NavbarAdmin = ({ children }) => {
     </div>
   );
 
+  const handleModalChangePassword = () => {
+    setVisibleChangePassword(true);
+    setVisible(false);
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      const response = await updatePassword(datas);
+      if (response.status === 200) {
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Password diperbarui",
+          life: 3000,
+        });
+        setVisibleChangePassword(false);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        handleChangePasswordError(error, toast);
+        console.log(error);
+      }
+    }
+  };
+
   return (
     <div className="flex h-screen w-full">
+      <Toast ref={toast} />
+
       {isSidebarOpen && (
         <div
           ref={overlayRef}
@@ -183,7 +231,7 @@ const NavbarAdmin = ({ children }) => {
       <Sidebar />
       <div className="flex flex-col w-full">
         {/* Navbar */}
-        <div className="h-20 w-full flex items-center px-8 justify-between fixed  z-40 shadow-md dark:shadow-blackHover dark:bg-darkGreen bg-mainGreen text-white">
+        <div className="h-20 w-full flex items-center px-8 justify-between fixed  z-40 shadow-md dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
           <div className="flex justify-center items-center gap-4 md:pl-80 pl-0">
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />
@@ -240,9 +288,13 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <div className="flex flex-col text-lg ">
-          <Link to="" className="mb-4 w-full flex gap-4">
-            <User />
-            <h1>Profile</h1>
+          <Link
+            to=""
+            onClick={handleModalChangePassword}
+            className="mb-4 w-full flex gap-4"
+          >
+            <Lock />
+            <h1>Ubah Password</h1>
           </Link>
           <Link
             to=""
@@ -252,6 +304,77 @@ const NavbarAdmin = ({ children }) => {
             <LogOut />
             <h1>Logout</h1>
           </Link>
+        </div>
+      </Dialog>
+
+      {/* Modal ubah password */}
+      <Dialog
+        header={"Ubah Password"}
+        visible={visibleChangePassword}
+        maximizable
+        className="md:w-1/2 w-full "
+        onHide={() => {
+          if (!visibleChangePassword) return;
+          setVisibleChangePassword(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          <InputText
+            type="password"
+            placeholder="Password Lama"
+            className="p-input text-lg p-3  rounded"
+            value={datas.currentPassword}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                currentPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.currentPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.currentPassword}
+            </small>
+          )}
+          <InputText
+            type="password"
+            placeholder="Password Baru"
+            className="p-input text-lg p-3  rounded"
+            value={datas.newPassword}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                newPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.newPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.newPassword}
+            </small>
+          )}
+          <InputText
+            type="password"
+            placeholder="Konfirmasi Password Baru"
+            className="p-input text-lg p-3  rounded"
+            value={datas.confirmPassword}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                confirmPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.confirmPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.confirmPassword}
+            </small>
+          )}
+          <Button
+            label={"Edit"}
+            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            onClick={handleChangePassword}
+          />
         </div>
       </Dialog>
 

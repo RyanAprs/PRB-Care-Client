@@ -1,5 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+import { convertUnixToHuman } from "../utils/DateConverter";
 
 const API_BASE_URI = import.meta.env.VITE_API_BASE_URI;
 
@@ -11,7 +12,12 @@ export const getAllKontrolBalik = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  return response.data.data;
+  const formattedData = response.data.data.map((item) => ({
+    ...item,
+    tanggalKontrol: convertUnixToHuman(item.tanggalKontrol),
+  }));
+
+  return formattedData;
 };
 
 export const getKontrolBalikById = async (id) => {
@@ -33,7 +39,7 @@ export const getKontrolBalikById = async (id) => {
 
 export const createKontrolBalik = async (datas) => {
   try {
-      const response = await axios.post(
+    const response = await axios.post(
       `${API_BASE_URI}/api/kontrol-balik`,
       datas,
       {
@@ -42,13 +48,13 @@ export const createKontrolBalik = async (datas) => {
         },
       }
     );
-    console.log("Response: ", response.data); 
+    console.log("Response: ", response.data);
     return response;
   } catch (error) {
     console.error(
       "Error creating kontrol balik: ",
       error.response?.data || error.message
-    ); 
+    );
     throw error;
   }
 };

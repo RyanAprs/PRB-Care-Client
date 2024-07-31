@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
@@ -21,13 +20,17 @@ import {
   kontrolBalikDone,
   updateKontrolBalik,
 } from "../../../services/KontrolBalikService";
-import { kontrolBalikSchema } from "../../../validations/KontrolBalikSchema";
+import {
+  kontrolBalikCreateSchema,
+  kontrolBalikUpdateSchema,
+} from "../../../validations/KontrolBalikSchema";
 import { ZodError } from "zod";
 import {
   handleApiError,
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
+import { getAllPasien } from "../../../services/PasienService";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -54,21 +57,9 @@ const DataKontrolBalik = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/kontrol-balik`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const responseData = await getAllKontrolBalik();
 
-        const formattedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalKontrol: convertUnixToHuman(item.tanggalKontrol),
-        }));
-
-        setData(formattedData);
+        setData(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,20 +69,8 @@ const DataKontrolBalik = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pasien?status=aktif`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const processedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
-        }));
-        setPasien(processedData);
-        console.log(response.data.data);
+        const responseData = await getAllPasien();
+        setPasien(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -106,9 +85,9 @@ const DataKontrolBalik = () => {
   const handleModalCreate = () => {
     setErrors({});
     setDatas({
-      idAdminPuskesmas: "",
-      idPasien: "",
-      tanggalKontrol: "",
+      idAdminPuskesmas: 0,
+      idPasien: 0,
+      tanggalKontrol: 0,
     });
     setVisible(true);
     setIsEditMode(false);
@@ -116,7 +95,7 @@ const DataKontrolBalik = () => {
 
   const handleCreate = async () => {
     try {
-      kontrolBalikSchema.parse(datas);
+      kontrolBalikCreateSchema.parse(datas);
       const response = await createKontrolBalik(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -126,8 +105,8 @@ const DataKontrolBalik = () => {
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllKontrolBalik();
-        setData(dataResponse);
+        const responseData = await getAllKontrolBalik();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -151,7 +130,7 @@ const DataKontrolBalik = () => {
         setDatas({
           idAdminPuskesmas: data.pasien.adminPuskesmas.id,
           idPasien: dataResponse.idPasien,
-          tanggalKontrol: convertDate,
+          tanggalKontrol: setSelectedDate(convertDate),
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -164,6 +143,7 @@ const DataKontrolBalik = () => {
 
   const handleUpdate = async () => {
     try {
+      kontrolBalikUpdateSchema.parse(datas);
       const response = await updateKontrolBalik(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
@@ -173,8 +153,8 @@ const DataKontrolBalik = () => {
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllKontrolBalik();
-        setData(dataResponse);
+        const responseData = await getAllKontrolBalik();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -206,8 +186,8 @@ const DataKontrolBalik = () => {
           life: 3000,
         });
         setVisibleDelete(false);
-        const dataResponse = await getAllKontrolBalik();
-        setData(dataResponse);
+        const responseData = await getAllKontrolBalik();
+        setData(responseData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -231,8 +211,8 @@ const DataKontrolBalik = () => {
           life: 3000,
         });
         setVisibleDone(false);
-        const dataResponse = await getAllKontrolBalik();
-        setData(dataResponse);
+        const responseData = await getAllKontrolBalik();
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -256,8 +236,8 @@ const DataKontrolBalik = () => {
           life: 3000,
         });
         setVisibleCancelled(false);
-        const dataResponse = await getAllKontrolBalik();
-        setData(dataResponse);
+        const responseData = await getAllKontrolBalik();
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -338,7 +318,7 @@ const DataKontrolBalik = () => {
             id="buttondisplay"
             className="p-input text-lg rounded"
             placeholder="Pilih Tanggal Kontrol"
-            value={isEditMode ? datas.tanggalKontrol : selectedDate}
+            value={selectedDate}
             onChange={(e) => {
               setSelectedDate(e.value);
               const initialDate = e.value;

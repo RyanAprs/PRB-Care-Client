@@ -25,6 +25,18 @@ const PrivateRoute = ({ children, role }) => {
   return children;
 };
 
+const AlreadyLoggedInRoute = ({ children, role }) => {
+  const { token, role: userRole } = useContext(AuthContext);
+
+  if (token && userRole === role) {
+    return <Navigate to="/apotek/home" />;
+  } else if (token && userRole !== role) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  return children;
+};
+
 const ApotekRoute = () => {
   const darkMode = useDarkMode(false);
   const { isLoading } = useContext(AuthContext);
@@ -36,7 +48,14 @@ const ApotekRoute = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/apotek/login" element={<LoginApotek />} />
+        <Route
+          path="/apotek/login"
+          element={
+            <AlreadyLoggedInRoute role="apoteker">
+              <LoginApotek />
+            </AlreadyLoggedInRoute>
+          }
+        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
       <div className={`${darkMode.value ? "dark" : ""}`}>

@@ -1,11 +1,29 @@
 import { z } from "zod";
 
-export const kontrolBalikSchema = z.object({
-  idPasien: z.number({ message: "Id Pengguna harus berupa angka" }).positive(),
-  idAdminPuskesmas: z
-    .number({ message: "Id Admin Puskesmas harus berupa angka" })
-    .positive(),
+export const kontrolBalikCreateSchema = z.object({
+  idPasien: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pasien tidak boleh kosong"),
   tanggalKontrol: z
-    .number({ message: "Tanggal kontrol harus berupa angka" })
-    .positive(),
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Kontrol harus diisi"),
+  idAdminPuskesmas: z.number().int().positive().optional(),
+});
+
+export const kontrolBalikUpdateSchema = z.object({
+  idPasien: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pasien tidak boleh kosong"),
+  tanggalKontrol: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Kontrol harus diisi"),
+  idAdminPuskesmas: z.number().int().positive().optional(),
 });

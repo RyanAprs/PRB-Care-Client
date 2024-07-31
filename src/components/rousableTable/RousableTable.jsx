@@ -48,7 +48,7 @@ export default function ReusableTable({
       onChange={onStatusFilterChange}
       placeholder="Pilih Status"
       optionLabel="label"
-      className="w-full"
+      className="w-full bg-white dark:bg-blackHover"
     />
   );
 
@@ -129,7 +129,7 @@ export default function ReusableTable({
               onClick={onCreate}
               text
               raised
-              className=" bg-lightGreen md:text-lg text-sm text-white rounded-xl"
+              className=" bg-lightGreen dark:bg-darkGreen md:text-lg text-sm text-white rounded-xl"
               label="Tambah"
             />
           </div>

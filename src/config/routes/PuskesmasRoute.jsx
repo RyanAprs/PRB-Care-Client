@@ -25,12 +25,31 @@ const PrivateRoute = ({ children, role }) => {
   return children;
 };
 
+const AlreadyLoggedInRoute = ({ children, role }) => {
+  const { token, role: userRole } = useContext(AuthContext);
+
+  if (token && userRole === role) {
+    return <Navigate to="/puskesmas/home" />;
+  } else if (token && userRole !== role) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  return children;
+};
+
 const PuskesmasRoute = () => {
   const darkMode = useDarkMode(false);
   return (
     <Router>
       <Routes>
-        <Route path="/puskesmas/login" element={<LoginPuskesmas />} />
+        <Route
+          path="/puskesmas/login"
+          element={
+            <AlreadyLoggedInRoute role="nakes">
+              <LoginPuskesmas />
+            </AlreadyLoggedInRoute>
+          }
+        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
       <div className={`${darkMode.value ? "dark" : ""}`}>

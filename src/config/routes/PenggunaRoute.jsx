@@ -26,13 +26,32 @@ const PrivateRoute = ({ children, role }) => {
   return children;
 };
 
+const AlreadyLoggedInRoute = ({ children, role }) => {
+  const { token, role: userRole } = useContext(AuthContext);
+
+  if (token && userRole === role) {
+    return <Navigate to="/pengguna/home" />;
+  } else if (token && userRole !== role) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  return children;
+};
+
 const PenggunaRoute = () => {
   const darkMode = useDarkMode(false);
   return (
     <Router>
       <Routes>
         <Route path="/pengguna/register" element={<RegisterPengguna />} />
-        <Route path="/pengguna/login" element={<LoginPengguna />} />
+        <Route
+          path="/pengguna/login"
+          element={
+            <AlreadyLoggedInRoute role="pengguna">
+              <LoginPengguna />
+            </AlreadyLoggedInRoute>
+          }
+        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
       <div className={`${darkMode.value ? "dark" : ""}`}>

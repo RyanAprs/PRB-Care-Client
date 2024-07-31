@@ -33,6 +33,18 @@ const PrivateRoute = ({ children, role }) => {
   return children;
 };
 
+const AlreadyLoggedInRoute = ({ children, role }) => {
+  const { token, role: userRole } = useContext(AuthContext);
+
+  if (token && userRole === role) {
+    return <Navigate to="/admin/dashboard" />;
+  } else if (token && userRole !== role) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  return children;
+};
+
 const AdminRoute = () => {
   const { isLoading } = useContext(AuthContext);
   const darkMode = useDarkMode(false);
@@ -44,7 +56,14 @@ const AdminRoute = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/admin/login" element={<LoginAdmin />} />
+        <Route
+          path="/admin/login"
+          element={
+            <AlreadyLoggedInRoute role="admin">
+              <LoginAdmin />
+            </AlreadyLoggedInRoute>
+          }
+        />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
       <div className={`${darkMode.value ? "dark" : ""}`}>

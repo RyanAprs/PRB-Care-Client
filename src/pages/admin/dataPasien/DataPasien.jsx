@@ -14,7 +14,10 @@ import {
 } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
 import { addLocale } from "primereact/api";
-import { pasienschema } from "../../../validations/PasienSchema";
+import {
+  pasienCreateSchema,
+  pasienUpdateSchema,
+} from "../../../validations/PasienSchema";
 import { ZodError } from "zod";
 import {
   handleApiError,
@@ -75,11 +78,11 @@ const DataPasien = () => {
           }
         );
 
-        const processedData = response.data.data.map((item) => ({
+        const formatedData = response.data.data.map((item) => ({
           ...item,
           tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
         }));
-        setData(processedData);
+        setData(formatedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -145,7 +148,7 @@ const DataPasien = () => {
 
   const handleCreate = async () => {
     try {
-      pasienschema.parse(datas);
+      pasienCreateSchema.parse(datas);
       const response = await createPasien(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -155,8 +158,8 @@ const DataPasien = () => {
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllPasien();
-        setData(dataResponse);
+        const responseData = await getAllPasien();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -199,6 +202,7 @@ const DataPasien = () => {
   };
   const handleUpdate = async () => {
     try {
+      pasienUpdateSchema.parse(datas);
       const response = await updatePasien(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
@@ -208,8 +212,8 @@ const DataPasien = () => {
           life: 3000,
         });
         setVisible(false);
-        const dataResponse = await getAllPasien();
-        setData(dataResponse);
+        const responseData = await getAllPasien();
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -241,8 +245,8 @@ const DataPasien = () => {
           life: 3000,
         });
         setVisibleDelete(false);
-        const dataResponse = await getAllPasien();
-        setData(dataResponse);
+        const responseData = await getAllPasien();
+        setData(responseData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -266,8 +270,8 @@ const DataPasien = () => {
           life: 3000,
         });
         setVisibleDone(false);
-        const dataResponse = await getAllPasien();
-        setData(dataResponse);
+        const responseData = await getAllPasien();
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -483,7 +487,7 @@ const DataPasien = () => {
             id="buttondisplay"
             className="p-input text-lg rounded"
             placeholder="Pilih Tanggal Periksa"
-            value={isEditMode ? datas.tanggalPeriksa : selectedDate}
+            value={selectedDate}
             onChange={(e) => {
               setSelectedDate(e.value);
               const initialDate = e.value;

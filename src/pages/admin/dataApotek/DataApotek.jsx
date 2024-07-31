@@ -12,7 +12,10 @@ import {
   handleApiError,
   handleDeleteError,
 } from "../../../utils/ApiErrorHandlers";
-import { apotekSchema } from "../../../validations/ApotekSchema";
+import {
+  apotekCreateSchema,
+  apotekUpdateSchema,
+} from "../../../validations/ApotekSchema";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -99,7 +102,7 @@ const DataApotek = () => {
 
   const handleCreate = async () => {
     try {
-      apotekSchema.parse(datas);
+      apotekCreateSchema.parse(datas);
       const response = await createApotek(datas);
 
       if (response.status === 201) {
@@ -148,15 +151,7 @@ const DataApotek = () => {
 
   const handleUpdate = async () => {
     try {
-      apotekSchema
-        .pick({
-          namaApotek: true,
-          username: true,
-          alamat: true,
-          telepon: true,
-        })
-        .parse(datas);
-
+      apotekUpdateSchema.parse(datas);
       const response = await updateApotek(currentId, datas);
 
       if (response.status === 200) {
@@ -289,6 +284,9 @@ const DataApotek = () => {
               }))
             }
           />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan password jika tidak ingin diubah" : null}
+          </span>
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
@@ -311,6 +309,9 @@ const DataApotek = () => {
 
           <span>Alamat Apotek</span>
           <DynamicAddress />
+          <span className="text-sm -mt-4 text-orange-700">
+            {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
+          </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}

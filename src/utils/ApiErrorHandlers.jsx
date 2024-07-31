@@ -169,3 +169,58 @@ export const handleDoneError = (error, toast) => {
     });
   }
 };
+
+export const handleChangePasswordError = (error, toast) => {
+  if (error.response) {
+    switch (error.response.status) {
+      case 401:
+        toast.current.show({
+          severity: "error",
+          summary: "Gagal",
+          detail: "Password lama yang anda masukkan salah.",
+          life: 3000,
+        });
+        break;
+      case 404:
+        toast.current.show({
+          severity: "error",
+          summary: "Gagal",
+          detail: "Data tidak ditemukan.",
+          life: 3000,
+        });
+        break;
+      case 409:
+        toast.current.show({
+          severity: "error",
+          summary: "Gagal",
+          detail:
+            "Pasien ini masih harus melakukan pengambilan obat atau kontrol balik, mohon periksa kembali.",
+          life: 3000,
+        });
+        break;
+      case 500:
+        toast.current.show({
+          severity: "error",
+          summary: "Gagal",
+          detail: "Terjadi kesalahan server. Mohon coba lagi nanti.",
+          life: 3000,
+        });
+        break;
+      default:
+        toast.current.show({
+          severity: "error",
+          summary: "Gagal",
+          detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+          life: 3000,
+        });
+        break;
+    }
+  } else {
+    toast.current.show({
+      severity: "error",
+      summary: "Gagal",
+      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      life: 3000,
+    });
+  }
+};
