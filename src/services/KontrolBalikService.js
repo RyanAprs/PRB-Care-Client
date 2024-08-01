@@ -4,14 +4,22 @@ import { convertUnixToHuman } from "../utils/DateConverter";
 
 const API_BASE_URI = import.meta.env.VITE_API_BASE_URI;
 
-const token = Cookies.get("token");
+const getToken = () => Cookies.get("token");
 
-export const getAllKontrolBalik = async () => {
-  const response = await axios.get(`${API_BASE_URI}/api/kontrol-balik   `, {
+const getRequestHeaders = () => {
+  const token = getToken();
+  return {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  };
+};
+
+export const getAllKontrolBalik = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/kontrol-balik   `,
+    getRequestHeaders()
+  );
   const formattedData = response.data.data.map((item) => ({
     ...item,
     tanggalKontrol: convertUnixToHuman(item.tanggalKontrol),
@@ -24,11 +32,7 @@ export const getKontrolBalikById = async (id) => {
   try {
     const response = await axios.get(
       `${API_BASE_URI}/api/kontrol-balik/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      getRequestHeaders()
     );
     return response.data.data;
   } catch (error) {
@@ -42,11 +46,7 @@ export const createKontrolBalik = async (datas) => {
     const response = await axios.post(
       `${API_BASE_URI}/api/kontrol-balik`,
       datas,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      getRequestHeaders()
     );
     console.log("Response: ", response.data);
     return response;
@@ -63,11 +63,7 @@ export const updateKontrolBalik = async (id, datas) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/kontrol-balik/${id}`,
     datas,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -75,11 +71,7 @@ export const updateKontrolBalik = async (id, datas) => {
 export const deleteKontrolBalik = async (id) => {
   const response = await axios.delete(
     `${API_BASE_URI}/api/kontrol-balik/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -88,11 +80,7 @@ export const kontrolBalikDone = async (id) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/kontrol-balik/${id}/selesai`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -101,11 +89,7 @@ export const kontrolBalikCancelled = async (id) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/kontrol-balik/${id}/batal`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
