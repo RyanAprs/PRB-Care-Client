@@ -15,6 +15,7 @@ export default function ReusableTable({
   onDone,
   onCancelled,
   statuses,
+  role,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -33,13 +34,14 @@ export default function ReusableTable({
     setSelectedStatus(e.value);
   };
 
-  const filteredData = data.filter((item) => {
-    return (
-      !selectedStatus ||
-      selectedStatus.key === "all" ||
-      item.status.toLowerCase() === selectedStatus.key.toLowerCase()
-    );
-  });
+  const filteredData =
+    data?.filter((item) => {
+      return (
+        !selectedStatus ||
+        selectedStatus.key === "all" ||
+        item.status.toLowerCase() === selectedStatus.key.toLowerCase()
+      );
+    }) || [];
 
   const statusRowFilterTemplate = (
     <Dropdown
@@ -78,7 +80,7 @@ export default function ReusableTable({
           </Button>
         </div>
       );
-    } else if (status === "menunggu") {
+    } else if (status === "menunggu" && role === "admin") {
       return (
         <div className="flex justify-center gap-2">
           <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
@@ -93,6 +95,29 @@ export default function ReusableTable({
             onClick={() => onCancelled(rowData)}
           >
             <X />
+          </Button>
+        </div>
+      );
+    } else if (status === "menunggu" && role === "nakes") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+            <Edit />
+          </Button>
+          <Button
+            size="sm"
+            severity="danger"
+            onClick={() => onCancelled(rowData)}
+          >
+            <X />
+          </Button>
+        </div>
+      );
+    } else if (status === "menunggu" && role === "apoteker") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button size="sm" severity="success" onClick={() => onDone(rowData)}>
+            <Check />
           </Button>
         </div>
       );
@@ -134,40 +159,46 @@ export default function ReusableTable({
             />
           </div>
         </div>
-        <DataTable
-          value={filteredData}
-          paginator
-          rows={10}
-          rowsPerPageOptions={[10, 25, 50, 75, 100]}
-          showGridlines
-          tableStyle={{ minWidth: "50rem" }}
-          currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
-          globalFilter={globalFilter}
-          editMode="row"
-        >
-          {columns.map((col, index) => (
+        {filteredData.length > 0 ? (
+          <DataTable
+            value={filteredData}
+            paginator
+            rows={10}
+            rowsPerPageOptions={[10, 25, 50, 75, 100]}
+            showGridlines
+            tableStyle={{ minWidth: "50rem" }}
+            currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+            globalFilter={globalFilter}
+            editMode="row"
+          >
+            {columns.map((col, index) => (
+              <Column
+                key={index}
+                field={col.field}
+                header={col.header}
+                sortable
+                filter={col.field === "status"}
+                filterElement={
+                  col.field === "status" && statuses && statuses.length > 0
+                    ? statusRowFilterTemplate
+                    : null
+                }
+                className="p-4 "
+              />
+            ))}
             <Column
-              key={index}
-              field={col.field}
-              header={col.header}
-              sortable
-              filter={col.field === "status"}
-              filterElement={
-                col.field === "status" && statuses && statuses.length > 0
-                  ? statusRowFilterTemplate
-                  : null
-              }
-              className="p-4 "
+              header="Aksi"
+              headerStyle={{ width: "10%", minWidth: "8rem" }}
+              body={actionBodyTemplate}
+              bodyStyle={{ textAlign: "center" }}
             />
-          ))}
-          <Column
-            header="Aksi"
-            headerStyle={{ width: "10%", minWidth: "8rem" }}
-            body={actionBodyTemplate}
-            bodyStyle={{ textAlign: "center" }}
-          />
-        </DataTable>
+          </DataTable>
+        ) : (
+          <div className="text-center text-gray-500 dark:text-gray-400">
+            Tidak ada data
+          </div>
+        )}
       </div>
     </div>
   );
