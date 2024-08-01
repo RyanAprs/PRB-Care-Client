@@ -3,7 +3,6 @@ import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
   convertHumanToUnix,
-  convertUnixToHuman,
   convertUnixToHumanForEditData,
 } from "../../../utils/DateConverter";
 import { ProgressSpinner } from "primereact/progressspinner";
