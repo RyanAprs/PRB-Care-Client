@@ -1,16 +1,17 @@
 export const convertUnixToHuman = (unixTimestamp) => {
   const date = new Date(unixTimestamp * 1000);
 
-  const formattedDate = date.toLocaleString("en-CA", {
+  const formattedDate = date.toLocaleString("id-ID", {
     day: "2-digit",
     month: "long",
     year: "numeric",
-    // hour: "2-digit",
-    // minute: "2-digit",
-    // second: "2-digit",
   });
 
   return formattedDate;
+};
+
+export const convertUnixToHumanForEditData = (unixTimestamp) => {
+  return new Date(unixTimestamp * 1000);
 };
 
 export const convertHumanToUnix = (dateString) => {

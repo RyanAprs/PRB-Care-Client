@@ -10,6 +10,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import {
   convertHumanToUnix,
   convertUnixToHuman,
+  convertUnixToHumanForEditData,
   dateLocaleId,
 } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
@@ -130,6 +131,7 @@ const DataPasien = () => {
 
   const handleModalCreate = () => {
     setErrors({});
+    setSelectedDate(null);
     setDatas({
       noRekamMedis: "",
       idAdminPuskesmas: "",
@@ -174,12 +176,24 @@ const DataPasien = () => {
     }
   };
 
+  const handleCalendarChange = (e) => {
+    setSelectedDate(e.value);
+    const unixTimestamp = convertHumanToUnix(e.value);
+    setDatas((prev) => ({
+      ...prev,
+      tanggalPeriksa: unixTimestamp,
+    }));
+  };
+
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
       const dataResponse = await getPasienById(data.id);
       if (dataResponse) {
-        const convertDate = convertUnixToHuman(dataResponse.tanggalPeriksa);
+        const convertDate = convertUnixToHumanForEditData(
+          dataResponse.tanggalPeriksa
+        );
+        setSelectedDate(convertDate);
         setDatas({
           noRekamMedis: dataResponse.noRekamMedis,
           idAdminPuskesmas: dataResponse.idAdminPuskesmas,
@@ -190,7 +204,6 @@ const DataPasien = () => {
           denyutNadi: dataResponse.denyutNadi,
           hasilLab: dataResponse.hasilLab,
           hasilEkg: dataResponse.hasilEkg,
-          tanggalPeriksa: convertDate,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -488,15 +501,7 @@ const DataPasien = () => {
             className="p-input text-lg rounded"
             placeholder="Pilih Tanggal Periksa"
             value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.value);
-              const initialDate = e.value;
-              const unixTimestamp = convertHumanToUnix(initialDate);
-              setDatas((prev) => ({
-                ...prev,
-                tanggalPeriksa: unixTimestamp,
-              }));
-            }}
+            onChange={handleCalendarChange}
             showIcon
             locale="id"
             showButtonBar

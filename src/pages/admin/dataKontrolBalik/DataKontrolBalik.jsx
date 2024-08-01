@@ -4,6 +4,7 @@ import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
   convertHumanToUnix,
   convertUnixToHuman,
+  convertUnixToHumanForEditData,
 } from "../../../utils/DateConverter";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Dialog } from "primereact/dialog";
@@ -84,6 +85,7 @@ const DataKontrolBalik = () => {
 
   const handleModalCreate = () => {
     setErrors({});
+    setSelectedDate(null);
     setDatas({
       idAdminPuskesmas: 0,
       idPasien: 0,
@@ -121,16 +123,27 @@ const DataKontrolBalik = () => {
     }
   };
 
+  const handleCalendarChange = (e) => {
+    setSelectedDate(e.value);
+    const unixTimestamp = convertHumanToUnix(e.value);
+    setDatas((prev) => ({
+      ...prev,
+      tanggalPeriksa: unixTimestamp,
+    }));
+  };
+
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
       const dataResponse = await getKontrolBalikById(data.id);
       if (dataResponse) {
-        const convertDate = convertUnixToHuman(dataResponse.tanggalKontrol);
+        const convertDate = convertUnixToHumanForEditData(
+          dataResponse.tanggalKontrol
+        );
+        setSelectedDate(convertDate);
         setDatas({
           idAdminPuskesmas: data.pasien.adminPuskesmas.id,
           idPasien: dataResponse.idPasien,
-          tanggalKontrol: setSelectedDate(convertDate),
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -320,15 +333,7 @@ const DataKontrolBalik = () => {
             className="p-input text-lg rounded"
             placeholder="Pilih Tanggal Kontrol"
             value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.value);
-              const initialDate = e.value;
-              const unixTimestamp = convertHumanToUnix(initialDate);
-              setDatas((prev) => ({
-                ...prev,
-                tanggalKontrol: unixTimestamp,
-              }));
-            }}
+            onChange={handleCalendarChange}
             showIcon
             locale="id"
             showButtonBar

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
   convertHumanToUnix,
-  convertUnixToHuman,
+  convertUnixToHumanForEditData,
 } from "../../../utils/DateConverter";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Dropdown } from "primereact/dropdown";
@@ -100,6 +100,7 @@ const DataPengambilanObat = () => {
 
   const handleModalCreate = () => {
     setIsEditMode(false);
+    setSelectedDate(null);
     setErrors({});
     setDatas({
       idObat: 0,
@@ -138,17 +139,28 @@ const DataPengambilanObat = () => {
     }
   };
 
+  const handleCalendarChange = (e) => {
+    setSelectedDate(e.value);
+    const unixTimestamp = convertHumanToUnix(e.value);
+    setDatas((prev) => ({
+      ...prev,
+      tanggalPengambilan: unixTimestamp,
+    }));
+  };
+
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
       const dataResponse = await getPengambilanObatById(data.id);
       if (dataResponse) {
-        const convertDate = convertUnixToHuman(dataResponse.tanggalPengambilan);
+        const convertDate = convertUnixToHumanForEditData(
+          dataResponse.tanggalPengambilan
+        );
+        setSelectedDate(convertDate);
         setDatas({
           idObat: dataResponse.idObat,
           idPasien: dataResponse.idPasien,
           jumlah: dataResponse.jumlah,
-          tanggalPengambilan: convertDate,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -385,15 +397,7 @@ const DataPengambilanObat = () => {
             className="p-input text-lg rounded"
             placeholder="Pilih Tanggal Pengambilan"
             value={selectedDate}
-            onChange={(e) => {
-              setSelectedDate(e.value);
-              const initialDate = e.value;
-              const unixTimestamp = convertHumanToUnix(initialDate);
-              setDatas((prev) => ({
-                ...prev,
-                tanggalPengambilan: unixTimestamp,
-              }));
-            }}
+            onChange={handleCalendarChange}
             showIcon
             locale="id"
             showButtonBar
