@@ -24,6 +24,8 @@ import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSche
 import { ZodError } from "zod";
 import { handleChangePasswordError } from "../../utils/ApiErrorHandlers";
 import { updatePassword } from "../../services/SuperAdminService";
+import Cookies from "js-cookie";
+import { getCurrentAdminPuskesmas } from "../../services/PuskesmasService";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -41,6 +43,20 @@ const NavbarAdmin = ({ children }) => {
   });
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
+  const role = Cookies.get("role");
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    try {
+      const fetchData = async () => {
+        const response = await getCurrentAdminPuskesmas();
+        setName(response.namaPuskesmas);
+      };
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   const { dispatch } = useContext(AuthContext);
 
@@ -90,96 +106,157 @@ const NavbarAdmin = ({ children }) => {
           <h1>PRB CARE</h1>
         </div>
         <div className="flex flex-col h-full justify-around">
-          <div className="flex flex-col h-full gap-2">
-            <Link
-              to="/admin/dashboard"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/dashboard"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <BarChart4Icon />
-              <h1>Dashboard</h1>
-            </Link>
-            <Link
-              to="/admin/data-puskesmas"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-puskesmas"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <Hospital />
-              <h1>Puskesmas</h1>
-            </Link>
-            <Link
-              to="/admin/data-apotek"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-apotek"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <HousePlus />
-              <h1>Apotek</h1>
-            </Link>
-            <Link
-              to="/admin/data-pengguna"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-pengguna"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <User />
-              <h1>Pengguna</h1>
-            </Link>
-            <Link
-              to="/admin/data-pasien"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-pasien"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <UserRoundPlus />
-              <h1>Pasien</h1>
-            </Link>
-            <Link
-              to="/admin/data-obat"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-obat"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <Pill />
-              <h1>Obat</h1>
-            </Link>
-            <Link
-              to="/admin/data-kontrol-balik"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-kontrol-balik"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <Stethoscope />
-              <h1>Kontrol Balik</h1>
-            </Link>
-            <Link
-              to="/admin/data-pengambilan-obat"
-              className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                location.pathname === "/admin/data-pengambilan-obat"
-                  ? "bg-lightGreen dark:bg-mainGreen"
-                  : ""
-              } rounded transition-all`}
-            >
-              <ShoppingCart />
-              <h1>Pengambilan Obat</h1>
-            </Link>
-          </div>
+          {role === "admin" && (
+            <div className="flex flex-col h-full gap-2">
+              <Link
+                to="/admin/dashboard"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/dashboard"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <BarChart4Icon />
+                <h1>Dashboard</h1>
+              </Link>
+              <Link
+                to="/admin/data-puskesmas"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-puskesmas"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Hospital />
+                <h1>Puskesmas</h1>
+              </Link>
+              <Link
+                to="/admin/data-apotek"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-apotek"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <HousePlus />
+                <h1>Apotek</h1>
+              </Link>
+              <Link
+                to="/admin/data-pengguna"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-pengguna"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <User />
+                <h1>Pengguna</h1>
+              </Link>
+              <Link
+                to="/admin/data-pasien"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-pasien"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <UserRoundPlus />
+                <h1>Pasien</h1>
+              </Link>
+              <Link
+                to="/admin/data-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-obat"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Pill />
+                <h1>Obat</h1>
+              </Link>
+              <Link
+                to="/admin/data-kontrol-balik"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-kontrol-balik"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Stethoscope />
+                <h1>Kontrol Balik</h1>
+              </Link>
+              <Link
+                to="/admin/data-pengambilan-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/admin/data-pengambilan-obat"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <ShoppingCart />
+                <h1>Pengambilan Obat</h1>
+              </Link>
+            </div>
+          )}
+          {role === "nakes" && (
+            <div className="flex flex-col h-full justify-start gap-8">
+              <Link
+                to="/puskesmas/dashboard"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/dashboard"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <BarChart4Icon />
+                <h1>Dashboard</h1>
+              </Link>
+              <Link
+                to="/puskesmas/data-apotek"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-apotek"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <HousePlus />
+                <h1>Apotek</h1>
+              </Link>
+              <Link
+                to="/puskesmas/data-pasien"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-pasien"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <UserRoundPlus />
+                <h1>Pasien</h1>
+              </Link>
+              <Link
+                to="/puskesmas/data-kontrol-balik"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-kontrol-balik"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Stethoscope />
+                <h1>Kontrol Balik</h1>
+              </Link>
+              <Link
+                to="/puskesmas/data-pengambilan-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-pengambilan-obat"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <ShoppingCart />
+                <h1>Pengambilan Obat</h1>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -237,31 +314,62 @@ const NavbarAdmin = ({ children }) => {
             <button onClick={toggleSidebar} className="md:hidden block">
               <AlignLeft />
             </button>
-            <h1 className="text-xl">
-              {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
-              {location.pathname === "/admin/data-puskesmas"
-                ? "Data Puskesmas"
-                : ""}
-              {location.pathname === "/admin/data-apotek" ? "Data Apotek" : ""}
-              {location.pathname === "/admin/data-pasien" ? "Data Pasien" : ""}
-              {location.pathname === "/admin/data-pengguna"
-                ? "Data Pengguna"
-                : ""}
-              {location.pathname === "/admin/data-obat" ? "Data Obat" : ""}
-              {location.pathname === "/admin/data-kontrol-balik"
-                ? "Data Kontrol Balik"
-                : ""}
-              {location.pathname === "/admin/data-pengambilan-obat"
-                ? "Data Pengambilan Obat"
-                : ""}
-            </h1>
+            {role === "admin" && (
+              <h1 className="text-xl">
+                {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
+                {location.pathname === "/admin/data-puskesmas"
+                  ? "Data Puskesmas"
+                  : ""}
+                {location.pathname === "/admin/data-apotek"
+                  ? "Data Apotek"
+                  : ""}
+                {location.pathname === "/admin/data-pasien"
+                  ? "Data Pasien"
+                  : ""}
+                {location.pathname === "/admin/data-pengguna"
+                  ? "Data Pengguna"
+                  : ""}
+                {location.pathname === "/admin/data-obat" ? "Data Obat" : ""}
+                {location.pathname === "/admin/data-kontrol-balik"
+                  ? "Data Kontrol Balik"
+                  : ""}
+                {location.pathname === "/admin/data-pengambilan-obat"
+                  ? "Data Pengambilan Obat"
+                  : ""}
+              </h1>
+            )}
+
+            {role === "nakes" && (
+              <h1 className="text-xl">
+                {location.pathname === "/puskesmas/dashboard"
+                  ? "Dashboard"
+                  : ""}
+                {location.pathname === "/puskesmas/profile" ? "Profile" : ""}
+                {location.pathname === "/puskesmas/data-apotek"
+                  ? "Data Apotek"
+                  : ""}
+                {location.pathname === "/puskesmas/data-pasien"
+                  ? "Data Pasien"
+                  : ""}
+                {location.pathname === "/puskesmas/data-kontrol-balik"
+                  ? "Data Kontrol Balik"
+                  : ""}
+                {location.pathname === "/puskesmas/data-pengambilan-obat"
+                  ? "Data Pengambilan Obat"
+                  : ""}
+              </h1>
+            )}
           </div>
           <div className="flex justify-between items-center gap-4">
             <div>
               <ThemeSwitcher />
             </div>
             <div className="flex gap-4 justify-center  items-center">
-              <p className="md:block hidden text-xl">Admin</p>
+              {role === "admin" ? (
+                <p className="md:block hidden text-xl">Admin</p>
+              ) : (
+                <p className="md:block hidden text-xl">{name}</p>
+              )}
               <div
                 onClick={() => setVisible(true)}
                 className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full cursor-pointer"
@@ -289,14 +397,27 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <div className="flex flex-col text-lg ">
-          <Link
-            to=""
-            onClick={handleModalChangePassword}
-            className="mb-4 w-full flex gap-4"
-          >
-            <Lock />
-            <h1>Ubah Password</h1>
-          </Link>
+          {role === "admin" && (
+            <Link
+              to=""
+              onClick={handleModalChangePassword}
+              className="mb-4 w-full flex gap-4"
+            >
+              <Lock />
+              <h1>Ubah Password</h1>
+            </Link>
+          )}
+
+          {role === "nakes" && (
+            <Link
+              to="/puskesmas/profile"
+              onClick={() => setVisible(false)}
+              className="mb-4 w-full flex gap-4"
+            >
+              <User />
+              <h1>Profile</h1>
+            </Link>
+          )}
           <Link
             to=""
             className="mb-4 w-full flex gap-4"

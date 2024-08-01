@@ -31,6 +31,18 @@ export const getPuskesmasById = async (id) => {
   }
 };
 
+export const getCurrentAdminPuskesmas = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/admin-puskesmas/current`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data.data;
+};
+
 export const createPuskesmas = async (datas) => {
   const response = await axios.post(
     `${API_BASE_URI}/api/admin-puskesmas`,

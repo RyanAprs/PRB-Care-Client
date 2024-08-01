@@ -9,7 +9,7 @@ const LoginPuskesmas = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <LoginForm
         API_URI={API_URI}
-        navigateUser="/puskesmas/home"
+        navigateUser="/puskesmas/dashboard"
         role="nakes"
         title="Puskesmas"
       />

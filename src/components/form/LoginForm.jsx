@@ -8,7 +8,7 @@ import icon from "../../assets/prbcare.svg";
 import { AuthContext } from "../../config/context/AuthContext";
 import { ZodError } from "zod";
 import { Toast } from "primereact/toast";
-import { handleApiError } from "../../utils/ApiErrorHandlers";
+import { handleApiError, handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
@@ -60,7 +60,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
         });
         setErrors(newErrors);
       } else {
-        handleApiError(error, toast);
+        handleLoginError(error, toast);
       }
     } finally {
       setLoading(false);
