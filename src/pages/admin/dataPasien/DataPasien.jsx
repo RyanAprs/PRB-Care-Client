@@ -134,15 +134,15 @@ const DataPasien = () => {
     setSelectedDate(null);
     setDatas({
       noRekamMedis: "",
-      idAdminPuskesmas: "",
-      idPengguna: "",
-      beratBadan: "",
-      tinggiBadan: "",
+      idAdminPuskesmas: 0,
+      idPengguna: 0,
+      beratBadan: 0,
+      tinggiBadan: 0,
       tekananDarah: "",
-      denyutNadi: "",
+      denyutNadi: 0,
       hasilLab: "",
       hasilEkg: "",
-      tanggalPeriksa: "",
+      tanggalPeriksa: 0,
     });
     setVisible(true);
     setIsEditMode(false);
@@ -204,6 +204,7 @@ const DataPasien = () => {
           denyutNadi: dataResponse.denyutNadi,
           hasilLab: dataResponse.hasilLab,
           hasilEkg: dataResponse.hasilEkg,
+          tanggalPeriksa: dataResponse.tanggalPeriksa,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -342,6 +343,10 @@ const DataPasien = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nomor rekam medis:
+          </label>
+
           <InputText
             type="text"
             placeholder="Nomor Rekam Medis"
@@ -359,6 +364,10 @@ const DataPasien = () => {
               {errors.noRekamMedis}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Pilih pengguna:
+          </label>
+
           <Dropdown
             value={
               pengguna.find((pengguna) => pengguna.id === datas.idPengguna) ||
@@ -379,6 +388,10 @@ const DataPasien = () => {
           {errors.idPengguna && (
             <small className="p-error -mt-3 text-sm">{errors.idPengguna}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Pilih puskesmas:
+          </label>
+
           <Dropdown
             value={
               adminPuskesmas.find(
@@ -402,6 +415,10 @@ const DataPasien = () => {
               {errors.idAdminPuskesmas}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Tinggi badan:
+          </label>
+
           <InputText
             type="number"
             placeholder="Tinggi Badan"
@@ -419,6 +436,10 @@ const DataPasien = () => {
               {errors.tinggiBadan}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Berat badan:
+          </label>
+
           <InputText
             type="number"
             placeholder="Berat Badan"
@@ -434,6 +455,10 @@ const DataPasien = () => {
           {errors.beratBadan && (
             <small className="p-error -mt-3 text-sm">{errors.beratBadan}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Tekanan darah:
+          </label>
+
           <InputText
             type="text"
             placeholder="Tekanan Darah"
@@ -451,6 +476,10 @@ const DataPasien = () => {
               {errors.tekananDarah}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Denyut nadi:
+          </label>
+
           <InputText
             type="number"
             placeholder="Denyut Nadi"
@@ -466,6 +495,10 @@ const DataPasien = () => {
           {errors.denyutNadi && (
             <small className="p-error -mt-3 text-sm">{errors.denyutNadi}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Hasil lab:
+          </label>
+
           <InputTextarea
             type="text"
             placeholder="Hasil Lab"
@@ -481,6 +514,10 @@ const DataPasien = () => {
           {errors.hasilLab && (
             <small className="p-error -mt-3 text-sm">{errors.hasilLab}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Hasil ekg:
+          </label>
+
           <InputTextarea
             type="text"
             placeholder="Hasil EKG"
@@ -496,6 +533,10 @@ const DataPasien = () => {
           {errors.hasilEkg && (
             <small className="p-error -mt-3 text-sm">{errors.hasilEkg}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Tanggal periksa:
+          </label>
+
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"

@@ -239,6 +239,9 @@ const DataPuskesmas = () => {
         onHide={() => setVisible(false)}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama Puskesmas:
+          </label>
           <InputText
             type="text"
             placeholder="Nama Puskesmas"
@@ -256,6 +259,9 @@ const DataPuskesmas = () => {
               {errors.namaPuskesmas}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Username:
+          </label>
           <InputText
             type="text"
             placeholder="Username"
@@ -271,6 +277,9 @@ const DataPuskesmas = () => {
           {errors.username && (
             <small className="p-error -mt-3 text-sm">{errors.username}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Password:
+          </label>
           <InputText
             type="password"
             placeholder="Password"
@@ -289,6 +298,9 @@ const DataPuskesmas = () => {
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
           <InputText
             type="text"
             placeholder="Telepon"
@@ -304,7 +316,10 @@ const DataPuskesmas = () => {
           {errors.telepon && (
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
-          <span className="font-medium">Alamat Puskesmas</span>
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+
           <DynamicAddress />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}

@@ -240,6 +240,9 @@ const DataApotek = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama apotek:
+          </label>
           <InputText
             type="text"
             placeholder="Nama Apotek"
@@ -255,7 +258,9 @@ const DataApotek = () => {
           {errors.namaApotek && (
             <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
           )}
-
+          <label htmlFor="" className="-mb-3">
+            Username:
+          </label>
           <InputText
             type="text"
             placeholder="Username"
@@ -271,7 +276,9 @@ const DataApotek = () => {
           {errors.username && (
             <small className="p-error -mt-3 text-sm">{errors.username}</small>
           )}
-
+          <label htmlFor="" className="-mb-3">
+            Password:
+          </label>
           <InputText
             type="password"
             placeholder="Password"
@@ -290,7 +297,7 @@ const DataApotek = () => {
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
-
+          <label htmlFor="" className="-mb-3">Telepon:</label>
           <InputText
             type="text"
             placeholder="Telepon"
@@ -307,7 +314,9 @@ const DataApotek = () => {
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
 
-          <span>Alamat Apotek</span>
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
           <DynamicAddress />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}

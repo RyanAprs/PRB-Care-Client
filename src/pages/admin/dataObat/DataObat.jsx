@@ -229,6 +229,10 @@ const DataObat = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Pilih apotek:
+          </label>
+
           <Dropdown
             value={
               dataAdminApotek.find(
@@ -252,6 +256,9 @@ const DataObat = () => {
               {errors.idAdminApotek}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Nama obat:
+          </label>
 
           <InputText
             type="text"
@@ -268,6 +275,10 @@ const DataObat = () => {
           {errors.namaObat && (
             <small className="p-error -mt-3 text-sm">{errors.namaObat}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Jumlah obat:
+          </label>
+
           <InputText
             type="number"
             placeholder="Jumlah"

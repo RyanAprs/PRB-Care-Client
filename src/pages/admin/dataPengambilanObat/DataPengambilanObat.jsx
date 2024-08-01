@@ -105,7 +105,7 @@ const DataPengambilanObat = () => {
     setDatas({
       idObat: 0,
       idPasien: 0,
-      jumlah: "",
+      jumlah: 0,
       tanggalPengambilan: 0,
     });
     setVisible(true);
@@ -161,6 +161,7 @@ const DataPengambilanObat = () => {
           idObat: dataResponse.idObat,
           idPasien: dataResponse.idPasien,
           jumlah: dataResponse.jumlah,
+          tanggalPengambilan: dataResponse.tanggalPengambilan,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -339,6 +340,10 @@ const DataPengambilanObat = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Pilih pasien:
+          </label>
+
           <Dropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
@@ -358,6 +363,9 @@ const DataPengambilanObat = () => {
           {errors.idPasien && (
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Pilih obat:
+          </label>
 
           <Dropdown
             value={obat.find((o) => o.id === datas.idObat) || null}
@@ -376,6 +384,9 @@ const DataPengambilanObat = () => {
           {errors.idObat && (
             <small className="p-error -mt-3 text-sm">{errors.idObat}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Jumlah obat:
+          </label>
 
           <InputText
             type="number"
@@ -392,6 +403,10 @@ const DataPengambilanObat = () => {
           {errors.jumlah && (
             <small className="p-error -mt-3 text-sm">{errors.jumlah}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Tanggal pengambilan obat:
+          </label>
+
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"

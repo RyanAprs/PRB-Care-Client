@@ -143,6 +143,7 @@ const DataKontrolBalik = () => {
         setDatas({
           idAdminPuskesmas: data.pasien.adminPuskesmas.id,
           idPasien: dataResponse.idPasien,
+          tanggalKontrol: dataResponse.tanggalKontrol,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -307,6 +308,10 @@ const DataKontrolBalik = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Pilih pasien:
+          </label>
+
           <Dropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
@@ -327,6 +332,10 @@ const DataKontrolBalik = () => {
           {errors.idPasien && (
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Pilih tanggal kontrol:{" "}
+          </label>
+
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"

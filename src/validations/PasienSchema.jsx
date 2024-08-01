@@ -48,7 +48,7 @@ export const pasienCreateSchema = z.object({
     .number()
     .int()
     .positive()
-    .refine((val) => val > 0, "Tanggal Periksa harus diisi"),
+    .refine((val) => val > 0, "Tanggal Periksa tidak boleh kosong"),
 });
 
 export const pasienUpdateSchema = z.object({

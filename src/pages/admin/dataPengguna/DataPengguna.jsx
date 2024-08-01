@@ -244,6 +244,10 @@ const DataPengguna = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama pengguna:
+          </label>
+
           <InputText
             type="text"
             placeholder="Nama Lengkap Pengguna"
@@ -261,6 +265,10 @@ const DataPengguna = () => {
               {errors.namaLengkap}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Username:
+          </label>
+
           <InputText
             type="text"
             placeholder="Username"
@@ -276,6 +284,10 @@ const DataPengguna = () => {
           {errors.username && (
             <small className="p-error -mt-3 text-sm">{errors.username}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Password:
+          </label>
+
           <InputText
             type="password"
             placeholder="Password"
@@ -294,6 +306,9 @@ const DataPengguna = () => {
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
 
           <InputText
             type="text"
@@ -310,6 +325,10 @@ const DataPengguna = () => {
           {errors.telepon && (
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Telepon keluarga:
+          </label>
+
           <InputText
             type="text"
             placeholder="Telepon Keluarga"
@@ -327,7 +346,9 @@ const DataPengguna = () => {
               {errors.teleponKeluarga}
             </small>
           )}
-          <span>Alamat Pengguna</span>
+          <label htmlFor="" className="-mb-3">
+            Alamat
+          </label>
           <DynamicAddress />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}

@@ -192,6 +192,7 @@ const NavbarAdmin = ({ children }) => {
 
   const handleChangePassword = async () => {
     try {
+      superAdminChangePasswordSchema.parse(datas);
       const response = await updatePassword(datas);
       if (response.status === 200) {
         toast.current.show({
@@ -319,6 +320,10 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Password lama:
+          </label>
+
           <InputText
             type="password"
             placeholder="Password Lama"
@@ -336,6 +341,9 @@ const NavbarAdmin = ({ children }) => {
               {errors.currentPassword}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Password baru:
+          </label>
           <InputText
             type="password"
             placeholder="Password Baru"
@@ -353,6 +361,9 @@ const NavbarAdmin = ({ children }) => {
               {errors.newPassword}
             </small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Konfirmasi password:
+          </label>
           <InputText
             type="password"
             placeholder="Konfirmasi Password Baru"
