@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import LoginAdmin from "../../pages/admin/login/LoginAdmin";
 import NotFound from "../../pages/NotFound";
-import DashboardAdmin from "../../pages/admin/dashboard/DashboardAdmin";
+import DashboardAdmin from "../../pages/admin/beranda/BerandaAdmin";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
 import DataPuskesmas from "../../pages/admin/dataPuskesmas/DataPuskesmas";
 import useDarkMode from "use-dark-mode";
@@ -37,7 +37,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (token && userRole === role) {
-    return <Navigate to="/admin/dashboard" />;
+    return <Navigate to="/admin/beranda" />;
   } else if (token && userRole !== role) {
     return <Navigate to="/page/not-found" />;
   }
@@ -69,7 +69,7 @@ const AdminRoute = () => {
       <div className={`${darkMode.value ? "dark" : ""}`}>
         <Routes>
           <Route
-            path="/admin/dashboard"
+            path="/admin/beranda"
             element={
               <PrivateRoute role="admin">
                 <NavbarAdmin>
