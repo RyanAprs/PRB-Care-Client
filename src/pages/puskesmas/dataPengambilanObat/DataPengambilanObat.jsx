@@ -324,7 +324,8 @@ const DataPengambilanObat = () => {
           onCancelled={handleModalCancelled}
           onDone={handleModalDone}
           statuses={statuses}
-          role="admin"
+          role="nakes"
+          path="pengambilanObat"
         />
       </div>
 

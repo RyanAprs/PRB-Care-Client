@@ -27,6 +27,18 @@ export const getAllPasien = async () => {
   return formatedData;
 };
 
+export const getAllPasienAktif = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/pasien?status=aktif`,
+    getRequestHeaders()
+  );
+  const formatedData = response.data.data.map((item) => ({
+    ...item,
+    tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
+  }));
+  return formatedData;
+};
+
 export const getPasienById = async (id) => {
   try {
     const response = await axios.get(

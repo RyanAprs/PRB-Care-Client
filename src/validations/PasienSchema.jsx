@@ -102,3 +102,96 @@ export const pasienUpdateSchema = z.object({
     .positive()
     .refine((val) => val > 0, "Tanggal Periksa harus diisi"), // Adjust to Date or Timestamp as needed
 });
+
+export const pasienCreateSchemaAdminPuskesmas = z.object({
+  noRekamMedis: z
+    .string()
+    .min(3)
+    .max(50)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Nomor Rekam Medis minimal 3 karakter"
+    ),
+  idPengguna: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pengguna tidak boleh kosong"),
+  beratBadan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Berat Badan harus lebih dari 0"),
+  tinggiBadan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tinggi Badan harus lebih dari 0"),
+  tekananDarah: z
+    .string()
+    .min(3)
+    .max(20)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Tekanan Darah minimal 3 karakter"
+    ),
+  denyutNadi: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
+  hasilLab: z.string().optional(),
+  hasilEkg: z.string().optional(),
+  tanggalPeriksa: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Periksa tidak boleh kosong"),
+});
+
+export const pasienUpdateSchemaAdminPuskesmas = z.object({
+  noRekamMedis: z
+    .string()
+    .min(3)
+    .max(50)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Nomor Rekam Medis minimal 3 karakter"
+    ),
+  idPengguna: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Pengguna tidak boleh kosong"),
+  currentAdminPuskesmas: z.boolean().optional(),
+  beratBadan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Berat Badan harus lebih dari 0"),
+  tinggiBadan: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tinggi Badan harus lebih dari 0"),
+  tekananDarah: z
+    .string()
+    .min(3)
+    .max(20)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Tekanan Darah minimal 3 karakter"
+    ),
+  denyutNadi: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
+  hasilLab: z.string().optional(),
+  hasilEkg: z.string().optional(),
+  tanggalPeriksa: z
+    .number()
+    .int()
+    .positive()
+    .refine((val) => val > 0, "Tanggal Periksa harus diisi"), // Adjust to Date or Timestamp as needed
+});

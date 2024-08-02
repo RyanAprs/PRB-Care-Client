@@ -30,7 +30,10 @@ import {
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
-import { getAllPasien } from "../../../services/PasienService";
+import {
+  getAllPasien,
+  getAllPasienAktif,
+} from "../../../services/PasienService";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -69,7 +72,7 @@ const DataKontrolBalik = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const responseData = await getAllPasien();
+        const responseData = await getAllPasienAktif();
         setPasien(responseData);
         setLoading(false);
       } catch (error) {
@@ -127,7 +130,7 @@ const DataKontrolBalik = () => {
     const unixTimestamp = convertHumanToUnix(e.value);
     setDatas((prev) => ({
       ...prev,
-      tanggalPeriksa: unixTimestamp,
+      tanggalKontrol: unixTimestamp,
     }));
   };
 

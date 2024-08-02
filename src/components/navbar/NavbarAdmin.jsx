@@ -46,17 +46,19 @@ const NavbarAdmin = ({ children }) => {
   const role = Cookies.get("role");
   const [name, setName] = useState("");
 
-  useEffect(() => {
-    try {
-      const fetchData = async () => {
-        const response = await getCurrentAdminPuskesmas();
-        setName(response.namaPuskesmas);
-      };
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  if (role === "nakes" || role === "apoteker") {
+    useEffect(() => {
+      try {
+        const fetchData = async () => {
+          const response = await getCurrentAdminPuskesmas();
+          setName(response.namaPuskesmas);
+        };
+        fetchData();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }
 
   const { dispatch } = useContext(AuthContext);
 
@@ -205,7 +207,7 @@ const NavbarAdmin = ({ children }) => {
             </div>
           )}
           {role === "nakes" && (
-            <div className="flex flex-col h-full justify-start gap-8">
+            <div className="flex flex-col h-full justify-start gap-6">
               <Link
                 to="/puskesmas/dashboard"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
@@ -216,17 +218,6 @@ const NavbarAdmin = ({ children }) => {
               >
                 <BarChart4Icon />
                 <h1>Dashboard</h1>
-              </Link>
-              <Link
-                to="/puskesmas/data-apotek"
-                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/puskesmas/data-apotek"
-                    ? "bg-lightGreen dark:bg-mainGreen"
-                    : ""
-                } rounded transition-all`}
-              >
-                <HousePlus />
-                <h1>Apotek</h1>
               </Link>
               <Link
                 to="/puskesmas/data-pasien"
