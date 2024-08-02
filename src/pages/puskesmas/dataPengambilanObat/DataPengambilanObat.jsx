@@ -61,23 +61,11 @@ const DataPengambilanObat = () => {
   const toast = useRef(null);
   const title = "Kontrol Balik";
 
-  const customSort = (a, b) => {
-      const statusOrder = ["menunggu", "diambil", "batal"];
-      
-      if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status)) return -1;
-      if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
-      if (a.tanggalPengambilan < b.tanggalPengambilan) return -1;
-      if (a.tanggalPengambilan > b.tanggalPengambilan) return 1;
-
-      return 0;
-    };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
 
         setLoading(false);
       } catch (error) {
@@ -139,8 +127,7 @@ const DataPengambilanObat = () => {
         });
         setVisible(false);
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -210,8 +197,7 @@ const DataPengambilanObat = () => {
         setVisible(false);
 
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -245,8 +231,7 @@ const DataPengambilanObat = () => {
         setVisibleDelete(false);
 
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -270,8 +255,7 @@ const DataPengambilanObat = () => {
         });
         setVisibleDone(false);
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -296,15 +280,14 @@ const DataPengambilanObat = () => {
         setVisibleCancelled(false);
 
         const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
-        setData(sortedData);
+        setData(responseData);
       }
     } catch (error) {
       handleDoneError(error, toast);
     }
   };
   const columns = [
-    { header: "Resi", field: "resi" },
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Apotek", field: "obat.adminApotek.namaApotek" },
@@ -341,8 +324,8 @@ const DataPengambilanObat = () => {
           onCancelled={handleModalCancelled}
           onDone={handleModalDone}
           statuses={statuses}
-     
-          role="admin"
+          role="nakes"
+          path="pengambilanObat"
         />
       </div>
 

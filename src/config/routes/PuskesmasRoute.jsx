@@ -11,11 +11,10 @@ import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
 import DashboardPuskesmas from "../../pages/puskesmas/dashboard/DashboardPuskesmas";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
-import DataApotek from "../../pages/puskesmas/dataApotek/DataApotek";
 import DataPasien from "../../pages/puskesmas/dataPasien/DataPasien";
 import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrolBalik";
-import DataPengembalianObat from "../../pages/puskesmas/dataPengembalianObat/DataPengembalianObat";
 import ProfilePuskesmas from "../../pages/puskesmas/profilePuskesmas/ProfilePuskesmas";
+import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -81,16 +80,6 @@ const PuskesmasRoute = () => {
             }
           />
           <Route
-            path="/puskesmas/data-apotek"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <DataApotek />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
             path="/puskesmas/data-pasien"
             element={
               <PrivateRoute role="nakes">
@@ -115,7 +104,7 @@ const PuskesmasRoute = () => {
             element={
               <PrivateRoute role="nakes">
                 <NavbarAdmin>
-                  <DataPengembalianObat />
+                  <DataPengambilanObat />
                 </NavbarAdmin>
               </PrivateRoute>
             }

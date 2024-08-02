@@ -1,4 +1,4 @@
-import { HousePlus, ShoppingCart, Stethoscope, UserPlus } from "lucide-react";
+import { ShoppingCart, Stethoscope, UserPlus } from "lucide-react";
 import { Card } from "primereact/card";
 import { useEffect, useState } from "react";
 import { getCurrentAdminPuskesmas } from "../../../services/PuskesmasService";
@@ -18,11 +18,6 @@ const DashboardPuskesmas = () => {
     }
   });
   const list = [
-    {
-      icon: <HousePlus size={54} />,
-      title: "Apotek",
-      desc: "Kelola data apotek",
-    },
     {
       icon: <UserPlus size={54} />,
       title: "Pasien",

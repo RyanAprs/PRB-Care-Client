@@ -77,3 +77,55 @@ export const puskesmasUpdateSchema = z.object({
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
     ),
 });
+
+export const puskesmasUpdateCurrentSchema = z.object({
+  namaPuskesmas: z
+    .string()
+    .min(3)
+    .max(50)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Nama Puskesmas minimal 3 karakter"
+    ),
+  telepon: z
+    .string()
+    .min(10)
+    .max(16)
+    .refine(isPhoneNumber, "Nomor telepon tidak valid"),
+  alamat: z
+    .string()
+    .min(3)
+    .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
+});
+
+export const puskesmasChangePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string()
+      .min(6)
+      .max(255)
+      .refine(
+        isPasswordFormat,
+        "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
+      ),
+    newPassword: z
+      .string()
+      .min(6)
+      .max(255)
+      .refine(
+        isPasswordFormat,
+        "Password baru tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
+      ),
+    confirmPassword: z
+      .string()
+      .min(6)
+      .max(255)
+      .refine(
+        isPasswordFormat,
+        "Konfirmasi password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
+      ),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Konfirmasi password harus sama dengan password baru",
+    path: ["confirmPassword"],
+  });

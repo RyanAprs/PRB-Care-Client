@@ -16,6 +16,7 @@ export default function ReusableTable({
   onCancelled,
   statuses,
   role,
+  path,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -100,18 +101,51 @@ export default function ReusableTable({
       );
     } else if (status === "menunggu" && role === "nakes") {
       return (
-        <div className="flex justify-center gap-2">
-          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
-            <Edit />
-          </Button>
-          <Button
-            size="sm"
-            severity="danger"
-            onClick={() => onCancelled(rowData)}
-          >
-            <X />
-          </Button>
-        </div>
+        <>
+          {path === "kontrolBalik" && (
+            <div className="flex justify-center gap-2">
+              <Button
+                size="sm"
+                severity="warning"
+                onClick={() => onEdit(rowData)}
+              >
+                <Edit />
+              </Button>
+              <Button
+                size="sm"
+                severity="success"
+                onClick={() => onDone(rowData)}
+              >
+                <Check />
+              </Button>
+              <Button
+                size="sm"
+                severity="danger"
+                onClick={() => onCancelled(rowData)}
+              >
+                <X />
+              </Button>
+            </div>
+          )}
+          {path === "pengambilanObat" && (
+            <div className="flex justify-center gap-2">
+              <Button
+                size="sm"
+                severity="warning"
+                onClick={() => onEdit(rowData)}
+              >
+                <Edit />
+              </Button>
+              <Button
+                size="sm"
+                severity="danger"
+                onClick={() => onCancelled(rowData)}
+              >
+                <X />
+              </Button>
+            </div>
+          )}
+        </>
       );
     } else if (status === "menunggu" && role === "apoteker") {
       return (

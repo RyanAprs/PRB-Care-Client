@@ -68,3 +68,25 @@ export const deletepuskesmas = async (id) => {
   );
   return response;
 };
+
+export const updateCurrentPuskesmas = async (datas) => {
+  const response = await axios.patch(
+    `${API_BASE_URI}/api/admin-puskesmas/current`,
+    datas,
+    getRequestHeaders()
+  );
+  return response;
+};
+
+export const updatePasswordPuskesmas = async (datas) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URI}/api/admin-puskesmas/current/password`,
+      datas,
+      getRequestHeaders()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

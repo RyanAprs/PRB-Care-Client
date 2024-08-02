@@ -49,8 +49,8 @@ const DashboardAdmin = () => {
   ];
 
   return (
-    <div className="flex flex-col p-8 gap-8">
-      <div className="text-3xl font-semibold">
+    <div className="flex flex-col p-8 gap-8" >
+      <div className="text-3xl font-semibold" >
         Halo, Selamat Datang Kembali!!
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -58,6 +58,7 @@ const DashboardAdmin = () => {
           <Card
             key={index}
             className="bg-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
+            style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             <div className="flex flex-col items-center justify-center h-full">
               <div className="text-xl font-bold mb-2">{item.title}</div>
