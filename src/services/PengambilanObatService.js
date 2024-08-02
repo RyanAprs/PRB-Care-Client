@@ -4,14 +4,22 @@ import { convertUnixToHuman } from "../utils/DateConverter";
 
 const API_BASE_URI = import.meta.env.VITE_API_BASE_URI;
 
-const token = Cookies.get("token");
+const getToken = () => Cookies.get("token");
 
-export const getAllPengambilanObat = async () => {
-  const response = await axios.get(`${API_BASE_URI}/api/pengambilan-obat`, {
+const getRequestHeaders = () => {
+  const token = getToken();
+  return {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  };
+};
+
+export const getAllPengambilanObat = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/pengambilan-obat`,
+    getRequestHeaders()
+  );
   const formattedData = response.data.data.map((item) => ({
     ...item,
     tanggalPengambilan: convertUnixToHuman(item.tanggalPengambilan),
@@ -24,11 +32,7 @@ export const getPengambilanObatById = async (id) => {
   try {
     const response = await axios.get(
       `${API_BASE_URI}/api/pengambilan-obat/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      getRequestHeaders()
     );
     return response.data.data;
   } catch (error) {
@@ -42,11 +46,7 @@ export const createPengambilanObat = async (datas) => {
     const response = await axios.post(
       `${API_BASE_URI}/api/pengambilan-obat`,
       datas,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      getRequestHeaders()
     );
     return response;
   } catch (error) {
@@ -59,11 +59,7 @@ export const updatePengambilanObat = async (id, datas) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/pengambilan-obat/${id}`,
     datas,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -71,11 +67,7 @@ export const updatePengambilanObat = async (id, datas) => {
 export const deletePengambilanObat = async (id) => {
   const response = await axios.delete(
     `${API_BASE_URI}/api/pengambilan-obat/${id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -84,11 +76,7 @@ export const PengambilanObatDone = async (id) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/pengambilan-obat/${id}/diambil`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
@@ -97,11 +85,7 @@ export const PengambilanObatCancelled = async (id) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/pengambilan-obat/${id}/batal`,
     {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    getRequestHeaders()
   );
   return response;
 };
