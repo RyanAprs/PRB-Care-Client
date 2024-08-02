@@ -48,6 +48,12 @@ const DataPuskesmas = () => {
 
   const toast = useRef(null);
 
+  const customSort = (a, b) => {
+    if (a.namaPuskesmas < b.namaPuskesmas) return -1;
+    if (a.namaPuskesmas > b.namaPuskesmas) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const formattedAddress = [
       address.detail,
@@ -76,7 +82,8 @@ const DataPuskesmas = () => {
             },
           }
         );
-        setData(response.data.data);
+        const sortedData = response.data.data.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -115,7 +122,8 @@ const DataPuskesmas = () => {
         });
         setVisible(false);
         const data = await getAllPuskesmas();
-        setData(data);
+        const sortedData = data.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -165,7 +173,8 @@ const DataPuskesmas = () => {
           life: 3000,
         });
         const data = await getAllPuskesmas();
-        setData(data);
+        const sortedData = data.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -199,7 +208,8 @@ const DataPuskesmas = () => {
           life: 3000,
         });
         const data = await getAllPuskesmas();
-        setData(data);
+        const sortedData = data.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);

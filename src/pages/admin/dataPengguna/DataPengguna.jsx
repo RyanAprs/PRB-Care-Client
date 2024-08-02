@@ -48,6 +48,12 @@ const DataPengguna = () => {
   const [errors, setErrors] = useState({});
   const title = "Pengguna";
 
+  const customSort = (a, b) => {
+    if (a.namaLengkap < b.namaLengkap) return -1;
+    if (a.namaLengkap > b.namaLengkap) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,7 +65,8 @@ const DataPengguna = () => {
             },
           }
         );
-        setData(response.data.data);
+        const sortedData = response.data.data.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -114,7 +121,8 @@ const DataPengguna = () => {
         });
         setVisible(false);
         const dataResponse = await getAllPengguna();
-        setData(dataResponse);
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -166,7 +174,8 @@ const DataPengguna = () => {
           life: 3000,
         });
         const dataResponse = await getAllPengguna();
-        setData(dataResponse);
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -199,8 +208,9 @@ const DataPengguna = () => {
           detail: "Data Pengguna dihapus",
           life: 3000,
         });
-        const response = await getAllPengguna();
-        setData(response);
+        const dataResponse = await getAllPengguna();
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);

@@ -48,6 +48,12 @@ const DataApotek = () => {
   const title = "Apotek";
   const token = Cookies.get("token");
 
+  const customSort = (a, b) => {
+    if (a.namaApotek < b.namaApotek) return -1;
+    if (a.namaApotek > b.namaApotek) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const formattedAddress = [
       address.detail,
@@ -76,7 +82,8 @@ const DataApotek = () => {
             },
           }
         );
-        setData(response.data.data);
+        const sortedData = response.data.data.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -113,8 +120,9 @@ const DataApotek = () => {
           life: 3000,
         });
         setVisible(false);
-        const data = await getAllApotek();
-        setData(data);
+        const dataResponse = await getAllApotek();
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -162,8 +170,9 @@ const DataApotek = () => {
           detail: "Data apotek diperbarui.",
           life: 3000,
         });
-        const data = await getAllApotek();
-        setData(data);
+        const dataResponse = await getAllApotek();
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -196,8 +205,9 @@ const DataApotek = () => {
           detail: "Data apotek dihapus.",
           life: 3000,
         });
-        const data = await getAllApotek();
-        setData(data);
+        const dataResponse = await getAllApotek();
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);

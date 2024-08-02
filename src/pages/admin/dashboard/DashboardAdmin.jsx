@@ -49,19 +49,20 @@ const DashboardAdmin = () => {
   ];
 
   return (
-    <div className="flex flex-col p-8  gap-8 ">
+    <div className="flex flex-col p-8 gap-8">
       <div className="text-3xl font-semibold">
         Halo, Selamat Datang Kembali!!
       </div>
-      <div className="gap-4 grid grid-cols-1 sm:grid-cols-3 ">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card
-            title={item.title}
             key={index}
-            className="bg-mainGreen rounded dark:bg-darkGreen text-white shadow-lg"
+            className="bg-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
           >
-            <div className="py-2 overflow-visible">
-              <div className="text-xl flex items-center justify-center">
+            <div className="flex flex-col items-center justify-center h-full">
+              <div className="text-xl font-bold mb-2">{item.title}</div>
+              {item.icon && <div className="text-4xl mb-2">{item.icon}</div>}
+              <div className="text-xl text-center">
                 {item.desc}
               </div>
             </div>

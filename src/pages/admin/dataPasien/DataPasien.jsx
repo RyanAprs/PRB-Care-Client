@@ -67,6 +67,14 @@ const DataPasien = () => {
   const toast = useRef(null);
   const title = "Pasien";
 
+  const customSort = (a, b) => {
+    if (a.status < b.status) return -1;
+    if (a.status > b.status) return 1;
+    if (a.tanggalPeriksa < b.tanggalPeriksa) return -1;
+    if (a.tanggalPeriksa > b.tanggalPeriksa) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -83,7 +91,8 @@ const DataPasien = () => {
           ...item,
           tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
         }));
-        setData(formatedData);
+        const sortedData = formatedData.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -161,7 +170,8 @@ const DataPasien = () => {
         });
         setVisible(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -227,7 +237,8 @@ const DataPasien = () => {
         });
         setVisible(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -260,7 +271,8 @@ const DataPasien = () => {
         });
         setVisibleDelete(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -285,7 +297,8 @@ const DataPasien = () => {
         });
         setVisibleDone(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDoneError(error, toast);

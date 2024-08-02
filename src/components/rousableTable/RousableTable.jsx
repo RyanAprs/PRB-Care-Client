@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { Check, ClipboardCheck, Delete, Edit, X } from "lucide-react";
+import { Check, Search, Delete, Edit, X } from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -139,13 +139,17 @@ export default function ReusableTable({
     <div className="p-4 w-full">
       <div className="card p-6 bg-white dark:bg-blackHover w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
-          <InputText
-            className="border w-full md:w-1/2 bg-gray-100 dark:bg-blackHover p-3 rounded-xl "
-            type="search"
-            value={globalFilter}
-            onChange={onGlobalFilterChange}
-            placeholder="Search..."
-          />
+          <div className="p-inputgroup md:w-1/2">
+              <span className="p-inputgroup-addon " style={{ backgroundColor: '#f8f9fa' }}>
+              <Search color="black" size={16} />
+              </span>
+              <InputText
+                  type="search"
+                  value={globalFilter}
+                  onChange={onGlobalFilterChange}
+                  placeholder="Search..."
+              />
+          </div>
           <div className="flex gap-4  items-end">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
@@ -178,12 +182,6 @@ export default function ReusableTable({
                 field={col.field}
                 header={col.header}
                 sortable
-                filter={col.field === "status"}
-                filterElement={
-                  col.field === "status" && statuses && statuses.length > 0
-                    ? statusRowFilterTemplate
-                    : null
-                }
                 className="p-4 "
               />
             ))}

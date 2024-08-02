@@ -54,12 +54,24 @@ const DataKontrolBalik = () => {
   const toast = useRef(null);
   const title = "Kontrol Balik";
 
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "selesai", "batal"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status)) return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
+    if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
+
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const responseData = await getAllKontrolBalik();
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
 
-        setData(responseData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -107,7 +119,8 @@ const DataKontrolBalik = () => {
         });
         setVisible(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -167,7 +180,8 @@ const DataKontrolBalik = () => {
         });
         setVisible(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -200,7 +214,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleDelete(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -225,7 +240,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleDone(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDoneError(error, toast);
@@ -250,7 +266,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleCancelled(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDoneError(error, toast);

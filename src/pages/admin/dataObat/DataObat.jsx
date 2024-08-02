@@ -21,7 +21,6 @@ import {
 } from "../../../services/ObatService";
 import {
   createObatSchema,
-  // obatSchema,
   updateObatSchema,
 } from "../../../validations/ObatSchema";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -45,11 +44,18 @@ const DataObat = () => {
   const title = "Obat";
   const [errors, setErrors] = useState({});
 
+  const customSort = (a, b) => {
+    if (a.namaObat < b.namaObat) return -1;
+    if (a.namaObat > b.namaObat) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const responseData = await getAllObat();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -103,7 +109,8 @@ const DataObat = () => {
         });
         setVisible(false);
         const dataResponse = await getAllObat();
-        setData(dataResponse);
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -150,7 +157,8 @@ const DataObat = () => {
         });
         setVisible(false);
         const dataResponse = await getAllObat();
-        setData(dataResponse);
+        const sortedData = dataResponse.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -184,7 +192,8 @@ const DataObat = () => {
           life: 3000,
         });
         const response = await getAllObat();
-        setData(response);
+        const sortedData = response.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       handleDeleteError(error, toast, title);
@@ -193,7 +202,7 @@ const DataObat = () => {
 
   const columns = [
     { header: "Nama Obat", field: "namaObat" },
-    { header: "jumlah", field: "jumlah" },
+    { header: "Jumlah", field: "jumlah" },
     { header: "Nama Apotek", field: "adminApotek.namaApotek" },
   ];
 
@@ -304,7 +313,7 @@ const DataObat = () => {
       </Dialog>
 
       <Dialog
-        header="Hapus Data Puskesmas"
+        header="Hapus Data Obat"
         visible={visibleDelete}
         className="md:w-1/2 w-full"
         onHide={() => setVisibleDelete(false)}
