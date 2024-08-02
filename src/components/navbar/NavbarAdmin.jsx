@@ -91,7 +91,13 @@ const NavbarAdmin = ({ children }) => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    navigate("/admin/login");
+    if (role === "admin") {
+      navigate("/admin/login");
+    } else if (role === "nakes") {
+      navigate("/puskesmas/login");
+    } else if (role === "apoteker") {
+      navigate("/apotek/login");
+    }
   };
 
   const Sidebar = () => (
