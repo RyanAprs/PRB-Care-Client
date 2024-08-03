@@ -3,9 +3,7 @@ import { Input, Button, Spinner } from "@nextui-org/react";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "../../../assets/prbcare.svg";
 import { z } from "zod";
-import DynamicAddress, {
-  validateAddress,
-} from "../../../components/dynamicAddress/DynamicAddress";
+import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import { AddressContext } from "../../../config/context/AdressContext";
 import axios from "axios";
 
@@ -93,15 +91,6 @@ const RegisterPengguna = () => {
         newErrors[err.path[0]] = err.message;
       });
       setError(newErrors);
-      return;
-    }
-
-    if (!validateAddress(address)) {
-      setLoading(false);
-      setError((prevErrors) => ({
-        ...prevErrors,
-        alamat: "Alamat tidak valid. Mohon periksa kembali.",
-      }));
       return;
     }
 

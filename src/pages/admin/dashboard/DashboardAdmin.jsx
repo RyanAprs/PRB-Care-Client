@@ -57,7 +57,7 @@ const DashboardAdmin = () => {
         {list.map((item, index) => (
           <Card
             key={index}
-            className="bg-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
+            className="bg-white dark:bg-blackHover dark:text-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
             style={{ fontFamily: 'Poppins, sans-serif' }}
           >
             <div className="flex flex-col items-center justify-center h-full">

@@ -46,6 +46,7 @@ const DataApotek = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const title = "Apotek";
+  const [resetAddress, setResetAddress] = useState(false);
   const token = Cookies.get("token");
 
   const customSort = (a, b) => {
@@ -105,6 +106,7 @@ const DataApotek = () => {
     });
     setIsEditMode(false);
     setVisible(true);
+    setResetAddress(true);
   };
 
   const handleCreate = async () => {
@@ -151,6 +153,7 @@ const DataApotek = () => {
         setCurrentId(data.id);
         setIsEditMode(true);
         setVisible(true);
+        setResetAddress(true);
       }
     } catch (error) {
       handleApiError(error, toast);
@@ -307,7 +310,9 @@ const DataApotek = () => {
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
-          <label htmlFor="" className="-mb-3">Telepon:</label>
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
           <InputText
             type="text"
             placeholder="Telepon"
@@ -327,7 +332,7 @@ const DataApotek = () => {
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <DynamicAddress />
+          <DynamicAddress reset={resetAddress} />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>

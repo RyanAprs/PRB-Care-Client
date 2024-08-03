@@ -51,7 +51,7 @@ export default function ReusableTable({
       onChange={onStatusFilterChange}
       placeholder="Pilih Status"
       optionLabel="label"
-      className="w-full bg-white dark:bg-blackHover"
+      className="w-full "
     />
   );
 

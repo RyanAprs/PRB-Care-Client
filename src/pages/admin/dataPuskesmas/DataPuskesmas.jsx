@@ -45,6 +45,7 @@ const DataPuskesmas = () => {
   const [visibleDelete, setVisibleDelete] = useState(false);
   const title = "Puskesmas";
   const token = Cookies.get("token");
+  const [resetAddress, setResetAddress] = useState(false);
 
   const toast = useRef(null);
 
@@ -105,6 +106,7 @@ const DataPuskesmas = () => {
     });
     setIsEditMode(false);
     setVisible(true);
+    setResetAddress(true);
   };
 
   const handleCreate = async () => {
@@ -152,6 +154,7 @@ const DataPuskesmas = () => {
         setCurrentId(data.id);
         setVisible(true);
         setIsEditMode(true);
+        setResetAddress(true);
       }
     } catch (error) {
       handleApiError(error, toast);
@@ -330,7 +333,7 @@ const DataPuskesmas = () => {
             Alamat:
           </label>
 
-          <DynamicAddress />
+          <DynamicAddress reset={resetAddress} />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>

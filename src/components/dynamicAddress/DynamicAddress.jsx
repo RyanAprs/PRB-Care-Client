@@ -4,7 +4,7 @@ import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 
-const DynamicAddress = () => {
+const DynamicAddress = ({ reset }) => {
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -26,6 +26,19 @@ const DynamicAddress = () => {
       .then((response) => response.json())
       .then((data) => setProvinces(data));
   }, []);
+
+  useEffect(() => {
+    if (reset) {
+      setAddress({
+        provinsi: "",
+        kabupaten: "",
+        kecamatan: "",
+        desa: "",
+        detail: "",
+      });
+      setErrors({});
+    }
+  }, [reset]);
 
   const handleProvinceChange = (e) => {
     const provinsiId = e.value;
@@ -96,20 +109,6 @@ const DynamicAddress = () => {
       ...prev,
       [name]: value,
     }));
-  };
-
-  const validateAddress = () => {
-    const result = addressSchema.safeParse(address);
-    if (!result.success) {
-      const errorMessages = {};
-      result.error.errors.forEach((err) => {
-        errorMessages[err.path[0]] = err.message;
-      });
-      setErrors(errorMessages);
-      return false;
-    }
-    setErrors({});
-    return true;
   };
 
   return (
@@ -208,19 +207,6 @@ const DynamicAddress = () => {
       </div>
     </div>
   );
-};
-
-export const validateAddress = (address) => {
-  const addressSchema = z.object({
-    provinsi: z.string().min(1, "Provinsi wajib diisi"),
-    kabupaten: z.string().min(1, "Kabupaten wajib diisi"),
-    kecamatan: z.string().min(1, "Kecamatan wajib diisi"),
-    desa: z.string().min(1, "Desa wajib diisi"),
-    detail: z.string().min(1, "Detail alamat wajib diisi"),
-  });
-
-  const result = addressSchema.safeParse(address);
-  return result.success;
 };
 
 export default DynamicAddress;

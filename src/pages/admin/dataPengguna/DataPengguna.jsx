@@ -46,6 +46,7 @@ const DataPengguna = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [errors, setErrors] = useState({});
+  const [resetAddress, setResetAddress] = useState(false);
   const title = "Pengguna";
 
   const customSort = (a, b) => {
@@ -105,6 +106,7 @@ const DataPengguna = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+    setResetAddress(true);
   };
 
   const handleCreate = async () => {
@@ -176,6 +178,7 @@ const DataPengguna = () => {
         const dataResponse = await getAllPengguna();
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
+        setResetAddress(true);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -359,7 +362,7 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Alamat
           </label>
-          <DynamicAddress />
+          <DynamicAddress reset={resetAddress} />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>

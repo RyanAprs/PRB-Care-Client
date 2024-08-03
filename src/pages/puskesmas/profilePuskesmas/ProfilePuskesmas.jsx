@@ -140,7 +140,7 @@ const ProfilePuskesmas = () => {
     <div className="h-full  w-full flex justify-center items-center py-32  px-60 rounded shadow-xl">
       <Toast ref={toast} />
 
-      <div className="flex flex-col items-center p-4 justify-center gap-8 bg-lightGreen dark:bg-darkGreen shadow-xl px-32">
+      <div className="flex flex-col items-center p-4 justify-center gap-8 bg-white dark:bg-blackHover shadow-xl px-32">
         <div className="flex flex-col gap-4 p-8 text-xl font-semibold">
           <div className="flex justify-start gap-6 items-center">
             <h1>Nama Puskesmas:</h1>
@@ -160,14 +160,14 @@ const ProfilePuskesmas = () => {
             onClick={handleUpdateModal}
             text
             raised
-            className=" bg-white md:text-lg text-sm text-black rounded-xl"
+            className=" bg-lightGreen md:text-lg text-sm text-black rounded-xl"
             label="Edit Profile"
           />
           <Button
             onClick={handleModalChangePassword}
             text
             raised
-            className=" bg-white md:text-lg text-sm text-black rounded-xl"
+            className=" bg-lightGreen md:text-lg text-sm text-black rounded-xl"
             label="Edit Password"
           />
         </div>
