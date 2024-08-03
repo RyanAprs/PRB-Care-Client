@@ -9,7 +9,7 @@ import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import NotFound from "../../pages/NotFound";
 import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
-import DashboardPuskesmas from "../../pages/puskesmas/dashboard/DashboardPuskesmas";
+import DashboardPuskesmas from "../../pages/puskesmas/beranda/BerandaPuskesmas";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
 import DataPasien from "../../pages/puskesmas/dataPasien/DataPasien";
 import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrolBalik";
@@ -34,7 +34,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (token && userRole === role) {
-    return <Navigate to="/puskesmas/dashboard" />;
+    return <Navigate to="/puskesmas/beranda" />;
   } else if (token && userRole !== role) {
     return <Navigate to="/page/not-found" />;
   }
@@ -60,7 +60,7 @@ const PuskesmasRoute = () => {
       <div className={`${darkMode.value ? "dark" : ""}`}>
         <Routes>
           <Route
-            path="/puskesmas/dashboard"
+            path="/puskesmas/beranda"
             element={
               <PrivateRoute role="nakes">
                 <NavbarAdmin>

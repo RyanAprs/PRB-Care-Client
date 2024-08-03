@@ -11,7 +11,7 @@ const LoginAdmin = () => {
       <Toast ref={toast} position="top-center" />
       <LoginForm
         API_URI={API_URI}
-        navigateUser="/admin/dashboard"
+        navigateUser="/admin/beranda"
         role="admin"
         title="Admin"
       />

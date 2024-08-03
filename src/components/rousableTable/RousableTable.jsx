@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { Check, Search, Delete, Edit, X } from "lucide-react";
+import { CircleCheckBig , Search, Trash2, Edit, CircleOff  } from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -61,11 +61,11 @@ export default function ReusableTable({
     if (!statuses) {
       return (
         <div className="flex justify-center gap-2">
-          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+          <Button  size="sm" className="  md:text-lg text-sm text-white rounded-xl" severity="warning" onClick={() => onEdit(rowData)}>
             <Edit />
           </Button>
-          <Button size="sm" severity="danger" onClick={() => onDelete(rowData)}>
-            <Delete />
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl" severity="danger" onClick={() => onDelete(rowData)}>
+            <Trash2 />
           </Button>
         </div>
       );
@@ -76,26 +76,26 @@ export default function ReusableTable({
     ) {
       return (
         <div className="flex justify-center gap-2">
-          <Button size="sm" severity="danger" onClick={() => onDelete(rowData)}>
-            <Delete />
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl" severity="danger" onClick={() => onDelete(rowData)}>
+            <Trash2 />
           </Button>
         </div>
       );
     } else if (status === "menunggu" && role === "admin") {
       return (
         <div className="flex justify-center gap-2">
-          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl" severity="warning" onClick={() => onEdit(rowData)}>
             <Edit />
           </Button>
-          <Button size="sm" severity="success" onClick={() => onDone(rowData)}>
-            <Check />
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl"  onClick={() => onDone(rowData)}>
+            <CircleCheckBig  />
           </Button>
           <Button
-            size="sm"
+            size="sm" className="  md:text-lg text-sm text-white rounded-xl"
             severity="danger"
             onClick={() => onCancelled(rowData)}
           >
-            <X />
+            <CircleOff  />
           </Button>
         </div>
       );
@@ -105,43 +105,43 @@ export default function ReusableTable({
           {path === "kontrolBalik" && (
             <div className="flex justify-center gap-2">
               <Button
-                size="sm"
+                size="sm" className="  md:text-lg text-sm text-white rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
                 <Edit />
               </Button>
               <Button
-                size="sm"
-                severity="success"
+                size="sm" className="  md:text-lg text-sm text-white rounded-xl"
+                
                 onClick={() => onDone(rowData)}
               >
-                <Check />
+                <CircleCheckBig  />
               </Button>
               <Button
-                size="sm"
+                size="sm" className="  md:text-lg text-sm text-white rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <X />
+                <CircleOff  />
               </Button>
             </div>
           )}
           {path === "pengambilanObat" && (
             <div className="flex justify-center gap-2">
               <Button
-                size="sm"
+                size="sm" className="  md:text-lg text-sm text-white rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
                 <Edit />
               </Button>
               <Button
-                size="sm"
+                size="sm" className="  md:text-lg text-sm text-white rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <X />
+                <CircleOff  />
               </Button>
             </div>
           )}
@@ -150,19 +150,19 @@ export default function ReusableTable({
     } else if (status === "menunggu" && role === "apoteker") {
       return (
         <div className="flex justify-center gap-2">
-          <Button size="sm" severity="success" onClick={() => onDone(rowData)}>
-            <Check />
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl"  onClick={() => onDone(rowData)}>
+            <CircleCheckBig  />
           </Button>
         </div>
       );
     } else {
       return (
         <div className="flex justify-center gap-2">
-          <Button size="sm" severity="warning" onClick={() => onEdit(rowData)}>
+          <Button size="sm" className="  md:text-lg text-sm text-white rounded-xl" severity="warning" onClick={() => onEdit(rowData)}>
             <Edit />
           </Button>
-          <Button severity="success" size="sm" onClick={() => onDone(rowData)}>
-            <Check />
+          <Button  size="sm" className="  md:text-lg text-sm text-white rounded-xl" onClick={() => onDone(rowData)}>
+            <CircleCheckBig  />
           </Button>
         </div>
       );

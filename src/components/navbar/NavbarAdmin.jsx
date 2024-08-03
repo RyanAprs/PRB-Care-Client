@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   AlignLeft,
-  BarChart4Icon,
+  LayoutGrid,
   Hospital,
   HousePlus,
   Lock,
@@ -117,15 +117,15 @@ const NavbarAdmin = ({ children }) => {
           {role === "admin" && (
             <div className="flex flex-col h-full gap-2">
               <Link
-                to="/admin/dashboard"
+                to="/admin/beranda"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/admin/dashboard"
+                  location.pathname === "/admin/beranda"
                     ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
-                <BarChart4Icon />
-                <h1>Dashboard</h1>
+                <LayoutGrid />
+                <h1>Beranda</h1>
               </Link>
               <Link
                 to="/admin/data-puskesmas"
@@ -209,15 +209,15 @@ const NavbarAdmin = ({ children }) => {
           {role === "nakes" && (
             <div className="flex flex-col h-full justify-start gap-6">
               <Link
-                to="/puskesmas/dashboard"
+                to="/puskesmas/beranda"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/puskesmas/dashboard"
+                  location.pathname === "/puskesmas/beranda"
                     ? "bg-lightGreen dark:bg-mainGreen"
                     : ""
                 } rounded transition-all`}
               >
-                <BarChart4Icon />
-                <h1>Dashboard</h1>
+                <LayoutGrid />
+                <h1>Beranda</h1>
               </Link>
               <Link
                 to="/puskesmas/data-pasien"
@@ -313,7 +313,7 @@ const NavbarAdmin = ({ children }) => {
             </button>
             {role === "admin" && (
               <h1 className="text-xl">
-                {location.pathname === "/admin/dashboard" ? "Dashboard" : ""}
+                {location.pathname === "/admin/beranda" ? "Beranda" : ""}
                 {location.pathname === "/admin/data-puskesmas"
                   ? "Data Puskesmas"
                   : ""}
@@ -338,8 +338,8 @@ const NavbarAdmin = ({ children }) => {
 
             {role === "nakes" && (
               <h1 className="text-xl">
-                {location.pathname === "/puskesmas/dashboard"
-                  ? "Dashboard"
+                {location.pathname === "/puskesmas/beranda"
+                  ? "Beranda"
                   : ""}
                 {location.pathname === "/puskesmas/profile" ? "Profile" : ""}
                 {location.pathname === "/puskesmas/data-apotek"
