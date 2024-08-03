@@ -20,6 +20,11 @@ export const getAllPengambilanObat = async () => {
     `${API_BASE_URI}/api/pengambilan-obat`,
     getRequestHeaders()
   );
+
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   const formattedData = response.data.data.map((item) => ({
     ...item,
     tanggalPengambilan: convertUnixToHuman(item.tanggalPengambilan),

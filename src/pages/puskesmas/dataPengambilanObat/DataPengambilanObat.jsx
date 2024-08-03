@@ -31,10 +31,7 @@ import {
   PengambilanObatDone,
   updatePengambilanObat,
 } from "../../../services/PengambilanObatService";
-import {
-  getAllPasien,
-  getAllPasienAktif,
-} from "../../../services/PasienService";
+import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
 
 const DataPengambilanObat = () => {
@@ -221,6 +218,8 @@ const DataPengambilanObat = () => {
   const handleDelete = async () => {
     try {
       const response = await deletePengambilanObat(currentId);
+      console.log(response);
+
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -229,7 +228,6 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisibleDelete(false);
-
         const responseData = await getAllPengambilanObat();
         setData(responseData);
       }
@@ -237,6 +235,7 @@ const DataPengambilanObat = () => {
       handleDeleteError(error, toast, title);
     }
   };
+  
   const handleModalDone = (data) => {
     setCurrentId(data.id);
     setCurrentName(data.pasien.pengguna.namaLengkap);

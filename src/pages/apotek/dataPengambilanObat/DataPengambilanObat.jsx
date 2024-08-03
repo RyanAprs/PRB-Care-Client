@@ -108,10 +108,6 @@ const DataPengambilanObat = () => {
         <ReusableTable
           columns={columns}
           data={data}
-          onCreate=""
-          onDelete=""
-          onEdit=""
-          onCancelled=""
           onDone={handleModalDone}
           statuses={statuses}
           role="apoteker"

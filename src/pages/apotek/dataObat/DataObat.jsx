@@ -199,6 +199,7 @@ const DataObat = () => {
           onEdit={handleModalUpdate}
           onCreate={handleModalCreate}
           statusOptions=""
+          role="apoteker"
         />
       </div>
 
