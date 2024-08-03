@@ -19,6 +19,10 @@ export const getAllPengguna = async () => {
     `${API_BASE_URI}/api/pengguna`,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   return response.data.data;
 };
 

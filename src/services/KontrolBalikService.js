@@ -20,6 +20,10 @@ export const getAllKontrolBalik = async () => {
     `${API_BASE_URI}/api/kontrol-balik   `,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   const formattedData = response.data.data.map((item) => ({
     ...item,
     tanggalKontrol: convertUnixToHuman(item.tanggalKontrol),

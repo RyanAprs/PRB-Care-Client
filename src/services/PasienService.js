@@ -20,6 +20,10 @@ export const getAllPasien = async () => {
     `${API_BASE_URI}/api/pasien`,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   const formatedData = response.data.data.map((item) => ({
     ...item,
     tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),

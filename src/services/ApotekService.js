@@ -19,6 +19,10 @@ export const getAllApotek = async () => {
     `${API_BASE_URI}/api/admin-apotek`,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   return response.data.data;
 };
 

@@ -19,6 +19,10 @@ export const getAllObat = async () => {
     `${API_BASE_URI}/api/obat`,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   return response.data.data;
 };
 

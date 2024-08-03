@@ -19,6 +19,10 @@ export const getAllPuskesmas = async () => {
     `${API_BASE_URI}/api/admin-puskesmas`,
     getRequestHeaders()
   );
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
   return response.data.data;
 };
 
