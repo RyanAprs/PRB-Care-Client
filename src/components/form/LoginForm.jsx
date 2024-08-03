@@ -17,7 +17,6 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
-  const navigate = useNavigate();
   const toast = useRef(null);
 
   const handleLogin = async (e) => {
@@ -41,16 +40,9 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           type: "LOGIN",
           payload: { token: response.data.token, role: role },
         });
-        toast.current.show({
-          severity: "success",
-          summary: "Berhasil",
-          detail: "Anda berhasil masuk ke akun anda",
-          life: 3000,
-        });
 
-        setTimeout(() => {
-          navigate(navigateUser);
-        }, 1500);
+        localStorage.setItem("isLogin", "true");
+
       }
     } catch (error) {
       if (error instanceof ZodError) {
