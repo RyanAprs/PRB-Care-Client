@@ -7,7 +7,7 @@ const LoginApotek = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <LoginForm
         API_URI={API_URI}
-        navigateUser="/apotek/home"
+        navigateUser="/apotek/beranda"
         role="apoteker"
         title="Apotek"
       />

@@ -7,9 +7,13 @@ import {
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
 import LoginApotek from "../../pages/apotek/login/LoginApotek";
-import HomeApotek from "../../pages/apotek/home/HomeApotek";
 import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
+import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
+import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
+import DataObat from "../../pages/apotek/dataObat/DataObat";
+import NavbarAdmin from "../../components/navbar/NavbarAdmin";
+import ProfileApotek from "../../pages/apotek/profileApotek/ProfileApotek";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -29,7 +33,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (token && userRole === role) {
-    return <Navigate to="/apotek/home" />;
+    return <Navigate to="/apotek/beranda" />;
   } else if (token && userRole !== role) {
     return <Navigate to="/page/not-found" />;
   }
@@ -61,10 +65,42 @@ const ApotekRoute = () => {
       <div className={`${darkMode.value ? "dark" : ""}`}>
         <Routes>
           <Route
-            path="/apotek/home"
+            path="/apotek/beranda"
             element={
               <PrivateRoute role="apoteker">
-                <HomeApotek />
+                <NavbarAdmin>
+                  <DashboardApotek />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/apotek/data-obat"
+            element={
+              <PrivateRoute role="apoteker">
+                <NavbarAdmin>
+                  <DataObat />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/apotek/data-pengambilan-obat"
+            element={
+              <PrivateRoute role="apoteker">
+                <NavbarAdmin>
+                  <DataPengambilanObat />
+                </NavbarAdmin>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/apotek/profile"
+            element={
+              <PrivateRoute role="apoteker">
+                <NavbarAdmin>
+                  <ProfileApotek />
+                </NavbarAdmin>
               </PrivateRoute>
             }
           />

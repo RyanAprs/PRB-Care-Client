@@ -13,14 +13,7 @@ const DynamicAddress = ({ reset }) => {
 
   const { address, setAddress } = useContext(AddressContext);
 
-  const addressSchema = z.object({
-    provinsi: z.string().min(1, "Provinsi wajib diisi"),
-    kabupaten: z.string().min(1, "Kabupaten wajib diisi"),
-    kecamatan: z.string().min(1, "Kecamatan wajib diisi"),
-    desa: z.string().min(1, "Desa wajib diisi"),
-    detail: z.string().min(1, "Detail alamat wajib diisi"),
-  });
-
+  
   useEffect(() => {
     fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
       .then((response) => response.json())

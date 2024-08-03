@@ -26,6 +26,7 @@ import { handleChangePasswordError } from "../../utils/ApiErrorHandlers";
 import { updatePassword } from "../../services/SuperAdminService";
 import Cookies from "js-cookie";
 import { getCurrentAdminPuskesmas } from "../../services/PuskesmasService";
+import { getCurrentAdminApotek } from "../../services/ApotekService";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,14 +47,28 @@ const NavbarAdmin = ({ children }) => {
   const role = Cookies.get("role");
   const [name, setName] = useState("");
 
-  if (role === "nakes" || role === "apoteker") {
+  if (role === "nakes") {
     useEffect(() => {
       try {
-        const fetchData = async () => {
+        const fetchDataAdminPuskesmas = async () => {
           const response = await getCurrentAdminPuskesmas();
           setName(response.namaPuskesmas);
         };
-        fetchData();
+
+        fetchDataAdminPuskesmas();
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  } else if (role === "apoteker") {
+    useEffect(() => {
+      try {
+        const fetchDataAdminApotek = async () => {
+          const response = await getCurrentAdminApotek();
+          setName(response.namaApotek);
+        };
+
+        fetchDataAdminApotek();
       } catch (error) {
         console.log(error);
       }
@@ -254,6 +269,43 @@ const NavbarAdmin = ({ children }) => {
               </Link>
             </div>
           )}
+          {role === "apoteker" && (
+            <div className="flex flex-col h-full justify-start gap-6">
+              <Link
+                to="/apotek/beranda"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/apotek/beranda"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <LayoutGrid />
+                <h1>Beranda</h1>
+              </Link>
+              <Link
+                to="/apotek/data-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/apotek/data-obat"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <Pill />
+                <h1>Obat</h1>
+              </Link>
+              <Link
+                to="/apotek/data-pengambilan-obat"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/apotek/data-pengambilan-obat"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <ShoppingCart />
+                <h1>Pengambilan Obat</h1>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -338,9 +390,7 @@ const NavbarAdmin = ({ children }) => {
 
             {role === "nakes" && (
               <h1 className="text-xl">
-                {location.pathname === "/puskesmas/beranda"
-                  ? "Beranda"
-                  : ""}
+                {location.pathname === "/puskesmas/beranda" ? "Beranda" : ""}
                 {location.pathname === "/puskesmas/profile" ? "Profile" : ""}
                 {location.pathname === "/puskesmas/data-apotek"
                   ? "Data Apotek"
@@ -352,6 +402,16 @@ const NavbarAdmin = ({ children }) => {
                   ? "Data Kontrol Balik"
                   : ""}
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
+                  ? "Data Pengambilan Obat"
+                  : ""}
+              </h1>
+            )}
+            {role === "apoteker" && (
+              <h1 className="text-xl">
+                {location.pathname === "/apotek/beranda" ? "Beranda" : ""}
+                {location.pathname === "/apotek/profile" ? "Profile" : ""}
+                {location.pathname === "/apotek/data-obat" ? "Data Obat" : ""}
+                {location.pathname === "/apotek/data-pengambilan-obat"
                   ? "Data Pengambilan Obat"
                   : ""}
               </h1>
@@ -408,6 +468,16 @@ const NavbarAdmin = ({ children }) => {
           {role === "nakes" && (
             <Link
               to="/puskesmas/profile"
+              onClick={() => setVisible(false)}
+              className="mb-4 w-full flex gap-4"
+            >
+              <User />
+              <h1>Profile</h1>
+            </Link>
+          )}
+          {role === "apoteker" && (
+            <Link
+              to="/apotek/profile"
               onClick={() => setVisible(false)}
               className="mb-4 w-full flex gap-4"
             >

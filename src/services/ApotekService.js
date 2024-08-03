@@ -60,3 +60,33 @@ export const deleteApotek = async (id) => {
   );
   return response;
 };
+
+export const getCurrentAdminApotek = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/admin-apotek/current`,
+    getRequestHeaders()
+  );
+  return response.data.data;
+};
+
+export const updateCurrentApotek = async (datas) => {
+  const response = await axios.patch(
+    `${API_BASE_URI}/api/admin-apotek/current`,
+    datas,
+    getRequestHeaders()
+  );
+  return response;
+};
+
+export const updatePasswordApotek = async (datas) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URI}/api/admin-apotek/current/password`,
+      datas,
+      getRequestHeaders()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

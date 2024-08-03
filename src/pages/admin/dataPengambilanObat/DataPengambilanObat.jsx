@@ -31,10 +31,7 @@ import {
   PengambilanObatDone,
   updatePengambilanObat,
 } from "../../../services/PengambilanObatService";
-import {
-  getAllPasien,
-  getAllPasienAktif,
-} from "../../../services/PasienService";
+import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
 
 const DataPengambilanObat = () => {
@@ -59,18 +56,19 @@ const DataPengambilanObat = () => {
   const [currentName, setCurrentName] = useState("");
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
-  const title = "Kontrol Balik";
+  const title = "Pengambilan Obat";
 
   const customSort = (a, b) => {
-      const statusOrder = ["menunggu", "diambil", "batal"];
-      
-      if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status)) return -1;
-      if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
-      if (a.tanggalPengambilan < b.tanggalPengambilan) return -1;
-      if (a.tanggalPengambilan > b.tanggalPengambilan) return 1;
+    const statusOrder = ["menunggu", "diambil", "batal"];
 
-      return 0;
-    };
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.tanggalPengambilan < b.tanggalPengambilan) return -1;
+    if (a.tanggalPengambilan > b.tanggalPengambilan) return 1;
+
+    return 0;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -341,7 +339,6 @@ const DataPengambilanObat = () => {
           onCancelled={handleModalCancelled}
           onDone={handleModalDone}
           statuses={statuses}
-     
           role="admin"
         />
       </div>

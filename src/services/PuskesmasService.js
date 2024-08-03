@@ -35,14 +35,6 @@ export const getPuskesmasById = async (id) => {
   }
 };
 
-export const getCurrentAdminPuskesmas = async () => {
-  const response = await axios.get(
-    `${API_BASE_URI}/api/admin-puskesmas/current`,
-    getRequestHeaders()
-  );
-  return response.data.data;
-};
-
 export const createPuskesmas = async (datas) => {
   const response = await axios.post(
     `${API_BASE_URI}/api/admin-puskesmas`,
@@ -67,6 +59,14 @@ export const deletepuskesmas = async (id) => {
     getRequestHeaders()
   );
   return response;
+};
+
+export const getCurrentAdminPuskesmas = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/admin-puskesmas/current`,
+    getRequestHeaders()
+  );
+  return response.data.data;
 };
 
 export const updateCurrentPuskesmas = async (datas) => {
