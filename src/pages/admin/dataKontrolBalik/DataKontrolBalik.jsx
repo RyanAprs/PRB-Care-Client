@@ -30,10 +30,9 @@ import {
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
-import {
-  getAllPasien,
-  getAllPasienAktif,
-} from "../../../services/PasienService";
+import { getAllPasienAktif } from "../../../services/PasienService";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -56,11 +55,13 @@ const DataKontrolBalik = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Kontrol Balik";
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];
 
-    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status)) return -1;
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
     if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
     if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
     if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
@@ -71,8 +72,10 @@ const DataKontrolBalik = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllKontrolBalik();
-        const sortedData = responseData.sort(customSort);
+        const response = await getAllKontrolBalik();
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        const sortedData = response.sort(customSort);
         setData(sortedData);
 
         setLoading(false);
@@ -84,8 +87,10 @@ const DataKontrolBalik = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const responseData = await getAllPasienAktif();
-        setPasien(responseData);
+        const response = await getAllPasienAktif();
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -95,7 +100,7 @@ const DataKontrolBalik = () => {
 
     fetchDataPasien();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -298,6 +303,25 @@ const DataKontrolBalik = () => {
       </div>
     );
 
+  const itemTemplate = (option) => {
+    return (
+      <div>
+        {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+      </div>
+    );
+  };
+
+  const valueTemplate = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
+
   return (
     <div className="flex flex-col gap-4 p-4 z-10 ">
       <Toast ref={toast} />
@@ -337,6 +361,8 @@ const DataKontrolBalik = () => {
             options={pasien}
             filter
             optionLabel="pengguna.namaLengkap"
+            valueTemplate={valueTemplate}
+            itemTemplate={itemTemplate}
             placeholder="Pilih Pasien"
             className=" p-2 rounded"
             onChange={(e) => {

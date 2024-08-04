@@ -25,6 +25,8 @@ import {
 import Cookies from "js-cookie";
 import axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 
 const DataPuskesmas = () => {
   const [data, setData] = useState([]);
@@ -48,6 +50,7 @@ const DataPuskesmas = () => {
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const toast = useRef(null);
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     if (a.namaPuskesmas < b.namaPuskesmas) return -1;
@@ -83,6 +86,9 @@ const DataPuskesmas = () => {
             },
           }
         );
+
+        HandleUnauthorizedAdminSuper(response, navigate);
+
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
         setLoading(false);
@@ -93,7 +99,7 @@ const DataPuskesmas = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

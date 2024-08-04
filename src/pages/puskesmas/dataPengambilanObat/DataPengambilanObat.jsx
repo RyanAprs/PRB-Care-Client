@@ -33,6 +33,8 @@ import {
 } from "../../../services/PengambilanObatService";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
+import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
@@ -57,16 +59,18 @@ const DataPengambilanObat = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Kontrol Balik";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllPengambilanObat();
-        setData(responseData);
+        const response = await getAllPengambilanObat();
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
+
+        setData(response);
 
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
         setLoading(false);
       }
     };
@@ -96,7 +100,7 @@ const DataPengambilanObat = () => {
     fetchDataObat();
     fetchDataPasien();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setIsEditMode(false);
@@ -235,7 +239,7 @@ const DataPengambilanObat = () => {
       handleDeleteError(error, toast, title);
     }
   };
-  
+
   const handleModalDone = (data) => {
     setCurrentId(data.id);
     setCurrentName(data.pasien.pengguna.namaLengkap);

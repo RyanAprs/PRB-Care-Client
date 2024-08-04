@@ -25,6 +25,8 @@ import {
   handleDeleteError,
 } from "../../../utils/ApiErrorHandlers";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const DataPengguna = () => {
   const [data, setData] = useState([]);
@@ -49,6 +51,7 @@ const DataPengguna = () => {
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const title = "Pengguna";
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     if (a.namaLengkap < b.namaLengkap) return -1;
@@ -67,6 +70,8 @@ const DataPengguna = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
+
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
         setLoading(false);
@@ -76,7 +81,7 @@ const DataPengguna = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   useEffect(() => {
     const formattedAddress = [

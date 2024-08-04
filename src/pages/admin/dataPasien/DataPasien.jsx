@@ -35,6 +35,8 @@ import {
 } from "../../../services/PasienService";
 import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 
 addLocale("id", dateLocaleId);
 
@@ -66,6 +68,7 @@ const DataPasien = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Pasien";
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
@@ -86,6 +89,7 @@ const DataPasien = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
 
         const formatedData = response.data.data.map((item) => ({
           ...item,
@@ -109,6 +113,8 @@ const DataPasien = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
+
         setAdminPuskesmas(response.data.data);
         setLoading(false);
       } catch (error) {
@@ -126,6 +132,8 @@ const DataPasien = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
+
         setPengguna(response.data.data);
         setLoading(false);
       } catch (error) {
@@ -136,7 +144,7 @@ const DataPasien = () => {
     fetchDataPengguna();
     fetchDataAdminPuskesmas();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

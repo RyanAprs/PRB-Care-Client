@@ -19,6 +19,8 @@ import {
   puskesmasChangePasswordSchema,
   puskesmasUpdateCurrentSchema,
 } from "../../../validations/PuskesmasSchema";
+import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePuskesmas = () => {
   const [data, setData] = useState({
@@ -36,18 +38,21 @@ const ProfilePuskesmas = () => {
   });
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getCurrentAdminPuskesmas();
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
+
         setData(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const formattedAddress = [

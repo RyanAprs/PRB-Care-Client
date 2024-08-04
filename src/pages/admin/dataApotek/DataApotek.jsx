@@ -26,6 +26,8 @@ import {
   getApotekById,
   updateApotek,
 } from "../../../services/ApotekService";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const DataApotek = () => {
   const [data, setData] = useState([]);
@@ -49,6 +51,7 @@ const DataApotek = () => {
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const token = Cookies.get("token");
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     if (a.namaApotek < b.namaApotek) return -1;
@@ -84,6 +87,8 @@ const DataApotek = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
+
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
         setLoading(false);
@@ -94,7 +99,7 @@ const DataApotek = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

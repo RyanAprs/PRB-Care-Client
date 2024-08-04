@@ -14,6 +14,7 @@ import { Calendar } from "primereact/calendar";
 import { ZodError } from "zod";
 import {
   handleApiError,
+  handleCreatePengambilanObatError,
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
@@ -33,6 +34,8 @@ import {
 } from "../../../services/PengambilanObatService";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
@@ -57,6 +60,7 @@ const DataPengambilanObat = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Pengambilan Obat";
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "diambil", "batal"];
@@ -73,8 +77,11 @@ const DataPengambilanObat = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
+        const response = await getAllPengambilanObat();
+
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        const sortedData = response.sort(customSort);
         setData(sortedData);
 
         setLoading(false);
@@ -86,8 +93,10 @@ const DataPengambilanObat = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const responseData = await getAllPasienAktif();
-        setPasien(responseData);
+        const response = await getAllPasienAktif();
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -97,8 +106,12 @@ const DataPengambilanObat = () => {
 
     const fetchDataObat = async () => {
       try {
-        const responseData = await getAllObat();
-        setObat(responseData);
+        const response = await getAllObat();
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        console.log(response);
+
+        setObat(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -109,7 +122,7 @@ const DataPengambilanObat = () => {
     fetchDataObat();
     fetchDataPasien();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setIsEditMode(false);
@@ -148,7 +161,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
-        handleApiError(error, toast);
+        handleCreatePengambilanObatError(error, toast);
       }
     }
   };
@@ -325,6 +338,44 @@ const DataPengambilanObat = () => {
       </div>
     );
 
+  const itemTemplatePasien = (option) => {
+    return (
+      <div>
+        {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+      </div>
+    );
+  };
+
+  const valueTemplatePasien = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
+
+  const itemTemplateObat = (option) => {
+    return (
+      <div>
+        {option.namaObat} - {option.adminApotek.namaApotek}
+      </div>
+    );
+  };
+
+  const valueTemplateObat = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaObat} - {option.adminApotek.namaApotek}
+        </div>
+      );
+    }
+    return <span>Pilih Obat</span>;
+  };
+
   return (
     <div className="flex flex-col gap-4 p-4 z-10 ">
       <Toast ref={toast} />
@@ -366,6 +417,8 @@ const DataPengambilanObat = () => {
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
             filter
+            itemTemplate={itemTemplatePasien}
+            valueTemplate={valueTemplatePasien}
             optionLabel="pengguna.namaLengkap"
             placeholder="Pilih Pasien"
             className=" p-2 rounded"
@@ -389,6 +442,8 @@ const DataPengambilanObat = () => {
             value={obat.find((o) => o.id === datas.idObat) || null}
             options={obat}
             filter
+            itemTemplate={itemTemplateObat}
+            valueTemplate={valueTemplateObat}
             optionLabel="namaObat"
             placeholder="Pilih Obat"
             className=" p-2 rounded"

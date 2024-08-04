@@ -30,7 +30,9 @@ import {
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
-import { getAllPasien, getAllPasienAktif } from "../../../services/PasienService";
+import { getAllPasienAktif } from "../../../services/PasienService";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 
 const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
@@ -53,13 +55,14 @@ const DataKontrolBalik = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Kontrol Balik";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllKontrolBalik();
-
-        setData(responseData);
+        const response = await getAllKontrolBalik();
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
+        setData(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -69,8 +72,10 @@ const DataKontrolBalik = () => {
 
     const fetchDataPasien = async () => {
       try {
-        const responseData = await getAllPasienAktif();
-        setPasien(responseData);
+        const response = await getAllPasienAktif();
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
+
+        setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -80,7 +85,7 @@ const DataKontrolBalik = () => {
 
     fetchDataPasien();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

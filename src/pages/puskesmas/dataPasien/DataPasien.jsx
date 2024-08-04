@@ -35,8 +35,9 @@ import {
 } from "../../../services/PasienService";
 import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { getAllPengguna } from "../../../services/PenggunaService";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 
 addLocale("id", dateLocaleId);
 
@@ -47,7 +48,6 @@ const DataPasien = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleDone, setVisibleDone] = useState(false);
-  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
   const [pengguna, setPengguna] = useState([]);
   const [datas, setDatas] = useState({
     noRekamMedis: "",
@@ -68,6 +68,7 @@ const DataPasien = () => {
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
   const title = "Pasien";
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,6 +81,7 @@ const DataPasien = () => {
             },
           }
         );
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
 
         const formatedData = response.data.data.map((item) => ({
           ...item,
@@ -92,21 +94,11 @@ const DataPasien = () => {
       }
     };
 
-    const fetchDataAdminPuskesmas = async () => {
-      try {
-        const response = await getAllPuskesmas();
-        setAdminPuskesmas(response);
-        console.log(response);
-
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-      }
-    };
-
     const fetchDataPengguna = async () => {
       try {
         const response = await getAllPengguna();
+        HandleUnauthorizedAdminPuskesmas(response, navigate);
+
         setPengguna(response);
 
         setLoading(false);
@@ -116,9 +108,8 @@ const DataPasien = () => {
     };
 
     fetchDataPengguna();
-    fetchDataAdminPuskesmas();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

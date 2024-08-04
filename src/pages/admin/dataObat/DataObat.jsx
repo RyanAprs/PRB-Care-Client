@@ -24,6 +24,8 @@ import {
   updateObatSchema,
 } from "../../../validations/ObatSchema";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 
 const DataObat = () => {
   const [data, setData] = useState([]);
@@ -43,6 +45,7 @@ const DataObat = () => {
   const toast = useRef(null);
   const title = "Obat";
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     if (a.namaObat < b.namaObat) return -1;
@@ -53,8 +56,10 @@ const DataObat = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllObat();
-        const sortedData = responseData.sort(customSort);
+        const response = await getAllObat();
+        HandleUnauthorizedAdminSuper(response, navigate);
+
+        const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
@@ -73,6 +78,7 @@ const DataObat = () => {
             },
           }
         );
+        HandleUnauthorizedAdminSuper(response, navigate);
         setDataAdminApotek(response.data.data);
         setLoading(false);
       } catch (error) {
@@ -83,7 +89,7 @@ const DataObat = () => {
 
     fetchDataAdminApotek();
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalCreate = () => {
     setErrors({});

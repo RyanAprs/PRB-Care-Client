@@ -20,6 +20,8 @@ import {
   updateCurrentApotek,
   updatePasswordApotek,
 } from "../../../services/ApotekService";
+import { useNavigate } from "react-router-dom";
+import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
 
 const ProfileApotek = () => {
   const [data, setData] = useState({
@@ -37,18 +39,20 @@ const ProfileApotek = () => {
   });
   const [errors, setErrors] = useState({});
   const toast = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getCurrentAdminApotek();
+        HandleUnauthorizedAdminApotek(response, navigate);
         setData(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     const formattedAddress = [

@@ -8,10 +8,9 @@ if ("serviceWorker" in navigator) {
       const registration = await navigator.serviceWorker.register(
         "/firebase-messaging-sw.js",
         {
-          scope: "/",
+          scope: "/pengguna/home",
         }
       );
-      console.log("Service Worker registered with scope:", registration.scope);
     } catch (error) {
       console.error("Service Worker registration failed:", error);
     }

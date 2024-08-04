@@ -10,6 +10,8 @@ import {
   getAllPengambilanObat,
   PengambilanObatDone,
 } from "../../../services/PengambilanObatService";
+import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
+import { useNavigate } from "react-router-dom";
 
 const DataPengambilanObat = () => {
   const [data, setData] = useState([]);
@@ -20,6 +22,7 @@ const DataPengambilanObat = () => {
   const [currentId, setCurrentId] = useState("");
   const [currentName, setCurrentName] = useState("");
   const toast = useRef(null);
+  const navigate = useNavigate();
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "diambil", "batal"];
@@ -36,8 +39,10 @@ const DataPengambilanObat = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const responseData = await getAllPengambilanObat();
-        const sortedData = responseData.sort(customSort);
+        const response = await getAllPengambilanObat();
+        HandleUnauthorizedAdminApotek(response, navigate);
+
+        const sortedData = response.sort(customSort);
         setData(sortedData);
 
         setLoading(false);
@@ -48,7 +53,7 @@ const DataPengambilanObat = () => {
     };
 
     fetchData();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleModalDone = (data) => {
     setCurrentId(data.id);
