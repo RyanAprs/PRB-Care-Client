@@ -46,7 +46,7 @@ const DataPuskesmas = () => {
   const title = "Puskesmas";
   const token = Cookies.get("token");
   const [resetAddress, setResetAddress] = useState(false);
-
+  const [prevAddress, setPrevAddress] = useState({});
   const toast = useRef(null);
 
   const customSort = (a, b) => {
@@ -110,6 +110,8 @@ const DataPuskesmas = () => {
   };
 
   const handleCreate = async () => {
+    console.log(address);
+
     try {
       puskesmasCreateSchema.parse(datas);
 
@@ -144,6 +146,7 @@ const DataPuskesmas = () => {
     setErrors({});
     try {
       const dataResponse = await getPuskesmasById(data.id);
+      setPrevAddress(dataResponse.alamat);
       if (dataResponse) {
         setDatas({
           namaPuskesmas: dataResponse.namaPuskesmas,
@@ -154,7 +157,7 @@ const DataPuskesmas = () => {
         setCurrentId(data.id);
         setVisible(true);
         setIsEditMode(true);
-        setResetAddress(true);
+        setResetAddress(false);
       }
     } catch (error) {
       handleApiError(error, toast);
@@ -163,9 +166,14 @@ const DataPuskesmas = () => {
 
   const handleUpdate = async () => {
     try {
-      puskesmasUpdateSchema.parse(datas);
+      const updatedDatas = {
+        ...datas,
+        alamat: datas.alamat || prevAddress,
+      };
 
-      const response = await updatePuskesmas(currentId, datas);
+      puskesmasUpdateSchema.parse(updatedDatas);
+
+      const response = await updatePuskesmas(currentId, updatedDatas);
 
       if (response.status === 200) {
         setVisible(false);
@@ -333,7 +341,11 @@ const DataPuskesmas = () => {
             Alamat:
           </label>
 
-          <DynamicAddress reset={resetAddress} />
+          <DynamicAddress
+            {...(isEditMode
+              ? { prevAddress: prevAddress }
+              : { reset: resetAddress })}
+          />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>

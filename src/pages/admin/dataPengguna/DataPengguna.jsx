@@ -47,6 +47,7 @@ const DataPengguna = () => {
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [errors, setErrors] = useState({});
   const [resetAddress, setResetAddress] = useState(false);
+  const [prevAddress, setPrevAddress] = useState({});
   const title = "Pengguna";
 
   const customSort = (a, b) => {
@@ -143,6 +144,7 @@ const DataPengguna = () => {
     setErrors({});
     try {
       const dataResponse = await getPenggunaById(data.id);
+      setPrevAddress(dataResponse.alamat);
       if (dataResponse) {
         setDatas({
           namaLengkap: dataResponse.namaLengkap,
@@ -163,9 +165,13 @@ const DataPengguna = () => {
 
   const handleUpdate = async () => {
     try {
-      penggunaUpdateSchema.parse(datas);
+      const updatedDatas = {
+        ...datas,
+        alamat: datas.alamat || prevAddress,
+      };
+      penggunaUpdateSchema.parse(updatedDatas);
 
-      const response = await updatePengguna(currentId, datas);
+      const response = await updatePengguna(currentId, updatedDatas);
 
       if (response.status === 200) {
         setVisible(false);
@@ -260,7 +266,6 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Nama pengguna:
           </label>
-
           <InputText
             type="text"
             placeholder="Nama Lengkap Pengguna"
@@ -281,7 +286,6 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Username:
           </label>
-
           <InputText
             type="text"
             placeholder="Username"
@@ -300,7 +304,6 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Password:
           </label>
-
           <InputText
             type="password"
             placeholder="Password"
@@ -322,7 +325,6 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Telepon:
           </label>
-
           <InputText
             type="text"
             placeholder="Telepon"
@@ -341,7 +343,6 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Telepon keluarga:
           </label>
-
           <InputText
             type="text"
             placeholder="Telepon Keluarga"
@@ -362,7 +363,11 @@ const DataPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Alamat
           </label>
-          <DynamicAddress reset={resetAddress} />
+          <DynamicAddress
+            {...(isEditMode
+              ? { prevAddress: prevAddress }
+              : { reset: resetAddress })}
+          />{" "}
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>

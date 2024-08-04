@@ -47,6 +47,7 @@ const DataApotek = () => {
   const [visibleDelete, setVisibleDelete] = useState(false);
   const title = "Apotek";
   const [resetAddress, setResetAddress] = useState(false);
+  const [prevAddress, setPrevAddress] = useState({});
   const token = Cookies.get("token");
 
   const customSort = (a, b) => {
@@ -143,6 +144,7 @@ const DataApotek = () => {
     setErrors({});
     try {
       const dataResponse = await getApotekById(data.id);
+      setPrevAddress(dataResponse.alamat);
       if (dataResponse) {
         setDatas({
           namaApotek: dataResponse.namaApotek,
@@ -162,8 +164,12 @@ const DataApotek = () => {
 
   const handleUpdate = async () => {
     try {
-      apotekUpdateSchema.parse(datas);
-      const response = await updateApotek(currentId, datas);
+      const updatedDatas = {
+        ...datas,
+        alamat: datas.alamat || prevAddress,
+      };
+      apotekUpdateSchema.parse(updatedDatas);
+      const response = await updateApotek(currentId, updatedDatas);
 
       if (response.status === 200) {
         setVisible(false);
@@ -328,18 +334,20 @@ const DataApotek = () => {
           {errors.telepon && (
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
-
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <DynamicAddress reset={resetAddress} />
+          <DynamicAddress
+            {...(isEditMode
+              ? { prevAddress: prevAddress }
+              : { reset: resetAddress })}
+          />
           <span className="text-sm -mt-4 text-orange-700">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}
-
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
             className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"

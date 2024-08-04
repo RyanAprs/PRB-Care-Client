@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Hospital,
   HousePlus,
@@ -18,9 +18,9 @@ const DashboardAdmin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem('isLogin') === 'true') {
+    if (localStorage.getItem("isLogin") === "true") {
       setShowToast(true);
-      localStorage.removeItem('isLogin');
+      localStorage.removeItem("isLogin");
     }
   }, []);
 
@@ -96,15 +96,13 @@ const DashboardAdmin = () => {
           <Card
             key={index}
             className="bg-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer"
-            style={{ fontFamily: 'Poppins, sans-serif' }}
+            style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
               <div className="text-xl font-bold mb-2">{item.title}</div>
               {item.icon && <div className="text-4xl mb-2">{item.icon}</div>}
-              <div className="text-xl text-center">
-                {item.desc}
-              </div>
+              <div className="text-xl text-center">{item.desc}</div>
             </div>
           </Card>
         ))}

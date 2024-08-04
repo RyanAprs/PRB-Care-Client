@@ -1,5 +1,4 @@
 import { useContext, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -8,7 +7,7 @@ import icon from "../../assets/prbcare.svg";
 import { AuthContext } from "../../config/context/AuthContext";
 import { ZodError } from "zod";
 import { Toast } from "primereact/toast";
-import { handleApiError, handleLoginError } from "../../utils/ApiErrorHandlers";
+import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
@@ -42,7 +41,6 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
         });
 
         localStorage.setItem("isLogin", "true");
-
       }
     } catch (error) {
       if (error instanceof ZodError) {

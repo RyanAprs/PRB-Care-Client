@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
-import { z } from "zod";
 import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 
-const DynamicAddress = ({ reset }) => {
+const DynamicAddress = ({ reset, prevAddress }) => {
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -13,7 +12,6 @@ const DynamicAddress = ({ reset }) => {
 
   const { address, setAddress } = useContext(AddressContext);
 
-  
   useEffect(() => {
     fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
       .then((response) => response.json())
@@ -30,8 +28,10 @@ const DynamicAddress = ({ reset }) => {
         detail: "",
       });
       setErrors({});
+    } else if (prevAddress) {
+      setAddress(prevAddress);
     }
-  }, [reset]);
+  }, [reset, prevAddress]);
 
   const handleProvinceChange = (e) => {
     const provinsiId = e.value;
