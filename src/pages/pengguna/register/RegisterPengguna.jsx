@@ -1,224 +1,247 @@
-import React, { useState, useContext } from "react";
-import { Input, Button, Spinner } from "@nextui-org/react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import icon from "../../../assets/prbcare.svg";
-import { z } from "zod";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import { AddressContext } from "../../../config/context/AdressContext";
-import axios from "axios";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { penggunaRegisterSchema } from "../../../validations/PenggunaSchema";
+import { ZodError } from "zod";
+import { handleApiError } from "../../../utils/ApiErrorHandlers";
+import { Toast } from "primereact/toast";
+import { createPengguna } from "../../../services/PenggunaService";
 
 const RegisterPengguna = () => {
-  const [namaLengkap, setnamaLengkap] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [telepon, setTelepon] = useState("");
-  const [teleponKeluarga, setTeleponKeluarga] = useState("");
-  const [error, setError] = useState("");
+  const [datas, setDatas] = useState({
+    namaLengkap: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+    telepon: "",
+    teleponKeluarga: "",
+    alamat: "",
+  });
+  const [errors, setErrors] = useState("");
   const [isLoading, setLoading] = useState(false);
+  const toast = useRef(null);
 
   const { address } = useContext(AddressContext);
-  const alamat = `${address.detail}, ${address.desa}, ${address.kecamatan}, ${address.kabupaten}, ${address.provinsi}`;
+
+  useEffect(() => {
+    const formattedAddress = [
+      address.detail,
+      address.desa,
+      address.kecamatan,
+      address.kabupaten,
+      address.provinsi,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    setDatas((prev) => ({
+      ...prev,
+      alamat: formattedAddress,
+    }));
+  }, [address]);
 
   const navigate = useNavigate();
 
-  const registerSchema = z
-    .object({
-      namaLengkap: z.string().min(1, "Nama lengkap tidak boleh kosong"),
-      username: z
-        .string()
-        .min(6, "Password minimal 6 karakter")
-        .refine(
-          (val) => !/\s/.test(val),
-          "Username tidak boleh mengandung spasi"
-        ),
-      password: z
-        .string()
-        .min(6, "Password minimal 6 karakter")
-        .max(255, "Password maksimal 255 karakter")
-        .refine(
-          (val) => /[!@#$%^&*(),.?":{}|<>]/.test(val),
-          "Password harus mengandung karakter khusus, contoh=!@#$%^&*()"
-        )
-        .refine((val) => /[0-9]/.test(val), "Password harus mengandung angka")
-        .refine(
-          (val) => /[A-Z]/.test(val),
-          "Password harus mengandung huruf besar"
-        )
-        .refine(
-          (val) => /[a-z]/.test(val),
-          "Password harus mengandung huruf kecil"
-        )
-        .refine(
-          (val) => !/\s/.test(val),
-          "Password tidak boleh mengandung spasi"
-        ),
-      confirmPassword: z
-        .string()
-        .min(1, "Konfirmasi password tidak boleh kosong"),
-      telepon: z
-        .string()
-        .min(10, "Nomor telepon minimal 10 karakter")
-        .regex(/^[0-9]+$/, "Nomor telepon harus berupa angka"),
-      teleponKeluarga: z
-        .string()
-        .min(10, "Nomor telepon keluarga minimal 10 karakter")
-        .regex(/^[0-9]+$/, "Nomor telepon keluarga harus berupa angka"),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Password konfirmasi tidak cocok",
-      path: ["confirmPassword"],
-    });
-
   const handleRegister = async (e) => {
     e.preventDefault();
-    setError({});
+    setErrors({});
     setLoading(true);
 
-    const result = registerSchema.safeParse({
-      namaLengkap,
-      username,
-      password,
-      confirmPassword,
-      telepon,
-      teleponKeluarga,
-    });
-
-    if (!result.success) {
-      setLoading(false);
-      const newErrors = {};
-      result.error.errors.forEach((err) => {
-        newErrors[err.path[0]] = err.message;
-      });
-      setError(newErrors);
-      return;
-    }
-
     try {
-      const apiUrl = `${import.meta.env.VITE_API_BASE_URL}/api/pengguna`;
+      penggunaRegisterSchema.parse(datas);
 
-      const response = await axios.post(apiUrl, {
-        namaLengkap,
-        telepon,
-        teleponKeluarga,
-        alamat,
-        username,
-        password,
-      });
-
+      const response = await createPengguna(datas);
       if (response.status === 201) {
-        navigate("/user/login");
-      } else {
-        throw new Error("Failed to login. Please check your credentials.");
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "berhasil melakukan register, silahkan login",
+          life: 3000,
+        });
+
+        setTimeout(() => {
+          navigate("/pengguna/login");
+        }, 1500);
+        setLoading(false);
       }
     } catch (error) {
-      console.error("User login failed:", error);
-      throw error;
+      if (error instanceof ZodError) {
+        setLoading(false);
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        handleApiError(error, toast);
+        setLoading(false);
+      }
     }
   };
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center p-8">
+      <Toast ref={toast} />
       <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
         <div className="flex flex-col gap-4 w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="" />
           <h1 className="text-3xl font-bold">Daftar Pengguna</h1>
         </div>
         <div className="flex flex-col w-full gap-4">
-          Data Pengguna
-          <Input
+          <p className="text-lg font-semibold">Data Pengguna</p>
+          <label htmlFor="" className="-mb-3">
+            Nama Lengkap:
+          </label>
+          <InputText
             type="text"
-            variant="bordered"
-            label="Nama Lengkap"
-            value={namaLengkap}
-            onChange={(e) => setnamaLengkap(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Nama Lengkap"
+            value={datas.namaLengkap}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                namaLengkap: e.target.value,
+              }))
+            }
             required
           />
-          {error.namaLengkap && (
-            <span className="text-red-500">{error.namaLengkap}</span>
+          {errors.namaLengkap && (
+            <span className="text-red-500">{errors.namaLengkap}</span>
           )}
-          <Input
+          <label htmlFor="" className="-mb-3">
+            Nomor Telepon:
+          </label>
+          <InputText
             type="text"
-            variant="bordered"
-            label="Nomor Telepon"
-            value={telepon}
-            onChange={(e) => setTelepon(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Nomor Telepon"
+            value={datas.telepon}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                telepon: e.target.value,
+              }))
+            }
             required
           />
-          {error.telepon && (
-            <span className="text-red-500">{error.telepon}</span>
+          {errors.telepon && (
+            <span className="text-red-500">{errors.telepon}</span>
           )}
-          <Input
+          <label htmlFor="" className="-mb-3">
+            Nomor Telepon Keluarga:
+          </label>
+          <InputText
             type="text"
-            variant="bordered"
-            label="Nomor Telepon Keluarga"
-            value={teleponKeluarga}
-            onChange={(e) => setTeleponKeluarga(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Nomor Telepon Keluarga"
+            value={datas.teleponKeluarga}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                teleponKeluarga: e.target.value,
+              }))
+            }
             required
           />
-          {error.teleponKeluarga && (
-            <span className="text-red-500">{error.teleponKeluarga}</span>
+          {errors.teleponKeluarga && (
+            <span className="text-red-500">{errors.teleponKeluarga}</span>
           )}
-          <Input
+          <label htmlFor="" className="-mb-3">
+            Username:
+          </label>
+          <InputText
             type="text"
-            variant="bordered"
-            label="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Username"
+            value={datas.username}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                username: e.target.value,
+              }))
+            }
             required
           />
-          {error.username && (
-            <span className="text-red-500">{error.username}</span>
+          {errors.username && (
+            <span className="text-red-500">{errors.username}</span>
           )}
-          <Input
+          <label htmlFor="" className="-mb-3">
+            Password:
+          </label>
+          <InputText
             type="password"
-            variant="bordered"
-            label="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Password"
+            value={datas.password}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                password: e.target.value,
+              }))
+            }
             required
           />
-          {error.password && (
-            <span className="text-red-500">{error.password}</span>
+          {errors.password && (
+            <span className="text-red-500">{errors.password}</span>
           )}
-          <Input
+          <label htmlFor="" className="-mb-3">
+            Konfirmasi Password:
+          </label>
+          <InputText
             type="password"
-            variant="bordered"
-            label="Konfirmasi Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="p-input text-lg p-4 rounded"
+            placeholder="Konfirmasi Password"
+            value={datas.confirmPassword}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                confirmPassword: e.target.value,
+              }))
+            }
             required
           />
-          {error.confirmPassword && (
-            <span className="text-red-500">{error.confirmPassword}</span>
+          {errors.confirmPassword && (
+            <span className="text-red-500">{errors.confirmPassword}</span>
           )}
+          <p className="text-lg font-semibold">Alamat Pengguna</p>
+
           <DynamicAddress />
-          {error.alamat && <p className="text-red-500">{error.alamat}</p>}
+          {errors.alamat && <p className="text-red-500">{errors.alamat}</p>}
         </div>
         <div className="flex flex-col w-full gap-4">
           <Button
-            onClick={handleRegister}
-            color="default"
-            className="text-white bg-mainGreen "
+            className="text-white bg-mainGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             type="submit"
-            radius="sm"
-            size="lg"
             disabled={isLoading}
+            onClick={handleRegister}
           >
-            {isLoading ? <Spinner color="default" size="md" /> : "Daftar"}
+            {isLoading ? (
+              <ProgressSpinner
+                style={{ width: "25px", height: "25px" }}
+                strokeWidth="8"
+                animationDuration="1s"
+                color="white"
+              />
+            ) : (
+              <p>Daftar</p>
+            )}
           </Button>
           <div className="flex items-center justify-center text-sm text-darkColor font-semibold">
             ATAU
           </div>
-          <Link to="/user/login" className="w-full">
+          <Link to="/pengguna/login" className="w-full">
             <Button
-              variant="bordered"
-              className="text-mainGrebg-mainGreen w-full"
+              type="submit"
+              label="Masuk"
+              className="text-black bg-white p-4 w-full flex justify-center rounded-xl  transition-all"
               radius="sm"
               size="lg"
-            >
-              Masuk
-            </Button>
+            />
           </Link>
         </div>
         <p className="text-center px-4">

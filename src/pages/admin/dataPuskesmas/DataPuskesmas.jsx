@@ -110,8 +110,6 @@ const DataPuskesmas = () => {
   };
 
   const handleCreate = async () => {
-    console.log(address);
-
     try {
       puskesmasCreateSchema.parse(datas);
 

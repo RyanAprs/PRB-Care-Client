@@ -245,7 +245,7 @@ export default function ReusableTable({
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}
-            {role !== "apoteker" && (
+            { path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
                 text

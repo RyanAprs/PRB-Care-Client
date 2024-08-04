@@ -9,6 +9,7 @@ import { ZodError } from "zod";
 import { Toast } from "primereact/toast";
 import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
+import { Link, useLocation } from "react-router-dom";
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,9 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const [isLoading, setLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
   const toast = useRef(null);
+  const location = useLocation();
+
+  const loginUser = location.pathname === "/pengguna/login";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -67,6 +71,9 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">
+          <label htmlFor="" className="-mb-3">
+            Username:
+          </label>
           <InputText
             type="text"
             placeholder="Username"
@@ -77,6 +84,9 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           {errors.username && (
             <small className="p-error text-sm -mt-3">{errors.username}</small>
           )}
+          <label htmlFor="" className="-mb-3">
+            Password:
+          </label>
           <InputText
             type="password"
             placeholder="Password"
@@ -87,22 +97,41 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           {errors.password && (
             <small className="p-error text-sm -mt-3">{errors.password}</small>
           )}
-          <Button
-            className="text-white bg-mainGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
-            type="submit"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <ProgressSpinner
-                style={{ width: "25px", height: "25px" }}
-                strokeWidth="8"
-                animationDuration="1s"
-                color="white"
-              />
-            ) : (
-              <p>Masuk</p>
+
+          <div className="flex flex-col w-full gap-4">
+            <Button
+              className="text-white bg-mainGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>Masuk</p>
+              )}
+            </Button>
+            {loginUser && (
+              <div className="flex flex-col w-full gap-4">
+                <div className="flex items-center justify-center text-sm text-darkColor font-semibold">
+                  ATAU
+                </div>
+                <Link to="/pengguna/register" className="w-full">
+                  <Button
+                    type="submit"
+                    label="Daftar"
+                    className="text-black bg-white p-4 w-full flex justify-center rounded-xl  transition-all"
+                    radius="sm"
+                    size="lg"
+                  />
+                </Link>
+              </div>
             )}
-          </Button>
+          </div>
         </form>
       </div>
     </div>

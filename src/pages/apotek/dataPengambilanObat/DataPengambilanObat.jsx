@@ -111,6 +111,7 @@ const DataPengambilanObat = () => {
           onDone={handleModalDone}
           statuses={statuses}
           role="apoteker"
+          path="pengambilanObatApoteker"
         />
       </div>
 
