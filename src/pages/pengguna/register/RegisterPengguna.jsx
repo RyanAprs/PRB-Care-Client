@@ -25,6 +25,7 @@ const RegisterPengguna = () => {
   const [errors, setErrors] = useState("");
   const [isLoading, setLoading] = useState(false);
   const toast = useRef(null);
+  const [resetAddress, setResetAddress] = useState(true);
 
   const { address } = useContext(AddressContext);
 
@@ -111,7 +112,9 @@ const RegisterPengguna = () => {
             required
           />
           {errors.namaLengkap && (
-            <span className="text-red-500">{errors.namaLengkap}</span>
+            <span className="text-red-500  -mt-3 text-sm">
+              {errors.namaLengkap}
+            </span>
           )}
           <label htmlFor="" className="-mb-3">
             Nomor Telepon:
@@ -130,7 +133,9 @@ const RegisterPengguna = () => {
             required
           />
           {errors.telepon && (
-            <span className="text-red-500">{errors.telepon}</span>
+            <span className="text-red-500  -mt-3 text-sm">
+              {errors.telepon}
+            </span>
           )}
           <label htmlFor="" className="-mb-3">
             Nomor Telepon Keluarga:
@@ -149,7 +154,9 @@ const RegisterPengguna = () => {
             required
           />
           {errors.teleponKeluarga && (
-            <span className="text-red-500">{errors.teleponKeluarga}</span>
+            <span className="text-red-500  -mt-3 text-sm ">
+              {errors.teleponKeluarga}
+            </span>
           )}
           <label htmlFor="" className="-mb-3">
             Username:
@@ -168,7 +175,9 @@ const RegisterPengguna = () => {
             required
           />
           {errors.username && (
-            <span className="text-red-500">{errors.username}</span>
+            <span className="text-red-500  -mt-3 text-sm">
+              {errors.username}
+            </span>
           )}
           <label htmlFor="" className="-mb-3">
             Password:
@@ -187,31 +196,15 @@ const RegisterPengguna = () => {
             required
           />
           {errors.password && (
-            <span className="text-red-500">{errors.password}</span>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Konfirmasi Password:
-          </label>
-          <InputText
-            type="password"
-            className="p-input text-lg p-4 rounded"
-            placeholder="Konfirmasi Password"
-            value={datas.confirmPassword}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                confirmPassword: e.target.value,
-              }))
-            }
-            required
-          />
-          {errors.confirmPassword && (
-            <span className="text-red-500">{errors.confirmPassword}</span>
+            <span className="text-red-500  -mt-3 text-sm">
+              {errors.password}
+            </span>
           )}
           <p className="text-lg font-semibold">Alamat Pengguna</p>
-
-          <DynamicAddress />
-          {errors.alamat && <p className="text-red-500">{errors.alamat}</p>}
+          <DynamicAddress reset={resetAddress} />
+          {errors.alamat && (
+            <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
+          )}
         </div>
         <div className="flex flex-col w-full gap-4">
           <Button
