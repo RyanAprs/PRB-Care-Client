@@ -22,8 +22,10 @@ import {
 } from "../../../services/ApotekService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const ProfileApotek = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState({
     namaApotek: "",
     telepon: "",
@@ -78,9 +80,7 @@ const ProfileApotek = () => {
   const handleUpdate = async () => {
     try {
       apotekUpdateCurrentSchema.parse(data);
-
       const response = await updateCurrentApotek(data);
-
       if (response.status === 200) {
         setVisibleUpdate(false);
         toast.current.show({
@@ -100,6 +100,7 @@ const ProfileApotek = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -135,6 +136,7 @@ const ProfileApotek = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleChangePasswordError(error, toast);
         console.log(error);
       }

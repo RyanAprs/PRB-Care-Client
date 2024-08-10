@@ -27,8 +27,10 @@ import {
 import { ProgressSpinner } from "primereact/progressspinner";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataPengguna = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -70,18 +72,18 @@ const DataPengguna = () => {
             },
           }
         );
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   useEffect(() => {
     const formattedAddress = [
@@ -140,6 +142,7 @@ const DataPengguna = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -164,6 +167,7 @@ const DataPengguna = () => {
         setIsEditMode(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -199,6 +203,7 @@ const DataPengguna = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -227,6 +232,7 @@ const DataPengguna = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };

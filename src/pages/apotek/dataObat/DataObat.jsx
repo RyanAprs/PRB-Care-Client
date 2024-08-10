@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { InputText } from "primereact/inputtext";
@@ -24,8 +24,10 @@ import {
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataObat = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -53,18 +55,18 @@ const DataObat = () => {
     const fetchData = async () => {
       try {
         const response = await getAllObat();
-        HandleUnauthorizedAdminApotek(response, navigate);
         const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -100,6 +102,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -119,6 +122,7 @@ const DataObat = () => {
         setIsEditMode(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -147,6 +151,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -175,6 +180,7 @@ const DataObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };

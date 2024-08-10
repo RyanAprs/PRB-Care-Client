@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
@@ -36,8 +36,10 @@ import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataPengambilanObat = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -78,15 +80,13 @@ const DataPengambilanObat = () => {
     const fetchData = async () => {
       try {
         const response = await getAllPengambilanObat();
-
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         const sortedData = response.sort(customSort);
         setData(sortedData);
 
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -94,12 +94,11 @@ const DataPengambilanObat = () => {
     const fetchDataPasien = async () => {
       try {
         const response = await getAllPasienAktif();
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -107,22 +106,19 @@ const DataPengambilanObat = () => {
     const fetchDataObat = async () => {
       try {
         const response = await getAllObat();
-        HandleUnauthorizedAdminSuper(response, navigate);
-
-        console.log(response);
-
         setObat(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       }
     };
 
     fetchDataObat();
     fetchDataPasien();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setIsEditMode(false);
@@ -161,6 +157,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);
       }
     }
@@ -195,6 +192,7 @@ const DataPengambilanObat = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -232,6 +230,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -260,6 +259,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -285,6 +285,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };
@@ -311,6 +312,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

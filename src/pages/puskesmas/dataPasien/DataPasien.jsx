@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
@@ -38,10 +38,12 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllPengguna } from "../../../services/PenggunaService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 addLocale("id", dateLocaleId);
 
 const DataPasien = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
@@ -81,8 +83,6 @@ const DataPasien = () => {
             },
           }
         );
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
-
         const formatedData = response.data.data.map((item) => ({
           ...item,
           tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
@@ -90,6 +90,7 @@ const DataPasien = () => {
         setData(formatedData);
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -97,19 +98,17 @@ const DataPasien = () => {
     const fetchDataPengguna = async () => {
       try {
         const response = await getAllPengguna();
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
-
         setPengguna(response);
-
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchDataPengguna();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -152,6 +151,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -191,6 +191,7 @@ const DataPasien = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -217,6 +218,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -243,6 +245,7 @@ const DataPasien = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -268,6 +271,7 @@ const DataPasien = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

@@ -27,8 +27,10 @@ import axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataPuskesmas = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -87,19 +89,18 @@ const DataPuskesmas = () => {
           }
         );
 
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -141,6 +142,7 @@ const DataPuskesmas = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -164,6 +166,7 @@ const DataPuskesmas = () => {
         setResetAddress(false);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -199,6 +202,7 @@ const DataPuskesmas = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -227,6 +231,7 @@ const DataPuskesmas = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };

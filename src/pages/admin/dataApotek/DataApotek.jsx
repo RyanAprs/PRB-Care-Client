@@ -29,7 +29,6 @@ import {
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 
-
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
@@ -89,7 +88,6 @@ const DataApotek = () => {
             },
           }
         );
-        
 
         const sortedData = response.data.data.sort(customSort);
         setData(sortedData);
@@ -97,12 +95,12 @@ const DataApotek = () => {
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
-        HandleUnauthorizedAdminSuper(error.response,dispatch, navigate);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       }
     };
 
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -143,7 +141,7 @@ const DataApotek = () => {
         });
         setErrors(newErrors);
       } else {
-        HandleUnauthorizedAdminSuper(error.response,dispatch, navigate);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -167,7 +165,7 @@ const DataApotek = () => {
         setResetAddress(true);
       }
     } catch (error) {
-      HandleUnauthorizedAdminSuper(error.response,dispatch, navigate);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -201,7 +199,7 @@ const DataApotek = () => {
         });
         setErrors(newErrors);
       } else {
-        HandleUnauthorizedAdminSuper(error.response,dispatch, navigate);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -230,7 +228,7 @@ const DataApotek = () => {
         setData(sortedData);
       }
     } catch (error) {
-      HandleUnauthorizedAdminSuper(error.response,dispatch, navigate);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };

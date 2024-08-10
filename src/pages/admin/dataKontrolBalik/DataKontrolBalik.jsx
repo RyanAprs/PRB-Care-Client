@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
@@ -33,8 +33,10 @@ import {
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataKontrolBalik = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -73,14 +75,14 @@ const DataKontrolBalik = () => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         const sortedData = response.sort(customSort);
         setData(sortedData);
 
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+
         setLoading(false);
       }
     };
@@ -88,19 +90,18 @@ const DataKontrolBalik = () => {
     const fetchDataPasien = async () => {
       try {
         const response = await getAllPasienAktif();
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchDataPasien();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -138,6 +139,8 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+
         handleApiError(error, toast);
       }
     }
@@ -171,6 +174,7 @@ const DataKontrolBalik = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -199,6 +203,7 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -226,6 +231,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -252,6 +258,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };
@@ -278,6 +285,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

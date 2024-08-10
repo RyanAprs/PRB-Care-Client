@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
@@ -35,8 +35,10 @@ import { getAllPasienAktif } from "../../../services/PasienService";
 import { getAllObat } from "../../../services/ObatService";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataPengambilanObat = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -65,12 +67,10 @@ const DataPengambilanObat = () => {
     const fetchData = async () => {
       try {
         const response = await getAllPengambilanObat();
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
-
         setData(response);
-
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -82,6 +82,7 @@ const DataPengambilanObat = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -93,6 +94,7 @@ const DataPengambilanObat = () => {
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -100,7 +102,7 @@ const DataPengambilanObat = () => {
     fetchDataObat();
     fetchDataPasien();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setIsEditMode(false);
@@ -138,6 +140,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -172,6 +175,7 @@ const DataPengambilanObat = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -208,6 +212,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -236,6 +241,7 @@ const DataPengambilanObat = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -261,6 +267,7 @@ const DataPengambilanObat = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };
@@ -281,11 +288,11 @@ const DataPengambilanObat = () => {
           life: 3000,
         });
         setVisibleCancelled(false);
-
         const responseData = await getAllPengambilanObat();
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

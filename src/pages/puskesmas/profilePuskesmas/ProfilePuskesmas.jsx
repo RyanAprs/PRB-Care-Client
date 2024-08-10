@@ -21,8 +21,10 @@ import {
 } from "../../../validations/PuskesmasSchema";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const ProfilePuskesmas = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState({
     namaPuskesmas: "",
     telepon: "",
@@ -44,15 +46,14 @@ const ProfilePuskesmas = () => {
     const fetchData = async () => {
       try {
         const response = await getCurrentAdminPuskesmas();
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
-
         setData(response);
       } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   useEffect(() => {
     const formattedAddress = [
@@ -100,6 +101,7 @@ const ProfilePuskesmas = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -135,8 +137,8 @@ const ProfilePuskesmas = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleChangePasswordError(error, toast);
-        console.log(error);
       }
     }
   };

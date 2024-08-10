@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -12,11 +12,12 @@ import {
 } from "../../../services/PengambilanObatService";
 import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataPengambilanObat = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const [visibleDone, setVisibleDone] = useState(false);
   const token = Cookies.get("token");
   const [currentId, setCurrentId] = useState("");
@@ -40,20 +41,18 @@ const DataPengambilanObat = () => {
     const fetchData = async () => {
       try {
         const response = await getAllPengambilanObat();
-        HandleUnauthorizedAdminApotek(response, navigate);
-
         const sortedData = response.sort(customSort);
         setData(sortedData);
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalDone = (data) => {
     setCurrentId(data.id);
@@ -77,6 +76,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
@@ -33,8 +33,10 @@ import {
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 const DataKontrolBalik = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
@@ -61,31 +63,31 @@ const DataKontrolBalik = () => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
         setData(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       }
     };
 
     const fetchDataPasien = async () => {
       try {
         const response = await getAllPasienAktif();
-        HandleUnauthorizedAdminPuskesmas(response, navigate);
 
         setPasien(response);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
 
     fetchDataPasien();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -99,8 +101,6 @@ const DataKontrolBalik = () => {
   };
 
   const handleCreate = async () => {
-    console.log(datas);
-
     try {
       kontrolBalikCreateSchema.parse(datas);
       const response = await createKontrolBalik(datas);
@@ -123,6 +123,7 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -156,6 +157,7 @@ const DataKontrolBalik = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -183,6 +185,7 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -209,6 +212,7 @@ const DataKontrolBalik = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -234,6 +238,7 @@ const DataKontrolBalik = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };
@@ -259,6 +264,7 @@ const DataKontrolBalik = () => {
         setData(responseData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };

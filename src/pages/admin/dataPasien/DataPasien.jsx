@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
@@ -37,10 +37,12 @@ import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import { AuthContext } from "../../../config/context/AuthContext";
 
 addLocale("id", dateLocaleId);
 
 const DataPasien = () => {
+  const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = Cookies.get("token");
@@ -89,7 +91,6 @@ const DataPasien = () => {
             },
           }
         );
-        HandleUnauthorizedAdminSuper(response, navigate);
 
         const formatedData = response.data.data.map((item) => ({
           ...item,
@@ -99,6 +100,7 @@ const DataPasien = () => {
         setData(sortedData);
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -113,11 +115,10 @@ const DataPasien = () => {
             },
           }
         );
-        HandleUnauthorizedAdminSuper(response, navigate);
-
         setAdminPuskesmas(response.data.data);
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -132,11 +133,11 @@ const DataPasien = () => {
             },
           }
         );
-        HandleUnauthorizedAdminSuper(response, navigate);
 
         setPengguna(response.data.data);
         setLoading(false);
       } catch (error) {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
     };
@@ -144,7 +145,7 @@ const DataPasien = () => {
     fetchDataPengguna();
     fetchDataAdminPuskesmas();
     fetchData();
-  }, [token, navigate]);
+  }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
     setErrors({});
@@ -189,6 +190,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -229,6 +231,7 @@ const DataPasien = () => {
         setVisible(true);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
@@ -256,6 +259,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -283,6 +287,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
   };
@@ -309,6 +314,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
   };
