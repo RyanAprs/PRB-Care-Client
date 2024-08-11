@@ -383,9 +383,9 @@ const DataApotek = () => {
             <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
-              className="p-button-text"
+              className="p-button-text rounded-xl"
             />
-            <Button label="Hapus" onClick={handleDelete} autoFocus />
+            <Button label="Hapus" className="rounded-xl" onClick={handleDelete} autoFocus />
           </div>
         </div>
       </Dialog>

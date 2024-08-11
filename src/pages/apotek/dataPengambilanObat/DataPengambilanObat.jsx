@@ -140,7 +140,12 @@ const DataPengambilanObat = () => {
               onClick={() => setVisibleDone(false)}
               className="p-button-text"
             />
-            <Button label="Selesai" onClick={handleDone} autoFocus />
+            <Button
+              label="Selesai"
+              className="rounded-xl"
+              onClick={handleDone}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>

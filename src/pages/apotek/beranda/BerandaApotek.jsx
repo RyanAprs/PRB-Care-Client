@@ -72,7 +72,7 @@ const DashboardApotek = () => {
         {list.map((item, index) => (
           <Card
             key={index}
-            className="bg-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
+            className="dark:text-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
             style={{ fontFamily: "Poppins, sans-serif" }}
             onClick={() => handleCardClick(item.route)}
           >

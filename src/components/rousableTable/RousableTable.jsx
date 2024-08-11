@@ -63,19 +63,19 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit style={{color:"var(--surface-0) !important"}} />
+            <Edit />
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 style={{color:"var(--surface-0) !important"}} />
+            <Trash2 />
           </Button>
         </div>
       );
@@ -100,11 +100,11 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 style={{color:"var(--surface-0) !important"}} />
+            <Trash2 />
           </Button>
         </div>
       );
@@ -113,26 +113,26 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit style={{color:"var(--surface-0) !important"}} />
+            <Edit />
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
+            <CircleCheckBig />
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onCancelled(rowData)}
           >
-            <CircleOff style={{color:"var(--surface-0) !important"}} />
+            <CircleOff />
           </Button>
         </div>
       );
@@ -143,26 +143,26 @@ export default function ReusableTable({
             <div className="flex justify-center gap-2">
               <Button
                 size="sm"
-                className="  md:text-lg text-sm text-white rounded-xl"
+                className="  md:text-lg text-sm rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
-                <Edit style={{color:"var(--surface-0) !important"}} />
+                <Edit />
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm text-white rounded-xl"
+                className="  md:text-lg text-sm rounded-xl"
                 onClick={() => onDone(rowData)}
               >
-                <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
+                <CircleCheckBig />
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm text-white rounded-xl"
+                className="  md:text-lg text-sm rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <CircleOff style={{color:"var(--surface-0) !important"}} />
+                <CircleOff />
               </Button>
             </div>
           )}
@@ -170,19 +170,19 @@ export default function ReusableTable({
             <div className="flex justify-center gap-2">
               <Button
                 size="sm"
-                className="  md:text-lg text-sm text-white rounded-xl"
+                className="  md:text-lg text-sm rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
-                <Edit style={{color:"var(--surface-0) !important"}} />
+                <Edit />
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm text-white rounded-xl"
+                className="  md:text-lg text-sm rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <CircleOff style={{color:"var(--surface-0) !important"}} />
+                <CircleOff />
               </Button>
             </div>
           )}
@@ -193,10 +193,10 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className=" md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
+            <CircleCheckBig />
           </Button>
         </div>
       );
@@ -205,18 +205,18 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit style={{color:"var(--surface-0) !important"}} />
+            <Edit />
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm text-white rounded-xl"
+            className="  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
+            <CircleCheckBig />
           </Button>
         </div>
       );
@@ -224,33 +224,31 @@ export default function ReusableTable({
   };
 
   return (
-    <div className="p-4 w-full">
-      <div className="card p-6 bg-white dark:bg-blackHover w-full flex flex-col gap-4">
+    <div className="p-4 w-full ">
+      <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
           <div className="p-inputgroup md:w-1/2">
-            <span
-              className="p-inputgroup-addon "
-
-            >
-              <Search style={{color:"var(--surface-900) !important"}} size={16} />
+            <span className="p-inputgroup-addon ">
+              <Search size={16} />
             </span>
             <InputText
               type="search"
               value={globalFilter}
               onChange={onGlobalFilterChange}
               placeholder="Search..."
+              className=""
             />
           </div>
-          <div className="flex gap-4  items-end">
+          <div className="flex gap-4  items-center justify-center">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}
-            { path !== "pengambilanObatApoteker" && (
+            {path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
                 text
                 raised
-                className=" bg-lightGreen dark:bg-darkGreen md:text-lg text-sm text-white rounded-xl"
+                className=" md:text-lg text-sm  rounded-xl dark:bg-black active:border-darkGreen dark:text-white text-black bg-lightGreen  hover:mainGreen transition-all"
                 label="Tambah"
               />
             )}

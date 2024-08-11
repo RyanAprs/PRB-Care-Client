@@ -395,7 +395,12 @@ const DataKontrolBalik = () => {
               onClick={() => setVisibleDelete(false)}
               className="p-button-text"
             />
-            <Button label="Hapus" onClick={handleDelete} autoFocus />
+            <Button
+              label="Hapus"
+              className="rounded-xl"
+              onClick={handleDelete}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>
@@ -420,7 +425,12 @@ const DataKontrolBalik = () => {
               onClick={() => setVisibleDone(false)}
               className="p-button-text"
             />
-            <Button label="Selesai" onClick={handleDone} autoFocus />
+            <Button
+              label="Selesai"
+              className="rounded-xl"
+              onClick={handleDone}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>
@@ -445,7 +455,12 @@ const DataKontrolBalik = () => {
               onClick={() => setVisibleCancelled(false)}
               className="p-button-text"
             />
-            <Button label="Iya" onClick={handleCancelled} autoFocus />
+            <Button
+              label="Iya"
+              className="rounded-xl"
+              onClick={handleCancelled}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>

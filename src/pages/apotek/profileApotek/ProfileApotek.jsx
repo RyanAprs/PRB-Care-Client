@@ -167,14 +167,14 @@ const ProfileApotek = () => {
             onClick={handleUpdateModal}
             text
             raised
-            className=" bg-lightGreen md:text-lg text-sm text-black rounded-xl"
+            className=" bg-lightGreen dark:bg-black dark:text-white md:text-lg text-sm text-black rounded-xl"
             label="Edit Profile"
           />
           <Button
             onClick={handleModalChangePassword}
             text
             raised
-            className=" bg-lightGreen md:text-lg text-sm text-black rounded-xl"
+            className=" bg-lightGreen dark:bg-black dark:text-white md:text-lg text-sm text-black rounded-xl"
             label="Edit Password"
           />
         </div>

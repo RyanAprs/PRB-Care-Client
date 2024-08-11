@@ -441,13 +441,13 @@ const NavbarAdmin = ({ children }) => {
           {children}
         </div>
       </div>
+
       {/* Modal Profile */}
       <Dialog
         header="Menu"
         visible={visible}
-        className="fixed top-20 right-8"
+        className="fixed top-20 md:right-8 right-1 md:w-64"
         modal={false}
-        style={{ width: "20vw", height: "auto" }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);

@@ -28,7 +28,6 @@ import {
   getAllPengambilanObat,
   getPengambilanObatById,
   PengambilanObatCancelled,
-  PengambilanObatDone,
   updatePengambilanObat,
 } from "../../../services/PengambilanObatService";
 import { getAllPasienAktif } from "../../../services/PasienService";
@@ -51,7 +50,6 @@ const DataPengambilanObat = () => {
   const [obat, setObat] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
-  const [visibleDone, setVisibleDone] = useState(false);
   const [visibleCancelled, setVisibleCancelled] = useState(false);
   const token = Cookies.get("token");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -246,31 +244,6 @@ const DataPengambilanObat = () => {
     }
   };
 
-  const handleModalDone = (data) => {
-    setCurrentId(data.id);
-    setCurrentName(data.pasien.pengguna.namaLengkap);
-    setVisibleDone(true);
-  };
-
-  const handleDone = async () => {
-    try {
-      const response = await PengambilanObatDone(currentId);
-      if (response.status === 200) {
-        toast.current.show({
-          severity: "success",
-          summary: "Berhasil",
-          detail: "Kontrol balik berhasil diselesaikan dari kontrol balik",
-          life: 3000,
-        });
-        setVisibleDone(false);
-        const responseData = await getAllPengambilanObat();
-        setData(responseData);
-      }
-    } catch (error) {
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      handleDoneError(error, toast);
-    }
-  };
   const handleModalCancelled = (data) => {
     setCurrentId(data.id);
     setCurrentName(data.pasien.pengguna.namaLengkap);
@@ -332,7 +305,7 @@ const DataPengambilanObat = () => {
           onDelete={handleModalDelete}
           onEdit={handleModalUpdate}
           onCancelled={handleModalCancelled}
-          onDone={handleModalDone}
+          onDone=""
           statuses={statuses}
           role="nakes"
           path="pengambilanObat"
@@ -467,32 +440,12 @@ const DataPengambilanObat = () => {
               onClick={() => setVisibleDelete(false)}
               className="p-button-text"
             />
-            <Button label="Hapus" onClick={handleDelete} autoFocus />
-          </div>
-        </div>
-      </Dialog>
-
-      <Dialog
-        header="Pasien Selesai Mengambil Obat"
-        visible={visibleDone}
-        className="md:w-1/2 w-full "
-        onHide={() => {
-          if (!visibleDone) return;
-          setVisibleDone(false);
-        }}
-      >
-        <div className="flex flex-col gap-8">
-          <div className="text-xl">
-            Apakah Anda yakin ingin menyelesaikan pasien {currentName} dari
-            pengambilan obat?
-          </div>
-          <div className="flex gap-4 items-end justify-end">
             <Button
-              label="Batal"
-              onClick={() => setVisibleDone(false)}
-              className="p-button-text"
+              label="Hapus"
+              className="rounded-xl"
+              onClick={handleDelete}
+              autoFocus
             />
-            <Button label="Selesai" onClick={handleDone} autoFocus />
           </div>
         </div>
       </Dialog>
@@ -517,7 +470,12 @@ const DataPengambilanObat = () => {
               onClick={() => setVisibleCancelled(false)}
               className="p-button-text"
             />
-            <Button label="Iya" onClick={handleCancelled} autoFocus />
+            <Button
+              label="Iya"
+              className="rounded-xl"
+              onClick={handleCancelled}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>

@@ -385,7 +385,12 @@ const DataPuskesmas = () => {
               onClick={() => setVisibleDelete(false)}
               className="p-button-text"
             />
-            <Button label="Hapus" onClick={handleDelete} autoFocus />
+            <Button
+              label="Hapus"
+              className="rounded-xl"
+              onClick={handleDelete}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>

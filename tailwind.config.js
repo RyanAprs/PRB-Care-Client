@@ -63,7 +63,7 @@ module.exports = {
         lightGreen: "#52b788",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
-        blackHover: "#231C28",
+        blackHover: "#1a1a1a ",
       },
       borderRadius: {
         lg: "var(--radius)",
