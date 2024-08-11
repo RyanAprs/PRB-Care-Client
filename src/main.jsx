@@ -7,11 +7,12 @@ import "primereact/resources/themes/saga-green/theme.css";
 import "primereact/resources/primereact.min.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <PrimeReactProvider>
-    <main className="font-poppins">
-      <AddressProvider>
-        <App />
-      </AddressProvider>
-    </main>
-  </PrimeReactProvider>
+    <PrimeReactProvider>
+        <link id="theme-link" rel="stylesheet" href=""/>
+        <main className="font-poppins">
+            <AddressProvider>
+                <App/>
+            </AddressProvider>
+        </main>
+    </PrimeReactProvider>
 );

@@ -67,7 +67,7 @@ export default function ReusableTable({
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit />
+            <Edit style={{color:"var(--surface-0) !important"}} />
           </Button>
           <Button
             size="sm"
@@ -75,7 +75,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 />
+            <Trash2 style={{color:"var(--surface-0) !important"}} />
           </Button>
         </div>
       );
@@ -104,7 +104,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 />
+            <Trash2 style={{color:"var(--surface-0) !important"}} />
           </Button>
         </div>
       );
@@ -117,14 +117,14 @@ export default function ReusableTable({
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit />
+            <Edit style={{color:"var(--surface-0) !important"}} />
           </Button>
           <Button
             size="sm"
             className="  md:text-lg text-sm text-white rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig />
+            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
           </Button>
           <Button
             size="sm"
@@ -132,7 +132,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onCancelled(rowData)}
           >
-            <CircleOff />
+            <CircleOff style={{color:"var(--surface-0) !important"}} />
           </Button>
         </div>
       );
@@ -147,14 +147,14 @@ export default function ReusableTable({
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
-                <Edit />
+                <Edit style={{color:"var(--surface-0) !important"}} />
               </Button>
               <Button
                 size="sm"
                 className="  md:text-lg text-sm text-white rounded-xl"
                 onClick={() => onDone(rowData)}
               >
-                <CircleCheckBig />
+                <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
               </Button>
               <Button
                 size="sm"
@@ -162,7 +162,7 @@ export default function ReusableTable({
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <CircleOff />
+                <CircleOff style={{color:"var(--surface-0) !important"}} />
               </Button>
             </div>
           )}
@@ -174,7 +174,7 @@ export default function ReusableTable({
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
-                <Edit />
+                <Edit style={{color:"var(--surface-0) !important"}} />
               </Button>
               <Button
                 size="sm"
@@ -182,7 +182,7 @@ export default function ReusableTable({
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
-                <CircleOff />
+                <CircleOff style={{color:"var(--surface-0) !important"}} />
               </Button>
             </div>
           )}
@@ -196,7 +196,7 @@ export default function ReusableTable({
             className="  md:text-lg text-sm text-white rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig />
+            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
           </Button>
         </div>
       );
@@ -209,14 +209,14 @@ export default function ReusableTable({
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
-            <Edit />
+            <Edit style={{color:"var(--surface-0) !important"}} />
           </Button>
           <Button
             size="sm"
             className="  md:text-lg text-sm text-white rounded-xl"
             onClick={() => onDone(rowData)}
           >
-            <CircleCheckBig />
+            <CircleCheckBig style={{color:"var(--surface-0) !important"}} />
           </Button>
         </div>
       );
@@ -230,9 +230,9 @@ export default function ReusableTable({
           <div className="p-inputgroup md:w-1/2">
             <span
               className="p-inputgroup-addon "
-              style={{ backgroundColor: "#f8f9fa" }}
+
             >
-              <Search color="black" size={16} />
+              <Search style={{color:"var(--surface-900) !important"}} size={16} />
             </span>
             <InputText
               type="search"
