@@ -75,7 +75,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 />
+            <Trash2  />
           </Button>
         </div>
       );
@@ -104,7 +104,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2 />
+            <Trash2  />
           </Button>
         </div>
       );
@@ -232,7 +232,7 @@ export default function ReusableTable({
       <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
           <div className="p-inputgroup md:w-1/2">
-            <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
+            <span className="p-inputgroup-addon ">
               <Search size={16} />
             </span>
             <InputText
@@ -250,9 +250,11 @@ export default function ReusableTable({
             {path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
-                className="rounded-xl "
+                text
+                raised
+                className=" md:text-lg text-sm  rounded-xl dark:bg-black active:border-darkGreen dark:text-white text-black bg-lightGreen  hover:mainGreen transition-all"
                 label="Tambah"
-              ></Button>
+              />
             )}
           </div>
         </div>

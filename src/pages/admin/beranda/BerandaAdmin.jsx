@@ -92,11 +92,8 @@ const DashboardAdmin = () => {
         {list.map((item, index) => (
           <Card
             key={index}
-            className="rounded-xl shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
-            style={{
-              fontFamily: "Poppins, sans-serif",
-              color: "var(--surface-900) !important",
-            }}
+            className="rounded shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
+            style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
