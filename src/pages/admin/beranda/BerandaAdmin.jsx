@@ -88,19 +88,19 @@ const DashboardAdmin = () => {
   return (
     <div className="flex flex-col p-8 gap-8">
       <Toast ref={toast} />
-      <div className="text-3xl font-semibold">
-        Halo, Selamat Datang Kembali!!
-      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card
             key={index}
-            className="rounded shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
-            style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
+            className="rounded-xl shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
+            style={{
+              fontFamily: "Poppins, sans-serif",
+              color: "var(--surface-900) !important",
+            }}
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
-              <div  className="text-xl font-bold mb-2">{item.title}</div>
+              <div className="text-xl font-bold mb-2">{item.title}</div>
               {item.icon && <div className="text-4xl mb-2">{item.icon}</div>}
               <div className="text-xl text-center">{item.desc}</div>
             </div>

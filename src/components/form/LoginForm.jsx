@@ -67,7 +67,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
       <div className="flex justify-center items-center w-full md:w-1/2 flex-col gap-6">
         <div className="flex justify-center items-center flex-col w-full">
           <img className="h-auto w-48" src={icon} alt="PRB CARE Logo" />
-          <h1 className="text-3xl font-bold">Masuk {title}</h1>
+          <h1 className="text-3xl font-semibold">Masuk {title}</h1>
         </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">

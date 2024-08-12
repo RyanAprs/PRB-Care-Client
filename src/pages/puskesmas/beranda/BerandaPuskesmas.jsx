@@ -68,9 +68,6 @@ const DashboardPuskesmas = () => {
   return (
     <div className="flex flex-col p-8  gap-8 ">
       <Toast ref={toast} />
-      <div className="text-3xl font-semibold">
-        Halo, Selamat Datang Kembali {name}!!
-      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card

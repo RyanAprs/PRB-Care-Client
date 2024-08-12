@@ -58,12 +58,14 @@ module.exports = {
         },
 
         // CUSTOM COLOR
-        darkGreen: "#0a5c4b",
+        darkGreen: "#276f4c",
         mainGreen: "#40916C",
         lightGreen: "#52b788",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
         blackHover: "#1a1a1a ",
+        grays: "#f8f9fa",
+        darkGrays: "#212121",
       },
       borderRadius: {
         lg: "var(--radius)",

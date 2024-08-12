@@ -91,7 +91,7 @@ const RegisterPengguna = () => {
       <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
         <div className="flex flex-col gap-4 w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="" />
-          <h1 className="text-3xl font-bold">Daftar Pengguna</h1>
+          <h1 className="text-3xl font-semibold">Daftar Pengguna</h1>
         </div>
         <div className="flex flex-col w-full gap-4">
           <p className="text-lg font-semibold">Data Pengguna</p>

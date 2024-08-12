@@ -944,7 +944,12 @@ const NavbarAdmin = ({ children }) => {
               onClick={() => setVisibleLogout(false) || setVisible(false)}
               className="p-button-text"
             />
-            <Button label="Logout" onClick={handleLogout} autoFocus />
+            <Button
+              className=" rounded-xl"
+              label="Logout"
+              onClick={handleLogout}
+              autoFocus
+            />
           </div>
         </div>
       </Dialog>
