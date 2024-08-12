@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import { getCurrentAdminPuskesmas } from "../../../services/PuskesmasService";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
+import { useModalUpdate } from "../../../config/context/ModalUpdateContext";
 
 const DashboardPuskesmas = () => {
   const [name, setName] = useState("");
   const [showToast, setShowToast] = useState(false);
   const toast = useRef(null);
   const navigate = useNavigate();
+  const { isUpdated, setIsUpdated } = useModalUpdate();
 
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
@@ -40,7 +42,7 @@ const DashboardPuskesmas = () => {
     } catch (error) {
       console.log(error);
     }
-  });
+  }, [isUpdated]);
   const list = [
     {
       icon: <UserPlus size={54} />,

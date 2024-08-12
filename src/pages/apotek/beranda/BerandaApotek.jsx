@@ -1,15 +1,17 @@
+import { useEffect, useRef, useState } from "react";
 import { Pill, ShoppingCart } from "lucide-react";
 import { Card } from "primereact/card";
-import { useEffect, useRef, useState } from "react";
-import { getCurrentAdminApotek } from "../../../services/ApotekService";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
+import { getCurrentAdminApotek } from "../../../services/ApotekService";
+import { useModalUpdate } from "../../../config/context/ModalUpdateContext";
 
 const DashboardApotek = () => {
   const [name, setName] = useState("");
   const [showToast, setShowToast] = useState(false);
   const toast = useRef(null);
   const navigate = useNavigate();
+  const { isUpdated, setIsUpdated } = useModalUpdate();
 
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
@@ -31,16 +33,17 @@ const DashboardApotek = () => {
   }, [showToast]);
 
   useEffect(() => {
-    try {
-      const fetchData = async () => {
+    const fetchData = async () => {
+      try {
         const response = await getCurrentAdminApotek();
         setName(response.namaApotek);
-      };
-      fetchData();
-    } catch (error) {
-      console.log(error);
-    }
-  });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, [isUpdated]);
 
   const list = [
     {

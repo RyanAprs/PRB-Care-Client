@@ -22,11 +22,31 @@ import { InputText } from "primereact/inputtext";
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
 import { ZodError } from "zod";
-import { handleChangePasswordError } from "../../utils/ApiErrorHandlers";
+import {
+  handleApiError,
+  handleChangePasswordError,
+} from "../../utils/ApiErrorHandlers";
 import { updatePassword } from "../../services/SuperAdminService";
 import Cookies from "js-cookie";
-import { getCurrentAdminPuskesmas } from "../../services/PuskesmasService";
-import { getCurrentAdminApotek } from "../../services/ApotekService";
+import {
+  getCurrentAdminPuskesmas,
+  updateCurrentPuskesmas,
+  updatePasswordPuskesmas,
+} from "../../services/PuskesmasService";
+import {
+  getCurrentAdminApotek,
+  updateCurrentApotek,
+  updatePasswordApotek,
+} from "../../services/ApotekService";
+import DynamicAddress from "../dynamicAddress/DynamicAddress";
+import {
+  HandleUnauthorizedAdminApotek,
+  HandleUnauthorizedAdminPuskesmas,
+} from "../../utils/HandleUnauthorized";
+import { apotekUpdateCurrentSchema } from "../../validations/ApotekSchema";
+import { puskesmasUpdateCurrentSchema } from "../../validations/PuskesmasSchema";
+import { AddressContext } from "../../config/context/AdressContext";
+import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -35,17 +55,58 @@ const NavbarAdmin = ({ children }) => {
   const [visible, setVisible] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
+  const [visibleDetailProfile, setVisibleDetailProfile] = useState(false);
+  const [visibleUpdateProfile, setVisibleUpdateProfile] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [datas, setDatas] = useState({
+  const toast = useRef(null);
+  const [dataPassword, setDataPassword] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  const toast = useRef(null);
   const role = Cookies.get("role");
   const [name, setName] = useState("");
+  const { dispatch } = useContext(AuthContext);
+  const [isApotekUpdate, setIsApotekUpdate] = useState(false);
+  const [dataApotek, setDataApotek] = useState({
+    namaApotek: "",
+    telepon: "",
+    alamat: "",
+  });
+  const [dataPuskesmas, setDataPuskesmas] = useState({
+    namaPuskesmas: "",
+    telepon: "",
+    alamat: "",
+  });
+  const [prevAddress, setPrevAddress] = useState({});
+
+  const { address } = useContext(AddressContext);
+
+  useEffect(() => {
+    const formattedAddress = [
+      address.detail,
+      address.desa,
+      address.kecamatan,
+      address.kabupaten,
+      address.provinsi,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    if (isApotekUpdate) {
+      setDataApotek((prev) => ({
+        ...prev,
+        alamat: formattedAddress,
+      }));
+    } else {
+      setDataPuskesmas((prev) => ({
+        ...prev,
+        alamat: formattedAddress,
+      }));
+    }
+  }, [address, isApotekUpdate]);
 
   if (role === "nakes") {
     useEffect(() => {
@@ -74,8 +135,6 @@ const NavbarAdmin = ({ children }) => {
       }
     });
   }
-
-  const { dispatch } = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -316,11 +375,159 @@ const NavbarAdmin = ({ children }) => {
     setVisible(false);
   };
 
+  const handleDetailProfileModal = async () => {
+    setVisibleDetailProfile(true);
+    if (role === "nakes") {
+      setIsApotekUpdate(false);
+      try {
+        const dataResponse = await getCurrentAdminPuskesmas();
+        if (dataResponse) {
+          setDataPuskesmas({
+            namaPuskesmas: dataResponse.namaPuskesmas,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+          });
+          setVisible(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+    if (role === "apoteker") {
+      setIsApotekUpdate(true);
+      try {
+        const dataResponse = await getCurrentAdminApotek();
+        if (dataResponse) {
+          setDataApotek({
+            namaApotek: dataResponse.namaApotek,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+          });
+          setVisible(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+  };
+
+  const handleUpdateProfileModal = async () => {
+    setVisibleUpdateProfile(true);
+    if (role === "nakes") {
+      setIsApotekUpdate(false);
+      try {
+        const dataResponse = await getCurrentAdminPuskesmas();
+        setPrevAddress(dataResponse.alamat);
+        if (dataResponse) {
+          setDataPuskesmas({
+            namaPuskesmas: dataResponse.namaPuskesmas,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+          });
+          setVisibleDetailProfile(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+    if (role === "apoteker") {
+      setIsApotekUpdate(true);
+      try {
+        const dataResponse = await getCurrentAdminApotek();
+        setPrevAddress(dataResponse.alamat);
+        if (dataResponse) {
+          setDataApotek({
+            namaApotek: dataResponse.namaApotek,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+          });
+          setVisibleDetailProfile(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+  };
+
+  const { setIsUpdated } = useModalUpdate();
+
+  const handleUpdateProfile = async () => {
+    try {
+      if (isApotekUpdate) {
+        const updatedDatas = {
+          ...dataApotek,
+          alamat: dataApotek.alamat || prevAddress,
+        };
+        apotekUpdateCurrentSchema.parse(updatedDatas);
+
+        const response = await updateCurrentApotek(updatedDatas);
+        if (response.status === 200) {
+          toast.current.show({
+            severity: "success",
+            summary: "Berhasil",
+            detail: "Data Apotek diperbarui",
+            life: 3000,
+          });
+
+          setIsUpdated(true);
+          setVisibleUpdateProfile(false);
+        }
+      } else {
+        const updatedDatas = {
+          ...dataPuskesmas,
+          alamat: dataPuskesmas.alamat || prevAddress,
+        };
+        puskesmasUpdateCurrentSchema.parse(updatedDatas);
+
+        const response = await updateCurrentPuskesmas(updatedDatas);
+        if (response.status === 200) {
+          toast.current.show({
+            severity: "success",
+            summary: "Berhasil",
+            detail: "Data Puskesmas diperbarui",
+            life: 3000,
+          });
+
+          setIsUpdated(true);
+          setVisibleUpdateProfile(false);
+        }
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        if (isApotekUpdate) {
+          HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
+        } else {
+          HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        }
+        handleApiError(error, toast);
+      }
+    }
+  };
+
   const handleChangePassword = async () => {
     try {
-      superAdminChangePasswordSchema.parse(datas);
-      const response = await updatePassword(datas);
-      if (response.status === 200) {
+      superAdminChangePasswordSchema.parse(dataPassword);
+
+      let response;
+      if (role === "admin") {
+        response = await updatePassword(dataPassword);
+      } else if (role === "nakes") {
+        response = await updatePasswordPuskesmas(dataPassword);
+      } else if (role === "apoteker") {
+        response = await updatePasswordApotek(dataPassword);
+      }
+
+      if (response && response.status === 200) {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
@@ -442,7 +649,7 @@ const NavbarAdmin = ({ children }) => {
         </div>
       </div>
 
-      {/* Modal Profile */}
+      {/* Modal Menu */}
       <Dialog
         header="Menu"
         visible={visible}
@@ -466,24 +673,47 @@ const NavbarAdmin = ({ children }) => {
           )}
 
           {role === "nakes" && (
-            <Link
-              to="/puskesmas/profile"
-              onClick={() => setVisible(false)}
-              className="mb-4 w-full flex gap-4"
-            >
-              <User />
-              <h1>Profile</h1>
-            </Link>
+            <div>
+              <Link
+                to=""
+                onClick={handleDetailProfileModal}
+                className="mb-4 w-full flex gap-4"
+              >
+                <User />
+                <h1>Detail Profile</h1>
+              </Link>
+
+              <Link
+                to=""
+                onClick={handleModalChangePassword}
+                className="mb-4 w-full flex gap-4"
+              >
+                <Lock />
+                <h1>Ubah Password</h1>
+              </Link>
+            </div>
           )}
+
           {role === "apoteker" && (
-            <Link
-              to="/apotek/profile"
-              onClick={() => setVisible(false)}
-              className="mb-4 w-full flex gap-4"
-            >
-              <User />
-              <h1>Profile</h1>
-            </Link>
+            <div>
+              <Link
+                to=""
+                onClick={handleDetailProfileModal}
+                className="mb-4 w-full flex gap-4"
+              >
+                <User />
+                <h1>Detail Profile</h1>
+              </Link>
+
+              <Link
+                to=""
+                onClick={handleModalChangePassword}
+                className="mb-4 w-full flex gap-4"
+              >
+                <Lock />
+                <h1>Ubah Password</h1>
+              </Link>
+            </div>
           )}
           <Link
             to=""
@@ -493,6 +723,124 @@ const NavbarAdmin = ({ children }) => {
             <LogOut />
             <h1>Logout</h1>
           </Link>
+        </div>
+      </Dialog>
+
+      {/* Modal Detail Profile */}
+      <Dialog
+        header={
+          isApotekUpdate ? "Detail Profile Apotek" : "Detail Profile Puskesmas"
+        }
+        visible={visibleDetailProfile}
+        maximizable
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visibleDetailProfile) return;
+          setVisibleDetailProfile(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          {isApotekUpdate ? (
+            <div className="flex flex-col gap-8 text-xl">
+              <h1>Nama Apotek: {dataApotek.namaApotek}</h1>
+              <h1>Telepon: {dataApotek.telepon}</h1>
+              <h1>Alamat: {dataApotek.alamat}</h1>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-8 text-xl">
+              <h1>Nama Puskesmas: {dataPuskesmas.namaPuskesmas}</h1>
+              <h1>Telepon: {dataPuskesmas.telepon}</h1>
+              <h1>Alamat: {dataPuskesmas.alamat}</h1>
+            </div>
+          )}
+          <Button
+            label="Edit Profile"
+            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            onClick={handleUpdateProfileModal}
+          />
+        </div>
+      </Dialog>
+
+      {/* Modal Update Profile */}
+      <Dialog
+        header={
+          isApotekUpdate ? "Edit Profile Apotek" : "Edit Profile Puskesmas"
+        }
+        visible={visibleUpdateProfile}
+        maximizable
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visibleUpdateProfile) return;
+          setVisibleUpdateProfile(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}:
+          </label>
+          <InputText
+            type="text"
+            placeholder={isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}
+            className="p-input text-lg p-3 rounded"
+            value={
+              isApotekUpdate
+                ? dataApotek.namaApotek
+                : dataPuskesmas.namaPuskesmas
+            }
+            onChange={(e) =>
+              isApotekUpdate
+                ? setDataApotek((prev) => ({
+                    ...prev,
+                    namaApotek: e.target.value,
+                  }))
+                : setDataPuskesmas((prev) => ({
+                    ...prev,
+                    namaPuskesmas: e.target.value,
+                  }))
+            }
+          />
+          {errors.namaApotek && (
+            <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
+          )}
+
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
+          <InputText
+            type="text"
+            placeholder="Telepon"
+            className="p-input text-lg p-3 rounded"
+            value={isApotekUpdate ? dataApotek.telepon : dataPuskesmas.telepon}
+            onChange={(e) =>
+              isApotekUpdate
+                ? setDataApotek((prev) => ({
+                    ...prev,
+                    telepon: e.target.value,
+                  }))
+                : setDataPuskesmas((prev) => ({
+                    ...prev,
+                    telepon: e.target.value,
+                  }))
+            }
+          />
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+          <DynamicAddress prevAddress={prevAddress} />
+          <span className="text-sm -mt-4 text-orange-700">
+            *Kosongkan alamat jika tidak ingin diubah
+          </span>
+          {errors.alamat && (
+            <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
+          <Button
+            label="Edit"
+            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            onClick={handleUpdateProfile}
+          />
         </div>
       </Dialog>
 
@@ -516,9 +864,9 @@ const NavbarAdmin = ({ children }) => {
             type="password"
             placeholder="Password Lama"
             className="p-input text-lg p-3  rounded"
-            value={datas.currentPassword}
+            value={dataPassword.currentPassword}
             onChange={(e) =>
-              setDatas((prev) => ({
+              setDataPassword((prev) => ({
                 ...prev,
                 currentPassword: e.target.value,
               }))
@@ -536,9 +884,9 @@ const NavbarAdmin = ({ children }) => {
             type="password"
             placeholder="Password Baru"
             className="p-input text-lg p-3  rounded"
-            value={datas.newPassword}
+            value={dataPassword.newPassword}
             onChange={(e) =>
-              setDatas((prev) => ({
+              setDataPassword((prev) => ({
                 ...prev,
                 newPassword: e.target.value,
               }))
@@ -556,9 +904,9 @@ const NavbarAdmin = ({ children }) => {
             type="password"
             placeholder="Konfirmasi Password Baru"
             className="p-input text-lg p-3  rounded"
-            value={datas.confirmPassword}
+            value={dataPassword.confirmPassword}
             onChange={(e) =>
-              setDatas((prev) => ({
+              setDataPassword((prev) => ({
                 ...prev,
                 confirmPassword: e.target.value,
               }))

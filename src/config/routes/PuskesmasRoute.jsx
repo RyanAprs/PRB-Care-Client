@@ -13,7 +13,6 @@ import DashboardPuskesmas from "../../pages/puskesmas/beranda/BerandaPuskesmas";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
 import DataPasien from "../../pages/puskesmas/dataPasien/DataPasien";
 import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrolBalik";
-import ProfilePuskesmas from "../../pages/puskesmas/profilePuskesmas/ProfilePuskesmas";
 import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
 
 const PrivateRoute = ({ children, role }) => {
@@ -65,16 +64,6 @@ const PuskesmasRoute = () => {
               <PrivateRoute role="nakes">
                 <NavbarAdmin>
                   <DashboardPuskesmas />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/puskesmas/profile"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <ProfilePuskesmas />
                 </NavbarAdmin>
               </PrivateRoute>
             }

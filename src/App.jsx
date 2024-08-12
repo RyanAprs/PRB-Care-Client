@@ -4,11 +4,9 @@ import PenggunaRoute from "./config/routes/PenggunaRoute";
 import PuskesmasRoute from "./config/routes/PuskesmasRoute";
 import { AuthContextProvider } from "./config/context/AuthContext";
 
-
 window.global = window;
 
 function App() {
-
   return (
     <AuthContextProvider>
       <AdminRoute />
