@@ -58,7 +58,11 @@ const HomePengguna = () => {
       unsubscribe();
     };
   }, []);
-  return <div>Home Pengguna</div>;
+  return (
+    <div className="flex items-center justify-center h-screen dark:bg-black dark:text-white">
+      Home 
+    </div>
+  );
 };
 
 export default HomePengguna;

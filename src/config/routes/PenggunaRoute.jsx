@@ -11,6 +11,12 @@ import { AuthContext } from "../context/AuthContext";
 import LoginPengguna from "../../pages/pengguna/login/LoginPengguna";
 import RegisterPengguna from "../../pages/pengguna/register/RegisterPengguna";
 import HomePengguna from "../../pages/pengguna/home/HomePengguna";
+import NavbarPengguna from "../../components/navbar/NavbarPengguna";
+import Kontrol from "../../pages/pengguna/kontrol/Kontrol";
+import Obat from "../../pages/pengguna/obat/Obat";
+import Profile from "../../pages/pengguna/profile/Profile";
+import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
+import Medis from "../../pages/pengguna/medis/Medis";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -60,7 +66,55 @@ const PenggunaRoute = () => {
             path="/pengguna/home"
             element={
               <PrivateRoute role="pengguna">
+                <NavbarPengguna />
                 <HomePengguna />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/pengguna/kontrol"
+            element={
+              <PrivateRoute role="pengguna">
+                <NavbarPengguna />
+                <Kontrol />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/pengguna/obat"
+            element={
+              <PrivateRoute role="pengguna">
+                <NavbarPengguna />
+                <Obat />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pengguna/profile"
+            element={
+              <PrivateRoute role="pengguna">
+                <NavbarPengguna />
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pengguna/medis"
+            element={
+              <PrivateRoute role="pengguna">
+                <NavbarPengguna />
+                <Medis />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/pengguna/notifikasi"
+            element={
+              <PrivateRoute role="pengguna">
+                <NavbarPengguna />
+                <Notifikasi />
               </PrivateRoute>
             }
           />
