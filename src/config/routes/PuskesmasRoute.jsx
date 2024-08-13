@@ -14,6 +14,7 @@ import NavbarAdmin from "../../components/navbar/NavbarAdmin";
 import DataPasien from "../../pages/puskesmas/dataPasien/DataPasien";
 import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrolBalik";
 import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -43,6 +44,15 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
 const PuskesmasRoute = () => {
   const darkMode = useDarkMode(false);
+  const { isLoading } = useContext(AuthContext);
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div>
+    );
+
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>

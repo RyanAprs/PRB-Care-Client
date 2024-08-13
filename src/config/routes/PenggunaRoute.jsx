@@ -17,6 +17,7 @@ import Obat from "../../pages/pengguna/obat/Obat";
 import Profile from "../../pages/pengguna/profile/Profile";
 import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -46,6 +47,14 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
 const PenggunaRoute = () => {
   const darkMode = useDarkMode(false);
+  const { isLoading } = useContext(AuthContext);
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div>
+    );
 
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>

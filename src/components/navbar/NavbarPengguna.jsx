@@ -95,7 +95,7 @@ const NavbarPengguna = () => {
         </div>
       </header>
 
-      <div className="fixed z-50 md:hidden  bottom-0 left-0 right-0 dark:bg-blackHover dark:text-white shadow-xl p-3 px-4">
+      <div className="fixed z-50 md:hidden  bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-xl p-3 px-4">
         <div className="flex  justify-between items-center ">
           <Link
             to={"/"}

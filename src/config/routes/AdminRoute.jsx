@@ -18,6 +18,7 @@ import DataKontrolBalik from "../../pages/admin/dataKontrolBalik/DataKontrolBali
 import DataPengambilanObat from "../../pages/admin/dataPengambilanObat/DataPengambilanObat";
 import { AuthContext } from "../context/AuthContext";
 import DataPengguna from "../../pages/admin/dataPengguna/DataPengguna";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -49,9 +50,12 @@ const AdminRoute = () => {
   const { isLoading } = useContext(AuthContext);
   const darkMode = useDarkMode(false);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div>
+    );
 
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
