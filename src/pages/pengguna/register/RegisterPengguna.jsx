@@ -224,18 +224,12 @@ const RegisterPengguna = () => {
               <p>Daftar</p>
             )}
           </Button>
-          <div className="flex items-center justify-center text-sm text-darkColor font-semibold">
-            ATAU
+          <div className="flex w-full gap-2 items-center justify-center">
+            Sudah punya akun?
+            <Link to="/login" className="text-mainGreen">
+              Masuk
+            </Link>
           </div>
-          <Link to="/pengguna/login" className="w-full">
-            <Button
-              type="submit"
-              label="Masuk"
-              className="text-black bg-white p-4 w-full flex justify-center rounded-xl  transition-all"
-              radius="sm"
-              size="lg"
-            />
-          </Link>
         </div>
         <p className="text-center px-4">
           <span className="font-normal opacity-60">

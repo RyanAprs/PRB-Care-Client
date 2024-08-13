@@ -64,3 +64,33 @@ export const deletePengguna = async (id) => {
   );
   return response;
 };
+
+export const getCurrentPengguna = async () => {
+  const response = await axios.get(
+    `${API_BASE_URI}/api/pengguna/current`,
+    getRequestHeaders()
+  );
+  return response.data.data;
+};
+
+export const updateCurrentPengguna = async (datas) => {
+  const response = await axios.patch(
+    `${API_BASE_URI}/api/pengguna/current`,
+    datas,
+    getRequestHeaders()
+  );
+  return response;
+};
+
+export const updatePasswordPengguna = async (datas) => {
+  try {
+    const response = await axios.patch(
+      `${API_BASE_URI}/api/pengguna/current/password`,
+      datas,
+      getRequestHeaders()
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -20,7 +20,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const toast = useRef(null);
   const location = useLocation();
 
-  const loginUser = location.pathname === "/pengguna/login";
+  const loginUser = location.pathname === "/login";
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -62,7 +62,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   };
 
   return (
-    <div className="min-h-screen w-full flex justify-center items-center p-8">
+    <div className="min-h-screen w-full flex justify-center items-center md:p-8">
       <Toast ref={toast} />
       <div className="flex justify-center items-center w-full md:w-1/2 flex-col gap-6">
         <div className="flex justify-center items-center flex-col w-full">
@@ -116,18 +116,10 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
               )}
             </Button>
             {loginUser && (
-              <div className="flex flex-col w-full gap-4">
-                <div className="flex items-center justify-center text-sm text-darkColor font-semibold">
-                  ATAU
-                </div>
-                <Link to="/pengguna/register" className="w-full">
-                  <Button
-                    type="submit"
-                    label="Daftar"
-                    className="text-black bg-white p-4 w-full flex justify-center rounded-xl  transition-all"
-                    radius="sm"
-                    size="lg"
-                  />
+              <div className="flex w-full gap-2 items-center justify-center">
+                Belum punya akun?
+                <Link to="/register" className="text-mainGreen ">
+                  Daftar
                 </Link>
               </div>
             )}

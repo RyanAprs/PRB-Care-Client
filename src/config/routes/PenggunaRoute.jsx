@@ -22,10 +22,14 @@ const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (!token) {
-    return <Navigate to="/pengguna/login" />;
+    return <Navigate to="/login" />;
   }
 
   if (userRole !== role) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  if (!token && !role) {
     return <Navigate to="/page/not-found" />;
   }
 
@@ -36,7 +40,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (token && userRole === role) {
-    return <Navigate to="/pengguna/home" />;
+    return <Navigate to="/" />;
   } else if (token && userRole !== role) {
     return <Navigate to="/page/not-found" />;
   }
@@ -49,9 +53,9 @@ const PenggunaRoute = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/pengguna/register" element={<RegisterPengguna />} />
+        <Route path="/register" element={<RegisterPengguna />} />
         <Route
-          path="/pengguna/login"
+          path="/login"
           element={
             <AlreadyLoggedInRoute role="pengguna">
               <LoginPengguna />
@@ -63,17 +67,17 @@ const PenggunaRoute = () => {
       <div className={`${darkMode.value ? "dark" : ""}`}>
         <Routes>
           <Route
-            path="/pengguna/home"
+            path="/"
             element={
-              <PrivateRoute role="pengguna">
+              <>
                 <NavbarPengguna />
                 <HomePengguna />
-              </PrivateRoute>
+              </>
             }
           />
 
           <Route
-            path="/pengguna/kontrol"
+            path="/kontrol"
             element={
               <PrivateRoute role="pengguna">
                 <NavbarPengguna />
@@ -81,9 +85,8 @@ const PenggunaRoute = () => {
               </PrivateRoute>
             }
           />
-
           <Route
-            path="/pengguna/obat"
+            path="/obat"
             element={
               <PrivateRoute role="pengguna">
                 <NavbarPengguna />
@@ -92,7 +95,7 @@ const PenggunaRoute = () => {
             }
           />
           <Route
-            path="/pengguna/profile"
+            path="/profile"
             element={
               <PrivateRoute role="pengguna">
                 <NavbarPengguna />
@@ -101,7 +104,7 @@ const PenggunaRoute = () => {
             }
           />
           <Route
-            path="/pengguna/medis"
+            path="/medis"
             element={
               <PrivateRoute role="pengguna">
                 <NavbarPengguna />
@@ -110,7 +113,7 @@ const PenggunaRoute = () => {
             }
           />
           <Route
-            path="/pengguna/notifikasi"
+            path="/notifikasi"
             element={
               <PrivateRoute role="pengguna">
                 <NavbarPengguna />

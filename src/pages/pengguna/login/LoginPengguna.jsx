@@ -7,7 +7,7 @@ const LoginPengguna = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <LoginForm
         API_URI={API_URI}
-        navigateUser="/pengguna/home"
+        navigateUser="/"
         role="pengguna"
         title="Pengguna"
       />
