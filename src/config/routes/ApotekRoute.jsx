@@ -13,7 +13,6 @@ import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
 import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
 import DataObat from "../../pages/apotek/dataObat/DataObat";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
-import { ProgressSpinner } from "primereact/progressspinner";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -43,14 +42,6 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
 const ApotekRoute = () => {
   const darkMode = useDarkMode(false);
-  const { isLoading } = useContext(AuthContext);
-
-  if (isLoading)
-    return (
-      <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
-      </div>
-    );
 
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>

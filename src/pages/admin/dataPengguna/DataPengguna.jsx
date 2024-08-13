@@ -327,7 +327,7 @@ const DataPengguna = () => {
               }))
             }
           />
-          <span className="text-sm -mt-4 text-orange-700">
+          <span className="text-sm -mt-4">
             {isEditMode ? "*Kosongkan password jika tidak ingin diubah" : null}
           </span>
           {errors.password && (
@@ -379,7 +379,7 @@ const DataPengguna = () => {
               ? { prevAddress: prevAddress }
               : { reset: resetAddress })}
           />{" "}
-          <span className="text-sm -mt-4 text-orange-700">
+          <span className="text-sm -mt-4">
             {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
           </span>
           {errors.alamat && (

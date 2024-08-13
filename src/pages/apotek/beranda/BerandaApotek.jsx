@@ -65,15 +65,14 @@ const DashboardApotek = () => {
   };
 
   return (
-    <div className="flex flex-col p-8 gap-8">
+    <div className="flex flex-col p-4  gap-4">
       <Toast ref={toast} />
-
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card
             key={index}
-            className="dark:text-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
-            style={{ fontFamily: "Poppins, sans-serif" }}
+            className="rounded-xl shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
+            style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
