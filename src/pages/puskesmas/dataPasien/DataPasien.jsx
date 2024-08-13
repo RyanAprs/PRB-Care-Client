@@ -279,7 +279,9 @@ const DataPasien = () => {
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
-    { header: "Nama Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Telepon", field: "pengguna.telepon" },
+    { header: "Telepon Keluarga", field: "pengguna.teleponKeluarga" },
+    { header: "Alamat", field: "pengguna.alamat" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
     { header: "Tekanan Darah", field: "tekananDarah" },

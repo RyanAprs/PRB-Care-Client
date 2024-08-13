@@ -19,6 +19,7 @@ import { AuthContext } from "../../config/context/AuthContext";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from 'primereact/inputtextarea'; 
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
 import { ZodError } from "zod";
@@ -165,6 +166,11 @@ const NavbarAdmin = ({ children }) => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
+    const themeLink = document.getElementById('theme-link');
+      if (themeLink) {
+          const themeUrl = new URL('primereact/resources/themes/saga-green/theme.css', import.meta.url).href
+          themeLink.href = themeUrl;
+      }
     if (role === "admin") {
       navigate("/admin/login");
     } else if (role === "nakes") {
@@ -281,7 +287,7 @@ const NavbarAdmin = ({ children }) => {
             </div>
           )}
           {role === "nakes" && (
-            <div className="flex flex-col h-full justify-start gap-6">
+            <div className="flex flex-col h-full justify-start gap-2">
               <Link
                 to="/puskesmas/beranda"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
@@ -329,7 +335,7 @@ const NavbarAdmin = ({ children }) => {
             </div>
           )}
           {role === "apoteker" && (
-            <div className="flex flex-col h-full justify-start gap-6">
+            <div className="flex flex-col h-full justify-start gap-2">
               <Link
                 to="/apotek/beranda"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
@@ -624,7 +630,7 @@ const NavbarAdmin = ({ children }) => {
               </h1>
             )}
           </div>
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex justify-between items-center ">
             <div>
               <ThemeSwitcher />
             </div>
@@ -680,7 +686,7 @@ const NavbarAdmin = ({ children }) => {
                 className="mb-4 w-full flex gap-4"
               >
                 <User />
-                <h1>Detail Profile</h1>
+                <h1>Profile</h1>
               </Link>
 
               <Link
@@ -702,7 +708,7 @@ const NavbarAdmin = ({ children }) => {
                 className="mb-4 w-full flex gap-4"
               >
                 <User />
-                <h1>Detail Profile</h1>
+                <h1>Profile</h1>
               </Link>
 
               <Link
@@ -740,19 +746,54 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
-          {isApotekUpdate ? (
-            <div className="flex flex-col gap-8 text-xl">
-              <h1>Nama Apotek: {dataApotek.namaApotek}</h1>
-              <h1>Telepon: {dataApotek.telepon}</h1>
-              <h1>Alamat: {dataApotek.alamat}</h1>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-8 text-xl">
-              <h1>Nama Puskesmas: {dataPuskesmas.namaPuskesmas}</h1>
-              <h1>Telepon: {dataPuskesmas.telepon}</h1>
-              <h1>Alamat: {dataPuskesmas.alamat}</h1>
-            </div>
+
+
+
+
+
+
+        <label htmlFor="" className="-mb-3">
+            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled 
+            className="p-input text-lg p-3 rounded"
+            value={
+              isApotekUpdate
+                ? dataApotek.namaApotek
+                : dataPuskesmas.namaPuskesmas
+            }
+          />
+          {errors.namaApotek && (
+            <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
           )}
+
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled 
+            className="p-input text-lg p-3 rounded"
+            value={isApotekUpdate ? dataApotek.telepon : dataPuskesmas.telepon}
+          />
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+          <InputTextarea 
+            variant="filled"
+            disabled 
+            autoResize 
+            className="p-input text-lg p-3 rounded"
+            value={isApotekUpdate ? dataApotek.alamat : dataPuskesmas.alamat}
+      
+          />
           <Button
             label="Edit Profile"
             className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
@@ -830,7 +871,7 @@ const NavbarAdmin = ({ children }) => {
             Alamat:
           </label>
           <DynamicAddress prevAddress={prevAddress} />
-          <span className="text-sm -mt-4 text-orange-700">
+          <span className="text-sm -mt-4">
             *Kosongkan alamat jika tidak ingin diubah
           </span>
           {errors.alamat && (

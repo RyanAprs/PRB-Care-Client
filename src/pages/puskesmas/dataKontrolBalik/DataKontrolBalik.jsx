@@ -270,9 +270,10 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
-    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
-    { header: "Nama", field: "pasien.pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
+    { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
+    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },
   ];

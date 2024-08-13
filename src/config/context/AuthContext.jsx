@@ -1,6 +1,6 @@
 import { createContext, useEffect, useReducer } from "react";
 import Cookies from "js-cookie";
-
+import { ProgressSpinner } from "primereact/progressspinner";
 export const AuthContext = createContext();
 
 export const authReducer = (state, action) => {
@@ -39,7 +39,10 @@ export const AuthContextProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={{ ...state, dispatch }}>
-      {state.isLoading ? <div>Loading...</div> : children}
+      {state.isLoading ? 
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div> : children}
     </AuthContext.Provider>
   );
 };

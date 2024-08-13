@@ -45,19 +45,22 @@ const DashboardPuskesmas = () => {
   }, [isUpdated]);
   const list = [
     {
-      icon: <UserPlus size={54} />,
+      icon: <UserPlus size={54} strokeWidth={1.5} />,
       title: "Pasien",
       desc: "Kelola data pasien",
+      route: "/puskesmas/data-pasien",
     },
     {
-      icon: <Stethoscope size={54} />,
+      icon: <Stethoscope size={54} strokeWidth={1.5} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
+      route: "/puskesmas/data-kontrol-balik",
     },
     {
-      icon: <ShoppingCart size={54} />,
+      icon: <ShoppingCart size={54} strokeWidth={1.5} />,
       title: "Pengambilan Obat",
       desc: "Kelola data pengambilan obat",
+      route: "/puskesmas/data-pengambilan-obat",
     },
   ];
 
@@ -66,19 +69,19 @@ const DashboardPuskesmas = () => {
   };
 
   return (
-    <div className="flex flex-col p-8  gap-8 ">
+    <div className="flex flex-col p-4  gap-4">
       <Toast ref={toast} />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card
             key={index}
-            className="bg-white dark:bg-blackHover dark:text-white rounded text-black shadow-lg p-4 flex flex-col items-center justify-center"
-            style={{ fontFamily: "Poppins, sans-serif" }}
+            className="rounded-xl shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
+            style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="text-xl font-bold mb-2">{item.title}</div>
-              {item.icon && <div className="text-4xl mb-2">{item.icon}</div>}
+              <div className="text-xl font-semibold mb-4">{item.title}</div>
+              {item.icon && <div className="text-4xl mb-4">{item.icon}</div>}
               <div className="text-xl text-center">{item.desc}</div>
             </div>
           </Card>

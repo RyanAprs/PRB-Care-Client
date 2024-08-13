@@ -219,7 +219,7 @@ const DataPengambilanObat = () => {
   const handleModalDelete = (data) => {
     setVisibleDelete(true);
     setCurrentId(data.id);
-    setCurrentName(data.pasien.pengguna.namaLengkap);
+    setCurrentName(data.resi);
   };
 
   const handleDelete = async () => {
@@ -270,10 +270,14 @@ const DataPengambilanObat = () => {
     }
   };
   const columns = [
-    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+    { header: "Resi", field: "resi" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
-    { header: "Apotek", field: "obat.adminApotek.namaApotek" },
+    { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
+    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
+    { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
+    { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
+    { header: "Alamat Apotek", field: "obat.adminApotek.alamat" },
     { header: "Obat", field: "obat.namaObat" },
     { header: "Jumlah Obat", field: "jumlah" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
@@ -285,6 +289,24 @@ const DataPengambilanObat = () => {
     { key: "diambil", label: "Diambil" },
     { key: "batal", label: "Batal" },
   ];
+  const itemTemplateObat = (option) => {
+    return (
+      <div>
+        {option.namaObat} - {option.adminApotek.namaApotek}
+      </div>
+    );
+  };
+
+  const valueTemplateObat = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaObat} - {option.adminApotek.namaApotek}
+        </div>
+      );
+    }
+    return <span>Pilih Obat</span>;
+  };
 
   if (loading)
     return (
@@ -357,6 +379,8 @@ const DataPengambilanObat = () => {
           <Dropdown
             value={obat.find((o) => o.id === datas.idObat) || null}
             options={obat}
+            itemTemplate={itemTemplateObat}
+            valueTemplate={valueTemplateObat}
             filter
             optionLabel="namaObat"
             placeholder="Pilih Obat"
@@ -431,7 +455,7 @@ const DataPengambilanObat = () => {
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
-            Apakah anda yakin ingin menghapus data {currentName} dari
+            Apakah anda yakin ingin menghapus data resi {currentName} dari
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">
@@ -461,7 +485,7 @@ const DataPengambilanObat = () => {
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
-            Apakah Anda yakin ingin membatalkan pasien {currentName} dari
+            Apakah Anda yakin ingin membatalkan resi {currentName} dari
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">
