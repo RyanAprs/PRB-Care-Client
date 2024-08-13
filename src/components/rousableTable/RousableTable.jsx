@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { CircleCheckBig, Search, Trash2, Edit, CircleOff } from "lucide-react";
+import { Ban,CircleCheckBig, Search, Trash2, Edit, CircleOff } from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -82,13 +82,13 @@ export default function ReusableTable({
     } else if (role === "apoteker" && status === "diambil") {
       return (
         <>
-          <p>Tidak ada aksi yang tersedia</p>
+          <Ban size="30" className="mx-auto " />
         </>
       );
     } else if (role === "apoteker" && status === "batal") {
       return (
         <>
-          <p>Tidak ada aksi yang tersedia</p>
+          <Ban size="30"  className="mx-auto" />
         </>
       );
     } else if (
@@ -232,7 +232,7 @@ export default function ReusableTable({
       <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
           <div className="p-inputgroup md:w-1/2">
-            <span className="p-inputgroup-addon ">
+          <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays" >
               <Search size={16} />
             </span>
             <InputText
@@ -250,9 +250,7 @@ export default function ReusableTable({
             {path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
-                text
-                raised
-                className=" md:text-lg text-sm  rounded-xl dark:bg-black active:border-darkGreen dark:text-white text-black bg-lightGreen  hover:mainGreen transition-all"
+                className="rounded-xl"
                 label="Tambah"
               />
             )}
