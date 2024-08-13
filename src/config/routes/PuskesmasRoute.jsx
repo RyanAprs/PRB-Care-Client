@@ -44,10 +44,10 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 const PuskesmasRoute = () => {
   const darkMode = useDarkMode(false);
   return (
-    <Router>
+    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route
-          path="/puskesmas/login"
+          path="/login"
           element={
             <AlreadyLoggedInRoute role="nakes">
               <LoginPuskesmas />
@@ -56,51 +56,50 @@ const PuskesmasRoute = () => {
         />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
-      <div className={`${darkMode.value ? "dark" : ""}`}>
-        <Routes>
-          <Route
-            path="/puskesmas/beranda"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <DashboardPuskesmas />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/puskesmas/data-pasien"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <DataPasien />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/puskesmas/data-kontrol-balik"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <DataKontrolBalik />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/puskesmas/data-pengambilan-obat"
-            element={
-              <PrivateRoute role="nakes">
-                <NavbarAdmin>
-                  <DataPengambilanObat />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+      <Routes>
+        <Route
+          path="/beranda"
+          element={
+            <PrivateRoute role="nakes">
+              <NavbarAdmin>
+                <DashboardPuskesmas />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pasien"
+          element={
+            <PrivateRoute role="nakes">
+              <NavbarAdmin>
+                <DataPasien />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-kontrol-balik"
+          element={
+            <PrivateRoute role="nakes">
+              <NavbarAdmin>
+                <DataKontrolBalik />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pengambilan-obat"
+          element={
+            <PrivateRoute role="nakes">
+              <NavbarAdmin>
+                <DataPengambilanObat />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 };
 

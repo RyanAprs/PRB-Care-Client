@@ -9,7 +9,7 @@ import { ZodError } from "zod";
 import { Toast } from "primereact/toast";
 import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const [username, setUsername] = useState("");
@@ -19,6 +19,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const { dispatch } = useContext(AuthContext);
   const toast = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const loginUser = location.pathname === "/login";
 
@@ -43,6 +44,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           type: "LOGIN",
           payload: { token: response.data.token, role: role },
         });
+
+        navigate(navigateUser);
 
         localStorage.setItem("isLogin", "true");
       }

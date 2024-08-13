@@ -54,10 +54,10 @@ const AdminRoute = () => {
   }
 
   return (
-    <Router>
+    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route
-          path="/admin/login"
+          path="/login"
           element={
             <AlreadyLoggedInRoute role="admin">
               <LoginAdmin />
@@ -66,91 +66,90 @@ const AdminRoute = () => {
         />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
-      <div className={`${darkMode.value ? "dark" : ""}`}>
-        <Routes>
-          <Route
-            path="/admin/beranda"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DashboardAdmin />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-puskesmas"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataPuskesmas />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-apotek"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataApotek />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-pasien"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataPasien />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-pengguna"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataPengguna />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-obat"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataObat />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-kontrol-balik"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataKontrolBalik />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/admin/data-pengambilan-obat"
-            element={
-              <PrivateRoute role="admin">
-                <NavbarAdmin>
-                  <DataPengambilanObat />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+      <Routes>
+        <Route
+          path="/beranda"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DashboardAdmin />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-puskesmas"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataPuskesmas />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-apotek"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataApotek />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pasien"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataPasien />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pengguna"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataPengguna />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-obat"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataObat />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-kontrol-balik"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataKontrolBalik />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pengambilan-obat"
+          element={
+            <PrivateRoute role="admin">
+              <NavbarAdmin>
+                <DataPengambilanObat />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 };
 

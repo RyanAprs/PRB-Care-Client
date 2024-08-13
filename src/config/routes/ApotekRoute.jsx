@@ -49,10 +49,10 @@ const ApotekRoute = () => {
   }
 
   return (
-    <Router>
+    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route
-          path="/apotek/login"
+          path="/login"
           element={
             <AlreadyLoggedInRoute role="apoteker">
               <LoginApotek />
@@ -61,41 +61,40 @@ const ApotekRoute = () => {
         />
         <Route path="/page/not-found" element={<NotFound />} />
       </Routes>
-      <div className={`${darkMode.value ? "dark" : ""}`}>
-        <Routes>
-          <Route
-            path="/apotek/beranda"
-            element={
-              <PrivateRoute role="apoteker">
-                <NavbarAdmin>
-                  <DashboardApotek />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/apotek/data-obat"
-            element={
-              <PrivateRoute role="apoteker">
-                <NavbarAdmin>
-                  <DataObat />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/apotek/data-pengambilan-obat"
-            element={
-              <PrivateRoute role="apoteker">
-                <NavbarAdmin>
-                  <DataPengambilanObat />
-                </NavbarAdmin>
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+      <Routes>
+        <Route
+          path="/beranda"
+          element={
+            <PrivateRoute role="apoteker">
+              <NavbarAdmin>
+                <DashboardApotek />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-obat"
+          element={
+            <PrivateRoute role="apoteker">
+              <NavbarAdmin>
+                <DataObat />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-pengambilan-obat"
+          element={
+            <PrivateRoute role="apoteker">
+              <NavbarAdmin>
+                <DataPengambilanObat />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
 };
 

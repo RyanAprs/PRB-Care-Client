@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -29,10 +29,6 @@ const PrivateRoute = ({ children, role }) => {
     return <Navigate to="/page/not-found" />;
   }
 
-  if (!token && !role) {
-    return <Navigate to="/page/not-found" />;
-  }
-
   return children;
 };
 
@@ -50,8 +46,9 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
 const PenggunaRoute = () => {
   const darkMode = useDarkMode(false);
+
   return (
-    <Router>
+    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route path="/register" element={<RegisterPengguna />} />
         <Route
@@ -63,67 +60,63 @@ const PenggunaRoute = () => {
           }
         />
         <Route path="/page/not-found" element={<NotFound />} />
+        <Route
+          path="/"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <HomePengguna />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/kontrol"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <Kontrol />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/obat"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <Obat />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <Profile />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/medis"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <Medis />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/notifikasi"
+          element={
+            <PrivateRoute role="pengguna">
+              <NavbarPengguna />
+              <Notifikasi />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
-      <div className={`${darkMode.value ? "dark" : ""}`}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <NavbarPengguna />
-                <HomePengguna />
-              </>
-            }
-          />
-
-          <Route
-            path="/kontrol"
-            element={
-              <PrivateRoute role="pengguna">
-                <NavbarPengguna />
-                <Kontrol />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/obat"
-            element={
-              <PrivateRoute role="pengguna">
-                <NavbarPengguna />
-                <Obat />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute role="pengguna">
-                <NavbarPengguna />
-                <Profile />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/medis"
-            element={
-              <PrivateRoute role="pengguna">
-                <NavbarPengguna />
-                <Medis />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/notifikasi"
-            element={
-              <PrivateRoute role="pengguna">
-                <NavbarPengguna />
-                <Notifikasi />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </div>
-    </Router>
+    </div>
   );
 };
 

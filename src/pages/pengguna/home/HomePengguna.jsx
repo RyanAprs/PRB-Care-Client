@@ -59,7 +59,7 @@ const HomePengguna = () => {
     };
   }, []);
   return (
-    <div className="flex items-center justify-center h-screen dark:bg-blackHover dark:text-white">
+    <div className="flex items-center justify-center h-screen dark:bg-black dark:text-white">
       Home
     </div>
   );
