@@ -18,6 +18,7 @@ import Profile from "../../pages/pengguna/profile/Profile";
 import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
 import { ProgressSpinner } from "primereact/progressspinner";
+import Footer from "../../components/footer/Footer";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -75,6 +76,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <HomePengguna />
+              <Footer />
             </PrivateRoute>
           }
         />
