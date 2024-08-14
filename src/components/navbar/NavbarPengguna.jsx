@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
 import {
@@ -8,16 +8,74 @@ import {
   Stethoscope,
   Settings2,
   UserPlus,
+  User,
+  Lock,
+  LogOut,
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { AuthContext } from "../../config/context/AuthContext";
+import { AddressContext } from "../../config/context/AdressContext";
+import {
+  getCurrentPengguna,
+  updateCurrentPengguna,
+  updatePasswordPengguna,
+} from "../../services/PenggunaService";
+import { HandleUnauthorizedPengguna } from "../../utils/HandleUnauthorized";
+import {
+  handleApiError,
+  handleChangePasswordError,
+} from "../../utils/ApiErrorHandlers";
+import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { ZodError } from "zod";
+import {
+  penggunaChangePasswordSchema,
+  penggunaUpdateCurrentSchema,
+} from "../../validations/PenggunaSchema";
+import DynamicAddress from "../dynamicAddress/DynamicAddress";
 
 const NavbarPengguna = () => {
   const { dispatch } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
+  const [dataPassword, setDataPassword] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [dataPengguna, setDataPengguna] = useState({
+    namaLengkap: "",
+    telepon: "",
+    teleponKeluarga: "",
+    alamat: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [visibleDetailProfile, setVisibleDetailProfile] = useState(false);
+  const [visibleUpdateProfile, setVisibleUpdateProfile] = useState(false);
+  const [visibleChangePassword, setVisibleChangePassword] = useState(false);
+  const [prevAddress, setPrevAddress] = useState({});
+  const toast = useRef(null);
+  const { address } = useContext(AddressContext);
+
+  useEffect(() => {
+    const formattedAddress = [
+      address.detail,
+      address.desa,
+      address.kecamatan,
+      address.kabupaten,
+      address.provinsi,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    setDataPengguna((prev) => ({
+      ...prev,
+      alamat: formattedAddress,
+    }));
+  }, [address]);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,9 +94,117 @@ const NavbarPengguna = () => {
     navigate("/");
   };
 
+  const handleModalChangePassword = () => {
+    setVisibleChangePassword(true);
+    setVisible(false);
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      penggunaChangePasswordSchema.parse(dataPassword);
+
+      const response = await updatePasswordPengguna(dataPassword);
+
+      if (response.status === 200) {
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Password diperbarui",
+          life: 3000,
+        });
+        setVisibleChangePassword(false);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        handleChangePasswordError(error, toast);
+        console.log(error);
+      }
+    }
+  };
+
+  const handleDetailProfileModal = async () => {
+    setVisible(false);
+    setVisibleDetailProfile(true);
+    try {
+      const dataResponse = await getCurrentPengguna();
+      if (dataResponse) {
+        setDataPengguna({
+          namaLengkap: dataResponse.namaLengkap,
+          alamat: dataResponse.alamat,
+          telepon: dataResponse.telepon,
+          teleponKeluarga: dataResponse.teleponKeluarga,
+        });
+        setVisible(false);
+      }
+    } catch (error) {
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+      handleApiError(error, toast);
+    }
+  };
+
+  const handleUpdateProfileModal = async () => {
+    setVisibleUpdateProfile(true);
+    try {
+      const dataResponse = await getCurrentPengguna();
+      setPrevAddress(dataResponse.alamat);
+      if (dataResponse) {
+        setDataPengguna({
+          namaLengkap: dataResponse.namaLengkap,
+          alamat: dataResponse.alamat,
+          telepon: dataResponse.telepon,
+          teleponKeluarga: dataResponse.teleponKeluarga,
+        });
+        setVisibleDetailProfile(false);
+      }
+    } catch (error) {
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+      handleApiError(error, toast);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      const updatedDatas = {
+        ...dataPengguna,
+        alamat: dataPengguna.alamat || prevAddress,
+      };
+      penggunaUpdateCurrentSchema.parse(updatedDatas);
+
+      const response = await updateCurrentPengguna(updatedDatas);
+      if (response.status === 200) {
+        toast.current.show({
+          severity: "success",
+          summary: "Berhasil",
+          detail: "Data Anda diperbarui",
+          life: 3000,
+        });
+
+        setVisibleUpdateProfile(false);
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+  };
+
   return (
     <>
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-darkGreen text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
+      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-darkGreen dark:text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
+        <Toast ref={toast} />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} className="w-14 h-12 md:h-14 " alt="prb-care logo " />
           <div className="font-bold">PRB CARE</div>
@@ -85,13 +251,11 @@ const NavbarPengguna = () => {
           <div className="relative flex gap-2 md:gap-2 items-center justify-center">
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
-              <Button onClick={handleModalMenu} 
-            
-              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-              label={<Settings2 className="text-white"/>}  
-                 > 
-                
-              </Button>
+              <Button
+                onClick={handleModalMenu}
+                className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+                label={<Settings2 className="text-white" />}
+              ></Button>
             </div>
           </div>
         </div>
@@ -145,67 +309,315 @@ const NavbarPengguna = () => {
             <div className="text-sm">Notifikasi</div>
           </Link>
         </div>
-
-        {/* Modal Menu */}
-        <Dialog
-          header="Menu"
-          visible={visible}
-          className="fixed top-20 md:right-8 right-1 w-1/2 md:w-64"
-          modal={false}
-          onHide={() => {
-            if (!visible) return;
-            setVisible(false);
-          }}
-        >
-          <div className="flex flex-col text-lg ">
-            <Link
-              to="/profile"
-              className="mb-4 w-full flex gap-4"
-              onClick={() => setVisible(false)}
-            >
-              <h1>Profile</h1>
-            </Link>
-            <Link
-              to=""
-              className="mb-4 w-full flex gap-4"
-              onClick={handleModalLogout}
-            >
-              <h1>Keluar</h1>
-            </Link>
-          </div>
-        </Dialog>
-
-        {/* Modal Logout */}
-        <Dialog
-          header="Logout"
-          visible={visibleLogout}
-          className="md:w-1/2 w-full "
-          onHide={() => {
-            if (!visibleLogout) return;
-            setVisibleLogout(false);
-            setVisible(false);
-          }}
-        >
-          <div className="flex flex-col gap-8">
-            <div className="text-xl">
-              Apakah anda yakin ingin keluar dari sistem?
-            </div>
-            <div className="flex gap-4 items-end justify-end">
-              <Button
-                label="Batal"
-                onClick={() => setVisibleLogout(false) || setVisible(false)}
-                className="p-button-text"
-              />
-              <Button
-                label="Keluar"
-                className="rounded-xl"
-                onClick={handleLogout}
-                autoFocus
-              />
-            </div>
-          </div>
-        </Dialog>
       </div>
+
+      {/* Modal Menu */}
+      <Dialog
+        header="Menu"
+        visible={visible}
+        className="fixed top-20 md:right-8 right-1 w-1/2 md:w-64"
+        modal={false}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
+      >
+        <div className="flex flex-col text-lg ">
+          <Link
+            to=""
+            className="mb-4 w-full flex gap-4"
+            onClick={handleDetailProfileModal}
+          >
+            <User />
+            <h1>Profile</h1>
+          </Link>
+          <Link
+            to=""
+            className="mb-4 w-full flex gap-4"
+            onClick={handleModalChangePassword}
+          >
+            <Lock />
+            <h1>Ubah Password</h1>
+          </Link>
+          <Link
+            to=""
+            className="mb-4 w-full flex gap-4"
+            onClick={handleModalLogout}
+          >
+            <LogOut />
+            <h1>Keluar</h1>
+          </Link>
+        </div>
+      </Dialog>
+
+      {/* Modal Logout */}
+      <Dialog
+        header="Logout"
+        visible={visibleLogout}
+        className="md:w-1/2 w-full "
+        onHide={() => {
+          if (!visibleLogout) return;
+          setVisibleLogout(false);
+          setVisible(false);
+        }}
+      >
+        <div className="flex flex-col gap-8">
+          <div className="text-xl">
+            Apakah anda yakin ingin keluar dari sistem?
+          </div>
+          <div className="flex gap-4 items-end justify-end">
+            <Button
+              label="Batal"
+              onClick={() => setVisibleLogout(false) || setVisible(false)}
+              className="p-button-text"
+            />
+            <Button
+              label="Keluar"
+              className="rounded-xl"
+              onClick={handleLogout}
+              autoFocus
+            />
+          </div>
+        </div>
+      </Dialog>
+
+      {/* Modal Detail Profile */}
+      <Dialog
+        header={"Detail Profile Pengguna"}
+        visible={visibleDetailProfile}
+        maximizable
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visibleDetailProfile) return;
+          setVisibleDetailProfile(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama Pengguna
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.namaLengkap}
+          />
+          {errors.namaLengkap && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.namaLengkap}
+            </small>
+          )}
+
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.telepon}
+          />
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Telepon Keluarga:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.teleponKeluarga}
+          />
+          {errors.teleponKeluarga && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.teleponKeluarga}
+            </small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+          <InputTextarea
+            variant="filled"
+            disabled
+            autoResize
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.alamat}
+          />
+          <Button
+            label="Edit Profile"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black  dark:hover:bg-lightGreen  hover:bg-mainGreen  rounded-xl  transition-all"
+            onClick={handleUpdateProfileModal}
+          />
+        </div>
+      </Dialog>
+
+      {/* Modal Update Profile */}
+      <Dialog
+        header="Edit Profile "
+        visible={visibleUpdateProfile}
+        maximizable
+        className="md:w-1/2 w-full"
+        onHide={() => {
+          if (!visibleUpdateProfile) return;
+          setVisibleUpdateProfile(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama Lengkap:
+          </label>
+          <InputText
+            type="text"
+            placeholder="Nama Lengkap"
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.namaLengkap}
+            onChange={(e) =>
+              setDataPengguna((prev) => ({
+                ...prev,
+                namaLengkap: e.target.value,
+              }))
+            }
+          />
+          {errors.namaLengkap && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.namaLengkap}
+            </small>
+          )}
+
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
+          <InputText
+            type="text"
+            placeholder="Telepon"
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.telepon}
+            onChange={(e) =>
+              setDataPengguna((prev) => ({
+                ...prev,
+                telepon: e.target.value,
+              }))
+            }
+          />
+          {errors.telepon && (
+            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Telepon Keluarga:
+          </label>
+          <InputText
+            type="text"
+            placeholder="Telepon Keluarga"
+            className="p-input text-lg p-3 rounded"
+            value={dataPengguna.teleponKeluarga}
+          />
+          {errors.teleponKeluarga && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.teleponKeluarga}
+            </small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+          <DynamicAddress prevAddress={prevAddress} />
+          <span className="text-sm -mt-4">
+            *Kosongkan alamat jika tidak ingin diubah
+          </span>
+          {errors.alamat && (
+            <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
+          <Button
+            label="Edit"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen   rounded-xl transition-all"
+            onClick={handleUpdateProfile}
+          />
+        </div>
+      </Dialog>
+
+      {/* Modal ubah password */}
+      <Dialog
+        header={"Ubah Password"}
+        visible={visibleChangePassword}
+        maximizable
+        className="md:w-1/2 w-full "
+        onHide={() => {
+          if (!visibleChangePassword) return;
+          setVisibleChangePassword(false);
+        }}
+      >
+        <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Password lama:
+          </label>
+
+          <InputText
+            type="password"
+            placeholder="Password Lama"
+            className="p-input text-lg p-3  rounded"
+            value={dataPassword.currentPassword}
+            onChange={(e) =>
+              setDataPassword((prev) => ({
+                ...prev,
+                currentPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.currentPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.currentPassword}
+            </small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Password baru:
+          </label>
+          <InputText
+            type="password"
+            placeholder="Password Baru"
+            className="p-input text-lg p-3  rounded"
+            value={dataPassword.newPassword}
+            onChange={(e) =>
+              setDataPassword((prev) => ({
+                ...prev,
+                newPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.newPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.newPassword}
+            </small>
+          )}
+          <label htmlFor="" className="-mb-3">
+            Konfirmasi password:
+          </label>
+          <InputText
+            type="password"
+            placeholder="Konfirmasi Password Baru"
+            className="p-input text-lg p-3  rounded"
+            value={dataPassword.confirmPassword}
+            onChange={(e) =>
+              setDataPassword((prev) => ({
+                ...prev,
+                confirmPassword: e.target.value,
+              }))
+            }
+          />
+          {errors.confirmPassword && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.confirmPassword}
+            </small>
+          )}
+          <Button
+            label={"Edit"}
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
+            onClick={handleChangePassword}
+          />
+        </div>
+      </Dialog>
     </>
   );
 };

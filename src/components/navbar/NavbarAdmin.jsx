@@ -21,7 +21,7 @@ import { AuthContext } from "../../config/context/AuthContext";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from 'primereact/inputtextarea'; 
+import { InputTextarea } from "primereact/inputtextarea";
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
 import { ZodError } from "zod";
@@ -110,7 +110,6 @@ const NavbarAdmin = ({ children }) => {
     }
   }, [address, isApotekUpdate]);
 
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -140,11 +139,14 @@ const NavbarAdmin = ({ children }) => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    const themeLink = document.getElementById('theme-link');
-      if (themeLink) {
-          const themeUrl = new URL('primereact/resources/themes/saga-green/theme.css', import.meta.url).href
-          themeLink.href = themeUrl;
-      }
+    const themeLink = document.getElementById("theme-link");
+    if (themeLink) {
+      const themeUrl = new URL(
+        "primereact/resources/themes/saga-green/theme.css",
+        import.meta.url
+      ).href;
+      themeLink.href = themeUrl;
+    }
     if (role === "admin") {
       navigate("/admin/login");
     } else if (role === "nakes") {
@@ -350,11 +352,6 @@ const NavbarAdmin = ({ children }) => {
     </div>
   );
 
-  const handleModalChangePassword = () => {
-    setVisibleChangePassword(true);
-    setVisible(false);
-  };
-
   const handleDetailProfileModal = async () => {
     setVisibleDetailProfile(true);
     if (role === "nakes") {
@@ -494,6 +491,11 @@ const NavbarAdmin = ({ children }) => {
     }
   };
 
+  const handleModalChangePassword = () => {
+    setVisibleChangePassword(true);
+    setVisible(false);
+  };
+
   const handleChangePassword = async () => {
     try {
       superAdminChangePasswordSchema.parse(dataPassword);
@@ -608,11 +610,11 @@ const NavbarAdmin = ({ children }) => {
             <div>
               <ThemeSwitcher />
             </div>
-            <Button className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-              label={<Settings2 className="text-white"/>}  
+            <Button
+              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+              label={<Settings2 className="text-white" />}
               onClick={() => setVisible(true)}
-              >
-            </Button>
+            ></Button>
           </div>
         </div>
 
@@ -712,19 +714,13 @@ const NavbarAdmin = ({ children }) => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
-
-
-
-
-
-
-        <label htmlFor="" className="-mb-3">
+          <label htmlFor="" className="-mb-3">
             {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}:
           </label>
           <InputText
             type="text"
             variant="filled"
-            disabled 
+            disabled
             className="p-input text-lg p-3 rounded"
             value={
               isApotekUpdate
@@ -742,7 +738,7 @@ const NavbarAdmin = ({ children }) => {
           <InputText
             type="text"
             variant="filled"
-            disabled 
+            disabled
             className="p-input text-lg p-3 rounded"
             value={isApotekUpdate ? dataApotek.telepon : dataPuskesmas.telepon}
           />
@@ -752,13 +748,12 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <InputTextarea 
+          <InputTextarea
             variant="filled"
-            disabled 
-            autoResize 
+            disabled
+            autoResize
             className="p-input text-lg p-3 rounded"
             value={isApotekUpdate ? dataApotek.alamat : dataPuskesmas.alamat}
-      
           />
           <Button
             label="Edit Profile"
@@ -845,7 +840,7 @@ const NavbarAdmin = ({ children }) => {
           )}
           <Button
             label="Edit"
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl transition-all"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen   rounded-xl transition-all"
             onClick={handleUpdateProfile}
           />
         </div>

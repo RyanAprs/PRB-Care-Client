@@ -14,7 +14,6 @@ import HomePengguna from "../../pages/pengguna/home/HomePengguna";
 import NavbarPengguna from "../../components/navbar/NavbarPengguna";
 import Kontrol from "../../pages/pengguna/kontrol/Kontrol";
 import Obat from "../../pages/pengguna/obat/Obat";
-import Profile from "../../pages/pengguna/profile/Profile";
 import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -96,16 +95,6 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Obat />
-              <Footer />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute role="pengguna">
-              <NavbarPengguna />
-              <Profile />
               <Footer />
             </PrivateRoute>
           }
