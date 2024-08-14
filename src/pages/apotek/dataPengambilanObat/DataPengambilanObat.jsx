@@ -56,7 +56,7 @@ const DataPengambilanObat = () => {
 
   const handleModalDone = (data) => {
     setCurrentId(data.id);
-    setCurrentName(data.pasien.pengguna.namaLengkap);
+    setCurrentName(data.resi);
     setVisibleDone(true);
   };
 
@@ -84,8 +84,12 @@ const DataPengambilanObat = () => {
   const columns = [
     { header: "Resi", field: "resi" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
-    { header: "Apotek", field: "obat.adminApotek.namaApotek" },
+    { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
+    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
+    { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Telepon Puskesmas", field: "pasien.adminPuskesmas.telepon" },
+    { header: "Alamat Puskesmas", field: "pasien.adminPuskesmas.alamat" },
     { header: "Obat", field: "obat.namaObat" },
     { header: "Jumlah Obat", field: "jumlah" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
@@ -131,7 +135,7 @@ const DataPengambilanObat = () => {
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
-            Apakah Anda yakin ingin menyelesaikan pasien {currentName} dari
+            Apakah Anda yakin ingin menyelesaikan resi {currentName} dari
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">

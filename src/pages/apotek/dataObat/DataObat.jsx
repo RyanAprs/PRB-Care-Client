@@ -188,7 +188,6 @@ const DataObat = () => {
   const columns = [
     { header: "Nama Obat", field: "namaObat" },
     { header: "Jumlah", field: "jumlah" },
-    { header: "Nama Apotek", field: "adminApotek.namaApotek" },
   ];
 
   if (loading)

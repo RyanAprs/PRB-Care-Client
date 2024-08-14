@@ -1,10 +1,5 @@
-import React, { useContext } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { useContext } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LoginAdmin from "../../pages/admin/login/LoginAdmin";
 import NotFound from "../../pages/NotFound";
 import DashboardAdmin from "../../pages/admin/beranda/BerandaAdmin";
@@ -18,6 +13,7 @@ import DataKontrolBalik from "../../pages/admin/dataKontrolBalik/DataKontrolBali
 import DataPengambilanObat from "../../pages/admin/dataPengambilanObat/DataPengambilanObat";
 import { AuthContext } from "../context/AuthContext";
 import DataPengguna from "../../pages/admin/dataPengguna/DataPengguna";
+import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
 
 const PrivateRoute = ({ children, role }) => {
@@ -48,6 +44,14 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
 const AdminRoute = () => {
   const darkMode = useDarkMode(false);
+  const { isLoading } = useContext(AuthContext);
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <ProgressSpinner />
+      </div>
+    );
 
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>

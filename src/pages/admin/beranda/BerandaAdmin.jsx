@@ -38,43 +38,43 @@ const DashboardAdmin = () => {
 
   const list = [
     {
-      icon: <Hospital size={54} />,
+      icon: <Hospital size={54} strokeWidth={1.5} />,
       title: "Puskesmas",
       desc: "Kelola data puskesmas",
       route: "/admin/data-puskesmas",
     },
     {
-      icon: <HousePlus size={54} />,
+      icon: <HousePlus size={54} strokeWidth={1.5} />,
       title: "Apotek",
       desc: "Kelola data apotek",
       route: "/admin/data-apotek",
     },
     {
-      icon: <UserPlus size={54} />,
+      icon: <UserPlus size={54} strokeWidth={1.5} />,
       title: "Pasien",
       desc: "Kelola data pasien",
       route: "/admin/data-pasien",
     },
     {
-      icon: <User2Icon size={54} />,
+      icon: <User2Icon size={54} strokeWidth={1.5} />,
       title: "User",
       desc: "Kelola data user",
       route: "/admin/data-user",
     },
     {
-      icon: <Pill size={54} />,
+      icon: <Pill size={54} strokeWidth={1.5} />,
       title: "Obat",
       desc: "Kelola data obat",
       route: "/admin/data-obat",
     },
     {
-      icon: <Stethoscope size={54} />,
+      icon: <Stethoscope size={54} strokeWidth={1.5} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
       route: "/admin/data-kontrol-balik",
     },
     {
-      icon: <ShoppingCart size={54} />,
+      icon: <ShoppingCart size={54} strokeWidth={1.5} />,
       title: "Pengambilan Obat",
       desc: "Kelola data pengambilan obat",
       route: "/admin/data-pengambilan-obat",
@@ -97,8 +97,8 @@ const DashboardAdmin = () => {
             onClick={() => handleCardClick(item.route)}
           >
             <div className="flex flex-col items-center justify-center h-full">
-              <div className="text-xl font-bold mb-2">{item.title}</div>
-              {item.icon && <div className="text-4xl mb-2">{item.icon}</div>}
+              <div className="text-xl font-semibold mb-4">{item.title}</div>
+              {item.icon && <div className="text-4xl mb-4">{item.icon}</div>}
               <div className="text-xl text-center">{item.desc}</div>
             </div>
           </Card>

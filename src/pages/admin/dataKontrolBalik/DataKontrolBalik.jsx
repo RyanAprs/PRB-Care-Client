@@ -291,8 +291,7 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
-    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
-    { header: "Nama", field: "pasien.pengguna.namaLengkap" },
+    { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },
