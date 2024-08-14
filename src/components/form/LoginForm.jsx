@@ -103,7 +103,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
 
           <div className="flex flex-col w-full gap-4">
             <Button
-              className="text-white bg-mainGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="text-white bg-lightGreen hover:bg-mainGreen p-4 w-full flex justify-center rounded-xl transition-all"
               type="submit"
               disabled={isLoading}
             >

@@ -409,7 +409,7 @@ const DataKontrolBalik = () => {
           )}
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
-            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
           />
         </div>

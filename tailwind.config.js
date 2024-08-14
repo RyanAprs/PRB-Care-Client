@@ -60,7 +60,11 @@ module.exports = {
         // CUSTOM COLOR
         darkGreen: "#276f4c",
         mainGreen: "#40916C",
-        lightGreen: "#52b788",
+        mediumGreen: "#48a47a",
+        lightGreen: "#56b588",
+        lightGreen2: "#51b788",
+        fontDarkGreen: "#013920",
+        extraLightGreen: "#6adca5",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
         blackHover: "#1a1a1a ",

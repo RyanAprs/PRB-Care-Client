@@ -6,7 +6,7 @@ import {
   HomeIcon,
   ShoppingCart,
   Stethoscope,
-  UserIcon,
+  Settings2,
   UserPlus,
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
@@ -38,14 +38,14 @@ const NavbarPengguna = () => {
 
   return (
     <>
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-blackHover  dark:text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
+      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-darkGreen text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} className="w-14 h-12 md:h-14 " alt="prb-care logo " />
           <div className="font-bold">PRB CARE</div>
         </div>
 
-        <div className="flex gap-16 items-center text-xl font-semibold">
-          <div className="md:flex gap-16 items-center text-xl hidden">
+        <div className="flex gap-10 items-center text-xl">
+          <div className="md:flex gap-10 items-center text-xl hidden">
             <Link
               to={"/"}
               className=" transition-all hover:scale-110 flex flex-col items-center justify-center"
@@ -82,14 +82,16 @@ const NavbarPengguna = () => {
               <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
             </Link>
           </div>
-          <div className="relative flex gap-2 md:gap-8 items-center justify-center">
+          <div className="relative flex gap-2 md:gap-2 items-center justify-center">
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
-              <button onClick={handleModalMenu} className="cursor-pointer ">
-                <div className="flex items-center justify-center gap-4 md:bg-white p-3  dark:bg-darkGreen rounded-full">
-                  <UserIcon />
-                </div>
-              </button>
+              <Button onClick={handleModalMenu} 
+            
+              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+              label={<Settings2 className="text-white"/>}  
+                 > 
+                
+              </Button>
             </div>
           </div>
         </div>

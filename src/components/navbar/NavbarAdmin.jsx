@@ -12,7 +12,9 @@ import {
   Stethoscope,
   User,
   UserRoundPlus,
+  Settings2,
 } from "lucide-react";
+
 import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
@@ -68,7 +70,6 @@ const NavbarAdmin = ({ children }) => {
   });
   const [errors, setErrors] = useState({});
   const role = Cookies.get("role");
-  const [name, setName] = useState("");
   const { dispatch } = useContext(AuthContext);
   const [isApotekUpdate, setIsApotekUpdate] = useState(false);
   const [dataApotek, setDataApotek] = useState({
@@ -109,33 +110,6 @@ const NavbarAdmin = ({ children }) => {
     }
   }, [address, isApotekUpdate]);
 
-  if (role === "nakes") {
-    useEffect(() => {
-      try {
-        const fetchDataAdminPuskesmas = async () => {
-          const response = await getCurrentAdminPuskesmas();
-          setName(response.namaPuskesmas);
-        };
-
-        fetchDataAdminPuskesmas();
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  } else if (role === "apoteker") {
-    useEffect(() => {
-      try {
-        const fetchDataAdminApotek = async () => {
-          const response = await getCurrentAdminApotek();
-          setName(response.namaApotek);
-        };
-
-        fetchDataAdminApotek();
-      } catch (error) {
-        console.log(error);
-      }
-    });
-  }
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -634,19 +608,11 @@ const NavbarAdmin = ({ children }) => {
             <div>
               <ThemeSwitcher />
             </div>
-            <div className="flex gap-4 justify-center  items-center">
-              {role === "admin" ? (
-                <p className="md:block hidden text-xl">Super Admin</p>
-              ) : (
-                <p className="md:block hidden text-xl">{name}</p>
-              )}
-              <div
-                onClick={() => setVisible(true)}
-                className="flex items-center justify-center bg-gray-200 h-10 w-10 rounded-full cursor-pointer"
+            <Button className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+              label={<Settings2 className="text-white"/>}  
+              onClick={() => setVisible(true)}
               >
-                <User className="text-black" />
-              </div>
-            </div>
+            </Button>
           </div>
         </div>
 
@@ -796,7 +762,7 @@ const NavbarAdmin = ({ children }) => {
           />
           <Button
             label="Edit Profile"
-            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
             onClick={handleUpdateProfileModal}
           />
         </div>
@@ -879,7 +845,7 @@ const NavbarAdmin = ({ children }) => {
           )}
           <Button
             label="Edit"
-            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl transition-all"
             onClick={handleUpdateProfile}
           />
         </div>
@@ -960,7 +926,7 @@ const NavbarAdmin = ({ children }) => {
           )}
           <Button
             label={"Edit"}
-            className="p-4 bg-lightGreen text-white rounded-xl hover:mainGreen transition-all"
+            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
             onClick={handleChangePassword}
           />
         </div>

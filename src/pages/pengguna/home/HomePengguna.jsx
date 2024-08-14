@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getToken, onMessage } from "firebase/messaging";
 import { messaging } from "../../../firebase";
-import img from "../../../assets/home-img.png";
+import img from "../../../assets/prbcare.svg";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -74,7 +74,7 @@ const HomePengguna = () => {
           </h3>
         </div>
       </div>
-      <div className="flex  md:w-1/2 justify-center items-center">
+      <div className="flex  md:w-1/3 justify-center items-center">
         <img src={img} alt="img" />
       </div>
     </div>

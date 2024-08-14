@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { Ban,CircleCheckBig, Search, Trash2, Edit, CircleOff } from "lucide-react";
+import { FilePlus2,Ban,CircleCheckBig, Search, Trash2, Edit, CircleOff } from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -63,7 +63,7 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
@@ -71,7 +71,7 @@ export default function ReusableTable({
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
@@ -100,7 +100,7 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
@@ -113,7 +113,7 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
@@ -121,15 +121,15 @@ export default function ReusableTable({
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            severity="success"
+            
           >
             <CircleCheckBig />
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="danger"
             onClick={() => onCancelled(rowData)}
           >
@@ -144,7 +144,7 @@ export default function ReusableTable({
             <div className="flex justify-center gap-2">
               <Button
                 size="sm"
-                className="  md:text-lg text-sm rounded-xl"
+                className="p-2  md:text-lg text-sm rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
@@ -152,15 +152,15 @@ export default function ReusableTable({
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm rounded-xl"
+                className="p-2  md:text-lg text-sm rounded-xl"
                 onClick={() => onDone(rowData)}
-                severity="success"
+                
               >
                 <CircleCheckBig />
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm rounded-xl"
+                className="p-2  md:text-lg text-sm rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
@@ -172,7 +172,7 @@ export default function ReusableTable({
             <div className="flex justify-center gap-2">
               <Button
                 size="sm"
-                className="  md:text-lg text-sm rounded-xl"
+                className="p-2  md:text-lg text-sm rounded-xl"
                 severity="warning"
                 onClick={() => onEdit(rowData)}
               >
@@ -180,7 +180,7 @@ export default function ReusableTable({
               </Button>
               <Button
                 size="sm"
-                className="  md:text-lg text-sm rounded-xl"
+                className="p-2  md:text-lg text-sm rounded-xl"
                 severity="danger"
                 onClick={() => onCancelled(rowData)}
               >
@@ -195,9 +195,9 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className=" md:text-lg text-sm rounded-xl"
+            className="p-2 md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            severity="success"
+            
           >
             <CircleCheckBig />
           </Button>
@@ -208,7 +208,7 @@ export default function ReusableTable({
         <div className="flex justify-center gap-2">
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             severity="warning"
             onClick={() => onEdit(rowData)}
           >
@@ -216,9 +216,9 @@ export default function ReusableTable({
           </Button>
           <Button
             size="sm"
-            className="  md:text-lg text-sm rounded-xl"
+            className="p-2  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            severity="success"
+            
           >
             <CircleCheckBig />
           </Button>
@@ -250,8 +250,8 @@ export default function ReusableTable({
             {path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
-                className="rounded-xl"
-                label="Tambah"
+                className="p-2 rounded-xl bg-lightGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen "
+                label={<FilePlus2 />}
               />
             )}
           </div>
@@ -269,6 +269,12 @@ export default function ReusableTable({
             globalFilter={globalFilter}
             editMode="row"
           >
+            <Column
+              header="Aksi"
+              headerStyle={{ width: "5%", minWidth: "2rem" }}
+              body={actionBodyTemplate}
+              bodyStyle={{ textAlign: "center" }}
+            />
             {columns.map((col, index) => (
               <Column
                 key={index}
@@ -278,12 +284,7 @@ export default function ReusableTable({
                 className="p-4 "
               />
             ))}
-            <Column
-              header="Aksi"
-              headerStyle={{ width: "10%", minWidth: "8rem" }}
-              body={actionBodyTemplate}
-              bodyStyle={{ textAlign: "center" }}
-            />
+            
           </DataTable>
         ) : (
           <div className="text-center text-gray-500 dark:text-gray-400">
