@@ -1,5 +1,3 @@
-const { nextui } = require("@nextui-org/react");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -60,11 +58,12 @@ module.exports = {
         // CUSTOM COLOR
         darkGreen: "#276f4c",
         mainGreen: "#40916C",
+        mainDarkGreen: "#35795A",
         mediumGreen: "#48a47a",
         lightGreen: "#56b588",
         lightGreen2: "#51b788",
         fontDarkGreen: "#013920",
-        extraLightGreen: "#6adca5",
+        extraLightGreen: "#56A17E",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
         blackHover: "#1a1a1a ",
@@ -99,5 +98,5 @@ module.exports = {
     },
   },
   darkMode: "class",
-  plugins: [require("tailwindcss-animate"), nextui()],
+  plugins: [require("tailwindcss-animate")],
 };

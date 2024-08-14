@@ -250,7 +250,7 @@ export default function ReusableTable({
             {path !== "pengambilanObatApoteker" && (
               <Button
                 onClick={onCreate}
-                className="p-2 rounded-xl bg-lightGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen "
+                className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
                 label={<FilePlus2 />}
               />
             )}

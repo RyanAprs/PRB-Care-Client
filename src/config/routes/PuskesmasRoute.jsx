@@ -65,9 +65,6 @@ const PuskesmasRoute = () => {
             </AlreadyLoggedInRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
-      </Routes>
-      <Routes>
         <Route
           path="/beranda"
           element={
@@ -112,6 +109,7 @@ const PuskesmasRoute = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/page/not-found" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

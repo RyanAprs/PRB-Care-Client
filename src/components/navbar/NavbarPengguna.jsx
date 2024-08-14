@@ -86,11 +86,21 @@ const NavbarPengguna = () => {
 
   const handleModalLogout = () => {
     setVisibleLogout(true);
+
     setVisible(false);
   };
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
+    const themeLink = document.getElementById("theme-link");
+    if (themeLink) {
+      const themeUrl = new URL(
+        "primereact/resources/themes/saga-green/theme.css",
+        import.meta.url
+      ).href;
+      themeLink.href = themeUrl;
+    }
+    document.body.classList.remove('dark')
     navigate("/");
   };
 
@@ -203,10 +213,10 @@ const NavbarPengguna = () => {
 
   return (
     <>
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-darkGreen dark:text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
+      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-darkGreen text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
         <Toast ref={toast} />
         <div className="flex items-center justify-center font-poppins text-2xl">
-          <img src={logo} className="w-14 h-12 md:h-14 " alt="prb-care logo " />
+          <img src={logo} width={60} height={60} alt="prb-care logo " />
           <div className="font-bold">PRB CARE</div>
         </div>
 
@@ -315,7 +325,7 @@ const NavbarPengguna = () => {
       <Dialog
         header="Menu"
         visible={visible}
-        className="fixed top-20 md:right-8 right-1 w-1/2 md:w-64"
+        className="fixed top-24 md:right-8 right-1 w-1/2 md:w-64"
         modal={false}
         onHide={() => {
           if (!visible) return;
@@ -369,11 +379,11 @@ const NavbarPengguna = () => {
             <Button
               label="Batal"
               onClick={() => setVisibleLogout(false) || setVisible(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Keluar"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleLogout}
               autoFocus
             />
@@ -449,7 +459,7 @@ const NavbarPengguna = () => {
           />
           <Button
             label="Edit Profile"
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black  dark:hover:bg-lightGreen  hover:bg-mainGreen  rounded-xl  transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfileModal}
           />
         </div>
@@ -532,7 +542,7 @@ const NavbarPengguna = () => {
           )}
           <Button
             label="Edit"
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen   rounded-xl transition-all"
+           className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
           />
         </div>

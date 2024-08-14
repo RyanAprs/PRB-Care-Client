@@ -64,9 +64,6 @@ const ApotekRoute = () => {
             </AlreadyLoggedInRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
-      </Routes>
-      <Routes>
         <Route
           path="/beranda"
           element={
@@ -100,7 +97,8 @@ const ApotekRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/page/not-found" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/page/not-found" />} />
       </Routes>
     </div>
   );

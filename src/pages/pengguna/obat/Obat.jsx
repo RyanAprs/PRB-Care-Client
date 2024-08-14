@@ -5,7 +5,7 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
-import { Ban, CircleCheck, History } from "lucide-react";
+import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
 
 const Obat = () => {
@@ -41,49 +41,42 @@ const Obat = () => {
     );
 
   return (
-    <div className="md:py-2 py-8  dark:bg-black">
+    <div className="md:py-2  dark:bg-fontDarkGreen">
       <div className="md:p-8 p-4  w-full min-h-screen">
-        <div>
-          <h1 className="text-2xl dark:text-white">Pengambilan Obat Anda:</h1>
-        </div>
         <div className="row p-8 grid grid-cols-1 gap-6">
           {data.length > 0 ? (
             data.map((item, index) => (
               <Card
                 key={index}
-                className={`${
-                  item.status === "diambil" ? "bg-green-300" : ""
-                } ${item.status === "batal" ? "bg-red-300" : ""} ${
-                  item.status === "menunggu" ? "bg-yellow-100" : ""
-                } shadow-lg rounded-xl`}
+                className={`bg-mainGreen shadow-lg rounded-xl`}
               >
-                <div className="flex w-full text-xl p-8 justify-between items-center dark:text-black">
+                 <div className="flex w-full text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-start justify-center">
-                    <h1>{item.pasien.pengguna.namaLengkap}</h1>
-                    <h1>
-                      Tempat Pengambilan: {item.obat.adminApotek.namaApotek}
+                  <div className="flex">
+                    <AlarmClock/> <h1 className="ml-2 font-poppins font-bold" >{item.tanggalPengambilan}</h1>
+                    </div>
+                    <h1 className="font-poppins">
+                        {item.obat.adminApotek.namaApotek} - {item.obat.adminApotek.telepon} - {item.obat.adminApotek.alamat}
                     </h1>
-                    <h1>Obat: {item.obat.namaObat}</h1>
-                    <h1>Jumlah: {item.jumlah}</h1>
-                    <h1>Tanggal Pengambilan: {item.tanggalPengambilan}</h1>
+                    <h1  className="font-poppins">{item.obat.namaObat} - {item.jumlah}×</h1>
                   </div>
                   <div className="flex items-center justify-center ">
                     {item.status === "menunggu" && (
-                      <div className="flex flex-col gap-2 items-center justify-center ">
+                      <div className="font-poppins flex flex-col gap-2 items-center justify-center ">
                         <History />
                         <p>Menunggu</p>
                       </div>
                     )}
                     {item.status === "diambil" && (
-                      <div className="flex flex-col gap-2 items-center justify-center">
+                      <div className="font-poppins flex flex-col gap-2 items-center justify-center">
                         <CircleCheck />
-                        <p>Berhasil</p>
+                        <p>Selesai</p>
                       </div>
                     )}
                     {item.status === "batal" && (
-                      <div className="flex flex-col gap-2 items-center justify-center">
+                      <div className="font-poppins flex flex-col gap-2 items-center justify-center">
                         <Ban />
-                        <p>Gagal</p>
+                        <p>Batal</p>
                       </div>
                     )}
                   </div>

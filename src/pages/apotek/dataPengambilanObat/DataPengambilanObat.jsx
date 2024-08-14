@@ -110,7 +110,7 @@ const DataPengambilanObat = () => {
     );
 
   return (
-    <div className="flex flex-col gap-4 p-4 z-10 ">
+    <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
       <Toast ref={toast} />
 
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
@@ -142,11 +142,11 @@ const DataPengambilanObat = () => {
             <Button
               label="Batal"
               onClick={() => setVisibleDone(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Selesai"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDone}
               autoFocus
             />

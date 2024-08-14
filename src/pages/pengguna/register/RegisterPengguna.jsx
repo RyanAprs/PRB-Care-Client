@@ -208,7 +208,7 @@ const RegisterPengguna = () => {
         </div>
         <div className="flex flex-col w-full gap-4">
           <Button
-            className="text-white bg-mainGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+            className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
             type="submit"
             disabled={isLoading}
             onClick={handleRegister}

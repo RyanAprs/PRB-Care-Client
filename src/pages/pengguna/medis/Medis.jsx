@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Card } from "@nextui-org/react";
+import { Card } from "primereact/card";
 
 const Medis = () => {
   const [data, setData] = useState([]);

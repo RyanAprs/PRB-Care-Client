@@ -338,7 +338,7 @@ const DataObat = () => {
 
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
           />
         </div>
@@ -355,14 +355,14 @@ const DataObat = () => {
             Apakah anda yakin ingin menghapus data {currentName}?
           </div>
           <div className="flex gap-4 items-end justify-end">
-            <Button
+          <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Hapus"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
               autoFocus
             />

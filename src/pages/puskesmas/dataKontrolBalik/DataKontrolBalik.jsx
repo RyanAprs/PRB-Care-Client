@@ -330,7 +330,7 @@ const DataKontrolBalik = () => {
     );
 
   return (
-    <div className="flex flex-col gap-4 p-4 z-10 ">
+    <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
       <Toast ref={toast} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
@@ -410,7 +410,7 @@ const DataKontrolBalik = () => {
           )}
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
           />
         </div>
@@ -434,11 +434,11 @@ const DataKontrolBalik = () => {
             <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Hapus"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
               autoFocus
             />
@@ -464,11 +464,11 @@ const DataKontrolBalik = () => {
             <Button
               label="Batal"
               onClick={() => setVisibleDone(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Selesai"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDone}
               autoFocus
             />
@@ -494,11 +494,11 @@ const DataKontrolBalik = () => {
             <Button
               label="Tidak"
               onClick={() => setVisibleCancelled(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Iya"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleCancelled}
               autoFocus
             />

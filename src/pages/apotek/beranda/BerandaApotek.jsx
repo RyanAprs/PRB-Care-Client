@@ -65,7 +65,7 @@ const DashboardApotek = () => {
   };
 
   return (
-    <div className="flex flex-col p-4 h-screen gap-4">
+    <div className="flex flex-col p-4 min-h-screen h-screen gap-4">
       <Toast ref={toast} />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (

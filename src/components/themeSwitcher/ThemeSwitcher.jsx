@@ -1,21 +1,19 @@
 import  { useEffect } from 'react';
-import { MoonIcon, SunIcon } from 'lucide-react';
+import { MoonIcon } from 'lucide-react';
 import useDarkMode from 'use-dark-mode';
 import { Button } from "primereact/button";
 
 export const ThemeSwitcher = () => {
     const darkMode = useDarkMode(false);
-
     useEffect(() => {
         const themeLink = document.getElementById('theme-link');
-
         if (themeLink) {
             const themeUrl = darkMode.value
                 ? new URL('primereact/resources/themes/arya-green/theme.css', import.meta.url).href
                 : new URL('primereact/resources/themes/saga-green/theme.css', import.meta.url).href;
-
             themeLink.href = themeUrl;
         }
+        darkMode.value ? document.body.classList.add('dark') : document.body.classList.remove('dark');
     }, [darkMode.value]);
 
     return (

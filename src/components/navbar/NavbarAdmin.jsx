@@ -146,7 +146,10 @@ const NavbarAdmin = ({ children }) => {
         import.meta.url
       ).href;
       themeLink.href = themeUrl;
+      document.body.classList.remove('dark');
     }
+    
+
     if (role === "admin") {
       navigate("/admin/login");
     } else if (role === "nakes") {
@@ -757,7 +760,7 @@ const NavbarAdmin = ({ children }) => {
           />
           <Button
             label="Edit Profile"
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
+            className="p-4 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
             onClick={handleUpdateProfileModal}
           />
         </div>
@@ -840,7 +843,7 @@ const NavbarAdmin = ({ children }) => {
           )}
           <Button
             label="Edit"
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen   rounded-xl transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
           />
         </div>
@@ -921,7 +924,7 @@ const NavbarAdmin = ({ children }) => {
           )}
           <Button
             label={"Edit"}
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleChangePassword}
           />
         </div>
@@ -944,11 +947,11 @@ const NavbarAdmin = ({ children }) => {
             <Button
               label="Batal"
               onClick={() => setVisibleLogout(false) || setVisible(false)}
-              className="p-button-text"
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
               label="Logout"
-              className="rounded-xl"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleLogout}
               autoFocus
             />

@@ -68,7 +68,6 @@ const PenggunaRoute = () => {
             </AlreadyLoggedInRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
         <Route
           path="/"
           element={
@@ -119,6 +118,7 @@ const PenggunaRoute = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/page/not-found" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
