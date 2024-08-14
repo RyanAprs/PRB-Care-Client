@@ -18,6 +18,7 @@ import DataKontrolBalik from "../../pages/admin/dataKontrolBalik/DataKontrolBali
 import DataPengambilanObat from "../../pages/admin/dataPengambilanObat/DataPengambilanObat";
 import { AuthContext } from "../context/AuthContext";
 import DataPengguna from "../../pages/admin/dataPengguna/DataPengguna";
+import Footer from "../../components/footer/Footer";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -68,6 +69,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DashboardAdmin />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -78,6 +80,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataPuskesmas />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -88,6 +91,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataApotek />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -98,6 +102,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataPasien />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -108,6 +113,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataPengguna />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -118,6 +124,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataObat />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -128,6 +135,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataKontrolBalik />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -138,6 +146,7 @@ const AdminRoute = () => {
             <PrivateRoute role="admin">
               <NavbarAdmin>
                 <DataPengambilanObat />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }

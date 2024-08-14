@@ -38,7 +38,7 @@ const NavbarPengguna = () => {
 
   return (
     <>
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-lightGreen dark:bg-blackHover  dark:text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
+      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-mainGreen dark:bg-blackHover  dark:text-white items-center py-4 md:py-6 px-5 md:px-10 text-black transition-colors duration-300 ">
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} className="w-14 h-12 md:h-14 " alt="prb-care logo " />
           <div className="font-bold">PRB CARE</div>

@@ -15,6 +15,7 @@ import DataPasien from "../../pages/puskesmas/dataPasien/DataPasien";
 import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrolBalik";
 import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
 import { ProgressSpinner } from "primereact/progressspinner";
+import Footer from "../../components/footer/Footer";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -73,6 +74,7 @@ const PuskesmasRoute = () => {
             <PrivateRoute role="nakes">
               <NavbarAdmin>
                 <DashboardPuskesmas />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -83,6 +85,7 @@ const PuskesmasRoute = () => {
             <PrivateRoute role="nakes">
               <NavbarAdmin>
                 <DataPasien />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -93,6 +96,7 @@ const PuskesmasRoute = () => {
             <PrivateRoute role="nakes">
               <NavbarAdmin>
                 <DataKontrolBalik />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -103,6 +107,7 @@ const PuskesmasRoute = () => {
             <PrivateRoute role="nakes">
               <NavbarAdmin>
                 <DataPengambilanObat />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }

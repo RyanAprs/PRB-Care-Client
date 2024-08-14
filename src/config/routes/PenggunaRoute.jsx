@@ -86,6 +86,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Kontrol />
+              <Footer />
             </PrivateRoute>
           }
         />
@@ -95,6 +96,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Obat />
+              <Footer />
             </PrivateRoute>
           }
         />
@@ -104,6 +106,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Profile />
+              <Footer />
             </PrivateRoute>
           }
         />
@@ -113,6 +116,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Medis />
+              <Footer />
             </PrivateRoute>
           }
         />
@@ -122,6 +126,7 @@ const PenggunaRoute = () => {
             <PrivateRoute role="pengguna">
               <NavbarPengguna />
               <Notifikasi />
+              <Footer />
             </PrivateRoute>
           }
         />

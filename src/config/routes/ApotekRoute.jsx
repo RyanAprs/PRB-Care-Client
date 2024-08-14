@@ -13,6 +13,7 @@ import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
 import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
 import DataObat from "../../pages/apotek/dataObat/DataObat";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
+import Footer from "../../components/footer/Footer";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -63,6 +64,7 @@ const ApotekRoute = () => {
             <PrivateRoute role="apoteker">
               <NavbarAdmin>
                 <DashboardApotek />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -73,6 +75,7 @@ const ApotekRoute = () => {
             <PrivateRoute role="apoteker">
               <NavbarAdmin>
                 <DataObat />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
@@ -83,6 +86,7 @@ const ApotekRoute = () => {
             <PrivateRoute role="apoteker">
               <NavbarAdmin>
                 <DataPengambilanObat />
+                <Footer />
               </NavbarAdmin>
             </PrivateRoute>
           }
