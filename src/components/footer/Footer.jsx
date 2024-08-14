@@ -70,9 +70,11 @@ const Footer = () => {
         </div>
       </div>
       <div className="border-t flex flex-col gap-4 border-gray-200 dark:border-gray-700 mt-8 pt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-        <h1>&copy; 2024 PRB Care. All rights reserved.</h1>
+        <h1>
+          <strong>&copy; 2024 PRB Care. All rights reserved.</strong>
+        </h1>
         <p className="text-sm">
-          <strong>Develop by Hilmi Raif Avicenna & Ryan Adi Prasetyo.</strong>
+          Develop by Hilmi Raif Avicenna & Ryan Adi Prasetyo.
         </p>
       </div>
     </footer>
