@@ -217,6 +217,25 @@ const DataObat = () => {
     { header: "Apotek", field: "adminApotek.namaApotek" },
   ];
 
+  const itemTemplateApotek = (option) => {
+    return (
+      <div>
+        {option.namaApotek} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplateApotek = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaApotek} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Apotek</span>;
+  };
+
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -260,6 +279,8 @@ const DataObat = () => {
               ) || null
             }
             options={dataAdminApotek}
+            itemTemplate={itemTemplateApotek}
+            valueTemplate={valueTemplateApotek}
             filter
             optionLabel="namaApotek"
             placeholder="Pilih Apotek"

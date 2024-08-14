@@ -90,6 +90,9 @@ const DataKontrolBalik = () => {
         const response = await getAllPasienAktif();
 
         setPasien(response);
+
+        console.log(response);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -300,6 +303,25 @@ const DataKontrolBalik = () => {
     { key: "batal", label: "Batal" },
   ];
 
+  const itemTemplatePengguna = (option) => {
+    return (
+      <div>
+        {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePengguna = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
+
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -345,6 +367,8 @@ const DataKontrolBalik = () => {
           <Dropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
+            itemTemplate={itemTemplatePengguna}
+            valueTemplate={valueTemplatePengguna}
             filter
             optionLabel="pengguna.namaLengkap"
             placeholder="Pilih Pasien"

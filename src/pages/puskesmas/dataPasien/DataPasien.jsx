@@ -306,6 +306,25 @@ const DataPasien = () => {
     { key: "selesai", label: "Selesai" },
   ];
 
+  const itemTemplatePengguna = (option) => {
+    return (
+      <div>
+        {option.namaLengkap} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePengguna = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaLengkap} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
+
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -370,6 +389,8 @@ const DataPasien = () => {
             }
             options={pengguna}
             filter
+            itemTemplate={itemTemplatePengguna}
+            valueTemplate={valueTemplatePengguna}
             optionLabel="namaLengkap"
             placeholder="Pilih Pengguna"
             className=" p-2 rounded"

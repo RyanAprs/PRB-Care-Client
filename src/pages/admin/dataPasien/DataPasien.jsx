@@ -135,6 +135,7 @@ const DataPasien = () => {
         );
 
         setPengguna(response.data.data);
+
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
@@ -338,6 +339,44 @@ const DataPasien = () => {
     { key: "selesai", label: "Selesai" },
   ];
 
+  const itemTemplatePengguna = (option) => {
+    return (
+      <div>
+        {option.namaLengkap} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePengguna = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaLengkap} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
+
+  const itemTemplatePuskesmas = (option) => {
+    return (
+      <div>
+        {option.namaPuskesmas} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePuskesmas = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaPuskesmas} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Puskesmas</span>;
+  };
+
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -392,7 +431,7 @@ const DataPasien = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih pengguna:
+            Pilih pasien:
           </label>
 
           <Dropdown
@@ -403,6 +442,8 @@ const DataPasien = () => {
             options={pengguna}
             filter
             optionLabel="namaLengkap"
+            itemTemplate={itemTemplatePengguna}
+            valueTemplate={valueTemplatePengguna}
             placeholder="Pilih Pengguna"
             className=" p-2 rounded"
             onChange={(e) =>
@@ -428,6 +469,8 @@ const DataPasien = () => {
             filter
             options={adminPuskesmas}
             optionLabel="namaPuskesmas"
+            itemTemplate={itemTemplatePuskesmas}
+            valueTemplate={valueTemplatePuskesmas}
             placeholder="Pilih Puskesmas"
             className=" p-2 rounded"
             onChange={(e) =>

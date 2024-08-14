@@ -305,10 +305,30 @@ const DataPengambilanObat = () => {
     { key: "diambil", label: "Diambil" },
     { key: "batal", label: "Batal" },
   ];
+
+  const itemTemplatePengguna = (option) => {
+    return (
+      <div>
+        {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePengguna = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Pasien</span>;
+  };
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - {option.adminApotek.namaApotek}
+        {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+        {option.adminApotek.telepon}
       </div>
     );
   };
@@ -317,7 +337,8 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek}
+          {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+          {option.adminApotek.telepon}
         </div>
       );
     }
@@ -372,6 +393,8 @@ const DataPengambilanObat = () => {
           <Dropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
+            itemTemplate={itemTemplatePengguna}
+            valueTemplate={valueTemplatePengguna}
             filter
             optionLabel="pengguna.namaLengkap"
             placeholder="Pilih Pasien"

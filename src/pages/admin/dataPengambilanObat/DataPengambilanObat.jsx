@@ -362,7 +362,8 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - {option.adminApotek.namaApotek}
+        {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+        {option.adminApotek.telepon}
       </div>
     );
   };
@@ -371,7 +372,8 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek}
+          {option.namaObat} - {option.adminApotek.namaApotek} - {" "}
+          {option.adminApotek.telepon}
         </div>
       );
     }
