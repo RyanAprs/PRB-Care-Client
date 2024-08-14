@@ -161,7 +161,7 @@ const NavbarPengguna = () => {
               className="mb-4 w-full flex gap-4"
               onClick={() => setVisible(false)}
             >
-              <h1>Akun</h1>
+              <h1>Profile</h1>
             </Link>
             <Link
               to=""

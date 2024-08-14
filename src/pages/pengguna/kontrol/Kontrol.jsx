@@ -20,6 +20,7 @@ const Kontrol = () => {
       try {
         const response = await getAllKontrolBalik();
         setData(response);
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -38,8 +39,8 @@ const Kontrol = () => {
     );
 
   return (
-    <div className="md:py-2 py-8 dark:bg-black">
-      <div className="md:p-8 p-4 w-full h-screen">
+    <div className="md:py-2 py-4 dark:bg-black">
+      <div className="md:p-8 p-2 w-full min-h-screen">
         <div>
           <h1 className="text-2xl dark:text-white">Kontrol Balik Anda:</h1>
         </div>
@@ -58,6 +59,9 @@ const Kontrol = () => {
                   <div className="flex flex-col gap-4 items-start justify-center">
                     <h1>{item.pasien.pengguna.namaLengkap}</h1>
                     <h1>Tanggal Kontrol: {item.tanggalKontrol}</h1>
+                    <h1>
+                      Tempat Kontrol: {item.pasien.adminPuskesmas.namaPuskesmas}
+                    </h1>
                   </div>
                   <div className="flex items-center justify-center ">
                     {item.status === "menunggu" && (
