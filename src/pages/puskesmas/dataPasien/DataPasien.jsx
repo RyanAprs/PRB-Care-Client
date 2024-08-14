@@ -72,6 +72,14 @@ const DataPasien = () => {
   const title = "Pasien";
   const navigate = useNavigate();
 
+  const customSort = (a, b) => {
+    if (a.status < b.status) return -1;
+    if (a.status > b.status) return 1;
+    if (a.tanggalPeriksa < b.tanggalPeriksa) return -1;
+    if (a.tanggalPeriksa > b.tanggalPeriksa) return 1;
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -87,7 +95,8 @@ const DataPasien = () => {
           ...item,
           tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
         }));
-        setData(formatedData);
+        const sortedData = formatedData.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);

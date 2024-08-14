@@ -59,11 +59,24 @@ const DataKontrolBalik = () => {
   const title = "Kontrol Balik";
   const navigate = useNavigate();
 
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "selesai", "batal"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
+    if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
+
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
-        setData(response);
+        const sortedData = response.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -272,7 +285,10 @@ const DataKontrolBalik = () => {
   const columns = [
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
-    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    {
+      header: "Telepon Keluarga Pasien",
+      field: "pasien.pengguna.teleponKeluarga",
+    },
     { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },

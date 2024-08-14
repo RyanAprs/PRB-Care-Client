@@ -61,11 +61,24 @@ const DataPengambilanObat = () => {
   const title = "Kontrol Balik";
   const navigate = useNavigate();
 
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "diambil", "batal"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.tanggalPengambilan < b.tanggalPengambilan) return -1;
+    if (a.tanggalPengambilan > b.tanggalPengambilan) return 1;
+
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllPengambilanObat();
-        setData(response);
+        const sortedData = response.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -273,7 +286,10 @@ const DataPengambilanObat = () => {
     { header: "Resi", field: "resi" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
-    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    {
+      header: "Telepon Keluarga Pasien",
+      field: "pasien.pengguna.teleponKeluarga",
+    },
     { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
     { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
     { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
