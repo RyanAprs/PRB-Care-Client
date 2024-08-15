@@ -66,7 +66,7 @@ const RegisterPengguna = () => {
         });
 
         setTimeout(() => {
-          navigate("/pengguna/login");
+          navigate("/login");
         }, 1500);
         setLoading(false);
       }

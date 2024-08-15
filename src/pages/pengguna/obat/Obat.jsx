@@ -51,13 +51,13 @@ const Obat = () => {
     );
 
   return (
-    <div className="md:py-2  dark:bg-fontDarkGreen">
-      <div className="md:p-8 p-4  w-full min-h-screen">
-        <div className="row p-8 grid grid-cols-1 gap-6">
+    <div className="md:py-2  dark:bg-fontDarkGreen h-screen">
+      <div className="md:p-8  w-full h-full">
+        <div className="row p-8 grid grid-cols-1 gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
               <Card key={index} className={`bg-mainGreen shadow-lg rounded-xl`}>
-                <div className="flex w-full text-xl px-4 justify-between items-center text-white">
+                <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-start justify-center">
                     <div className="flex">
                       <AlarmClock />{" "}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
@@ -237,20 +237,18 @@ export default function ReusableTable({
     <div className="p-4 w-full ">
       <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
-          {path !== "pengguna" && (
-            <div className="p-inputgroup md:w-1/2">
-              <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
-                <Search size={16} />
-              </span>
-              <InputText
-                type="search"
-                value={globalFilter}
-                onChange={onGlobalFilterChange}
-                placeholder="Search..."
-                className=""
-              />
-            </div>
-          )}
+          <div className="p-inputgroup md:w-1/2">
+            <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
+              <Search size={16} />
+            </span>
+            <InputText
+              type="search"
+              value={globalFilter}
+              onChange={onGlobalFilterChange}
+              placeholder="Search..."
+              className=""
+            />
+          </div>
           <div className="flex gap-4  items-center justify-center">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
@@ -280,16 +278,12 @@ export default function ReusableTable({
             rowsPerPageOptions={[10, 25, 50, 75, 100]}
             showGridlines
             tableStyle={{ minWidth: "50rem" }}
-            currentPageReportTemplate={`${
-              path !== "pengguna"
-                ? "{first} to {last} of {totalRecords} entries"
-                : ""
-            }`}
-            paginatorTemplate={`${
-              path !== "pengguna"
-                ? "CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                : ""
-            }`}
+            currentPageReportTemplate={
+              "{first} to {last} of {totalRecords} entries"
+            }
+            paginatorTemplate={
+              "CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+            }
             globalFilter={globalFilter}
             editMode="row"
           >

@@ -80,12 +80,12 @@ const Medis = () => {
       </div>
     );
   return (
-    <div className="md:py-2 py-8 dark:bg-fontDarkGreen">
+    <div className="md:py-2 dark:bg-fontDarkGreen">
       <div className="md:p-8 p-4 w-full h-screen">
         <div>
           <h1 className="text-2xl dark:text-white">Data Medis Anda:</h1>
         </div>
-        <div className="row p-8 grid grid-cols-1 gap-6">
+        <div className="row md:p-8 grid grid-cols-1 gap-6">
           <ReusableTable
             columns={columns}
             data={data}

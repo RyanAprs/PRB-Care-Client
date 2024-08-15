@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import province from "../../address/provinces.json";
 
 const DynamicAddress = ({ reset, prevAddress }) => {
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
-  const [errors, setErrors] = useState({});
 
   const { address, setAddress } = useContext(AddressContext);
-
-  useEffect(() => {
-    fetch("https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json")
-      .then((response) => response.json())
-      .then((data) => setProvinces(data));
-  }, []);
 
   useEffect(() => {
     if (reset) {
@@ -27,70 +21,88 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         desa: "",
         detail: "",
       });
-      setErrors({});
     } else if (prevAddress) {
       setAddress(prevAddress);
     }
-  }, [reset, prevAddress]);
+  }, [reset, prevAddress, setAddress]);
 
-  const handleProvinceChange = (e) => {
+  useEffect(() => {
+    setProvinces(province);
+  }, []);
+
+  const handleProvinceChange = async (e) => {
     const provinsiId = e.value;
-    const province = provinces.find((prov) => prov.id === provinsiId);
-    if (province) {
+    const selectedProvince = provinces.find((prov) => prov.id === provinsiId);
+    if (selectedProvince) {
       setAddress((prev) => ({
         ...prev,
-        provinsi: province.name,
+        provinsi: selectedProvince.name,
         provinsiId: provinsiId,
       }));
-      fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${province.id}.json`
-      )
-        .then((response) => response.json())
-        .then((data) => setRegencies(data));
+
+      try {
+        const regencyData = await import(
+          `../../address/regencies/${provinsiId}.json`
+        );
+        setRegencies(regencyData.default);
+      } catch (error) {
+        console.error("Error loading regencies:", error);
+        setRegencies([]);
+      }
     }
   };
 
-  const handleRegencyChange = (e) => {
+  const handleRegencyChange = async (e) => {
     const kabupatenId = e.value;
-    const regency = regencies.find((reg) => reg.id === kabupatenId);
-    if (regency) {
+    const selectedRegency = regencies.find((reg) => reg.id === kabupatenId);
+    if (selectedRegency) {
       setAddress((prev) => ({
         ...prev,
-        kabupaten: regency.name,
+        kabupaten: selectedRegency.name,
         kabupatenId: kabupatenId,
       }));
-      fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${regency.id}.json`
-      )
-        .then((response) => response.json())
-        .then((data) => setDistricts(data));
+
+      try {
+        const districtData = await import(
+          `../../address/districts/${kabupatenId}.json`
+        );
+        setDistricts(districtData.default);
+      } catch (error) {
+        console.error("Error loading districts:", error);
+        setDistricts([]);
+      }
     }
   };
 
-  const handleDistrictChange = (e) => {
+  const handleDistrictChange = async (e) => {
     const kecamatanId = e.value;
-    const district = districts.find((dist) => dist.id === kecamatanId);
-    if (district) {
+    const selectedDistrict = districts.find((dist) => dist.id === kecamatanId);
+    if (selectedDistrict) {
       setAddress((prev) => ({
         ...prev,
-        kecamatan: district.name,
+        kecamatan: selectedDistrict.name,
         kecamatanId: kecamatanId,
       }));
-      fetch(
-        `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${district.id}.json`
-      )
-        .then((response) => response.json())
-        .then((data) => setVillages(data));
+
+      try {
+        const villageData = await import(
+          `../../address/villages/${kecamatanId}.json`
+        );
+        setVillages(villageData.default);
+      } catch (error) {
+        console.error("Error loading villages:", error);
+        setVillages([]);
+      }
     }
   };
 
   const handleVillageChange = (e) => {
     const desaId = e.value;
-    const village = villages.find((village) => village.id === desaId);
-    if (village) {
+    const selectedVillage = villages.find((village) => village.id === desaId);
+    if (selectedVillage) {
       setAddress((prev) => ({
         ...prev,
-        desa: village.name,
+        desa: selectedVillage.name,
         desaId: desaId,
       }));
     }
@@ -119,83 +131,62 @@ const DynamicAddress = ({ reset, prevAddress }) => {
           className="w-full p-2 text-sm"
           required
         />
-        {errors.provinsi && (
-          <span className="text-red-500">{errors.provinsi}</span>
-        )}
 
         {address.provinsiId && (
-          <>
-            <Dropdown
-              value={address.kabupatenId || ""}
-              options={regencies.map((reg) => ({
-                label: reg.name,
-                value: reg.id,
-              }))}
-              onChange={handleRegencyChange}
-              placeholder="Pilih Kabupaten"
-              filter
-              className="w-full p-2 text-sm "
-              required
-            />
-            {errors.kabupaten && (
-              <span className="text-red-500">{errors.kabupaten}</span>
-            )}
-          </>
+          <Dropdown
+            value={address.kabupatenId || ""}
+            options={regencies.map((reg) => ({
+              label: reg.name,
+              value: reg.id,
+            }))}
+            onChange={handleRegencyChange}
+            placeholder="Pilih Kabupaten"
+            filter
+            className="w-full p-2 text-sm "
+            required
+          />
         )}
 
         {address.kabupatenId && (
-          <>
-            <Dropdown
-              value={address.kecamatanId || ""}
-              options={districts.map((dist) => ({
-                label: dist.name,
-                value: dist.id,
-              }))}
-              onChange={handleDistrictChange}
-              placeholder="Pilih Kecamatan"
-              filter
-              className="w-full p-2 text-sm"
-              required
-            />
-            {errors.kecamatan && (
-              <span className="text-red-500">{errors.kecamatan}</span>
-            )}
-          </>
+          <Dropdown
+            value={address.kecamatanId || ""}
+            options={districts.map((dist) => ({
+              label: dist.name,
+              value: dist.id,
+            }))}
+            onChange={handleDistrictChange}
+            placeholder="Pilih Kecamatan"
+            filter
+            className="w-full p-2 text-sm"
+            required
+          />
         )}
 
         {address.kecamatanId && (
-          <>
-            <Dropdown
-              value={address.desaId || ""}
-              options={villages.map((village) => ({
-                label: village.name,
-                value: village.id,
-              }))}
-              onChange={handleVillageChange}
-              placeholder="Pilih Desa"
-              filter
-              className="w-full p-2 text-sm "
-              required
-            />
-            {errors.desa && <span className="text-red-500">{errors.desa}</span>}
-          </>
+          <Dropdown
+            value={address.desaId || ""}
+            options={villages.map((village) => ({
+              label: village.name,
+              value: village.id,
+            }))}
+            onChange={handleVillageChange}
+            placeholder="Pilih Desa"
+            filter
+            className="w-full p-2 text-sm "
+            required
+          />
         )}
 
         {address.desaId && (
-          <>
-            <InputText
-              type="text"
-              value={address.detail || ""}
-              placeholder="Detail Alamat"
-              name="detail"
-              onChange={handleInputChange}
-              className="w-full p-3 text-slg "
-              required
-            />
-            {errors.detail && (
-              <span className="text-red-500">{errors.detail}</span>
-            )}
-          </>
+          <InputText
+            type="text"
+            value={address.detail || ""}
+            placeholder="Detail Alamat"
+            name="detail"
+            onChange={handleInputChange}
+            className="w-full p-3 text-slg "
+            required
+          />
         )}
       </div>
     </div>

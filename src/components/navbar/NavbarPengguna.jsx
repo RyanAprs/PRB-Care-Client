@@ -100,7 +100,7 @@ const NavbarPengguna = () => {
       ).href;
       themeLink.href = themeUrl;
     }
-    document.body.classList.remove('dark')
+    document.body.classList.remove("dark");
     navigate("/");
   };
 
@@ -413,12 +413,6 @@ const NavbarPengguna = () => {
             className="p-input text-lg p-3 rounded"
             value={dataPengguna.namaLengkap}
           />
-          {errors.namaLengkap && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.namaLengkap}
-            </small>
-          )}
-
           <label htmlFor="" className="-mb-3">
             Telepon:
           </label>
@@ -429,9 +423,6 @@ const NavbarPengguna = () => {
             className="p-input text-lg p-3 rounded"
             value={dataPengguna.telepon}
           />
-          {errors.telepon && (
-            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
-          )}
           <label htmlFor="" className="-mb-3">
             Telepon Keluarga:
           </label>
@@ -442,18 +433,12 @@ const NavbarPengguna = () => {
             className="p-input text-lg p-3 rounded"
             value={dataPengguna.teleponKeluarga}
           />
-          {errors.teleponKeluarga && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.teleponKeluarga}
-            </small>
-          )}
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
           <InputTextarea
             variant="filled"
             disabled
-            autoResize
             className="p-input text-lg p-3 rounded"
             value={dataPengguna.alamat}
           />
@@ -542,7 +527,7 @@ const NavbarPengguna = () => {
           )}
           <Button
             label="Edit"
-           className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
           />
         </div>
