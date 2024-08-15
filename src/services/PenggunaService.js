@@ -82,6 +82,15 @@ export const updateCurrentPengguna = async (datas) => {
   return response;
 };
 
+export const updateCurrentTokenPerangkatPengguna = async (data) => {
+  const response = await axios.patch(
+    `${API_BASE_URI}/api/pengguna/current/perangkat`,
+    data,
+    getRequestHeaders()
+  );
+  return response;
+};
+
 export const updatePasswordPengguna = async (datas) => {
   try {
     const response = await axios.patch(

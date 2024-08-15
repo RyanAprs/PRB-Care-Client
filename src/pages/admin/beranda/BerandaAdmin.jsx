@@ -13,9 +13,9 @@ import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
 
 const DashboardAdmin = () => {
-  const [showToast, setShowToast] = useState(false);
   const toast = useRef(null);
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {

@@ -217,7 +217,9 @@ const NavbarPengguna = () => {
         <Toast ref={toast} />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
-          <div className="font-extrabold text-black dark:text-white">PRB Care</div>
+          <div className="font-extrabold text-black dark:text-white">
+            PRB Care
+          </div>
         </div>
 
         <div className="flex gap-10 items-center text-xl ">
@@ -226,45 +228,75 @@ const NavbarPengguna = () => {
               to={"/"}
               className=" transition-all flex flex-col items-center justify-center "
             >
-              <h1 className={location.pathname === "/"
+              <h1
+                className={
+                  location.pathname === "/"
                     ? "text-lightGreen dark:text-mainGreen"
-                    : ""} >Beranda</h1>
+                    : ""
+                }
+              >
+                Beranda
+              </h1>
               <span className="h-1 rounded-full bg-mainGreen transition-all"></span>
             </Link>
             <Link
               to="/kontrol"
               className=" transition-all flex flex-col items-center justify-center"
             >
-              <h1 className={location.pathname === "/kontrol"
+              <h1
+                className={
+                  location.pathname === "/kontrol"
                     ? "text-lightGreen dark:text-mainGreen"
-                    : ""}>Kontrol</h1>
+                    : ""
+                }
+              >
+                Kontrol
+              </h1>
               <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
             </Link>
             <Link
               to="/obat"
               className=" transition-all flex flex-col items-center justify-center"
             >
-              <h1 className={location.pathname === "/obat"
+              <h1
+                className={
+                  location.pathname === "/obat"
                     ? "text-lightGreen dark:text-mainGreen"
-                    : ""}>Obat</h1>
+                    : ""
+                }
+              >
+                Obat
+              </h1>
               <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
             </Link>
             <Link
               to="/medis"
               className=" transition-all flex flex-col items-center justify-center"
             >
-              <h1 className={location.pathname === "/medis"
+              <h1
+                className={
+                  location.pathname === "/medis"
                     ? "text-lightGreen dark:text-mainGreen"
-                    : ""}>Medis</h1>
+                    : ""
+                }
+              >
+                Medis
+              </h1>
               <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
             </Link>
             <Link
               to="/notifikasi"
               className=" transition-all flex flex-col items-center justify-center"
             >
-              <h1 className={location.pathname === "/notifikasi"
+              <h1
+                className={
+                  location.pathname === "/notifikasi"
                     ? "text-lightGreen dark:text-mainGreen"
-                    : ""}>Notifikasi</h1>
+                    : ""
+                }
+              >
+                Notifikasi
+              </h1>
               <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
             </Link>
           </div>
@@ -280,9 +312,11 @@ const NavbarPengguna = () => {
           </div>
         </div>
       </header>
-                
-      <div className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4" style={{ boxShadow: '0 -4px 6px rgba(0, 0, 0, 0.1)' }}>
-      
+
+      <div
+        className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
+        style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.1)" }}
+      >
         <div className="flex  justify-between items-center ">
           <Link
             to={"/"}

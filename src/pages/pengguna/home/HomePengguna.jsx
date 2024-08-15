@@ -2,6 +2,7 @@ import img from "../../../assets/prbcare.svg";
 import { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { updateCurrentTokenPerangkatPengguna } from "../../../services/PenggunaService";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -29,6 +30,13 @@ const convertUnixTimestampToLocalTime = (timestamp) => {
 const HomePengguna = () => {
   const [token, setToken] = useState("");
   const [permission, setPermission] = useState(Notification.permission);
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    if (permission !== "granted") {
+      setShowModal(true);
+    }
+  }, [permission]);
 
   useEffect(() => {
     const registerServiceWorker = async () => {
@@ -62,26 +70,12 @@ const HomePengguna = () => {
       }
     };
 
-    const requestNotificationPermission = async () => {
-      try {
-        const permission = await Notification.requestPermission();
-        setPermission(permission);
-        if (permission === "granted") {
-          registerServiceWorker();
-        } else {
-          console.log("Unable to get permission to notify.");
-        }
-      } catch (error) {
-        console.error("An error occurred while retrieving token.", error);
-      }
-    };
-
     if (permission === "granted") {
       registerServiceWorker();
     }
 
     onMessage(messaging, (payload) => {
-      console.log("Message received.", payload);
+      console.log("Message received. ", payload);
 
       const {
         title,
@@ -93,6 +87,7 @@ const HomePengguna = () => {
         tanggalBatal,
       } = payload.data;
 
+      // Convert timestamps to local time
       let tanggalAmbilLocal, tanggalBatalLocal;
       let notificationTitle, notificationBody;
 
@@ -104,7 +99,7 @@ const HomePengguna = () => {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, anda memiliki jadwal pengambilan obat pada tanggal ${tanggalAmbilLocal} pada apotek ${namaApotek} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+        notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
       } else if (namaPuskesmas) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
@@ -113,7 +108,7 @@ const HomePengguna = () => {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol balik pada tanggal ${tanggalAmbilLocal} di puskesmas ${namaPuskesmas} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+        notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
       }
 
       const notificationOptions = {
@@ -129,10 +124,23 @@ const HomePengguna = () => {
       setPermission(result);
       if (result === "granted") {
         console.log("Notification permission granted.");
+        setShowModal(false);
       } else {
         console.log("Notification permission denied.");
       }
     });
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const data = { TokenPerangkat: token };
+      const response = await updateCurrentTokenPerangkatPengguna(data);
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -148,18 +156,8 @@ const HomePengguna = () => {
             mengingatkan kapan harus mengambil obat ke apotek dan kapan harus
             melakukan kontrol kesehatan ke puskesmas.
           </h3>
-
-          {permission !== "granted" ? (
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleRequestPermission}
-            >
-              Izinkan Notifikasi
-            </button>
-          ) : (
-            <p className="text-green-500">Notifikasi diizinkan!</p>
-          )}
         </div>
+        <button onClick={handleUpdate}>update token</button>
       </div>
 
       <img src={img} className="md:w-1/3 md:block hidden" alt="img" />
