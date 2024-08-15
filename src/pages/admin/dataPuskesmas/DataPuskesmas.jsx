@@ -28,6 +28,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataPuskesmas = () => {
   const { dispatch } = useContext(AuthContext);
@@ -236,6 +238,33 @@ const DataPuskesmas = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Puskesmas", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-puskesmas.pdf");
+  };
+
   const columns = [
     { field: "namaPuskesmas", header: "Nama Puskesmas" },
     { field: "telepon", header: "Telepon" },
@@ -259,6 +288,7 @@ const DataPuskesmas = () => {
           onCreate={handleModalCreate}
           onEdit={handleModalUpdate}
           onDelete={handleModalDelete}
+          onDownload={handleDownload}
         />
       </div>
       <Dialog

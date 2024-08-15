@@ -34,6 +34,8 @@ import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataKontrolBalik = () => {
   const { dispatch } = useContext(AuthContext);
@@ -290,6 +292,33 @@ const DataKontrolBalik = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Kontrol Balik", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-kontrol-balik.pdf");
+  };
+
   const columns = [
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
@@ -349,6 +378,7 @@ const DataKontrolBalik = () => {
           statuses={statuses}
           role="nakes"
           path="kontrolBalik"
+          onDownload={handleDownload}
         />
       </div>
 

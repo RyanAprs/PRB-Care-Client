@@ -35,6 +35,8 @@ import { getAllObat } from "../../../services/ObatService";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataPengambilanObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -286,6 +288,34 @@ const DataPengambilanObat = () => {
       handleDoneError(error, toast);
     }
   };
+
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pengambilan Obat", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pengambilan-obat.pdf");
+  };
+
   const columns = [
     { header: "Resi", field: "resi" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
@@ -372,6 +402,7 @@ const DataPengambilanObat = () => {
           statuses={statuses}
           role="nakes"
           path="pengambilanObat"
+          onDownload={handleDownload}
         />
       </div>
 

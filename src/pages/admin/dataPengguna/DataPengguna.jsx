@@ -28,6 +28,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataPengguna = () => {
   const { dispatch } = useContext(AuthContext);
@@ -237,6 +239,33 @@ const DataPengguna = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pengguna", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pengguna.pdf");
+  };
+
   const columns = [
     { field: "namaLengkap", header: "Nama Pengguna" },
     { field: "telepon", header: "Telepon" },
@@ -260,6 +289,7 @@ const DataPengguna = () => {
           onDelete={handleModalDelete}
           onEdit={handleModalUpdate}
           onCreate={handleModalCreate}
+          onDownload={handleDownload}
         />
       </div>
 
@@ -407,7 +437,7 @@ const DataPengguna = () => {
             Apakah anda yakin ingin menghapus data {currentName}?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"

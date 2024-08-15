@@ -28,6 +28,8 @@ import {
 } from "../../../services/ApotekService";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
@@ -233,6 +235,33 @@ const DataApotek = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Apotek", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-apotek.pdf");
+  };
+
   const columns = [
     { field: "namaApotek", header: "Nama Apotek" },
     { field: "telepon", header: "Telepon" },
@@ -254,6 +283,7 @@ const DataApotek = () => {
           data={data}
           onDelete={handleModalDelete}
           onEdit={handleModalUpdate}
+          onDownload={handleDownload}
           onCreate={handleModalCreate}
         />
       </div>
@@ -380,7 +410,7 @@ const DataApotek = () => {
             Apakah anda yakin ingin menghapus data {currentName}?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"

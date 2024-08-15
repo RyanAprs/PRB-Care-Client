@@ -37,6 +37,8 @@ import { getAllObat } from "../../../services/ObatService";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataPengambilanObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -316,6 +318,34 @@ const DataPengambilanObat = () => {
       handleDoneError(error, toast);
     }
   };
+
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pengambilan Obat", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pengambilan-obat.pdf");
+  };
+
   const columns = [
     { header: "Resi", field: "resi" },
     { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
@@ -372,7 +402,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek} - {" "}
+          {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
           {option.adminApotek.telepon}
         </div>
       );
@@ -395,6 +425,7 @@ const DataPengambilanObat = () => {
           onDone={handleModalDone}
           statuses={statuses}
           role="admin"
+          onDownload={handleDownload}
         />
       </div>
 
@@ -525,7 +556,7 @@ const DataPengambilanObat = () => {
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
@@ -555,7 +586,7 @@ const DataPengambilanObat = () => {
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDone(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
@@ -585,7 +616,7 @@ const DataPengambilanObat = () => {
             pengambilan obat?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Tidak"
               onClick={() => setVisibleCancelled(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"

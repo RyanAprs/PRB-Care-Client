@@ -38,6 +38,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 addLocale("id", dateLocaleId);
 
@@ -320,6 +322,33 @@ const DataPasien = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pasien", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pasien.pdf");
+  };
+
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
@@ -396,6 +425,7 @@ const DataPasien = () => {
           onDelete={handleModalDelete}
           onDone={handleModalDone}
           statuses={statuses}
+          onDownload={handleDownload}
         />
       </div>
       <Dialog
@@ -627,7 +657,7 @@ const DataPasien = () => {
           )}
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
-           className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
           />
         </div>
@@ -648,7 +678,7 @@ const DataPasien = () => {
             {currentName}?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
@@ -679,7 +709,7 @@ const DataPasien = () => {
             atau mengambil obat lagi.
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDone(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"

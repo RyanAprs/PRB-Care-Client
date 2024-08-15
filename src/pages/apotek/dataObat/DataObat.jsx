@@ -25,6 +25,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -185,6 +187,33 @@ const DataObat = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Obat", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-obat.pdf");
+  };
+
   const columns = [
     { header: "Nama Obat", field: "namaObat" },
     { header: "Jumlah", field: "jumlah" },
@@ -198,7 +227,7 @@ const DataObat = () => {
     );
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 p-4 min-h-screen ">
+    <div className="min-h-screen flex flex-col gap-4 p-4  ">
       <Toast ref={toast} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
@@ -208,6 +237,7 @@ const DataObat = () => {
           onEdit={handleModalUpdate}
           onCreate={handleModalCreate}
           statusOptions=""
+          onDownload={handleDownload}
           role="apoteker"
         />
       </div>

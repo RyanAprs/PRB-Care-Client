@@ -13,6 +13,8 @@ import {
 import { HandleUnauthorizedAdminApotek } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataPengambilanObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -81,11 +83,41 @@ const DataPengambilanObat = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pengambilan Obat", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pengambilan-obat.pdf");
+  };
+
   const columns = [
     { header: "Resi", field: "resi" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
-    { header: "Telepon Keluarga Pasien", field: "pasien.pengguna.teleponKeluarga" },
+    {
+      header: "Telepon Keluarga Pasien",
+      field: "pasien.pengguna.teleponKeluarga",
+    },
     { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
     { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Telepon Puskesmas", field: "pasien.adminPuskesmas.telepon" },
@@ -119,6 +151,7 @@ const DataPengambilanObat = () => {
           data={data}
           onDone={handleModalDone}
           statuses={statuses}
+          onDownload={handleDownload}
           role="apoteker"
           path="pengambilanObatApoteker"
         />

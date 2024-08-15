@@ -12,6 +12,7 @@ import {
   Trash2,
   Edit,
   CircleOff,
+  FileDown,
 } from "lucide-react";
 
 export default function ReusableTable({
@@ -25,6 +26,7 @@ export default function ReusableTable({
   statuses,
   role,
   path,
+  onDownload,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -262,8 +264,14 @@ export default function ReusableTable({
               } block p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`}
               label={<FilePlus2 />}
             />
+            <Button
+              onClick={onDownload}
+              className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
+              label={<FileDown />}
+            />
           </div>
         </div>
+
         {filteredData.length > 0 ? (
           <DataTable
             value={filteredData}

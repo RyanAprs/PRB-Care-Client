@@ -34,6 +34,8 @@ import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataKontrolBalik = () => {
   const { dispatch } = useContext(AuthContext);
@@ -290,6 +292,33 @@ const DataKontrolBalik = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Kontrol Balik", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-kontrol-balik.pdf");
+  };
+
   const columns = [
     { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
@@ -343,6 +372,7 @@ const DataKontrolBalik = () => {
           onCancelled={handleModalCancelled}
           statuses={statuses}
           role="admin"
+          onDownload={handleDownload}
         />
       </div>
 
@@ -430,7 +460,7 @@ const DataKontrolBalik = () => {
             balik?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDelete(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
@@ -460,7 +490,7 @@ const DataKontrolBalik = () => {
             kontrol balik?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Batal"
               onClick={() => setVisibleDone(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
@@ -490,7 +520,7 @@ const DataKontrolBalik = () => {
             kontrol balik?
           </div>
           <div className="flex gap-4 items-end justify-end">
-          <Button
+            <Button
               label="Tidak"
               onClick={() => setVisibleCancelled(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"

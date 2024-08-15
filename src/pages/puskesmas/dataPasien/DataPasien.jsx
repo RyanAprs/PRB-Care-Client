@@ -39,6 +39,8 @@ import { getAllPengguna } from "../../../services/PenggunaService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 addLocale("id", dateLocaleId);
 
@@ -290,6 +292,33 @@ const DataPasien = () => {
     }
   };
 
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Pasien", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-pasien.pdf");
+  };
+
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
@@ -349,6 +378,7 @@ const DataPasien = () => {
           onDelete={handleModalDelete}
           onDone={handleModalDone}
           statuses={statuses}
+          onDownload={handleDownload}
         />
       </div>
       <Dialog
