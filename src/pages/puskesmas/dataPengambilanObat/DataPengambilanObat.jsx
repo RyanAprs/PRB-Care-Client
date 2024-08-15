@@ -141,7 +141,8 @@ const DataPengambilanObat = () => {
         });
         setVisible(false);
         const responseData = await getAllPengambilanObat();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -213,7 +214,8 @@ const DataPengambilanObat = () => {
         setVisible(false);
 
         const responseData = await getAllPengambilanObat();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -249,7 +251,8 @@ const DataPengambilanObat = () => {
         });
         setVisibleDelete(false);
         const responseData = await getAllPengambilanObat();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -275,7 +278,8 @@ const DataPengambilanObat = () => {
         });
         setVisibleCancelled(false);
         const responseData = await getAllPengambilanObat();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);

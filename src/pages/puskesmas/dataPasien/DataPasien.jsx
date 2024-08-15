@@ -150,7 +150,8 @@ const DataPasien = () => {
         });
         setVisible(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -217,7 +218,8 @@ const DataPasien = () => {
         });
         setVisible(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -251,7 +253,8 @@ const DataPasien = () => {
         });
         setVisibleDelete(false);
         const responseData = await getAllPasien();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -277,6 +280,8 @@ const DataPasien = () => {
         });
         setVisibleDone(false);
         const responseData = await getAllPasien();
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
         setData(responseData);
       }
     } catch (error) {

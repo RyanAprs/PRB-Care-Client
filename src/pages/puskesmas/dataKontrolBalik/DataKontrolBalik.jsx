@@ -129,7 +129,8 @@ const DataKontrolBalik = () => {
         });
         setVisible(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -191,7 +192,8 @@ const DataKontrolBalik = () => {
         });
         setVisible(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -225,7 +227,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleDelete(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -251,7 +254,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleDone(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -277,7 +281,8 @@ const DataKontrolBalik = () => {
         });
         setVisibleCancelled(false);
         const responseData = await getAllKontrolBalik();
-        setData(responseData);
+        const sortedData = responseData.sort(customSort);
+        setData(sortedData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
