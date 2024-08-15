@@ -14,7 +14,7 @@ const Footer = () => {
       </div>
     </footer>
   ) : (
-    <footer className="bg-darkGrays text-white pt-12  pb-24 md:pb-4">
+    <footer className="dark:bg-blackHover dark:text-white pt-12  pb-24 md:pb-4">
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="flex flex-col mx-auto items-center">
           <div className="flex items-center">
@@ -53,7 +53,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="border-t-2 flex flex-col border-dashed gap-4 border-white mt-12 pt-6 text-center text-sm">
+      <div className="border-t-2 flex flex-col border-dashed gap-4  border-black dark:border-white mt-12 pt-6 text-center text-sm">
         <h1>
           &copy; {new Date().getFullYear()} PRB Care, Made with ❤ by{" "}
           <a href="https://github.com/RyanAprs">Ryan</a>.

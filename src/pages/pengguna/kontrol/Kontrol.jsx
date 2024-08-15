@@ -51,43 +51,43 @@ const Kontrol = () => {
     );
 
   return (
-    <div className="md:py-2  dark:bg-fontDarkGreen h-screen">
-      <div className="md:p-8  w-full h-full">
-        <div className="row p-8 grid grid-cols-1 gap-6 overflow-y-auto h-full">
+    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
+      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
+        <div className="row p-1 grid grid-cols-1  gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card key={index} className={`bg-mainGreen shadow-lg rounded-xl`}>
+              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen h-fit shadow-lg rounded-xl`}>
                 <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
-                  <div className="flex flex-col gap-4 items-start justify-center">
-                    <div className="flex">
+                  <div className="flex flex-col gap-4 items-center md:items-start justify-center">
+                    <div className="flex md:mx-0 mx-auto">
                       <AlarmClock />{" "}
                       <h1 className="ml-2 font-poppins font-bold">
                         {item.tanggalKontrol}
                       </h1>
                     </div>
 
-                    <h1 className="font-poppins ">
-                      {item.pasien.adminPuskesmas.namaPuskesmas} -{" "}
-                      {item.pasien.adminPuskesmas.telepon} -{" "}
-                      {item.pasien.adminPuskesmas.alamat}
+                    <h1 className="font-poppins md:text-start text-center ">
+                      {item.pasien.adminPuskesmas.namaPuskesmas},{" "}
+                      {item.pasien.adminPuskesmas.telepon},{" "}
+                      {item.pasien.adminPuskesmas.alamat}.
                     </h1>
                   </div>
                   <div className="flex items-center justify-center ">
                     {item.status === "menunggu" && (
                       <div className="flex flex-col gap-2 items-center justify-center">
-                        <History />
+                        <History size={35} />
                         <p className="font-poppins ">Menunggu</p>
                       </div>
                     )}
                     {item.status === "selesai" && (
                       <div className="flex flex-col gap-2 items-center justify-center">
-                        <CircleCheck />
+                        <CircleCheck size={35} />
                         <p>Selesai</p>
                       </div>
                     )}
                     {item.status === "batal" && (
                       <div className="flex flex-col gap-2 items-center justify-center">
-                        <Ban />
+                        <Ban size={35} />
                         <p>Batal</p>
                       </div>
                     )}

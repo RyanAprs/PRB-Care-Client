@@ -61,8 +61,9 @@ const Medis = () => {
 
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
-    { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Nama Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Alamat Puskesmas", field: "adminPuskesmas.alamat" },
+    { header: "Telepon Puskesmas", field: "adminPuskesmas.telepon" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
     { header: "Tekanan Darah", field: "tekananDarah" },
@@ -80,12 +81,9 @@ const Medis = () => {
       </div>
     );
   return (
-    <div className="md:py-2 dark:bg-fontDarkGreen">
-      <div className="md:p-8 p-4 w-full h-screen">
-        <div>
-          <h1 className="text-2xl dark:text-white">Data Medis Anda:</h1>
-        </div>
-        <div className="row md:p-8 grid grid-cols-1 gap-6">
+    <div className="md:p-4 p-2  bg-whiteGrays dark:bg-black">
+      <div className="md:p-4 bg-white dark:bg-blackHover rounded-xl w-full h-screen">
+        <div className="row grid grid-cols-1 gap-6">
           <ReusableTable
             columns={columns}
             data={data}
