@@ -37,11 +37,11 @@ const Footer = () => {
 
         <div className="flex flex-col mx-auto items-center md:items-start ">
           <h2 className="text-xl font-bold mb-4  text-center">Tautan Cepat</h2>
-          <Link to="">Beranda</Link>
-          <Link to="">Kontrol Balik</Link>
-          <Link to="">Pengambilan Obat</Link>
-          <Link to="">Rekam Medis</Link>
-          <Link to="">Pemberitahuan</Link>
+          <Link to="/">Beranda</Link>
+          <Link to="/kontrol">Kontrol Balik</Link>
+          <Link to="/obat">Pengambilan Obat</Link>
+          <Link to="/medis">Rekam Medis</Link>
+          <Link to="/notifikasi">Pemberitahuan</Link>
         </div>
 
         <div className="mx-auto">
