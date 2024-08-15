@@ -286,6 +286,8 @@ export default function ReusableTable({
             }
             globalFilter={globalFilter}
             editMode="row"
+            removableSort 
+            resizableColumns
           >
             {path !== "pengguna" && (
               <Column

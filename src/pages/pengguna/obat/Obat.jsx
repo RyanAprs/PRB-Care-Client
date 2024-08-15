@@ -7,6 +7,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
+import { Toast } from "primereact/toast";
 
 const Obat = () => {
   const [data, setData] = useState([]);
@@ -51,45 +52,42 @@ const Obat = () => {
     );
 
   return (
-    <div className="md:py-2  dark:bg-fontDarkGreen h-screen">
-      <div className="md:p-8  w-full h-full">
-        <div className="row p-8 grid grid-cols-1 gap-6 overflow-y-auto h-full">
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
+      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
+        <div className="row p-1 grid  grid-cols-1 gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card key={index} className={`bg-mainGreen shadow-lg rounded-xl`}>
-                <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
-                  <div className="flex flex-col gap-4 items-start justify-center">
+              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen shadow-lg rounded-xl h-fit`}>
+               <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
+                  <div className="flex flex-col gap-4 items-center md:items-start justify-center">
                     <div className="flex">
                       <AlarmClock />{" "}
                       <h1 className="ml-2 font-poppins font-bold">
                         {item.tanggalPengambilan}
                       </h1>
                     </div>
-                    <h1 className="font-poppins">
-                      {item.obat.adminApotek.namaApotek} -{" "}
-                      {item.obat.adminApotek.telepon} -{" "}
-                      {item.obat.adminApotek.alamat}
-                    </h1>
-                    <h1 className="font-poppins">
-                      {item.obat.namaObat} - {item.jumlah}×
+                    <h1 className="font-poppins md:text-start text-center">
+                      {item.obat.adminApotek.namaApotek},{" "}
+                      {item.obat.adminApotek.telepon},{" "}
+                      {item.obat.adminApotek.alamat}, {item.obat.namaObat} {"("}{item.jumlah}×{")."}
                     </h1>
                   </div>
                   <div className="flex items-center justify-center ">
                     {item.status === "menunggu" && (
                       <div className="font-poppins flex flex-col gap-2 items-center justify-center ">
-                        <History />
+                        <History size={35} />
                         <p>Menunggu</p>
                       </div>
                     )}
                     {item.status === "diambil" && (
                       <div className="font-poppins flex flex-col gap-2 items-center justify-center">
-                        <CircleCheck />
+                        <CircleCheck size={35} />
                         <p>Selesai</p>
                       </div>
                     )}
                     {item.status === "batal" && (
                       <div className="font-poppins flex flex-col gap-2 items-center justify-center">
-                        <Ban />
+                        <Ban size={35} />
                         <p>Batal</p>
                       </div>
                     )}

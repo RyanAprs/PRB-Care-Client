@@ -89,12 +89,11 @@ const RegisterPengguna = () => {
     <div className="min-h-screen w-full flex justify-center items-center p-8">
       <Toast ref={toast} />
       <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
-        <div className="flex flex-col gap-4 w-full justify-center items-center">
+        <div className="flex flex-col w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="" />
           <h1 className="text-3xl font-semibold">Daftar Pengguna</h1>
         </div>
         <div className="flex flex-col w-full gap-4">
-          <p className="text-lg font-semibold">Data Pengguna</p>
           <label htmlFor="" className="-mb-3">
             Nama Lengkap:
           </label>
@@ -200,12 +199,15 @@ const RegisterPengguna = () => {
               {errors.password}
             </span>
           )}
-          <p className="text-lg font-semibold">Alamat Pengguna</p>
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
           <DynamicAddress reset={resetAddress} />
           {errors.alamat && (
             <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
           )}
         </div>
+        
         <div className="flex flex-col w-full gap-4">
           <Button
             className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
@@ -224,21 +226,21 @@ const RegisterPengguna = () => {
               <p>Daftar</p>
             )}
           </Button>
+          <p className="text-center">
+          <span className="font-normal">
+            Dengan mengklik Daftar, anda menyetujui{" "}
+          </span>
+          <span className="font-semibold text-mainGreen">kebijakan privasi</span>
+          <span className="font-normal"> kami </span>
+        </p>
           <div className="flex w-full gap-2 items-center justify-center">
             Sudah punya akun?
-            <Link to="/login" className="text-mainGreen">
+            <Link to="/login" className="text-mainGreen font-semibold">
               Masuk
             </Link>
           </div>
         </div>
-        <p className="text-center px-4">
-          <span className="font-normal opacity-60">
-            Dengan mengklik Daftar, Anda menyetujui{" "}
-          </span>
-          <span className="font-bold opacity-100">Ketentuan layanan</span>
-          <span className="font-normal opacity-60"> dan </span>
-          <span className="font-bold opacity-100">kebijakan privasi kami</span>
-        </p>
+        
       </div>
     </div>
   );
