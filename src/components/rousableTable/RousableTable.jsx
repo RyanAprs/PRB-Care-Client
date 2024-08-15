@@ -4,7 +4,15 @@ import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { FilePlus2,Ban,CircleCheckBig, Search, Trash2, Edit, CircleOff } from "lucide-react";
+import {
+  FilePlus2,
+  Ban,
+  CircleCheckBig,
+  Search,
+  Trash2,
+  Edit,
+  CircleOff,
+} from "lucide-react";
 
 export default function ReusableTable({
   data,
@@ -75,7 +83,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2  />
+            <Trash2 />
           </Button>
         </div>
       );
@@ -88,7 +96,7 @@ export default function ReusableTable({
     } else if (role === "apoteker" && status === "batal") {
       return (
         <>
-          <Ban size="30"  className="mx-auto" />
+          <Ban size="30" className="mx-auto" />
         </>
       );
     } else if (
@@ -104,7 +112,7 @@ export default function ReusableTable({
             severity="danger"
             onClick={() => onDelete(rowData)}
           >
-            <Trash2  />
+            <Trash2 />
           </Button>
         </div>
       );
@@ -123,7 +131,6 @@ export default function ReusableTable({
             size="sm"
             className="p-2  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            
           >
             <CircleCheckBig />
           </Button>
@@ -154,7 +161,6 @@ export default function ReusableTable({
                 size="sm"
                 className="p-2  md:text-lg text-sm rounded-xl"
                 onClick={() => onDone(rowData)}
-                
               >
                 <CircleCheckBig />
               </Button>
@@ -197,7 +203,6 @@ export default function ReusableTable({
             size="sm"
             className="p-2 md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            
           >
             <CircleCheckBig />
           </Button>
@@ -218,7 +223,6 @@ export default function ReusableTable({
             size="sm"
             className="p-2  md:text-lg text-sm rounded-xl"
             onClick={() => onDone(rowData)}
-            
           >
             <CircleCheckBig />
           </Button>
@@ -231,18 +235,20 @@ export default function ReusableTable({
     <div className="p-4 w-full ">
       <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
-          <div className="p-inputgroup md:w-1/2">
-          <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays" >
-              <Search size={16} />
-            </span>
-            <InputText
-              type="search"
-              value={globalFilter}
-              onChange={onGlobalFilterChange}
-              placeholder="Search..."
-              className=""
-            />
-          </div>
+          {path !== "pengguna" && (
+            <div className="p-inputgroup md:w-1/2">
+              <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
+                <Search size={16} />
+              </span>
+              <InputText
+                type="search"
+                value={globalFilter}
+                onChange={onGlobalFilterChange}
+                placeholder="Search..."
+                className=""
+              />
+            </div>
+          )}
           <div className="flex gap-4  items-center justify-center">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
@@ -264,17 +270,27 @@ export default function ReusableTable({
             rowsPerPageOptions={[10, 25, 50, 75, 100]}
             showGridlines
             tableStyle={{ minWidth: "50rem" }}
-            currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown CurrentPageReport"
+            currentPageReportTemplate={`${
+              path !== "pengguna"
+                ? "{first} to {last} of {totalRecords} entries"
+                : ""
+            }`}
+            paginatorTemplate={`${
+              path !== "pengguna"
+                ? "CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                : ""
+            }`}
             globalFilter={globalFilter}
             editMode="row"
           >
-            <Column
-              header="Aksi"
-              headerStyle={{ width: "5%", minWidth: "2rem" }}
-              body={actionBodyTemplate}
-              bodyStyle={{ textAlign: "center" }}
-            />
+            {path !== "pengguna" && (
+              <Column
+                header="Aksi"
+                headerStyle={{ width: "5%", minWidth: "2rem" }}
+                body={actionBodyTemplate}
+                bodyStyle={{ textAlign: "center" }}
+              />
+            )}
             {columns.map((col, index) => (
               <Column
                 key={index}
@@ -284,7 +300,6 @@ export default function ReusableTable({
                 className="p-4 "
               />
             ))}
-            
           </DataTable>
         ) : (
           <div className="text-center text-gray-500 dark:text-gray-400">

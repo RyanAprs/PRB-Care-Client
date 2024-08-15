@@ -1,6 +1,6 @@
 const Notifikasi = () => {
   return (
-    <div className="flex items-center justify-center h-screen dark:bg-black dark:text-white">
+    <div className="flex items-center justify-center h-screen dark:bg-fontDarkGreen dark:text-white">
       Notifikasi
     </div>
   );

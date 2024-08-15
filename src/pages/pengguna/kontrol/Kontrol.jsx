@@ -15,12 +15,24 @@ const Kontrol = () => {
   const { dispatch } = useContext(AuthContext);
   const token = Cookies.get("token");
 
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "selesai", "batal"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
+    if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
+
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
-        setData(response);
-
+        const sortedData = response.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -41,22 +53,23 @@ const Kontrol = () => {
   return (
     <div className="md:py-2 py-4 dark:bg-fontDarkGreen ">
       <div className="md:p-8 p-2 w-full min-h-screen">
-
         <div className="row p-8 grid grid-cols-1 gap-6">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card
-                key={index}
-                className={`bg-mainGreen shadow-lg rounded-xl`}
-              >
+              <Card key={index} className={`bg-mainGreen shadow-lg rounded-xl`}>
                 <div className="flex w-full text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-start justify-center">
                     <div className="flex">
-                    <AlarmClock/> <h1 className="ml-2 font-poppins font-bold" >{item.tanggalKontrol}</h1>
+                      <AlarmClock />{" "}
+                      <h1 className="ml-2 font-poppins font-bold">
+                        {item.tanggalKontrol}
+                      </h1>
                     </div>
-                    
+
                     <h1 className="font-poppins ">
-                      {item.pasien.adminPuskesmas.namaPuskesmas} - {item.pasien.adminPuskesmas.telepon} - {item.pasien.adminPuskesmas.alamat}
+                      {item.pasien.adminPuskesmas.namaPuskesmas} -{" "}
+                      {item.pasien.adminPuskesmas.telepon} -{" "}
+                      {item.pasien.adminPuskesmas.alamat}
                     </h1>
                   </div>
                   <div className="flex items-center justify-center ">

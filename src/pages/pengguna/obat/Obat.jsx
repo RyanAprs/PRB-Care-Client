@@ -15,14 +15,24 @@ const Obat = () => {
   const { dispatch } = useContext(AuthContext);
   const token = Cookies.get("token");
 
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "diambil", "batal"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.tanggalPengambilan < b.tanggalPengambilan) return -1;
+    if (a.tanggalPengambilan > b.tanggalPengambilan) return 1;
+
+    return 0;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAllPengambilanObat();
-        setData(response);
-
-        console.log(response);
-
+        const sortedData = response.sort(customSort);
+        setData(sortedData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -46,19 +56,23 @@ const Obat = () => {
         <div className="row p-8 grid grid-cols-1 gap-6">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card
-                key={index}
-                className={`bg-mainGreen shadow-lg rounded-xl`}
-              >
-                 <div className="flex w-full text-xl px-4 justify-between items-center text-white">
+              <Card key={index} className={`bg-mainGreen shadow-lg rounded-xl`}>
+                <div className="flex w-full text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-start justify-center">
-                  <div className="flex">
-                    <AlarmClock/> <h1 className="ml-2 font-poppins font-bold" >{item.tanggalPengambilan}</h1>
+                    <div className="flex">
+                      <AlarmClock />{" "}
+                      <h1 className="ml-2 font-poppins font-bold">
+                        {item.tanggalPengambilan}
+                      </h1>
                     </div>
                     <h1 className="font-poppins">
-                        {item.obat.adminApotek.namaApotek} - {item.obat.adminApotek.telepon} - {item.obat.adminApotek.alamat}
+                      {item.obat.adminApotek.namaApotek} -{" "}
+                      {item.obat.adminApotek.telepon} -{" "}
+                      {item.obat.adminApotek.alamat}
                     </h1>
-                    <h1  className="font-poppins">{item.obat.namaObat} - {item.jumlah}×</h1>
+                    <h1 className="font-poppins">
+                      {item.obat.namaObat} - {item.jumlah}×
+                    </h1>
                   </div>
                   <div className="flex items-center justify-center ">
                     {item.status === "menunggu" && (
