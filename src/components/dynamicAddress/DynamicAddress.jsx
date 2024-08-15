@@ -2,7 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-import province from "../../address/provinces.json";
+
+const ADDRESS_URI = import.meta.env.VITE_ADDRESS_API_URI;
 
 const DynamicAddress = ({ reset, prevAddress }) => {
   const [provinces, setProvinces] = useState([]);
@@ -26,83 +27,70 @@ const DynamicAddress = ({ reset, prevAddress }) => {
     }
   }, [reset, prevAddress, setAddress]);
 
-  useEffect(() => {
-    setProvinces(province);
-  }, []);
+  fetch(`${ADDRESS_URI}/provinces.json`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => setProvinces(data))
+    .catch((error) => {
+      console.error("Error fetching provinces:", error);
+    });
 
-  const handleProvinceChange = async (e) => {
+  const handleProvinceChange = (e) => {
     const provinsiId = e.value;
-    const selectedProvince = provinces.find((prov) => prov.id === provinsiId);
-    if (selectedProvince) {
+    const province = provinces.find((prov) => prov.id === provinsiId);
+    if (province) {
       setAddress((prev) => ({
         ...prev,
-        provinsi: selectedProvince.name,
+        provinsi: province.name,
         provinsiId: provinsiId,
       }));
-
-      try {
-        const regencyData = await import(
-          `../../address/regencies/${provinsiId}.json`
-        );
-        setRegencies(regencyData.default);
-      } catch (error) {
-        console.error("Error loading regencies:", error);
-        setRegencies([]);
-      }
+      fetch(`${ADDRESS_URI}/regencies/${province.id}.json`)
+        .then((response) => response.json())
+        .then((data) => setRegencies(data));
     }
   };
 
-  const handleRegencyChange = async (e) => {
+  const handleRegencyChange = (e) => {
     const kabupatenId = e.value;
-    const selectedRegency = regencies.find((reg) => reg.id === kabupatenId);
-    if (selectedRegency) {
+    const regency = regencies.find((reg) => reg.id === kabupatenId);
+    if (regency) {
       setAddress((prev) => ({
         ...prev,
-        kabupaten: selectedRegency.name,
+        kabupaten: regency.name,
         kabupatenId: kabupatenId,
       }));
-
-      try {
-        const districtData = await import(
-          `../../address/districts/${kabupatenId}.json`
-        );
-        setDistricts(districtData.default);
-      } catch (error) {
-        console.error("Error loading districts:", error);
-        setDistricts([]);
-      }
+      fetch(`${ADDRESS_URI}/districts/${regency.id}.json`)
+        .then((response) => response.json())
+        .then((data) => setDistricts(data));
     }
   };
 
-  const handleDistrictChange = async (e) => {
+  const handleDistrictChange = (e) => {
     const kecamatanId = e.value;
-    const selectedDistrict = districts.find((dist) => dist.id === kecamatanId);
-    if (selectedDistrict) {
+    const district = districts.find((dist) => dist.id === kecamatanId);
+    if (district) {
       setAddress((prev) => ({
         ...prev,
-        kecamatan: selectedDistrict.name,
+        kecamatan: district.name,
         kecamatanId: kecamatanId,
       }));
-
-      try {
-        const villageData = await import(
-          `../../address/villages/${kecamatanId}.json`
-        );
-        setVillages(villageData.default);
-      } catch (error) {
-        console.error("Error loading villages:", error);
-        setVillages([]);
-      }
+      fetch(`${ADDRESS_URI}/villages/${district.id}.json`)
+        .then((response) => response.json())
+        .then((data) => setVillages(data));
     }
   };
 
   const handleVillageChange = (e) => {
     const desaId = e.value;
-    const selectedVillage = villages.find((village) => village.id === desaId);
-    if (selectedVillage) {
+    const village = villages.find((village) => village.id === desaId);
+    if (village) {
       setAddress((prev) => ({
         ...prev,
-        desa: selectedVillage.name,
+        desa: village.name,
         desaId: desaId,
       }));
     }
@@ -133,60 +121,68 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         />
 
         {address.provinsiId && (
-          <Dropdown
-            value={address.kabupatenId || ""}
-            options={regencies.map((reg) => ({
-              label: reg.name,
-              value: reg.id,
-            }))}
-            onChange={handleRegencyChange}
-            placeholder="Pilih Kabupaten"
-            filter
-            className="w-full p-2 text-sm "
-            required
-          />
+          <>
+            <Dropdown
+              value={address.kabupatenId || ""}
+              options={regencies.map((reg) => ({
+                label: reg.name,
+                value: reg.id,
+              }))}
+              onChange={handleRegencyChange}
+              placeholder="Pilih Kabupaten"
+              filter
+              className="w-full p-2 text-sm "
+              required
+            />
+          </>
         )}
 
         {address.kabupatenId && (
-          <Dropdown
-            value={address.kecamatanId || ""}
-            options={districts.map((dist) => ({
-              label: dist.name,
-              value: dist.id,
-            }))}
-            onChange={handleDistrictChange}
-            placeholder="Pilih Kecamatan"
-            filter
-            className="w-full p-2 text-sm"
-            required
-          />
+          <>
+            <Dropdown
+              value={address.kecamatanId || ""}
+              options={districts.map((dist) => ({
+                label: dist.name,
+                value: dist.id,
+              }))}
+              onChange={handleDistrictChange}
+              placeholder="Pilih Kecamatan"
+              filter
+              className="w-full p-2 text-sm"
+              required
+            />
+          </>
         )}
 
         {address.kecamatanId && (
-          <Dropdown
-            value={address.desaId || ""}
-            options={villages.map((village) => ({
-              label: village.name,
-              value: village.id,
-            }))}
-            onChange={handleVillageChange}
-            placeholder="Pilih Desa"
-            filter
-            className="w-full p-2 text-sm "
-            required
-          />
+          <>
+            <Dropdown
+              value={address.desaId || ""}
+              options={villages.map((village) => ({
+                label: village.name,
+                value: village.id,
+              }))}
+              onChange={handleVillageChange}
+              placeholder="Pilih Desa"
+              filter
+              className="w-full p-2 text-sm "
+              required
+            />
+          </>
         )}
 
         {address.desaId && (
-          <InputText
-            type="text"
-            value={address.detail || ""}
-            placeholder="Detail Alamat"
-            name="detail"
-            onChange={handleInputChange}
-            className="w-full p-3 text-slg "
-            required
-          />
+          <>
+            <InputText
+              type="text"
+              value={address.detail || ""}
+              placeholder="Detail Alamat"
+              name="detail"
+              onChange={handleInputChange}
+              className="w-full p-3 text-slg "
+              required
+            />
+          </>
         )}
       </div>
     </div>

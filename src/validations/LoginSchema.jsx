@@ -3,16 +3,17 @@ import { z } from "zod";
 export const loginSchema = z.object({
   username: z
     .string()
-    .nonempty("Username tidak boleh kosong")
-    .regex(/^\S*$/, "Username tidak boleh mengandung spasi")
-    .max(50, "Username harus kurang dari 50 huruf"),
+    .nonempty("Format username tidak sesuai")
+    .regex(/^\S*$/, "Format username tidak sesuai")
+    .min(6, "Format username tidak sesuai")
+    .max(50, "Format username tidak sesuai"),
   password: z
     .string()
-    .nonempty("Password tidak boleh kosong")
-    .min(6, "Password harus lebih dari 6 huruf")
+    .nonempty("Format password tidak sesuai")
+    .min(6, "Format password tidak sesuai")
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
-      "Password harus mengandung huruf besar, kecil, angka, dan simbol"
+      "Format password tidak sesuai"
     )
-    .regex(/^\S*$/, "Password tidak boleh mengandung spasi"),
+    .regex(/^\S*$/, "Format password tidak sesuai"),
 });
