@@ -7,8 +7,6 @@ import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 
 const Kontrol = () => {
   const [data, setData] = useState([]);
