@@ -253,13 +253,15 @@ export default function ReusableTable({
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}
-            {path !== "pengambilanObatApoteker" && (
-              <Button
-                onClick={onCreate}
-                className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
-                label={<FilePlus2 />}
-              />
-            )}
+            <Button
+              onClick={onCreate}
+              className={`${
+                path === "pengguna" || path === "pengambilanObatApoteker"
+                  ? "hidden"
+                  : ""
+              } block p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`}
+              label={<FilePlus2 />}
+            />
           </div>
         </div>
         {filteredData.length > 0 ? (
