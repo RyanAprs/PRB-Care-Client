@@ -53,10 +53,13 @@ const Kontrol = () => {
   return (
     <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
       <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
-        <div className="row p-1 grid grid-cols-1  gap-6 overflow-y-auto h-full">
+        <div className="flex flex-col p-1  gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen h-fit shadow-lg rounded-xl`}>
+              <Card
+                key={index}
+                className={`bg-lightGreen dark:bg-mainGreen h-fit shadow-lg rounded-xl`}
+              >
                 <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-center md:items-start justify-center">
                     <div className="flex md:mx-0 mx-auto">

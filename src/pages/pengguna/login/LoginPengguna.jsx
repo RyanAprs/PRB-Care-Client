@@ -81,6 +81,7 @@ const LoginPengguna = () => {
 
       let tanggalAmbilLocal, tanggalBatalLocal;
       let notificationTitle, notificationBody;
+      let notificationType;
 
       if (namaApotek) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
@@ -91,6 +92,22 @@ const LoginPengguna = () => {
         );
         notificationTitle = title;
         notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationType = "notifikasiPengambilanObat";
+        const storedNotification = localStorage.getItem(notificationType);
+        if (!storedNotification) {
+          const notificationData = {
+            title: notificationTitle,
+            body: notificationBody,
+            timestamp: Date.now(),
+          };
+          localStorage.setItem(
+            notificationType,
+            JSON.stringify(notificationData)
+          );
+          console.log(`${notificationType} stored in localStorage`);
+        } else {
+          console.log(`${notificationType} already exists in localStorage`);
+        }
       } else if (namaPuskesmas) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
@@ -100,12 +117,27 @@ const LoginPengguna = () => {
         );
         notificationTitle = title;
         notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationType = "notifikasiKontrolBalik";
+        const storedNotification = localStorage.getItem(notificationType);
+        if (!storedNotification) {
+          const notificationData = {
+            title: notificationTitle,
+            body: notificationBody,
+            timestamp: Date.now(),
+          };
+          localStorage.setItem(
+            notificationType,
+            JSON.stringify(notificationData)
+          );
+          console.log(`${notificationType} stored in localStorage`);
+        } else {
+          console.log(`${notificationType} already exists in localStorage`);
+        }
       }
 
       const notificationOptions = {
         body: notificationBody,
       };
-
       new Notification(notificationTitle, notificationOptions);
     });
   }, [permission]);

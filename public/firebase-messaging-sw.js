@@ -35,7 +35,7 @@ function convertUnixTimestampToLocalTime(timestamp) {
 }
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("Received background message ", payload);
+  console.log("Received background message ", payload.data);
 
   // Extract data
   const {
@@ -51,6 +51,7 @@ messaging.onBackgroundMessage((payload) => {
   // Convert timestamps to local time
   let tanggalAmbilLocal, tanggalBatalLocal;
   let notificationTitle, notificationBody;
+  let notificationType;
 
   if (namaApotek) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
@@ -59,6 +60,19 @@ messaging.onBackgroundMessage((payload) => {
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal pengambilan obat pada tanggal ${tanggalAmbilLocal} pada apotek ${namaApotek} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+    notificationType = "notifikasiPengambilanObat";
+    const storedNotification = localStorage.getItem(notificationType);
+    if (!storedNotification) {
+      const notificationData = {
+        title: notificationTitle,
+        body: notificationBody,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem(notificationType, JSON.stringify(notificationData));
+      console.log(`${notificationType} stored in localStorage`);
+    } else {
+      console.log(`${notificationType} already exists in localStorage`);
+    }
   } else if (namaPuskesmas) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
       parseInt(tanggalKontrol)
@@ -66,6 +80,19 @@ messaging.onBackgroundMessage((payload) => {
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol balik pada tanggal ${tanggalAmbilLocal} di puskesmas ${namaPuskesmas} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+    notificationType = "notifikasiKontrolBalik";
+    const storedNotification = localStorage.getItem(notificationType);
+    if (!storedNotification) {
+      const notificationData = {
+        title: notificationTitle,
+        body: notificationBody,
+        timestamp: Date.now(),
+      };
+      localStorage.setItem(notificationType, JSON.stringify(notificationData));
+      console.log(`${notificationType} stored in localStorage`);
+    } else {
+      console.log(`${notificationType} already exists in localStorage`);
+    }
   }
 
   const notificationOptions = {
