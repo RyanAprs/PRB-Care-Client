@@ -10,8 +10,9 @@ import { Toast } from "primereact/toast";
 import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { updateCurrentTokenPerangkatPengguna } from "../../services/PenggunaService";
 
-const LoginForm = ({ title, API_URI, navigateUser, role }) => {
+const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -23,12 +24,25 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
 
   const loginUser = location.pathname === "/login";
 
+  const handleUpdate = async () => {
+    try {
+      const data = { TokenPerangkat: tokenPerangkat };
+      const response = await updateCurrentTokenPerangkatPengguna(data);
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       loginSchema.parse({ username, password });
+
       const response = await axios.post(
         API_URI,
         { username, password },
@@ -45,9 +59,15 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           payload: { token: response.data.token, role: role },
         });
 
+        localStorage.setItem("isLogin", "true");
+
         navigate(navigateUser);
 
-        localStorage.setItem("isLogin", "true");
+        if (role === "pengguna") {
+          setTimeout(async () => {
+            await handleUpdate();
+          }, 2000);
+        }
       }
     } catch (error) {
       if (error instanceof ZodError) {
