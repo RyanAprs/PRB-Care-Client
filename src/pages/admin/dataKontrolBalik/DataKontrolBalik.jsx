@@ -80,6 +80,8 @@ const DataKontrolBalik = () => {
         const sortedData = response.sort(customSort);
         setData(sortedData);
 
+        console.log(sortedData);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -342,7 +344,7 @@ const DataKontrolBalik = () => {
   const itemTemplate = (option) => {
     return (
       <div>
-        {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+        {option.pengguna.namaLengkap} - {option.noRekamMedis}
       </div>
     );
   };
@@ -351,7 +353,7 @@ const DataKontrolBalik = () => {
     if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.adminPuskesmas.namaPuskesmas}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis}
         </div>
       );
     }

@@ -343,7 +343,7 @@ const DataPengambilanObat = () => {
   const itemTemplatePengguna = (option) => {
     return (
       <div>
-        {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+        {option.pengguna.namaLengkap} - {option.noRekamMedis}
       </div>
     );
   };
@@ -352,7 +352,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis}
         </div>
       );
     }

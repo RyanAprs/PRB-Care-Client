@@ -340,7 +340,7 @@ const DataKontrolBalik = () => {
   const itemTemplatePengguna = (option) => {
     return (
       <div>
-        {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+        {option.pengguna.namaLengkap} - {option.noRekamMedis}
       </div>
     );
   };
@@ -349,7 +349,7 @@ const DataKontrolBalik = () => {
     if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.pengguna.telepon}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis}
         </div>
       );
     }
