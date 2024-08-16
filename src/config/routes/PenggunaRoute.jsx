@@ -18,6 +18,8 @@ import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
+import KebijakanPrivasi from "../../pages/guides/KebijakanPrivasi";
+import PWAInstallTutorial from "../../pages/guides/PWAInstallTutorial";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -116,6 +118,15 @@ const PenggunaRoute = () => {
               <Notifikasi />
               <Footer />
             </PrivateRoute>
+          }
+        />
+        <Route path="/cara-instalasi-PWA" element={<PWAInstallTutorial />} />
+        <Route
+          path="/kebijakan-privasi"
+          element={
+            <>
+              <KebijakanPrivasi />
+            </>
           }
         />
         <Route path="/page/not-found" element={<NotFound />} />

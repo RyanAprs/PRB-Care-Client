@@ -207,7 +207,7 @@ const RegisterPengguna = () => {
             <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
           )}
         </div>
-        
+
         <div className="flex flex-col w-full gap-4">
           <Button
             className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
@@ -227,12 +227,17 @@ const RegisterPengguna = () => {
             )}
           </Button>
           <p className="text-center">
-          <span className="font-normal">
-            Dengan mengklik Daftar, anda menyetujui{" "}
-          </span>
-          <span className="font-semibold text-mainGreen">kebijakan privasi</span>
-          <span className="font-normal"> kami </span>
-        </p>
+            <span className="font-normal">
+              Dengan mengklik Daftar, anda menyetujui{" "}
+            </span>
+            <Link
+              to="/kebijakan-privasi"
+              className="font-semibold text-mainGreen"
+            >
+              kebijakan privasi
+            </Link>
+            <span className="font-normal"> kami </span>
+          </p>
           <div className="flex w-full gap-2 items-center justify-center">
             Sudah punya akun?
             <Link to="/login" className="text-mainGreen font-semibold">
@@ -240,7 +245,6 @@ const RegisterPengguna = () => {
             </Link>
           </div>
         </div>
-        
       </div>
     </div>
   );
