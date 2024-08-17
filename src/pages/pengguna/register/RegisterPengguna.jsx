@@ -10,7 +10,8 @@ import { penggunaRegisterSchema } from "../../../validations/PenggunaSchema";
 import { ZodError } from "zod";
 import { handleApiError } from "../../../utils/ApiErrorHandlers";
 import { Toast } from "primereact/toast";
-import { createPengguna } from "../../../services/PenggunaService";
+import { registerPengguna } from "../../../services/PenggunaService";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const RegisterPengguna = () => {
   const [datas, setDatas] = useState({
@@ -21,11 +22,13 @@ const RegisterPengguna = () => {
     telepon: "",
     teleponKeluarga: "",
     alamat: "",
+    tokenRecaptcha: "",
   });
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
   const toast = useRef(null);
   const [resetAddress, setResetAddress] = useState(true);
+  const recaptchaRef = useRef(null); 
 
   const { address } = useContext(AddressContext);
 
@@ -52,11 +55,10 @@ const RegisterPengguna = () => {
     e.preventDefault();
     setErrors({});
     setLoading(true);
-
     try {
       penggunaRegisterSchema.parse(datas);
 
-      const response = await createPengguna(datas);
+      const response = await registerPengguna(datas);
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
@@ -79,6 +81,13 @@ const RegisterPengguna = () => {
         });
         setErrors(newErrors);
       } else {
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset();
+        }
+        setDatas((prev) => ({
+          ...prev,
+          tokenRecaptcha: "",
+        }));
         handleApiError(error, toast);
         setLoading(false);
       }
@@ -206,8 +215,29 @@ const RegisterPengguna = () => {
           {errors.alamat && (
             <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
           )}
-        </div>
+          <label htmlFor="" className="-mb-3">
+            Captcha:
+          </label>
+          <ReCAPTCHA
+            className="rounded-lg"
+            ref={recaptchaRef} 
+            sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"
+            value={datas.tokenRecaptcha}
+            onChange={(value) => {
+              setDatas((prev) => ({
+                ...prev,
+                tokenRecaptcha: value,
+              }));
+            }}
+          />
 
+          {errors.tokenRecaptcha && (
+            <span className="text-red-500  -mt-3 text-sm">
+              {errors.tokenRecaptcha}
+            </span>
+          )}
+        </div>
+       
         <div className="flex flex-col w-full gap-4">
           <Button
             className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
@@ -228,13 +258,14 @@ const RegisterPengguna = () => {
           </Button>
           <p className="text-center">
             <span className="font-normal">
-              Dengan mengklik Daftar, anda menyetujui{" "}
+              Dengan mengklik daftar, anda menyetujui{" "}
             </span>
             <Link
               to="/kebijakan-privasi"
+              target="_blank"
               className="font-semibold text-mainGreen"
             >
-              kebijakan privasi
+              Kebijakan Privasi
             </Link>
             <span className="font-normal"> kami </span>
           </p>

@@ -27,17 +27,43 @@ const DynamicAddress = ({ reset, prevAddress }) => {
     }
   }, [reset, prevAddress, setAddress]);
 
-  fetch(`${ADDRESS_URI}/provinces.json`)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then((data) => setProvinces(data))
-    .catch((error) => {
-      console.error("Error fetching provinces:", error);
-    });
+  useEffect(() => {
+    fetch(`${ADDRESS_URI}/provinces.json`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setProvinces(data))
+      .catch((error) => {
+        console.error("Error fetching provinces:", error);
+      });
+  }, []); 
+
+  useEffect(() => {
+    if (address.provinsiId) {
+      fetch(`${ADDRESS_URI}/regencies/${address.provinsiId}.json`)
+        .then((response) => response.json())
+        .then((data) => setRegencies(data));
+    }
+  }, [address.provinsiId]);
+
+  useEffect(() => {
+    if (address.kabupatenId) {
+      fetch(`${ADDRESS_URI}/districts/${address.kabupatenId}.json`)
+        .then((response) => response.json())
+        .then((data) => setDistricts(data));
+    }
+  }, [address.kabupatenId]);
+
+  useEffect(() => {
+    if (address.kecamatanId) {
+      fetch(`${ADDRESS_URI}/villages/${address.kecamatanId}.json`)
+        .then((response) => response.json())
+        .then((data) => setVillages(data));
+    }
+  }, [address.kecamatanId]);
 
   const handleProvinceChange = (e) => {
     const provinsiId = e.value;
@@ -48,9 +74,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         provinsi: province.name,
         provinsiId: provinsiId,
       }));
-      fetch(`${ADDRESS_URI}/regencies/${province.id}.json`)
-        .then((response) => response.json())
-        .then((data) => setRegencies(data));
     }
   };
 
@@ -63,9 +86,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         kabupaten: regency.name,
         kabupatenId: kabupatenId,
       }));
-      fetch(`${ADDRESS_URI}/districts/${regency.id}.json`)
-        .then((response) => response.json())
-        .then((data) => setDistricts(data));
     }
   };
 
@@ -78,9 +98,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         kecamatan: district.name,
         kecamatanId: kecamatanId,
       }));
-      fetch(`${ADDRESS_URI}/villages/${district.id}.json`)
-        .then((response) => response.json())
-        .then((data) => setVillages(data));
     }
   };
 
@@ -121,68 +138,60 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         />
 
         {address.provinsiId && (
-          <>
-            <Dropdown
-              value={address.kabupatenId || ""}
-              options={regencies.map((reg) => ({
-                label: reg.name,
-                value: reg.id,
-              }))}
-              onChange={handleRegencyChange}
-              placeholder="Pilih Kabupaten"
-              filter
-              className="w-full p-2 text-sm "
-              required
-            />
-          </>
+          <Dropdown
+            value={address.kabupatenId || ""}
+            options={regencies.map((reg) => ({
+              label: reg.name,
+              value: reg.id,
+            }))}
+            onChange={handleRegencyChange}
+            placeholder="Pilih Kabupaten"
+            filter
+            className="w-full p-2 text-sm "
+            required
+          />
         )}
 
         {address.kabupatenId && (
-          <>
-            <Dropdown
-              value={address.kecamatanId || ""}
-              options={districts.map((dist) => ({
-                label: dist.name,
-                value: dist.id,
-              }))}
-              onChange={handleDistrictChange}
-              placeholder="Pilih Kecamatan"
-              filter
-              className="w-full p-2 text-sm"
-              required
-            />
-          </>
+          <Dropdown
+            value={address.kecamatanId || ""}
+            options={districts.map((dist) => ({
+              label: dist.name,
+              value: dist.id,
+            }))}
+            onChange={handleDistrictChange}
+            placeholder="Pilih Kecamatan"
+            filter
+            className="w-full p-2 text-sm"
+            required
+          />
         )}
 
         {address.kecamatanId && (
-          <>
-            <Dropdown
-              value={address.desaId || ""}
-              options={villages.map((village) => ({
-                label: village.name,
-                value: village.id,
-              }))}
-              onChange={handleVillageChange}
-              placeholder="Pilih Desa"
-              filter
-              className="w-full p-2 text-sm "
-              required
-            />
-          </>
+          <Dropdown
+            value={address.desaId || ""}
+            options={villages.map((village) => ({
+              label: village.name,
+              value: village.id,
+            }))}
+            onChange={handleVillageChange}
+            placeholder="Pilih Desa"
+            filter
+            className="w-full p-2 text-sm "
+            required
+          />
         )}
 
         {address.desaId && (
-          <>
-            <InputText
-              type="text"
-              value={address.detail || ""}
-              placeholder="Detail Alamat"
-              name="detail"
-              onChange={handleInputChange}
-              className="w-full p-3 text-slg "
-              required
-            />
-          </>
+          <InputText
+            type="text"
+            value={address.detail || ""}
+            placeholder="Detail Alamat"
+            name="detail"
+            onChange={handleInputChange}
+            className="w-full p-3 text-slg "
+            required
+          />
         )}
       </div>
     </div>

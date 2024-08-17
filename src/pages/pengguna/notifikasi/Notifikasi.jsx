@@ -41,8 +41,8 @@ const Notifikasi = () => {
               </div>
             ))
           ) : (
-            <div className="bg-white dark:dark:bg-blackHover text-center  p-8 rounded  w-full">
-              <h1 className="text-xl font-semibold mb-2">
+            <div className="bg-white dark:dark:bg-blackHover text-center   rounded  w-full">
+              <h1 className="text-xl text-gray-500 dark:text-gray-400 mb-2">
                 Tidak ada notifikasi
               </h1>
             </div>

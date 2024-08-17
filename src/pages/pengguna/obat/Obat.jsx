@@ -96,8 +96,8 @@ const Obat = () => {
               </Card>
             ))
           ) : (
-            <div className="text-center text-xl dark:text-white">
-              Anda belum melakukan Pengambilan Obat
+            <div className="text-center text-xl text-gray-500 dark:text-gray-400">
+              Anda belum melakukan pengambilan obat
             </div>
           )}
         </div>

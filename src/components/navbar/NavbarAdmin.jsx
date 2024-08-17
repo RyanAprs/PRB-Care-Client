@@ -449,7 +449,7 @@ const NavbarAdmin = ({ children }) => {
           toast.current.show({
             severity: "success",
             summary: "Berhasil",
-            detail: "Data Apotek diperbarui",
+            detail: "Apotek diperbarui",
             life: 3000,
           });
 
@@ -468,7 +468,7 @@ const NavbarAdmin = ({ children }) => {
           toast.current.show({
             severity: "success",
             summary: "Berhasil",
-            detail: "Data Puskesmas diperbarui",
+            detail: "Puskesmas diperbarui",
             life: 3000,
           });
 
@@ -559,23 +559,23 @@ const NavbarAdmin = ({ children }) => {
               <h1 className="text-xl">
                 {location.pathname === "/admin/beranda" ? "Beranda" : ""}
                 {location.pathname === "/admin/data-puskesmas"
-                  ? "Data Puskesmas"
+                  ? "Puskesmas"
                   : ""}
                 {location.pathname === "/admin/data-apotek"
-                  ? "Data Apotek"
+                  ? "Apotek"
                   : ""}
                 {location.pathname === "/admin/data-pasien"
-                  ? "Data Pasien"
+                  ? "Pasien"
                   : ""}
                 {location.pathname === "/admin/data-pengguna"
-                  ? "Data Pengguna"
+                  ? "Pengguna"
                   : ""}
-                {location.pathname === "/admin/data-obat" ? "Data Obat" : ""}
+                {location.pathname === "/admin/data-obat" ? "Obat" : ""}
                 {location.pathname === "/admin/data-kontrol-balik"
-                  ? "Data Kontrol Balik"
+                  ? "Kontrol Balik"
                   : ""}
                 {location.pathname === "/admin/data-pengambilan-obat"
-                  ? "Data Pengambilan Obat"
+                  ? "Pengambilan Obat"
                   : ""}
               </h1>
             )}
@@ -585,16 +585,16 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/puskesmas/beranda" ? "Beranda" : ""}
                 {location.pathname === "/puskesmas/profile" ? "Profile" : ""}
                 {location.pathname === "/puskesmas/data-apotek"
-                  ? "Data Apotek"
+                  ? "Apotek"
                   : ""}
                 {location.pathname === "/puskesmas/data-pasien"
-                  ? "Data Pasien"
+                  ? "Pasien"
                   : ""}
                 {location.pathname === "/puskesmas/data-kontrol-balik"
-                  ? "Data Kontrol Balik"
+                  ? "Kontrol Balik"
                   : ""}
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
-                  ? "Data Pengambilan Obat"
+                  ? "Pengambilan Obat"
                   : ""}
               </h1>
             )}
@@ -602,9 +602,9 @@ const NavbarAdmin = ({ children }) => {
               <h1 className="text-xl">
                 {location.pathname === "/apotek/beranda" ? "Beranda" : ""}
                 {location.pathname === "/apotek/profile" ? "Profile" : ""}
-                {location.pathname === "/apotek/data-obat" ? "Data Obat" : ""}
+                {location.pathname === "/apotek/data-obat" ? "Obat" : ""}
                 {location.pathname === "/apotek/data-pengambilan-obat"
-                  ? "Data Pengambilan Obat"
+                  ? "Pengambilan Obat"
                   : ""}
               </h1>
             )}

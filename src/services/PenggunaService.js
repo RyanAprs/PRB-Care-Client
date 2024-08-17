@@ -48,6 +48,15 @@ export const createPengguna = async (datas) => {
   return response;
 };
 
+export const registerPengguna = async (datas) => {
+  const response = await axios.post(
+    `${API_BASE_URI}/api/pengguna/register`,
+    datas,
+    getRequestHeaders()
+  );
+  return response;
+};
+
 export const updatePengguna = async (id, datas) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/pengguna/${id}`,

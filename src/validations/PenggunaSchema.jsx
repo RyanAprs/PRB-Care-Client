@@ -116,6 +116,9 @@ export const penggunaRegisterSchema = z.object({
       isPasswordFormat,
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
     ),
+  tokenRecaptcha: z
+    .string()
+    .min(1, "Selesaikan captcha terlebih dahulu"), 
 });
 
 export const penggunaUpdateCurrentSchema = z.object({

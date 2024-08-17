@@ -1,6 +1,8 @@
+import img from "../../assets/prbcare.svg";
 const PWAInstallTutorial = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-gray-800 dark:text-white p-8 md:px-40">
+    <div className="min-h-screen bg-white  text-gray-800  p-8 md:px-40">
+      <img src={img} className="mb-2 md:w-1/5 w-4/5 mx-auto" alt="img" />
       <h1 className="text-4xl font-bold mb-6 text-center">
         Panduan Instalasi PWA
       </h1>

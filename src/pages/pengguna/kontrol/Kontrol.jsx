@@ -99,7 +99,7 @@ const Kontrol = () => {
               </Card>
             ))
           ) : (
-            <div className="text-center text-xl dark:text-white">
+            <div className="text-center text-xl text-gray-500 dark:text-gray-400">
               Anda belum melakukan kontrol
             </div>
           )}
