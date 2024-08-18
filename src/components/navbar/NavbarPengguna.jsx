@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
+import { Menu } from 'primereact/menu';
 import {
   Bell,
   HomeIcon,
@@ -11,6 +12,7 @@ import {
   User,
   Lock,
   LogOut,
+  X
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
@@ -39,7 +41,6 @@ import DynamicAddress from "../dynamicAddress/DynamicAddress";
 
 const NavbarPengguna = () => {
   const { dispatch } = useContext(AuthContext);
-  const [visible, setVisible] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [dataPassword, setDataPassword] = useState({
     currentPassword: "",
@@ -58,6 +59,8 @@ const NavbarPengguna = () => {
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const toast = useRef(null);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [key, setKey] = useState(0);
   const { address } = useContext(AddressContext);
 
   useEffect(() => {
@@ -80,14 +83,9 @@ const NavbarPengguna = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleModalMenu = () => {
-    setVisible(true);
-  };
-
   const handleModalLogout = () => {
+    setIsMenuVisible(false)
     setVisibleLogout(true);
-
-    setVisible(false);
   };
 
   const handleLogout = () => {
@@ -105,16 +103,14 @@ const NavbarPengguna = () => {
   };
 
   const handleModalChangePassword = () => {
+    setIsMenuVisible(false)
     setVisibleChangePassword(true);
-    setVisible(false);
   };
 
   const handleChangePassword = async () => {
     try {
       penggunaChangePasswordSchema.parse(dataPassword);
-
       const response = await updatePasswordPengguna(dataPassword);
-
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -139,7 +135,7 @@ const NavbarPengguna = () => {
   };
 
   const handleDetailProfileModal = async () => {
-    setVisible(false);
+    setIsMenuVisible(false)
     setVisibleDetailProfile(true);
     try {
       const dataResponse = await getCurrentPengguna();
@@ -150,7 +146,6 @@ const NavbarPengguna = () => {
           telepon: dataResponse.telepon,
           teleponKeluarga: dataResponse.teleponKeluarga,
         });
-        setVisible(false);
       }
     } catch (error) {
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
@@ -194,7 +189,6 @@ const NavbarPengguna = () => {
           detail: "Data Anda diperbarui",
           life: 3000,
         });
-
         setVisibleUpdateProfile(false);
       }
     } catch (error) {
@@ -210,11 +204,28 @@ const NavbarPengguna = () => {
       }
     }
   };
-
+  const toggleMenuVisibility = () => {
+    setIsMenuVisible(!isMenuVisible);
+    setKey((prev) => prev + 1);
+  };
+  const items = [
+    {
+      label: <div className="flex justify-center items-center gap-2"><User/><h1>Profile</h1></div>,
+      command: () => handleDetailProfileModal(),
+    },
+    {
+      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      command: () => handleModalChangePassword(),
+    },
+    {
+      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      command: () => handleModalLogout(),
+    },
+  ];
   return (
     <>
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover shadow-xl text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
-        <Toast ref={toast} />
+        <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
           <div className="font-extrabold text-black dark:text-white">
@@ -223,7 +234,7 @@ const NavbarPengguna = () => {
         </div>
 
         <div className="flex gap-10 items-center text-xl ">
-          <div className="md:flex gap-10 items-center text-xl font-semibold hidden text-black dark:text-white">
+          <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
             <Link
               to={"/"}
               className=" transition-all flex flex-col items-center justify-center "
@@ -304,15 +315,18 @@ const NavbarPengguna = () => {
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <Button
-                onClick={handleModalMenu}
+                onClick={toggleMenuVisibility}
                 className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-                label={<Settings2 className="text-white" />}
+                label={!isMenuVisible ?<Settings2 className="text-white" /> : <X className="text-white" />}
               ></Button>
             </div>
+            
           </div>
+          
         </div>
-      </header>
-
+        
+      </header> 
+      <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} absolute  right-0 `} model={items} />
       <div
         className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
         style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.1)" }}
@@ -365,45 +379,7 @@ const NavbarPengguna = () => {
           </Link>
         </div>
       </div>
-
-      {/* Modal Menu */}
-      <Dialog
-        header="Menu"
-        visible={visible}
-        className="fixed top-24 md:right-8 right-1 w-1/2 md:w-64"
-        modal={false}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-      >
-        <div className="flex flex-col text-lg ">
-          <Link
-            to=""
-            className="mb-4 w-full flex gap-4"
-            onClick={handleDetailProfileModal}
-          >
-            <User />
-            <h1>Profile</h1>
-          </Link>
-          <Link
-            to=""
-            className="mb-4 w-full flex gap-4"
-            onClick={handleModalChangePassword}
-          >
-            <Lock />
-            <h1>Ubah Password</h1>
-          </Link>
-          <Link
-            to=""
-            className="mb-4 w-full flex gap-4"
-            onClick={handleModalLogout}
-          >
-            <LogOut />
-            <h1>Keluar</h1>
-          </Link>
-        </div>
-      </Dialog>
+      
 
       {/* Modal Logout */}
       <Dialog
@@ -413,7 +389,6 @@ const NavbarPengguna = () => {
         onHide={() => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
-          setVisible(false);
         }}
       >
         <div className="flex flex-col gap-8">
@@ -423,7 +398,7 @@ const NavbarPengguna = () => {
           <div className="flex gap-4 items-end justify-end">
             <Button
               label="Batal"
-              onClick={() => setVisibleLogout(false) || setVisible(false)}
+              onClick={() => setVisibleLogout(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
@@ -438,7 +413,7 @@ const NavbarPengguna = () => {
 
       {/* Modal Detail Profile */}
       <Dialog
-        header={"Detail Profile Pengguna"}
+        header={"Profile Pengguna"}
         visible={visibleDetailProfile}
         maximizable
         className="md:w-1/2 w-full"

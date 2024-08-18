@@ -19,6 +19,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 'outline-none border-0 focus:border-0 focus:outline-none focus:ring-0 box-shadow-none',
             },
           },
+          toast:{
+            root:{
+              className: 'm-0'
+            }
+          }
         },
       }}
     >

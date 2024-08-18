@@ -7,7 +7,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
-import { Toast } from "primereact/toast";
+import img from "../../../assets/data_empty.png";
 
 const Obat = () => {
   const [data, setData] = useState([]);
@@ -96,8 +96,9 @@ const Obat = () => {
               </Card>
             ))
           ) : (
-            <div className="text-center text-xl text-gray-500 dark:text-gray-400">
-              Anda belum melakukan pengambilan obat
+            <div className="flex flex-col items-center justify-center text-center  md:text-2xl text-xl  text-black dark:text-white">
+              <img src={img} className="md:w-1/4" alt="img" />
+              Belum ada pengambilan obat
             </div>
           )}
         </div>

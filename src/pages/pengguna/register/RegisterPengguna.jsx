@@ -96,7 +96,7 @@ const RegisterPengguna = () => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center p-8">
-      <Toast ref={toast} />
+      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
       <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
         <div className="flex flex-col w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="" />

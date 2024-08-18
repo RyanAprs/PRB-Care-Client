@@ -13,8 +13,9 @@ import {
   User,
   UserRoundPlus,
   Settings2,
+  X
 } from "lucide-react";
-
+import { Menu } from 'primereact/menu';
 import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
@@ -55,7 +56,6 @@ const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const sidebarRef = useRef(null);
   const overlayRef = useRef(null);
-  const [visible, setVisible] = useState(false);
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
   const [visibleDetailProfile, setVisibleDetailProfile] = useState(false);
@@ -158,6 +158,46 @@ const NavbarAdmin = ({ children }) => {
       navigate("/apotek/login");
     }
   };
+
+
+
+  //menu
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [key, setKey] = useState(0);
+  const itemsNotAdmin = [
+    {
+      label: <div className="flex justify-center items-center gap-2"><User/><h1>Profile</h1></div>,
+      command: () => handleDetailProfileModal(),
+    },
+    {
+      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      command: () => handleModalChangePassword(),
+    },
+    {
+      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      command: () => handleModalLogout(),
+    },
+  ];
+  const itemsAdmin = [
+    {
+      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      command: () => handleModalChangePassword(),
+    },
+    {
+      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      command: () => handleModalLogout(),
+    },
+  ];
+
+  const handleModalLogout = () => {
+    setIsMenuVisible(false)
+    setVisibleLogout(true);
+  };
+  const toggleMenuVisibility = () => {
+    setIsMenuVisible(!isMenuVisible);
+    setKey((prev) => prev + 1);
+  };
+
 
   const Sidebar = () => (
     <div
@@ -356,6 +396,7 @@ const NavbarAdmin = ({ children }) => {
   );
 
   const handleDetailProfileModal = async () => {
+    setIsMenuVisible(false);
     setVisibleDetailProfile(true);
     if (role === "nakes") {
       setIsApotekUpdate(false);
@@ -367,7 +408,7 @@ const NavbarAdmin = ({ children }) => {
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
           });
-          setVisible(false);
+          
         }
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -384,7 +425,7 @@ const NavbarAdmin = ({ children }) => {
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
           });
-          setVisible(false);
+          
         }
       } catch (error) {
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
@@ -495,8 +536,9 @@ const NavbarAdmin = ({ children }) => {
   };
 
   const handleModalChangePassword = () => {
+    setIsMenuVisible(false);
     setVisibleChangePassword(true);
-    setVisible(false);
+    
   };
 
   const handleChangePassword = async () => {
@@ -537,7 +579,7 @@ const NavbarAdmin = ({ children }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <Toast ref={toast} />
+      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
 
       {isSidebarOpen && (
         <div
@@ -614,99 +656,23 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-              label={<Settings2 className="text-white" />}
-              onClick={() => setVisible(true)}
-            ></Button>
+                onClick={toggleMenuVisibility}
+                className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+                label={!isMenuVisible ?<Settings2 className="text-white" /> : <X className="text-white" />}
+              ></Button>
           </div>
+          <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
         </div>
-
+        
         <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto md:pl-80    pt-20 overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
       </div>
 
-      {/* Modal Menu */}
-      <Dialog
-        header="Menu"
-        visible={visible}
-        className="fixed top-20 md:right-8 right-1 md:w-64"
-        modal={false}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-      >
-        <div className="flex flex-col text-lg ">
-          {role === "admin" && (
-            <Link
-              to=""
-              onClick={handleModalChangePassword}
-              className="mb-4 w-full flex gap-4"
-            >
-              <Lock />
-              <h1>Ubah Password</h1>
-            </Link>
-          )}
-
-          {role === "nakes" && (
-            <div>
-              <Link
-                to=""
-                onClick={handleDetailProfileModal}
-                className="mb-4 w-full flex gap-4"
-              >
-                <User />
-                <h1>Profile</h1>
-              </Link>
-
-              <Link
-                to=""
-                onClick={handleModalChangePassword}
-                className="mb-4 w-full flex gap-4"
-              >
-                <Lock />
-                <h1>Ubah Password</h1>
-              </Link>
-            </div>
-          )}
-
-          {role === "apoteker" && (
-            <div>
-              <Link
-                to=""
-                onClick={handleDetailProfileModal}
-                className="mb-4 w-full flex gap-4"
-              >
-                <User />
-                <h1>Profile</h1>
-              </Link>
-
-              <Link
-                to=""
-                onClick={handleModalChangePassword}
-                className="mb-4 w-full flex gap-4"
-              >
-                <Lock />
-                <h1>Ubah Password</h1>
-              </Link>
-            </div>
-          )}
-          <Link
-            to=""
-            className="mb-4 w-full flex gap-4"
-            onClick={() => setVisibleLogout(true)}
-          >
-            <LogOut />
-            <h1>Logout</h1>
-          </Link>
-        </div>
-      </Dialog>
-
       {/* Modal Detail Profile */}
       <Dialog
         header={
-          isApotekUpdate ? "Detail Profile Apotek" : "Detail Profile Puskesmas"
+          isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"
         }
         visible={visibleDetailProfile}
         maximizable
@@ -938,7 +904,7 @@ const NavbarAdmin = ({ children }) => {
         onHide={() => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
-          setVisible(false);
+          
         }}
       >
         <div className="flex flex-col gap-8">
@@ -946,7 +912,7 @@ const NavbarAdmin = ({ children }) => {
           <div className="flex gap-4 items-end justify-end">
             <Button
               label="Batal"
-              onClick={() => setVisibleLogout(false) || setVisible(false)}
+              onClick={() => setVisibleLogout(false)}
               className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
             <Button
