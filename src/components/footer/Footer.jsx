@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="bg-white dark:bg-blackHover dark:text-white">
       <div className="flex md:justify-end justify-center gap-4 border-gray-200 dark:border-gray-700 mt-8 py-2 pr-2 text-sm">
         <h1>
-          &copy; {new Date().getFullYear()} PRB Care, Made with ❤ by{" "}
+          &copy; {new Date().getFullYear()} PRBCare, Made with ❤ by{" "}
           <a href="https://github.com/RyanAprs">Ryan</a>.
         </h1>
       </div>
@@ -19,7 +19,7 @@ const Footer = () => {
         <div className="flex flex-col mx-auto items-center">
           <div className="flex items-center">
             <img src={img} alt="img" width={50} />
-            <h2 className="text-2xl font-bold text-center ml-1">PRB Care</h2>
+            <h2 className="text-2xl font-bold text-center ml-1">PRBCare</h2>
           </div>
 
           <div className="flex space-x-4 mt-4">
@@ -55,7 +55,7 @@ const Footer = () => {
 
       <div className="border-t-2 flex flex-col border-dashed gap-4  border-black dark:border-white mt-12 pt-6 text-center text-sm">
         <h1>
-          &copy; {new Date().getFullYear()} PRB Care, Made with ❤ by{" "}
+          &copy; {new Date().getFullYear()} PRBCare, Made with ❤ by{" "}
           <a href="https://github.com/RyanAprs">Ryan</a>.
         </h1>
       </div>

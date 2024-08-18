@@ -229,7 +229,7 @@ const NavbarPengguna = () => {
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
           <div className="font-extrabold text-black dark:text-white">
-            PRB Care
+            PRBCare
           </div>
         </div>
 

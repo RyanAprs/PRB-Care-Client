@@ -210,7 +210,7 @@ const NavbarAdmin = ({ children }) => {
       <div className="flex flex-col h-full gap-4">
         <div className="flex flex-col border-b border-lightGreen font-bold text-lg mb-4 items-center justify-center">
           <img src={icon} alt="LOGO PRB CARE" className="w-auto h-20" />
-          <h1>PRB Care</h1>
+          <h1>PRBCare</h1>
         </div>
         <div className="flex flex-col h-full justify-around">
           {role === "admin" && (

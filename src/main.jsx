@@ -5,9 +5,11 @@ import { AddressProvider } from "./config/context/AdressContext.jsx";
 import { PrimeReactProvider } from "primereact/api";
 import { ModalUpdateProvider } from "./config/context/ModalUpdateContext.jsx";
 import { HelmetProvider, Helmet } from "react-helmet-async";
+import { InstallPromptProvider } from './config/context/InstallPromptContext.jsx';
 const helmetContext = {};
 
 ReactDOM.createRoot(document.getElementById("root")).render(
+  <InstallPromptProvider>
   <HelmetProvider context={helmetContext}>
     <PrimeReactProvider
       value={{
@@ -43,4 +45,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       </main>
     </PrimeReactProvider>
   </HelmetProvider>
+  </InstallPromptProvider>
 );
