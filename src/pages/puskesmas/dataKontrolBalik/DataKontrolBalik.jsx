@@ -79,6 +79,7 @@ const DataKontrolBalik = () => {
     if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
       return -1;
     if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+
     if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
     if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
 
@@ -354,9 +355,12 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
-    { header: "Nomor Antrean", field: "noAntrean" },
-    { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
+    { header: "No Antrean", field: "noAntrean" },
+    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+
+    { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
     { header: "Denyut Nadi", field: "denyutNadi" },
@@ -364,8 +368,6 @@ const DataKontrolBalik = () => {
     { header: "Hasil LAB", field: "hasilLab" },
     { header: "Hasil EKG", field: "hasilEkg" },
     { header: "Hasil Diagnosa", field: "hasilDiagnosa" },
-    { header: "Keluhan", field: "keluhan" },
-    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },
   ];
 
@@ -489,6 +491,22 @@ const DataKontrolBalik = () => {
 
           {isEditMode && (
             <>
+              <label htmlFor="" className="-mb-3">
+                Keluhan:
+              </label>
+
+              <InputTextarea
+                type="text"
+                placeholder="Keluhan"
+                className="p-input text-lg p-3  rounded"
+                value={datas.keluhan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    keluhan: e.target.value,
+                  }))
+                }
+              />
               <label htmlFor="" className="-mb-3">
                 Tinggi badan:
               </label>
@@ -636,22 +654,7 @@ const DataKontrolBalik = () => {
                   {errors.hasilDiagnosa}
                 </small>
               )}
-              <label htmlFor="" className="-mb-3">
-                Keluhan:
-              </label>
-
-              <InputTextarea
-                type="text"
-                placeholder="Keluhan"
-                className="p-input text-lg p-3  rounded"
-                value={datas.keluhan}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    keluhan: e.target.value,
-                  }))
-                }
-              />
+              
               {errors.keluhan && (
                 <small className="p-error -mt-3 text-sm">
                   {errors.keluhan}

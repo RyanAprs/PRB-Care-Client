@@ -354,9 +354,11 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
-    { header: "Nomor Antrean", field: "noAntrean" },
     { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
+    { header: "Nomor Antrean", field: "noAntrean" },    
+    { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
     { header: "Denyut Nadi", field: "denyutNadi" },
@@ -364,8 +366,6 @@ const DataKontrolBalik = () => {
     { header: "Hasil LAB", field: "hasilLab" },
     { header: "Hasil EKG", field: "hasilEkg" },
     { header: "Hasil Diagnosa", field: "hasilDiagnosa" },
-    { header: "Keluhan", field: "keluhan" },
-    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },
   ];
 

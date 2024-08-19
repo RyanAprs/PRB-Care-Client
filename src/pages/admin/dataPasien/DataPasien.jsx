@@ -306,7 +306,7 @@ const DataPasien = () => {
 
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
-    { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
+    { header: "Nama Pasien", field: "pengguna.namaLengkap" },
     { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Periksa", field: "tanggalDaftar" },
     { header: "Status", field: "status" },

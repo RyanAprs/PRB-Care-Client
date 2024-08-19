@@ -52,6 +52,13 @@ body,
   border-color: #56b588;
 }
 
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none;
+  border-color: #56b588 !important;
+}
+
 .p-dropdown:focus  {
   border-color: #56b588;
 }

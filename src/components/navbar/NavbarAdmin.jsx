@@ -69,7 +69,7 @@ const NavbarAdmin = ({ children }) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  const { token, role } = useContext(AuthContext);
+  const { role } = useContext(AuthContext);
   const { dispatch } = useContext(AuthContext);
   const [isApotekUpdate, setIsApotekUpdate] = useState(false);
   const [dataApotek, setDataApotek] = useState({
@@ -429,9 +429,9 @@ const NavbarAdmin = ({ children }) => {
 
     if (valueString.includes("<br />")) {
       return (
-        <ul className="list-disc pl-5">
+        <ul className="list-disc pl-5 bg-[#fbfbfc] dark:bg-[#282828]">
           {valueString.split("<br />").map((item, index) => (
-            <li key={index}>{item.trim()}</li>
+            <li className="text-[#989da0] dark:text-[#6e6e6e]" key={index}>{item.trim()}</li>
           ))}
         </ul>
       );
@@ -781,7 +781,7 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Waktu Operasional:
           </label>
-          <div className="p-input text-lg p-3 rounded bg-gray-100">
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] border dark:border-none ">
             {isApotekUpdate
               ? validasiWaktuOperasional(dataApotek.waktuOperasional)
               : validasiWaktuOperasional(dataPuskesmas.waktuOperasional)}
