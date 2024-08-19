@@ -36,9 +36,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
   if (token && userRole === role) {
     return <Navigate to="/puskesmas/beranda" />;
-  } else if (token && userRole !== role) {
-    return <Navigate to="/page/not-found" />;
-  }
+  } 
 
   return children;
 };
@@ -57,6 +55,12 @@ const PuskesmasRoute = () => {
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
+        <Route
+            path="/"
+            element={
+              <Navigate to="/puskesmas/login" />
+            }
+          />
         <Route
           path="/login"
           element={

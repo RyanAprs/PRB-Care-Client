@@ -52,6 +52,30 @@ body,
   border-color: #56b588;
 }
 
+.p-dropdown:focus  {
+  border-color: #56b588;
+}
+.p-dropdown-filter:focus  {
+  border-color: #56b588;
+}
+.p-inputtext:focus  {
+  border-color: #56b588;
+}
+.p-input:focus  {
+  border-color: #56b588;
+}
+
+.p-inputwrapper-focus{
+  border-color: #56b588 !important; 
+  box-shadow: 0 0 0 0px #56b588 !important; 
+  outline: 0px solid #56b588 !important; 
+  outline-offset: 0px; 
+
+}
+.p-highlight{
+  background: #56b58946;
+}
+
 .p-dropdown:hover  {
   border-color: #56b588;
 }

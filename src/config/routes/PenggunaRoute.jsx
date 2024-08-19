@@ -36,13 +36,9 @@ const PrivateRoute = ({ children, role }) => {
 
 const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
-
   if (token && userRole === role) {
-    return <Navigate to="/" />;
-  } else if (token && userRole !== role) {
-    return <Navigate to="/page/not-found" />;
+    return <Navigate to="/beranda" />;
   }
-
   return children;
 };
 
@@ -60,6 +56,12 @@ const PenggunaRoute = () => {
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
+      <Route
+            path="/"
+            element={
+              <Navigate to="/login" />
+            }
+          />
         <Route path="/register" element={<RegisterPengguna />} />
         <Route
           path="/login"
@@ -70,7 +72,7 @@ const PenggunaRoute = () => {
           }
         />
         <Route
-          path="/"
+          path="/beranda"
           element={
             <PrivateRoute role="pengguna">
               <NavbarPengguna />

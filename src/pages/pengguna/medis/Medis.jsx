@@ -76,8 +76,10 @@ const Medis = () => {
 
   if (loading) {
     return (
-      <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
+        <div className="p-8 w-full h-full flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
+          <ProgressSpinner />
+        </div>
       </div>
     );
   }
@@ -97,10 +99,11 @@ const Medis = () => {
           </div>
         
       ) : (
-        <div className="flex h-screen flex-col items-center justify-center text-center  md:text-2xl text-xl  text-black dark:text-white">
-          <img src={img} className="md:w-1/4" alt="img" />
-          Belum ada rekam medis
-        </div>
+        <div className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+              <img src={img} className="md:w-80 w-64" alt="img" />
+              Belum Ada Data
+              <p className="font-medium text-xl">Data akan muncul di sini ketika tersedia.</p>
+            </div>
       )}
       </div>
       </div>

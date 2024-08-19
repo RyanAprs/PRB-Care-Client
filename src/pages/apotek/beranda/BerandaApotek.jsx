@@ -71,7 +71,7 @@ const DashboardApotek = () => {
         {list.map((item, index) => (
           <Card
             key={index}
-            className="rounded-xl shadow-lg p-4 flex flex-col items-center justify-center cursor-pointer "
+            className="rounded-xl shadow-md p-4 flex flex-col items-center justify-center cursor-pointer "
             style={{
               fontFamily: "Poppins, sans-serif",
               color: "var(--surface-900) !important",
