@@ -39,7 +39,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       .catch((error) => {
         console.error("Error fetching provinces:", error);
       });
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (address.provinsiId) {
@@ -122,7 +122,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 items-center justify-center">
       <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
         <Dropdown
           value={address.provinsiId || ""}
@@ -136,7 +136,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
           className="w-full p-2 text-sm"
           required
         />
-
         {address.provinsiId && (
           <Dropdown
             value={address.kabupatenId || ""}
@@ -151,7 +150,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
             required
           />
         )}
-
         {address.kabupatenId && (
           <Dropdown
             value={address.kecamatanId || ""}
@@ -166,7 +164,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
             required
           />
         )}
-
         {address.kecamatanId && (
           <Dropdown
             value={address.desaId || ""}
@@ -181,7 +178,6 @@ const DynamicAddress = ({ reset, prevAddress }) => {
             required
           />
         )}
-
         {address.desaId && (
           <InputText
             type="text"

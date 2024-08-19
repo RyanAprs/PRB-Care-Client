@@ -289,7 +289,10 @@ const DataApotek = () => {
     );
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}
@@ -407,7 +410,9 @@ const DataApotek = () => {
             />
           </div>
           <span className="text-sm -mt-4">
-            {isEditMode ? "*Kosongkan waktu operasional jika tidak ingin diubah" : null}
+            {isEditMode
+              ? "*Kosongkan waktu operasional jika tidak ingin diubah"
+              : null}
           </span>
 
           {errors.waktuOperasional && (

@@ -110,6 +110,13 @@ export const puskesmasUpdateCurrentSchema = z.object({
     .string()
     .min(3)
     .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
+    ),
 });
 
 export const puskesmasChangePasswordSchema = z

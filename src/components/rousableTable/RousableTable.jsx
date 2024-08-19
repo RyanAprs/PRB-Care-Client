@@ -233,12 +233,26 @@ export default function ReusableTable({
     }
   };
 
-  const renderCellContent = (rowData, field) => {
-    const content = rowData[field];
-    if (content && /<\/?[a-z][\s\S]*>/i.test(content)) {
-      return <div dangerouslySetInnerHTML={{ __html: content }} />;
+  const formatCellContent = (data, field) => {
+    const fields = field.split(".");
+    let value = data;
+
+    for (const f of fields) {
+      value = value ? value[f] : "";
     }
-    return content;
+
+    const valueString = value ? value.toString() : "";
+
+    if (valueString.includes("<br />")) {
+      return (
+        <ul className="list-disc pl-5">
+          {valueString.split("<br />").map((item, index) => (
+            <li key={index}>{item.trim()}</li>
+          ))}
+        </ul>
+      );
+    }
+    return <span>{valueString}</span>;
   };
 
   return (
@@ -307,8 +321,8 @@ export default function ReusableTable({
                 field={col.field}
                 header={col.header}
                 sortable
+                body={(data) => formatCellContent(data, col.field)}
                 className="p-4"
-                body={(rowData) => renderCellContent(rowData, col.field)}
               />
             ))}
           </DataTable>

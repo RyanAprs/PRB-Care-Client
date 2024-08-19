@@ -13,9 +13,9 @@ import {
   User,
   UserRoundPlus,
   Settings2,
-  X
+  X,
 } from "lucide-react";
-import { Menu } from 'primereact/menu';
+import { Menu } from "primereact/menu";
 import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
@@ -51,6 +51,7 @@ import { apotekUpdateCurrentSchema } from "../../validations/ApotekSchema";
 import { puskesmasUpdateCurrentSchema } from "../../validations/PuskesmasSchema";
 import { AddressContext } from "../../config/context/AdressContext";
 import { useModalUpdate } from "../../config/context/ModalUpdateContext";
+import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 
 const NavbarAdmin = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -76,13 +77,17 @@ const NavbarAdmin = ({ children }) => {
     namaApotek: "",
     telepon: "",
     alamat: "",
+    waktuOperasional: "",
   });
   const [dataPuskesmas, setDataPuskesmas] = useState({
     namaPuskesmas: "",
     telepon: "",
     alamat: "",
+    waktuOperasional: "",
   });
   const [prevAddress, setPrevAddress] = useState({});
+  const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
+  const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
 
   const { address } = useContext(AddressContext);
 
@@ -146,9 +151,8 @@ const NavbarAdmin = ({ children }) => {
         import.meta.url
       ).href;
       themeLink.href = themeUrl;
-      document.body.classList.remove('dark');
+      document.body.classList.remove("dark");
     }
-    
 
     if (role === "admin") {
       navigate("/admin/login");
@@ -159,45 +163,67 @@ const NavbarAdmin = ({ children }) => {
     }
   };
 
-
-
   //menu
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [key, setKey] = useState(0);
   const itemsNotAdmin = [
     {
-      label: <div className="flex justify-center items-center gap-2"><User/><h1>Profile</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <User />
+          <h1>Profile</h1>
+        </div>
+      ),
       command: () => handleDetailProfileModal(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <Lock />
+          <h1>Password</h1>
+        </div>
+      ),
       command: () => handleModalChangePassword(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <LogOut />
+          <h1>Keluar</h1>
+        </div>
+      ),
       command: () => handleModalLogout(),
     },
   ];
   const itemsAdmin = [
     {
-      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <Lock />
+          <h1>Password</h1>
+        </div>
+      ),
       command: () => handleModalChangePassword(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <LogOut />
+          <h1>Keluar</h1>
+        </div>
+      ),
       command: () => handleModalLogout(),
     },
   ];
 
   const handleModalLogout = () => {
-    setIsMenuVisible(false)
+    setIsMenuVisible(false);
     setVisibleLogout(true);
   };
   const toggleMenuVisibility = () => {
     setIsMenuVisible(!isMenuVisible);
     setKey((prev) => prev + 1);
   };
-
 
   const Sidebar = () => (
     <div
@@ -395,11 +421,33 @@ const NavbarAdmin = ({ children }) => {
     </div>
   );
 
+  const formatWaktuOperasional = () => {
+    return waktuOperasionalList.join(" <br /> ");
+  };
+
+  const validasiWaktuOperasional = (value) => {
+    const valueString = value ? value.toString() : "";
+
+    if (valueString.includes("<br />")) {
+      return (
+        <ul className="list-disc pl-5">
+          {valueString.split("<br />").map((item, index) => (
+            <li key={index}>{item.trim()}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    return <span>{valueString}</span>;
+  };
+
   const handleDetailProfileModal = async () => {
+    setErrors({});
     setIsMenuVisible(false);
     setVisibleDetailProfile(true);
     if (role === "nakes") {
       setIsApotekUpdate(false);
+      setDataPuskesmas({});
       try {
         const dataResponse = await getCurrentAdminPuskesmas();
         if (dataResponse) {
@@ -407,8 +455,8 @@ const NavbarAdmin = ({ children }) => {
             namaPuskesmas: dataResponse.namaPuskesmas,
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
+            waktuOperasional: dataResponse.waktuOperasional,
           });
-          
         }
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -417,6 +465,7 @@ const NavbarAdmin = ({ children }) => {
     }
     if (role === "apoteker") {
       setIsApotekUpdate(true);
+      setDataApotek({});
       try {
         const dataResponse = await getCurrentAdminApotek();
         if (dataResponse) {
@@ -424,48 +473,8 @@ const NavbarAdmin = ({ children }) => {
             namaApotek: dataResponse.namaApotek,
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
+            waktuOperasional: dataResponse.waktuOperasional,
           });
-          
-        }
-      } catch (error) {
-        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
-        handleApiError(error, toast);
-      }
-    }
-  };
-
-  const handleUpdateProfileModal = async () => {
-    setVisibleUpdateProfile(true);
-    if (role === "nakes") {
-      setIsApotekUpdate(false);
-      try {
-        const dataResponse = await getCurrentAdminPuskesmas();
-        setPrevAddress(dataResponse.alamat);
-        if (dataResponse) {
-          setDataPuskesmas({
-            namaPuskesmas: dataResponse.namaPuskesmas,
-            alamat: dataResponse.alamat,
-            telepon: dataResponse.telepon,
-          });
-          setVisibleDetailProfile(false);
-        }
-      } catch (error) {
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        handleApiError(error, toast);
-      }
-    }
-    if (role === "apoteker") {
-      setIsApotekUpdate(true);
-      try {
-        const dataResponse = await getCurrentAdminApotek();
-        setPrevAddress(dataResponse.alamat);
-        if (dataResponse) {
-          setDataApotek({
-            namaApotek: dataResponse.namaApotek,
-            alamat: dataResponse.alamat,
-            telepon: dataResponse.telepon,
-          });
-          setVisibleDetailProfile(false);
         }
       } catch (error) {
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
@@ -476,12 +485,64 @@ const NavbarAdmin = ({ children }) => {
 
   const { setIsUpdated } = useModalUpdate();
 
+  const handleUpdateProfileModal = async () => {
+    setErrors({});
+    setVisibleUpdateProfile(true);
+
+    if (role === "nakes") {
+      setIsApotekUpdate(false);
+      try {
+        const dataResponse = await getCurrentAdminPuskesmas();
+        setPrevAddress(dataResponse.alamat);
+        setPrevWaktuOperasional(dataResponse.waktuOperasional);
+
+        if (dataResponse) {
+          setDataPuskesmas({
+            namaPuskesmas: dataResponse.namaPuskesmas,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+            waktuOperasional: dataResponse.waktuOperasional,
+          });
+          setVisibleDetailProfile(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+
+    if (role === "apoteker") {
+      setIsApotekUpdate(true);
+      try {
+        const dataResponse = await getCurrentAdminApotek();
+        setPrevWaktuOperasional(dataResponse.waktuOperasional);
+        setPrevAddress(dataResponse.alamat);
+
+        if (dataResponse) {
+          setDataApotek({
+            namaApotek: dataResponse.namaApotek,
+            alamat: dataResponse.alamat,
+            telepon: dataResponse.telepon,
+            waktuOperasional: dataResponse.waktuOperasional,
+          });
+          setVisibleDetailProfile(false);
+        }
+      } catch (error) {
+        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
+  };
+
   const handleUpdateProfile = async () => {
+    const formattedWaktuOperasional = formatWaktuOperasional();
+
     try {
       if (isApotekUpdate) {
         const updatedDatas = {
           ...dataApotek,
           alamat: dataApotek.alamat || prevAddress,
+          waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
         };
         apotekUpdateCurrentSchema.parse(updatedDatas);
 
@@ -501,6 +562,7 @@ const NavbarAdmin = ({ children }) => {
         const updatedDatas = {
           ...dataPuskesmas,
           alamat: dataPuskesmas.alamat || prevAddress,
+          waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
         };
         puskesmasUpdateCurrentSchema.parse(updatedDatas);
 
@@ -538,7 +600,6 @@ const NavbarAdmin = ({ children }) => {
   const handleModalChangePassword = () => {
     setIsMenuVisible(false);
     setVisibleChangePassword(true);
-    
   };
 
   const handleChangePassword = async () => {
@@ -579,7 +640,10 @@ const NavbarAdmin = ({ children }) => {
 
   return (
     <div className="flex h-screen w-full">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
 
       {isSidebarOpen && (
         <div
@@ -603,15 +667,9 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/admin/data-puskesmas"
                   ? "Puskesmas"
                   : ""}
-                {location.pathname === "/admin/data-apotek"
-                  ? "Apotek"
-                  : ""}
-                {location.pathname === "/admin/data-pasien"
-                  ? "Pasien"
-                  : ""}
-                {location.pathname === "/admin/data-pengguna"
-                  ? "Pengguna"
-                  : ""}
+                {location.pathname === "/admin/data-apotek" ? "Apotek" : ""}
+                {location.pathname === "/admin/data-pasien" ? "Pasien" : ""}
+                {location.pathname === "/admin/data-pengguna" ? "Pengguna" : ""}
                 {location.pathname === "/admin/data-obat" ? "Obat" : ""}
                 {location.pathname === "/admin/data-kontrol-balik"
                   ? "Kontrol Balik"
@@ -626,12 +684,8 @@ const NavbarAdmin = ({ children }) => {
               <h1 className="text-xl">
                 {location.pathname === "/puskesmas/beranda" ? "Beranda" : ""}
                 {location.pathname === "/puskesmas/profile" ? "Profile" : ""}
-                {location.pathname === "/puskesmas/data-apotek"
-                  ? "Apotek"
-                  : ""}
-                {location.pathname === "/puskesmas/data-pasien"
-                  ? "Pasien"
-                  : ""}
+                {location.pathname === "/puskesmas/data-apotek" ? "Apotek" : ""}
+                {location.pathname === "/puskesmas/data-pasien" ? "Pasien" : ""}
                 {location.pathname === "/puskesmas/data-kontrol-balik"
                   ? "Kontrol Balik"
                   : ""}
@@ -656,14 +710,26 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-                onClick={toggleMenuVisibility}
-                className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-                label={!isMenuVisible ?<Settings2 className="text-white" /> : <X className="text-white" />}
-              ></Button>
+              onClick={toggleMenuVisibility}
+              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+              label={
+                !isMenuVisible ? (
+                  <Settings2 className="text-white" />
+                ) : (
+                  <X className="text-white" />
+                )
+              }
+            ></Button>
           </div>
-          <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
+          <Menu
+            key={key}
+            className={` ${
+              isMenuVisible ? "visible" : "hidden"
+            } absolute top-[80px] right-0 `}
+            model={role === "admin" ? itemsAdmin : itemsNotAdmin}
+          />
         </div>
-        
+
         <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto md:pl-80    pt-20 overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
@@ -671,9 +737,7 @@ const NavbarAdmin = ({ children }) => {
 
       {/* Modal Detail Profile */}
       <Dialog
-        header={
-          isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"
-        }
+        header={isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"}
         visible={visibleDetailProfile}
         maximizable
         className="md:w-1/2 w-full"
@@ -697,9 +761,6 @@ const NavbarAdmin = ({ children }) => {
                 : dataPuskesmas.namaPuskesmas
             }
           />
-          {errors.namaApotek && (
-            <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
-          )}
 
           <label htmlFor="" className="-mb-3">
             Telepon:
@@ -711,9 +772,7 @@ const NavbarAdmin = ({ children }) => {
             className="p-input text-lg p-3 rounded"
             value={isApotekUpdate ? dataApotek.telepon : dataPuskesmas.telepon}
           />
-          {errors.telepon && (
-            <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
-          )}
+
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
@@ -724,6 +783,16 @@ const NavbarAdmin = ({ children }) => {
             className="p-input text-lg p-3 rounded"
             value={isApotekUpdate ? dataApotek.alamat : dataPuskesmas.alamat}
           />
+
+          <label htmlFor="" className="-mb-3">
+            Waktu Operasional:
+          </label>
+          <div className="p-input text-lg p-3 rounded bg-gray-100">
+            {isApotekUpdate
+              ? validasiWaktuOperasional(dataApotek.waktuOperasional)
+              : validasiWaktuOperasional(dataPuskesmas.waktuOperasional)}
+          </div>
+
           <Button
             label="Edit Profile"
             className="p-4 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
@@ -806,6 +875,20 @@ const NavbarAdmin = ({ children }) => {
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
+          <div className="w-full">
+            <WaktuOperasional
+              setWaktuOperasionalList={setWaktuOperasionalList}
+            />
+          </div>
+          <span className="text-sm -mt-4">
+            *Kosongkan waktu operasional jika tidak ingin diubah
+          </span>
+
+          {errors.waktuOperasional && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.waktuOperasional}
+            </small>
           )}
           <Button
             label="Edit"
@@ -904,7 +987,6 @@ const NavbarAdmin = ({ children }) => {
         onHide={() => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
-          
         }}
       >
         <div className="flex flex-col gap-8">

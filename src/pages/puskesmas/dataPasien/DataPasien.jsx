@@ -1,23 +1,20 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
 import {
   convertHumanToUnix,
-  convertUnixToHuman,
   convertUnixToHumanForEditData,
   dateLocaleId,
 } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
 import { addLocale } from "primereact/api";
 import {
-  pasienCreateSchemaAdminPuskesmas,
-  pasienUpdateSchemaAdminPuskesmas,
+  pasienCreateSchema,
+  pasienUpdateSchema,
 } from "../../../validations/PasienSchema";
 import { ZodError } from "zod";
 import {
@@ -35,12 +32,13 @@ import {
 } from "../../../services/PasienService";
 import { Toast } from "primereact/toast";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { getAllPengguna } from "../../../services/PenggunaService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { getAllPengguna } from "../../../services/PenggunaService";
+import { getAllPuskesmas } from "../../../services/PuskesmasService";
 
 addLocale("id", dateLocaleId);
 
@@ -52,18 +50,13 @@ const DataPasien = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleDone, setVisibleDone] = useState(false);
+  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
   const [pengguna, setPengguna] = useState([]);
   const [datas, setDatas] = useState({
     noRekamMedis: "",
     idAdminPuskesmas: "",
     idPengguna: "",
-    beratBadan: 0,
-    tinggiBadan: 0,
-    tekananDarah: "",
-    denyutNadi: 0,
-    hasilLab: "",
-    hasilEkg: "",
-    tanggalPeriksa: 0,
+    tanggalDaftar: 0,
   });
   const [selectedDate, setSelectedDate] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -77,28 +70,28 @@ const DataPasien = () => {
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
-    if (a.tanggalPeriksa < b.tanggalPeriksa) return -1;
-    if (a.tanggalPeriksa > b.tanggalPeriksa) return 1;
+    if (a.tanggalDaftar < b.tanggalDaftar) return -1;
+    if (a.tanggalDaftar > b.tanggalDaftar) return 1;
     return 0;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pasien`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const formatedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
-        }));
-        const sortedData = formatedData.sort(customSort);
+        const response = await getAllPasien();
+        const sortedData = response.sort(customSort);
         setData(sortedData);
+        setLoading(false);
+      } catch (error) {
+        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        setLoading(false);
+      }
+    };
+
+    const fetchDataAdminPuskesmas = async () => {
+      try {
+        const response = await getAllPuskesmas();
+        setAdminPuskesmas(response);
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -109,7 +102,9 @@ const DataPasien = () => {
     const fetchDataPengguna = async () => {
       try {
         const response = await getAllPengguna();
+
         setPengguna(response);
+
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -118,6 +113,7 @@ const DataPasien = () => {
     };
 
     fetchDataPengguna();
+    fetchDataAdminPuskesmas();
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -126,14 +122,9 @@ const DataPasien = () => {
     setSelectedDate(null);
     setDatas({
       noRekamMedis: "",
+      idAdminPuskesmas: 0,
       idPengguna: 0,
-      beratBadan: 0,
-      tinggiBadan: 0,
-      tekananDarah: "",
-      denyutNadi: 0,
-      hasilLab: "",
-      hasilEkg: "",
-      tanggalPeriksa: 0,
+      tanggalDaftar: 0,
     });
     setVisible(true);
     setIsEditMode(false);
@@ -141,7 +132,7 @@ const DataPasien = () => {
 
   const handleCreate = async () => {
     try {
-      pasienCreateSchemaAdminPuskesmas.parse(datas);
+      pasienCreateSchema.parse(datas);
       const response = await createPasien(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -174,7 +165,7 @@ const DataPasien = () => {
     const unixTimestamp = convertHumanToUnix(e.value);
     setDatas((prev) => ({
       ...prev,
-      tanggalPeriksa: unixTimestamp,
+      tanggalDaftar: unixTimestamp,
     }));
   };
 
@@ -184,19 +175,14 @@ const DataPasien = () => {
       const dataResponse = await getPasienById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
-          dataResponse.tanggalPeriksa
+          dataResponse.tanggalDaftar
         );
         setSelectedDate(convertDate);
         setDatas({
           noRekamMedis: dataResponse.noRekamMedis,
+          idAdminPuskesmas: dataResponse.idAdminPuskesmas,
           idPengguna: dataResponse.idPengguna,
-          beratBadan: dataResponse.beratBadan,
-          tinggiBadan: dataResponse.tinggiBadan,
-          tekananDarah: dataResponse.tekananDarah,
-          denyutNadi: dataResponse.denyutNadi,
-          hasilLab: dataResponse.hasilLab,
-          hasilEkg: dataResponse.hasilEkg,
-          tanggalPeriksa: dataResponse.tanggalPeriksa,
+          tanggalDaftar: dataResponse.tanggalDaftar,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -209,7 +195,7 @@ const DataPasien = () => {
   };
   const handleUpdate = async () => {
     try {
-      pasienUpdateSchemaAdminPuskesmas.parse(datas);
+      pasienUpdateSchema.parse(datas);
       const response = await updatePasien(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
@@ -284,7 +270,6 @@ const DataPasien = () => {
         const responseData = await getAllPasien();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
-        setData(responseData);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -322,16 +307,8 @@ const DataPasien = () => {
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
-    { header: "Telepon", field: "pengguna.telepon" },
-    { header: "Telepon Keluarga", field: "pengguna.teleponKeluarga" },
-    { header: "Alamat", field: "pengguna.alamat" },
-    { header: "Berat Badan", field: "beratBadan" },
-    { header: "Tinggi Badan", field: "tinggiBadan" },
-    { header: "Tekanan Darah", field: "tekananDarah" },
-    { header: "Denyut Nadi", field: "denyutNadi" },
-    { header: "Hasil Lab", field: "hasilLab" },
-    { header: "Hasil EKG", field: "hasilEkg" },
-    { header: "Tanggal Periksa", field: "tanggalPeriksa" },
+    { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Tanggal Periksa", field: "tanggalDaftar" },
     { header: "Status", field: "status" },
   ];
 
@@ -359,6 +336,25 @@ const DataPasien = () => {
     return <span>Pilih Pasien</span>;
   };
 
+  const itemTemplatePuskesmas = (option) => {
+    return (
+      <div>
+        {option.namaPuskesmas} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePuskesmas = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaPuskesmas} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Puskesmas</span>;
+  };
+
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -368,7 +364,10 @@ const DataPasien = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}
@@ -414,7 +413,7 @@ const DataPasien = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih pengguna:
+            Pilih pasien:
           </label>
 
           <Dropdown
@@ -424,9 +423,9 @@ const DataPasien = () => {
             }
             options={pengguna}
             filter
+            optionLabel="namaLengkap"
             itemTemplate={itemTemplatePengguna}
             valueTemplate={valueTemplatePengguna}
-            optionLabel="namaLengkap"
             placeholder="Pilih Pengguna"
             className=" p-2 rounded"
             onChange={(e) =>
@@ -439,125 +438,39 @@ const DataPasien = () => {
           {errors.idPengguna && (
             <small className="p-error -mt-3 text-sm">{errors.idPengguna}</small>
           )}
-
           <label htmlFor="" className="-mb-3">
-            Tinggi badan:
+            Pilih puskesmas:
           </label>
 
-          <InputText
-            type="number"
-            placeholder="Tinggi Badan"
-            className="p-input  text-lg p-3  rounded"
-            value={datas.tinggiBadan}
+          <Dropdown
+            value={
+              adminPuskesmas && adminPuskesmas.length > 0
+                ? adminPuskesmas.find(
+                    (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
+                  ) || null
+                : null
+            }
+            filter
+            options={adminPuskesmas || []}
+            optionLabel="namaPuskesmas"
+            itemTemplate={itemTemplatePuskesmas}
+            valueTemplate={valueTemplatePuskesmas}
+            placeholder="Pilih Puskesmas"
+            className="p-2 rounded"
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
-                tinggiBadan: Number(e.target.value),
+                idAdminPuskesmas: e.value.id,
               }))
             }
           />
-          {errors.tinggiBadan && (
+
+          {errors.idAdminPuskesmas && (
             <small className="p-error -mt-3 text-sm">
-              {errors.tinggiBadan}
+              {errors.idAdminPuskesmas}
             </small>
           )}
-          <label htmlFor="" className="-mb-3">
-            Berat badan:
-          </label>
 
-          <InputText
-            type="number"
-            placeholder="Berat Badan"
-            className="p-input text-lg p-3  rounded"
-            value={datas.beratBadan}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                beratBadan: Number(e.target.value),
-              }))
-            }
-          />
-          {errors.beratBadan && (
-            <small className="p-error -mt-3 text-sm">{errors.beratBadan}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Tekanan darah:
-          </label>
-
-          <InputText
-            type="text"
-            placeholder="Tekanan Darah"
-            className="p-input text-lg p-3  rounded"
-            value={datas.tekananDarah}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                tekananDarah: e.target.value,
-              }))
-            }
-          />
-          {errors.tekananDarah && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.tekananDarah}
-            </small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Denyut nadi:
-          </label>
-
-          <InputText
-            type="number"
-            placeholder="Denyut Nadi"
-            className="p-input text-lg p-3  rounded"
-            value={datas.denyutNadi}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                denyutNadi: Number(e.target.value),
-              }))
-            }
-          />
-          {errors.denyutNadi && (
-            <small className="p-error -mt-3 text-sm">{errors.denyutNadi}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Hasil lab:
-          </label>
-
-          <InputTextarea
-            type="text"
-            placeholder="Hasil Lab"
-            className="p-input text-lg p-3  rounded"
-            value={datas.hasilLab}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                hasilLab: e.target.value,
-              }))
-            }
-          />
-          {errors.hasilLab && (
-            <small className="p-error -mt-3 text-sm">{errors.hasilLab}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Hasil ekg:
-          </label>
-
-          <InputTextarea
-            type="text"
-            placeholder="Hasil EKG"
-            className="p-input text-lg p-3  rounded"
-            value={datas.hasilEkg}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                hasilEkg: e.target.value,
-              }))
-            }
-          />
-          {errors.hasilEkg && (
-            <small className="p-error -mt-3 text-sm">{errors.hasilEkg}</small>
-          )}
           <label htmlFor="" className="-mb-3">
             Tanggal periksa:
           </label>
@@ -575,9 +488,9 @@ const DataPasien = () => {
             hideOnRangeSelection
           />
 
-          {errors.tanggalPeriksa && (
+          {errors.tanggalDaftar && (
             <small className="p-error -mt-3 text-sm">
-              {errors.tanggalPeriksa}
+              {errors.tanggalDaftar}
             </small>
           )}
           <Button
