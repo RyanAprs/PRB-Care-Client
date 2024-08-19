@@ -66,20 +66,12 @@ const DataPengguna = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pengguna`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const sortedData = response.data.data.sort(customSort);
+        const response = await getAllPengguna();
+        const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-
         setLoading(false);
       }
     };

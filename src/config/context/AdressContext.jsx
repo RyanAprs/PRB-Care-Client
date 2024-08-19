@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext, useState } from "react";
 
 export const AddressContext = createContext();
 
@@ -8,7 +8,7 @@ export const AddressProvider = ({ children }) => {
     kabupaten: "",
     kecamatan: "",
     desa: "",
-    detail: ""
+    detail: "",
   });
 
   return (

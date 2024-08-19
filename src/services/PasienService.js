@@ -26,7 +26,7 @@ export const getAllPasien = async () => {
 
   const formatedData = response.data.data.map((item) => ({
     ...item,
-    tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
+    tanggalDaftar: convertUnixToHuman(item.tanggalDaftar),
   }));
   return formatedData;
 };
@@ -38,7 +38,7 @@ export const getAllPasienAktif = async () => {
   );
   const formatedData = response.data.data.map((item) => ({
     ...item,
-    tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
+    tanggalDaftar: convertUnixToHuman(item.tanggalDaftar),
   }));
   return formatedData;
 };

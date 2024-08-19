@@ -304,17 +304,19 @@ const DataObat = () => {
 
           <Dropdown
             value={
-              dataAdminApotek.find(
-                (apotek) => apotek.id === datas.idAdminApotek
-              ) || null
+              dataAdminApotek && dataAdminApotek.length > 0
+                ? dataAdminApotek.find(
+                    (apotek) => apotek.id === datas.idAdminApotek
+                  ) || null
+                : null
             }
-            options={dataAdminApotek}
+            options={dataAdminApotek || []}
             itemTemplate={itemTemplateApotek}
             valueTemplate={valueTemplateApotek}
             filter
             optionLabel="namaApotek"
             placeholder="Pilih Apotek"
-            className=" p-2 rounded"
+            className="p-2 rounded"
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
@@ -322,6 +324,7 @@ const DataObat = () => {
               }))
             }
           />
+
           {errors.idAdminApotek && (
             <small className="p-error -mt-3 text-sm">
               {errors.idAdminApotek}

@@ -1,15 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
 import {
   convertHumanToUnix,
-  convertUnixToHuman,
   convertUnixToHumanForEditData,
   dateLocaleId,
 } from "../../../utils/DateConverter";
@@ -40,6 +37,8 @@ import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized"
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { getAllPengguna } from "../../../services/PenggunaService";
+import { getAllPuskesmas } from "../../../services/PuskesmasService";
 
 addLocale("id", dateLocaleId);
 
@@ -63,7 +62,7 @@ const DataPasien = () => {
     denyutNadi: 0,
     hasilLab: "",
     hasilEkg: "",
-    tanggalPeriksa: 0,
+    tanggalDaftar: 0,
   });
   const [selectedDate, setSelectedDate] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -77,28 +76,16 @@ const DataPasien = () => {
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
-    if (a.tanggalPeriksa < b.tanggalPeriksa) return -1;
-    if (a.tanggalPeriksa > b.tanggalPeriksa) return 1;
+    if (a.tanggalDaftar < b.tanggalDaftar) return -1;
+    if (a.tanggalDaftar > b.tanggalDaftar) return 1;
     return 0;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pasien`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const formatedData = response.data.data.map((item) => ({
-          ...item,
-          tanggalPeriksa: convertUnixToHuman(item.tanggalPeriksa),
-        }));
-        const sortedData = formatedData.sort(customSort);
+        const response = await getAllPasien();
+        const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
@@ -109,15 +96,8 @@ const DataPasien = () => {
 
     const fetchDataAdminPuskesmas = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setAdminPuskesmas(response.data.data);
+        const response = await getAllPuskesmas();
+        setAdminPuskesmas(response);
         setLoading(false);
       } catch (error) {
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
@@ -127,16 +107,9 @@ const DataPasien = () => {
 
     const fetchDataPengguna = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/pengguna`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getAllPengguna();
 
-        setPengguna(response.data.data);
+        setPengguna(response);
 
         setLoading(false);
       } catch (error) {
@@ -163,7 +136,7 @@ const DataPasien = () => {
       denyutNadi: 0,
       hasilLab: "",
       hasilEkg: "",
-      tanggalPeriksa: 0,
+      tanggalDaftar: 0,
     });
     setVisible(true);
     setIsEditMode(false);
@@ -204,7 +177,7 @@ const DataPasien = () => {
     const unixTimestamp = convertHumanToUnix(e.value);
     setDatas((prev) => ({
       ...prev,
-      tanggalPeriksa: unixTimestamp,
+      tanggalDaftar: unixTimestamp,
     }));
   };
 
@@ -214,7 +187,7 @@ const DataPasien = () => {
       const dataResponse = await getPasienById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
-          dataResponse.tanggalPeriksa
+          dataResponse.tanggalDaftar
         );
         setSelectedDate(convertDate);
         setDatas({
@@ -227,7 +200,7 @@ const DataPasien = () => {
           denyutNadi: dataResponse.denyutNadi,
           hasilLab: dataResponse.hasilLab,
           hasilEkg: dataResponse.hasilEkg,
-          tanggalPeriksa: dataResponse.tanggalPeriksa,
+          tanggalDaftar: dataResponse.tanggalDaftar,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -359,7 +332,7 @@ const DataPasien = () => {
     { header: "Denyut Nadi", field: "denyutNadi" },
     { header: "Hasil Lab", field: "hasilLab" },
     { header: "Hasil EKG", field: "hasilEkg" },
-    { header: "Tanggal Periksa", field: "tanggalPeriksa" },
+    { header: "Tanggal Periksa", field: "tanggalDaftar" },
     { header: "Status", field: "status" },
   ];
 
@@ -492,17 +465,19 @@ const DataPasien = () => {
 
           <Dropdown
             value={
-              adminPuskesmas.find(
-                (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
-              ) || null
+              adminPuskesmas && adminPuskesmas.length > 0
+                ? adminPuskesmas.find(
+                    (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
+                  ) || null
+                : null
             }
             filter
-            options={adminPuskesmas}
+            options={adminPuskesmas || []}
             optionLabel="namaPuskesmas"
             itemTemplate={itemTemplatePuskesmas}
             valueTemplate={valueTemplatePuskesmas}
             placeholder="Pilih Puskesmas"
-            className=" p-2 rounded"
+            className="p-2 rounded"
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
@@ -510,129 +485,13 @@ const DataPasien = () => {
               }))
             }
           />
+
           {errors.idAdminPuskesmas && (
             <small className="p-error -mt-3 text-sm">
               {errors.idAdminPuskesmas}
             </small>
           )}
-          <label htmlFor="" className="-mb-3">
-            Tinggi badan:
-          </label>
 
-          <InputText
-            type="number"
-            placeholder="Tinggi Badan"
-            className="p-input  text-lg p-3  rounded"
-            value={datas.tinggiBadan}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                tinggiBadan: Number(e.target.value),
-              }))
-            }
-          />
-          {errors.tinggiBadan && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.tinggiBadan}
-            </small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Berat badan:
-          </label>
-
-          <InputText
-            type="number"
-            placeholder="Berat Badan"
-            className="p-input text-lg p-3  rounded"
-            value={datas.beratBadan}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                beratBadan: Number(e.target.value),
-              }))
-            }
-          />
-          {errors.beratBadan && (
-            <small className="p-error -mt-3 text-sm">{errors.beratBadan}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Tekanan darah:
-          </label>
-
-          <InputText
-            type="text"
-            placeholder="Tekanan Darah"
-            className="p-input text-lg p-3  rounded"
-            value={datas.tekananDarah}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                tekananDarah: e.target.value,
-              }))
-            }
-          />
-          {errors.tekananDarah && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.tekananDarah}
-            </small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Denyut nadi:
-          </label>
-
-          <InputText
-            type="number"
-            placeholder="Denyut Nadi"
-            className="p-input text-lg p-3  rounded"
-            value={datas.denyutNadi}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                denyutNadi: Number(e.target.value),
-              }))
-            }
-          />
-          {errors.denyutNadi && (
-            <small className="p-error -mt-3 text-sm">{errors.denyutNadi}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Hasil lab:
-          </label>
-
-          <InputTextarea
-            type="text"
-            placeholder="Hasil Lab"
-            className="p-input text-lg p-3  rounded"
-            value={datas.hasilLab}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                hasilLab: e.target.value,
-              }))
-            }
-          />
-          {errors.hasilLab && (
-            <small className="p-error -mt-3 text-sm">{errors.hasilLab}</small>
-          )}
-          <label htmlFor="" className="-mb-3">
-            Hasil ekg:
-          </label>
-
-          <InputTextarea
-            type="text"
-            placeholder="Hasil EKG"
-            className="p-input text-lg p-3  rounded"
-            value={datas.hasilEkg}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                hasilEkg: e.target.value,
-              }))
-            }
-          />
-          {errors.hasilEkg && (
-            <small className="p-error -mt-3 text-sm">{errors.hasilEkg}</small>
-          )}
           <label htmlFor="" className="-mb-3">
             Tanggal periksa:
           </label>
@@ -650,9 +509,9 @@ const DataPasien = () => {
             hideOnRangeSelection
           />
 
-          {errors.tanggalPeriksa && (
+          {errors.tanggalDaftar && (
             <small className="p-error -mt-3 text-sm">
-              {errors.tanggalPeriksa}
+              {errors.tanggalDaftar}
             </small>
           )}
           <Button

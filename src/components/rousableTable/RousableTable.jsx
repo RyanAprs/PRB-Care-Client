@@ -233,6 +233,14 @@ export default function ReusableTable({
     }
   };
 
+  const renderCellContent = (rowData, field) => {
+    const content = rowData[field];
+    if (content && /<\/?[a-z][\s\S]*>/i.test(content)) {
+      return <div dangerouslySetInnerHTML={{ __html: content }} />;
+    }
+    return content;
+  };
+
   return (
     <div className="p-4 w-full ">
       <div className="card p-6 w-full flex flex-col gap-4">
@@ -278,15 +286,11 @@ export default function ReusableTable({
             rowsPerPageOptions={[10, 25, 50, 75, 100]}
             showGridlines
             tableStyle={{ minWidth: "50rem" }}
-            currentPageReportTemplate={
-              "{first} to {last} of {totalRecords} entries"
-            }
-            paginatorTemplate={
-              "CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            }
+            currentPageReportTemplate="{first} to {last} of {totalRecords} entries"
+            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
             globalFilter={globalFilter}
             editMode="row"
-            removableSort 
+            removableSort
             resizableColumns
           >
             {path !== "pengguna" && (
@@ -303,7 +307,8 @@ export default function ReusableTable({
                 field={col.field}
                 header={col.header}
                 sortable
-                className="p-4 "
+                className="p-4"
+                body={(rowData) => renderCellContent(rowData, col.field)}
               />
             ))}
           </DataTable>

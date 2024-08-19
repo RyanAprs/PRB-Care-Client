@@ -19,32 +19,8 @@ export const pasienCreateSchema = z.object({
     .int()
     .positive()
     .refine((val) => val > 0, "Admin Puskesmas tidak boleh kosong"),
-  beratBadan: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Berat Badan harus lebih dari 0"),
-  tinggiBadan: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Tinggi Badan harus lebih dari 0"),
-  tekananDarah: z
-    .string()
-    .min(3)
-    .max(20)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Tekanan Darah minimal 3 karakter"
-    ),
-  denyutNadi: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
-  hasilLab: z.string().optional(),
-  hasilEkg: z.string().optional(),
-  tanggalPeriksa: z
+
+  tanggalDaftar: z
     .number()
     .int()
     .positive()
@@ -96,7 +72,7 @@ export const pasienUpdateSchema = z.object({
     .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
   hasilLab: z.string().optional(),
   hasilEkg: z.string().optional(),
-  tanggalPeriksa: z
+  tanggalDaftar: z
     .number()
     .int()
     .positive()
@@ -142,7 +118,7 @@ export const pasienCreateSchemaAdminPuskesmas = z.object({
     .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
   hasilLab: z.string().optional(),
   hasilEkg: z.string().optional(),
-  tanggalPeriksa: z
+  tanggalDaftar: z
     .number()
     .int()
     .positive()
@@ -189,7 +165,7 @@ export const pasienUpdateSchemaAdminPuskesmas = z.object({
     .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
   hasilLab: z.string().optional(),
   hasilEkg: z.string().optional(),
-  tanggalPeriksa: z
+  tanggalDaftar: z
     .number()
     .int()
     .positive()

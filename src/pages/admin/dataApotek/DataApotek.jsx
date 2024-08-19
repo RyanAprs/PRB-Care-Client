@@ -16,7 +16,6 @@ import {
   apotekCreateSchema,
   apotekUpdateSchema,
 } from "../../../validations/ApotekSchema";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import {
@@ -30,6 +29,7 @@ import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized"
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
 
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
@@ -41,6 +41,7 @@ const DataApotek = () => {
     password: "",
     telepon: "",
     alamat: "",
+    waktuOperasional: "",
   });
   const [errors, setErrors] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
@@ -53,6 +54,8 @@ const DataApotek = () => {
   const title = "Apotek";
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
+  const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
+  const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
   const token = Cookies.get("token");
   const navigate = useNavigate();
 
@@ -82,16 +85,9 @@ const DataApotek = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await getAllApotek();
 
-        const sortedData = response.data.data.sort(customSort);
+        const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
@@ -112,16 +108,27 @@ const DataApotek = () => {
       password: "",
       alamat: "",
       telepon: "",
+      waktuOperasional: "",
     });
     setIsEditMode(false);
     setVisible(true);
     setResetAddress(true);
   };
 
+  const formatWaktuOperasional = () => {
+    return waktuOperasionalList.join(" <br /> ");
+  };
+
   const handleCreate = async () => {
     try {
-      apotekCreateSchema.parse(datas);
-      const response = await createApotek(datas);
+      const formattedWaktuOperasional = formatWaktuOperasional();
+
+      const newDatas = {
+        ...datas,
+        waktuOperasional: formattedWaktuOperasional,
+      };
+      apotekCreateSchema.parse(newDatas);
+      const response = await createApotek(newDatas);
 
       if (response.status === 201) {
         toast.current.show({
@@ -154,12 +161,14 @@ const DataApotek = () => {
     try {
       const dataResponse = await getApotekById(data.id);
       setPrevAddress(dataResponse.alamat);
+      setPrevWaktuOperasional(dataResponse.waktuOperasional);
       if (dataResponse) {
         setDatas({
           namaApotek: dataResponse.namaApotek,
           username: dataResponse.username,
           alamat: dataResponse.alamat,
           telepon: dataResponse.telepon,
+          waktuOperasional: dataResponse.waktuOperasional,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -174,9 +183,12 @@ const DataApotek = () => {
 
   const handleUpdate = async () => {
     try {
+      const formattedWaktuOperasional = formatWaktuOperasional();
+
       const updatedDatas = {
         ...datas,
         alamat: datas.alamat || prevAddress,
+        waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
       };
       apotekUpdateSchema.parse(updatedDatas);
       const response = await updateApotek(currentId, updatedDatas);
@@ -266,6 +278,7 @@ const DataApotek = () => {
     { field: "namaApotek", header: "Nama Apotek" },
     { field: "telepon", header: "Telepon" },
     { field: "alamat", header: "Alamat" },
+    { field: "waktuOperasional", header: "Waktu Operasional" },
   ];
 
   if (loading)
@@ -387,6 +400,20 @@ const DataApotek = () => {
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
+          )}
+          <div className="w-full">
+            <WaktuOperasional
+              setWaktuOperasionalList={setWaktuOperasionalList}
+            />
+          </div>
+          <span className="text-sm -mt-4">
+            {isEditMode ? "*Kosongkan waktu operasional jika tidak ingin diubah" : null}
+          </span>
+
+          {errors.waktuOperasional && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.waktuOperasional}
+            </small>
           )}
           <Button
             label={isEditMode ? "Edit" : "Simpan"}

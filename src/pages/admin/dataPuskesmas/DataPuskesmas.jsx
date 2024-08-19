@@ -23,24 +23,26 @@ import {
   handleDeleteError,
 } from "../../../utils/ApiErrorHandlers";
 import Cookies from "js-cookie";
-import axios from "axios";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
 
 const DataPuskesmas = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
   const [datas, setDatas] = useState({
     namaPuskesmas: "",
     username: "",
     password: "",
     alamat: "",
     telepon: "",
+    waktuOperasional: "",
   });
   const [errors, setErrors] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
@@ -53,6 +55,7 @@ const DataPuskesmas = () => {
   const token = Cookies.get("token");
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
+  const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
   const toast = useRef(null);
   const navigate = useNavigate();
 
@@ -82,20 +85,11 @@ const DataPuskesmas = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const sortedData = response.data.data.sort(customSort);
+        const response = await getAllPuskesmas();
+        const sortedData = response.sort(customSort);
         setData(sortedData);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         setLoading(false);
       }
@@ -112,18 +106,28 @@ const DataPuskesmas = () => {
       password: "",
       alamat: "",
       telepon: "",
+      waktuOperasional: "",
     });
     setIsEditMode(false);
     setVisible(true);
     setResetAddress(true);
   };
 
+  const formatWaktuOperasional = () => {
+    return waktuOperasionalList.join(" <br /> ");
+  };
+
   const handleCreate = async () => {
     try {
-      puskesmasCreateSchema.parse(datas);
+      const formattedWaktuOperasional = formatWaktuOperasional();
 
-      const response = await createPuskesmas(datas);
+      const newDatas = {
+        ...datas,
+        waktuOperasional: formattedWaktuOperasional,
+      };
 
+      puskesmasCreateSchema.parse(newDatas);
+      const response = await createPuskesmas(newDatas);
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
@@ -132,6 +136,7 @@ const DataPuskesmas = () => {
           life: 3000,
         });
         setVisible(false);
+
         const data = await getAllPuskesmas();
         const sortedData = data.sort(customSort);
         setData(sortedData);
@@ -155,12 +160,14 @@ const DataPuskesmas = () => {
     try {
       const dataResponse = await getPuskesmasById(data.id);
       setPrevAddress(dataResponse.alamat);
+      setPrevWaktuOperasional(dataResponse.waktuOperasional);
       if (dataResponse) {
         setDatas({
           namaPuskesmas: dataResponse.namaPuskesmas,
           username: dataResponse.username,
           alamat: dataResponse.alamat,
           telepon: dataResponse.telepon,
+          waktuOperasional: dataResponse.waktuOperasional,
         });
         setCurrentId(data.id);
         setVisible(true);
@@ -175,9 +182,12 @@ const DataPuskesmas = () => {
 
   const handleUpdate = async () => {
     try {
+      const formattedWaktuOperasional = formatWaktuOperasional();
+
       const updatedDatas = {
         ...datas,
         alamat: datas.alamat || prevAddress,
+        waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
       };
 
       puskesmasUpdateSchema.parse(updatedDatas);
@@ -269,6 +279,7 @@ const DataPuskesmas = () => {
     { field: "namaPuskesmas", header: "Nama Puskesmas" },
     { field: "telepon", header: "Telepon" },
     { field: "alamat", header: "Alamat" },
+    { field: "waktuOperasional", header: "Waktu Operasional" },
   ];
 
   if (loading)
@@ -279,7 +290,7 @@ const DataPuskesmas = () => {
     );
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
+    <div className="min-h-screen flex flex-col gap-4 p-4 z-10 w-full">
       <Toast ref={toast} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
@@ -391,6 +402,24 @@ const DataPuskesmas = () => {
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}
+
+          <div className="w-full">
+            <WaktuOperasional
+              setWaktuOperasionalList={setWaktuOperasionalList}
+            />
+          </div>
+          <span className="text-sm -mt-4">
+            {isEditMode
+              ? "*Kosongkan waktu operasional jika tidak ingin diubah"
+              : null}
+          </span>
+
+          {errors.waktuOperasional && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.waktuOperasional}
+            </small>
+          )}
+
           <Button
             label={isEditMode ? "Edit" : "Simpan"}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"

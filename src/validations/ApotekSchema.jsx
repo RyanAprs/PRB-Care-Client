@@ -69,6 +69,13 @@ export const apotekCreateSchema = z.object({
       isPasswordFormat,
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
     ),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
+    ),
 });
 
 export const apotekUpdateSchema = z.object({
@@ -99,6 +106,13 @@ export const apotekUpdateSchema = z.object({
       (val) => !val || isPasswordFormat(val),
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
     ),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
+    ),
 });
 
 export const apotekUpdateCurrentSchema = z.object({
@@ -106,10 +120,7 @@ export const apotekUpdateCurrentSchema = z.object({
     .string()
     .min(3)
     .max(50)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Nama Apotek minimal 3 karakter"
-    ),
+    .refine((val) => val.trim().length >= 3, "Nama Apotek minimal 3 karakter"),
   telepon: z
     .string()
     .min(10)
@@ -119,6 +130,13 @@ export const apotekUpdateCurrentSchema = z.object({
     .string()
     .min(3)
     .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
+    ),
 });
 
 export const apotekChangePasswordSchema = z

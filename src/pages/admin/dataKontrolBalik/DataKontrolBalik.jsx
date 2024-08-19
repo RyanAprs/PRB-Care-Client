@@ -29,6 +29,7 @@ import {
   handleApiError,
   handleDeleteError,
   handleDoneError,
+  handleKontrolBalikError,
 } from "../../../utils/ApiErrorHandlers";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
@@ -36,14 +37,25 @@ import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized"
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { InputTextarea } from "primereact/inputtextarea";
+import { InputText } from "primereact/inputtext";
 
 const DataKontrolBalik = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
+    noAntrean: 0,
     idAdminPuskesmas: "",
     idPasien: "",
+    tinggiBadan: 0,
+    beratBadan: 0,
+    tekananDarah: "",
+    denyutNadi: 0,
+    hasilLab: "",
+    hasilEkg: "",
+    hasilDiagnosa: "",
+    keluhan: "",
     tanggalKontrol: 0,
   });
   const [pasien, setPasien] = useState([]);
@@ -77,10 +89,10 @@ const DataKontrolBalik = () => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
+        console.log(response);
+
         const sortedData = response.sort(customSort);
         setData(sortedData);
-
-        console.log(sortedData);
 
         setLoading(false);
       } catch (error) {
@@ -111,8 +123,17 @@ const DataKontrolBalik = () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
+      noAntrean: 0,
       idAdminPuskesmas: 0,
       idPasien: 0,
+      tinggiBadan: 0,
+      beratBadan: 0,
+      tekananDarah: "",
+      denyutNadi: 0,
+      hasilLab: "",
+      hasilEkg: "",
+      hasilDiagnosa: "",
+      keluhan: "",
       tanggalKontrol: 0,
     });
     setVisible(true);
@@ -163,15 +184,25 @@ const DataKontrolBalik = () => {
     setErrors({});
     try {
       const dataResponse = await getKontrolBalikById(data.id);
+
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
           dataResponse.tanggalKontrol
         );
         setSelectedDate(convertDate);
         setDatas({
+          noAntrean: dataResponse.noAntrean,
           idAdminPuskesmas: data.pasien.adminPuskesmas.id,
           idPasien: dataResponse.idPasien,
           tanggalKontrol: dataResponse.tanggalKontrol,
+          tinggiBadan: dataResponse.tinggiBadan,
+          beratBadan: dataResponse.beratBadan,
+          tekananDarah: dataResponse.tekananDarah,
+          denyutNadi: dataResponse.denyutNadi,
+          hasilLab: dataResponse.hasilLab,
+          hasilEkg: dataResponse.hasilEkg,
+          hasilDiagnosa: dataResponse.hasilDiagnosa,
+          keluhan: dataResponse.keluhan,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -194,6 +225,7 @@ const DataKontrolBalik = () => {
           detail: "Data kontrol balik diperbarui",
           life: 3000,
         });
+
         setVisible(false);
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
@@ -208,7 +240,7 @@ const DataKontrolBalik = () => {
         setErrors(newErrors);
       } else {
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        handleApiError(error, toast);
+        handleKontrolBalikError(error, toast);
       }
     }
   };
@@ -322,8 +354,17 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
+    { header: "Nomor Antrean", field: "noAntrean" },
     { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Berat Badan", field: "beratBadan" },
+    { header: "Tinggi Badan", field: "tinggiBadan" },
+    { header: "Denyut Nadi", field: "denyutNadi" },
+    { header: "Tekanan Darah", field: "tekananDarah" },
+    { header: "Hasil LAB", field: "hasilLab" },
+    { header: "Hasil EKG", field: "hasilEkg" },
+    { header: "Hasil Diagnosa", field: "hasilDiagnosa" },
+    { header: "Keluhan", field: "keluhan" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Status", field: "status" },
   ];
@@ -391,6 +432,31 @@ const DataKontrolBalik = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          {isEditMode && (
+            <>
+              <label htmlFor="" className="-mb-3">
+                Nomor Atrean:
+              </label>
+
+              <InputText
+                type="text"
+                placeholder="Nomor Antrean"
+                className="p-input  text-lg p-3  rounded"
+                value={datas.noAntrean}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    noAntrean: Number(e.target.value),
+                  }))
+                }
+              />
+              {errors.noAntrean && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.noAntrean}
+                </small>
+              )}
+            </>
+          )}
           <label htmlFor="" className="-mb-3">
             Pilih pasien:
           </label>
@@ -417,6 +483,180 @@ const DataKontrolBalik = () => {
           {errors.idPasien && (
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
           )}
+
+          {isEditMode && (
+            <>
+              <label htmlFor="" className="-mb-3">
+                Tinggi badan:
+              </label>
+
+              <InputText
+                type="number"
+                placeholder="Tinggi Badan"
+                className="p-input  text-lg p-3  rounded"
+                value={datas.tinggiBadan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    tinggiBadan: Number(e.target.value),
+                  }))
+                }
+              />
+              {errors.tinggiBadan && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.tinggiBadan}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Berat badan:
+              </label>
+
+              <InputText
+                type="number"
+                placeholder="Berat Badan"
+                className="p-input text-lg p-3  rounded"
+                value={datas.beratBadan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    beratBadan: Number(e.target.value),
+                  }))
+                }
+              />
+              {errors.beratBadan && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.beratBadan}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Tekanan darah:
+              </label>
+
+              <InputText
+                type="text"
+                placeholder="Tekanan Darah"
+                className="p-input text-lg p-3  rounded"
+                value={datas.tekananDarah}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    tekananDarah: e.target.value,
+                  }))
+                }
+              />
+              {errors.tekananDarah && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.tekananDarah}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Denyut nadi:
+              </label>
+
+              <InputText
+                type="number"
+                placeholder="Denyut Nadi"
+                className="p-input text-lg p-3  rounded"
+                value={datas.denyutNadi}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    denyutNadi: Number(e.target.value),
+                  }))
+                }
+              />
+              {errors.denyutNadi && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.denyutNadi}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Hasil lab:
+              </label>
+
+              <InputTextarea
+                type="text"
+                placeholder="Hasil Lab"
+                className="p-input text-lg p-3  rounded"
+                value={datas.hasilLab}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    hasilLab: e.target.value,
+                  }))
+                }
+              />
+              {errors.hasilLab && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.hasilLab}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Hasil ekg:
+              </label>
+
+              <InputTextarea
+                type="text"
+                placeholder="Hasil EKG"
+                className="p-input text-lg p-3  rounded"
+                value={datas.hasilEkg}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    hasilEkg: e.target.value,
+                  }))
+                }
+              />
+              {errors.hasilEkg && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.hasilEkg}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Hasil Diagnosa:
+              </label>
+
+              <InputTextarea
+                type="text"
+                placeholder="Hasil Diagnosa"
+                className="p-input text-lg p-3  rounded"
+                value={datas.hasilDiagnosa}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    hasilDiagnosa: e.target.value,
+                  }))
+                }
+              />
+              {errors.hasilDiagnosa && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.hasilDiagnosa}
+                </small>
+              )}
+              <label htmlFor="" className="-mb-3">
+                Keluhan:
+              </label>
+
+              <InputTextarea
+                type="text"
+                placeholder="Keluhan"
+                className="p-input text-lg p-3  rounded"
+                value={datas.keluhan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    keluhan: e.target.value,
+                  }))
+                }
+              />
+              {errors.keluhan && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.keluhan}
+                </small>
+              )}
+            </>
+          )}
+
           <label htmlFor="" className="-mb-3">
             Pilih tanggal kontrol:{" "}
           </label>

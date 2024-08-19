@@ -43,6 +43,13 @@ export const puskesmasCreateSchema = z.object({
       isPasswordFormat,
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
     ),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
+    ),
 });
 
 export const puskesmasUpdateSchema = z.object({
@@ -75,6 +82,13 @@ export const puskesmasUpdateSchema = z.object({
     .refine(
       (val) => !val || isPasswordFormat(val),
       "Password tidak sesuai format (minimal 6 karakter, harus mengandung huruf besar, huruf kecil, angka, dan karakter spesial)"
+    ),
+  waktuOperasional: z
+    .string()
+    .min(3)
+    .refine(
+      (val) => val.trim().length >= 3,
+      "Waktu Operasional tidak boleh kosong"
     ),
 });
 
@@ -128,5 +142,4 @@ export const puskesmasChangePasswordSchema = z
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Konfirmasi password harus sama dengan password baru",
     path: ["confirmPassword"],
-    
   });
