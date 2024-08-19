@@ -33,27 +33,20 @@ export const kontrolBalikUpdateSchema = z.object({
   idAdminPuskesmas: z.number().int().positive().optional(),
   beratBadan: z
     .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Berat Badan harus lebih dari 0"),
+    .refine((val) => val >= 0, "Value harus bilangan bulat")
+    .optional(),
   tinggiBadan: z
     .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Tinggi Badan harus lebih dari 0"),
+    .refine((val) => val >= 0, "Value harus bilangan bulat")
+    .optional(),
   tekananDarah: z
     .string()
-    .min(3)
     .max(20)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Tekanan Darah minimal 3 karakter"
-    ),
+    .optional(),
   denyutNadi: z
     .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
+    .refine((val) => val >= 0, "Value harus bilangan bulat")
+    .optional(),
   hasilLab: z.string().optional(),
   hasilEkg: z.string().optional(),
   hasilDiagnosa: z.string().optional(),

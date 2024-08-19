@@ -373,7 +373,7 @@ const DataPengambilanObat = () => {
   const itemTemplatePasien = (option) => {
     return (
       <div>
-        {option.pengguna.namaLengkap} - {option.noRekamMedis}
+        {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
       </div>
     );
   };
@@ -382,7 +382,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.noRekamMedis}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
         </div>
       );
     }
@@ -392,7 +392,7 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+        {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
         {option.adminApotek.telepon}
       </div>
     );
@@ -402,7 +402,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+          {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
           {option.adminApotek.telepon}
         </div>
       );

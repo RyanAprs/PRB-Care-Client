@@ -318,16 +318,9 @@ const DataPengambilanObat = () => {
 
   const columns = [
     { header: "Resi", field: "resi" },
-    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Telepon Pasien", field: "pasien.pengguna.telepon" },
-    {
-      header: "Telepon Keluarga Pasien",
-      field: "pasien.pengguna.teleponKeluarga",
-    },
-    { header: "Alamat Pasien", field: "pasien.pengguna.alamat" },
-    { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
-    { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
-    { header: "Alamat Apotek", field: "obat.adminApotek.alamat" },
+    { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
+    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
+    { header: "Apotek", field: "obat.adminApotek.namaApotek" },
     { header: "Obat", field: "obat.namaObat" },
     { header: "Jumlah Obat", field: "jumlah" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
@@ -361,7 +354,7 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+        {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
         {option.adminApotek.telepon}
       </div>
     );
@@ -371,7 +364,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+          {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
           {option.adminApotek.telepon}
         </div>
       );
@@ -388,7 +381,10 @@ const DataPengambilanObat = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
 
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable

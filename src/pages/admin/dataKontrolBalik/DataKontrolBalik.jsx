@@ -382,24 +382,24 @@ const DataKontrolBalik = () => {
       </div>
     );
 
-  const itemTemplate = (option) => {
-    return (
-      <div>
-        {option.pengguna.namaLengkap} - {option.noRekamMedis}
-      </div>
-    );
-  };
-
-  const valueTemplate = (option) => {
-    if (option) {
+    const itemTemplate = (option) => {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.noRekamMedis}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
         </div>
       );
-    }
-    return <span>Pilih Pasien</span>;
-  };
+    };
+  
+    const valueTemplate = (option) => {
+      if (option) {
+        return (
+          <div>
+            {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
+          </div>
+        );
+      }
+      return <span>Pilih Pasien</span>;
+    };
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">

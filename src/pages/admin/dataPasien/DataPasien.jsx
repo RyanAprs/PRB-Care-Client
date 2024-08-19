@@ -56,12 +56,6 @@ const DataPasien = () => {
     noRekamMedis: "",
     idAdminPuskesmas: "",
     idPengguna: "",
-    beratBadan: 0,
-    tinggiBadan: 0,
-    tekananDarah: "",
-    denyutNadi: 0,
-    hasilLab: "",
-    hasilEkg: "",
     tanggalDaftar: 0,
   });
   const [selectedDate, setSelectedDate] = useState(null);
@@ -130,12 +124,6 @@ const DataPasien = () => {
       noRekamMedis: "",
       idAdminPuskesmas: 0,
       idPengguna: 0,
-      beratBadan: 0,
-      tinggiBadan: 0,
-      tekananDarah: "",
-      denyutNadi: 0,
-      hasilLab: "",
-      hasilEkg: "",
       tanggalDaftar: 0,
     });
     setVisible(true);
@@ -194,12 +182,6 @@ const DataPasien = () => {
           noRekamMedis: dataResponse.noRekamMedis,
           idAdminPuskesmas: dataResponse.idAdminPuskesmas,
           idPengguna: dataResponse.idPengguna,
-          beratBadan: dataResponse.beratBadan,
-          tinggiBadan: dataResponse.tinggiBadan,
-          tekananDarah: dataResponse.tekananDarah,
-          denyutNadi: dataResponse.denyutNadi,
-          hasilLab: dataResponse.hasilLab,
-          hasilEkg: dataResponse.hasilEkg,
           tanggalDaftar: dataResponse.tanggalDaftar,
         });
         setCurrentId(data.id);
@@ -326,12 +308,6 @@ const DataPasien = () => {
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
     { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
-    { header: "Berat Badan", field: "beratBadan" },
-    { header: "Tinggi Badan", field: "tinggiBadan" },
-    { header: "Tekanan Darah", field: "tekananDarah" },
-    { header: "Denyut Nadi", field: "denyutNadi" },
-    { header: "Hasil Lab", field: "hasilLab" },
-    { header: "Hasil EKG", field: "hasilEkg" },
     { header: "Tanggal Periksa", field: "tanggalDaftar" },
     { header: "Status", field: "status" },
   ];
@@ -388,7 +364,10 @@ const DataPasien = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}

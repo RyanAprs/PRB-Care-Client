@@ -86,6 +86,7 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
               value={input.waktuBuka}
               onChange={(e) => handleInputChange(index, "waktuBuka", e.value)}
               timeOnly
+              placeholder="Pilih Waktu Buka"
               showTime
             />
           </div>
@@ -95,6 +96,7 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
               value={input.waktuTutup}
               onChange={(e) => handleInputChange(index, "waktuTutup", e.value)}
               timeOnly
+              placeholder="Pilih Waktu Tutup"
               showTime
             />
           </div>
