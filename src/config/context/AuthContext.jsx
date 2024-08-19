@@ -1,18 +1,30 @@
 import { createContext, useEffect, useReducer } from "react";
 import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { jwtDecode } from "jwt-decode";
+
 export const AuthContext = createContext();
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      const { token, role } = action.payload;
+      const { token } = action.payload;
+      const decodedToken = jwtDecode(token);
+      let role = decodedToken.role;
+
+      if (role === 'super') {
+        role = 'admin';
+      }else if (role === 'puskesmas') {
+        role = 'nakes';
+      }else if (role === 'apotek') {
+        role = 'apoteker';
+      }
+
       Cookies.set("token", token);
-      Cookies.set("role", role);
+
       return { token, role, isLoading: false };
     case "LOGOUT":
       Cookies.remove("token");
-      Cookies.remove("role");
       return { token: null, role: null, isLoading: false };
     default:
       return state;
@@ -28,9 +40,19 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const token = Cookies.get("token");
-    const role = Cookies.get("role");
 
-    if (token && role) {
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      let role = decodedToken.role;
+
+      if (role === 'super') {
+        role = 'admin';
+      }else if (role === 'puskesmas') {
+        role = 'nakes';
+      }else if (role === 'apotek') {
+        role = 'apoteker';
+      }
+
       dispatch({ type: "LOGIN", payload: { token, role } });
     } else {
       dispatch({ type: "LOGOUT" });

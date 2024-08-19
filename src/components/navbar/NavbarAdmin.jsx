@@ -32,7 +32,6 @@ import {
   handleChangePasswordError,
 } from "../../utils/ApiErrorHandlers";
 import { updatePassword } from "../../services/SuperAdminService";
-import Cookies from "js-cookie";
 import {
   getCurrentAdminPuskesmas,
   updateCurrentPuskesmas,
@@ -70,7 +69,7 @@ const NavbarAdmin = ({ children }) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  const role = Cookies.get("role");
+  const { token, role } = useContext(AuthContext);
   const { dispatch } = useContext(AuthContext);
   const [isApotekUpdate, setIsApotekUpdate] = useState(false);
   const [dataApotek, setDataApotek] = useState({
@@ -456,6 +455,7 @@ const NavbarAdmin = ({ children }) => {
       }
     }
     if (role === "apoteker") {
+      
       setIsApotekUpdate(true);
       try {
         const dataResponse = await getCurrentAdminApotek();
@@ -478,6 +478,7 @@ const NavbarAdmin = ({ children }) => {
   const { setIsUpdated } = useModalUpdate();
 
   const handleUpdateProfile = async () => {
+    
     try {
       if (isApotekUpdate) {
         const updatedDatas = {
@@ -485,7 +486,7 @@ const NavbarAdmin = ({ children }) => {
           alamat: dataApotek.alamat || prevAddress,
         };
         apotekUpdateCurrentSchema.parse(updatedDatas);
-
+        
         const response = await updateCurrentApotek(updatedDatas);
         if (response.status === 200) {
           toast.current.show({
@@ -519,6 +520,7 @@ const NavbarAdmin = ({ children }) => {
         }
       }
     } catch (error) {
+      
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
