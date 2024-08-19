@@ -86,7 +86,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center md:p-8">
-      <Toast ref={toast} />
+      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
       <div className="flex justify-center items-center w-full md:w-1/2 flex-col gap-6">
         <div className="flex justify-center items-center flex-col w-full">
           <img className="h-auto w-48" src={icon} alt="PRB CARE Logo" />

@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
-
+import img from "../../../assets/data_empty.png";
 const Kontrol = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -99,8 +99,9 @@ const Kontrol = () => {
               </Card>
             ))
           ) : (
-            <div className="text-center text-xl text-gray-500 dark:text-gray-400">
-              Anda belum melakukan kontrol
+            <div className="flex  h-screen flex-col items-center justify-center text-center  md:text-2xl text-xl  text-black dark:text-white">
+              <img src={img} className="md:w-1/4" alt="img" />
+              Belum ada kontrol
             </div>
           )}
         </div>

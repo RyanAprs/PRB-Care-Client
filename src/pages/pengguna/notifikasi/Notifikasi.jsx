@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-
+import img from "../../../assets/data_empty.png";
 const Notifikasi = () => {
   const notifikasiPengambilanObat = JSON.parse(
     localStorage.getItem("notifikasiPengambilanObat")
@@ -41,11 +41,10 @@ const Notifikasi = () => {
               </div>
             ))
           ) : (
-            <div className="bg-white dark:dark:bg-blackHover text-center   rounded  w-full">
-              <h1 className="text-xl text-gray-500 dark:text-gray-400 mb-2">
-                Tidak ada notifikasi
-              </h1>
-            </div>
+            <div className="flex  h-screen flex-col items-center justify-center text-center md:text-2xl text-xl  text-black dark:text-white">
+            <img src={img} className="md:w-1/4" alt="img" />
+            Belum ada notifikasi
+          </div>
           )}
         </div>
       </div>

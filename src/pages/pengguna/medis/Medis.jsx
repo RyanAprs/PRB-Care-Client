@@ -8,6 +8,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import img from "../../../assets/data_empty.png";
 
 const Medis = () => {
   const [data, setData] = useState([]);
@@ -20,8 +21,7 @@ const Medis = () => {
     const fetchData = async () => {
       try {
         const response = await getAllPasienAktif();
-        setData(response);
-
+        setData(response || []);  
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -74,23 +74,35 @@ const Medis = () => {
     { header: "Status", field: "status" },
   ];
 
-  if (loading)
+  if (loading) {
     return (
       <div className="h-screen flex justify-center items-center">
         <ProgressSpinner />
       </div>
     );
+  }
+
   return (
-    <div className="md:p-4 p-2  bg-whiteGrays dark:bg-black">
-      <div className="md:p-4 bg-white dark:bg-blackHover rounded-xl w-full h-screen">
-        <div className="row grid grid-cols-1 gap-6">
-          <ReusableTable
-            columns={columns}
-            data={data}
-            onDownload={handleDownload}
-            path={"pengguna"}
-          />
+    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
+      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
+        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
+      {data.length > 0 ? (
+          <div className="row grid grid-cols-1 gap-6">
+            <ReusableTable
+              columns={columns}
+              data={data}
+              onDownload={handleDownload}
+              path={"pengguna"}
+            />
+          </div>
+        
+      ) : (
+        <div className="flex h-screen flex-col items-center justify-center text-center  md:text-2xl text-xl  text-black dark:text-white">
+          <img src={img} className="md:w-1/4" alt="img" />
+          Belum ada rekam medis
         </div>
+      )}
+      </div>
       </div>
     </div>
   );

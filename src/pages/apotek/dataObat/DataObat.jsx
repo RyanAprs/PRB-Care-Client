@@ -228,7 +228,7 @@ const DataObat = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4  ">
-      <Toast ref={toast} />
+      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}

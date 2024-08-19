@@ -26,3 +26,41 @@ body,
 .p-datatable.dark-mode {
   background-color: #231c28;
 }
+.p-dropdown  {
+  box-shadow: none;
+}
+.p-dropdown-filter  {
+  box-shadow: none;
+}
+.p-inputtext  {
+  box-shadow: none;
+}
+.p-input  {
+  box-shadow: none;
+}
+
+.p-dropdown:focus  {
+  border-color: #56b588;
+}
+.p-dropdown-filter:focus  {
+  border-color: #56b588;
+}
+.p-inputtext:focus  {
+  border-color: #56b588;
+}
+.p-input:focus  {
+  border-color: #56b588;
+}
+
+.p-dropdown:hover  {
+  border-color: #56b588;
+}
+.p-dropdown-filter:hover  {
+  border-color: #56b588;
+}
+.p-inputtext:hover  {
+  border-color: #56b588;
+}
+.p-input:hover  {
+  border-color: #56b588;
+}
