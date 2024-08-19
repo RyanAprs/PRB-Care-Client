@@ -1,19 +1,20 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  AlignLeft,
+  AlignJustify,
   LayoutGrid,
   Hospital,
   HousePlus,
-  Lock,
+  LockKeyhole,
   LogOut,
   Pill,
   ShoppingCart,
   Stethoscope,
+  CircleUser,
   User,
   UserRoundPlus,
   Settings2,
-  X,
+  X
 } from "lucide-react";
 import { Menu } from "primereact/menu";
 import icon from "../../assets/prbcare.svg";
@@ -168,21 +169,11 @@ const NavbarAdmin = ({ children }) => {
   const [key, setKey] = useState(0);
   const itemsNotAdmin = [
     {
-      label: (
-        <div className="flex justify-center items-center gap-2">
-          <User />
-          <h1>Profile</h1>
-        </div>
-      ),
+      label: <div className="flex justify-center items-center gap-2"><User/><h1>Profile</h1></div>,
       command: () => handleDetailProfileModal(),
     },
     {
-      label: (
-        <div className="flex justify-center items-center gap-2">
-          <Lock />
-          <h1>Password</h1>
-        </div>
-      ),
+      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
       command: () => handleModalChangePassword(),
     },
     {
@@ -197,12 +188,7 @@ const NavbarAdmin = ({ children }) => {
   ];
   const itemsAdmin = [
     {
-      label: (
-        <div className="flex justify-center items-center gap-2">
-          <Lock />
-          <h1>Password</h1>
-        </div>
-      ),
+      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
       command: () => handleModalChangePassword(),
     },
     {
@@ -658,9 +644,14 @@ const NavbarAdmin = ({ children }) => {
         {/* Navbar */}
         <div className="h-20 w-full flex items-center px-8 justify-between fixed  z-40 shadow-md dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
           <div className="flex justify-center items-center gap-4 md:pl-80 pl-0">
-            <button onClick={toggleSidebar} className="md:hidden block">
-              <AlignLeft />
-            </button>
+          <Button
+                severity="secondary"
+                onClick={toggleSidebar}
+                text
+
+                className="p-1 rounded-full cursor-pointer md:hidden"
+                label={<AlignJustify className="dark:text-white text-black" />}
+              ></Button>
             {role === "admin" && (
               <h1 className="text-xl">
                 {location.pathname === "/admin/beranda" ? "Beranda" : ""}
@@ -710,24 +701,12 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-              onClick={toggleMenuVisibility}
-              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-              label={
-                !isMenuVisible ? (
-                  <Settings2 className="text-white" />
-                ) : (
-                  <X className="text-white" />
-                )
-              }
-            ></Button>
+                onClick={toggleMenuVisibility}
+                className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
+                label={!isMenuVisible ?<Settings2 className="text-white" /> : <X className="text-white" />}
+              ></Button>
           </div>
-          <Menu
-            key={key}
-            className={` ${
-              isMenuVisible ? "visible" : "hidden"
-            } absolute top-[80px] right-0 `}
-            model={role === "admin" ? itemsAdmin : itemsNotAdmin}
-          />
+          <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
         </div>
 
         <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto md:pl-80    pt-20 overflow-y-scroll w-full overflow-x-auto">

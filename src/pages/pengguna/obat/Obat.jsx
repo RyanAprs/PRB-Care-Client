@@ -46,8 +46,10 @@ const Obat = () => {
 
   if (loading)
     return (
-      <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
+        <div className="p-8 w-full h-full flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
+          <ProgressSpinner />
+        </div>
       </div>
     );
 
@@ -57,7 +59,7 @@ const Obat = () => {
         <div className="row p-1 grid  grid-cols-1 gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen shadow-lg rounded-xl h-fit`}>
+              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen rounded-xl h-fit`}>
                <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
                   <div className="flex flex-col gap-4 items-center md:items-start justify-center">
                     <div className="flex">
@@ -96,9 +98,10 @@ const Obat = () => {
               </Card>
             ))
           ) : (
-            <div className="flex flex-col items-center justify-center text-center  md:text-2xl text-xl  text-black dark:text-white">
-              <img src={img} className="md:w-1/4" alt="img" />
-              Belum ada pengambilan obat
+            <div className="flex flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+              <img src={img} className="md:w-80 w-64" alt="img" />
+              Belum Ada Data
+              <p className="font-medium text-xl">Data akan muncul di sini ketika tersedia.</p>
             </div>
           )}
         </div>

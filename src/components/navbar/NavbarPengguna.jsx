@@ -9,10 +9,10 @@ import {
   Stethoscope,
   Settings2,
   UserPlus,
-  User,
-  Lock,
+  CircleUser,
+  LockKeyhole,
   LogOut,
-  X
+  GitPullRequestClosed
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
@@ -99,10 +99,12 @@ const NavbarPengguna = () => {
       themeLink.href = themeUrl;
     }
     document.body.classList.remove("dark");
-    navigate("/");
+    navigate("/beranda");
   };
 
   const handleModalChangePassword = () => {
+    setDataPassword({})
+    setErrors({})
     setIsMenuVisible(false)
     setVisibleChangePassword(true);
   };
@@ -128,6 +130,7 @@ const NavbarPengguna = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisibleChangePassword(false)
         handleChangePasswordError(error, toast);
         console.log(error);
       }
@@ -148,12 +151,15 @@ const NavbarPengguna = () => {
         });
       }
     } catch (error) {
+      setVisibleDetailProfile(false);
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
   };
 
   const handleUpdateProfileModal = async () => {
+    setErrors({})
+    setVisibleDetailProfile(false);
     setVisibleUpdateProfile(true);
     try {
       const dataResponse = await getCurrentPengguna();
@@ -165,9 +171,9 @@ const NavbarPengguna = () => {
           telepon: dataResponse.telepon,
           teleponKeluarga: dataResponse.teleponKeluarga,
         });
-        setVisibleDetailProfile(false);
       }
     } catch (error) {
+      setVisibleUpdateProfile(false);
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
@@ -210,11 +216,11 @@ const NavbarPengguna = () => {
   };
   const items = [
     {
-      label: <div className="flex justify-center items-center gap-2"><User/><h1>Profile</h1></div>,
+      label: <div className="flex justify-center items-center gap-2"><CircleUser/><h1>Profile</h1></div>,
       command: () => handleDetailProfileModal(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><Lock/><h1>Password</h1></div>,
+      label: <div className="flex justify-center items-center gap-2"><LockKeyhole/><h1>Password</h1></div>,
       command: () => handleModalChangePassword(),
     },
     {
@@ -224,7 +230,7 @@ const NavbarPengguna = () => {
   ];
   return (
     <>
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover shadow-xl text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
+      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
         <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
@@ -236,19 +242,18 @@ const NavbarPengguna = () => {
         <div className="flex gap-10 items-center text-xl ">
           <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
             <Link
-              to={"/"}
-              className=" transition-all flex flex-col items-center justify-center "
+              to={"/beranda"}
+              className="mx-auto transition-all flex flex-col items-center justify-center"
             >
               <h1
                 className={
-                  location.pathname === "/"
+                  location.pathname === "/beranda"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
               >
                 Beranda
               </h1>
-              <span className="h-1 rounded-full bg-mainGreen transition-all"></span>
             </Link>
             <Link
               to="/kontrol"
@@ -263,7 +268,7 @@ const NavbarPengguna = () => {
               >
                 Kontrol
               </h1>
-              <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
+            
             </Link>
             <Link
               to="/obat"
@@ -278,7 +283,7 @@ const NavbarPengguna = () => {
               >
                 Obat
               </h1>
-              <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
+            
             </Link>
             <Link
               to="/medis"
@@ -293,7 +298,7 @@ const NavbarPengguna = () => {
               >
                 Medis
               </h1>
-              <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
+            
             </Link>
             <Link
               to="/notifikasi"
@@ -308,7 +313,7 @@ const NavbarPengguna = () => {
               >
                 Notifikasi
               </h1>
-              <span className="h-1 rounded-full bg-mainGreen transition-all "></span>
+            
             </Link>
           </div>
           <div className="relative flex gap-2 md:gap-2 items-center justify-center">
@@ -316,8 +321,10 @@ const NavbarPengguna = () => {
             <div className="flex items-center gap-2">
               <Button
                 onClick={toggleMenuVisibility}
-                className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-                label={!isMenuVisible ?<Settings2 className="text-white" /> : <X className="text-white" />}
+                text
+                severity="secondary"
+                className="p-1 rounded-full cursor-pointer "
+                label={!isMenuVisible ?<Settings2 className="text-black dark:text-white" /> : <GitPullRequestClosed className="text-black dark:text-white"/>}
               ></Button>
             </div>
             
@@ -333,9 +340,9 @@ const NavbarPengguna = () => {
       >
         <div className="flex  justify-between items-center ">
           <Link
-            to={"/"}
+            to={"/beranda"}
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/" ? "opacity-100" : "opacity-50"
+              location.pathname === "/beranda" ? "opacity-100" : "opacity-50"
             }`}
           >
             <HomeIcon size={25} />
@@ -530,6 +537,12 @@ const NavbarPengguna = () => {
             placeholder="Telepon Keluarga"
             className="p-input text-lg p-3 rounded"
             value={dataPengguna.teleponKeluarga}
+            onChange={(e) =>
+              setDataPengguna((prev) => ({
+                ...prev,
+                teleponKeluarga: e.target.value,
+              }))
+            }
           />
           {errors.teleponKeluarga && (
             <small className="p-error -mt-3 text-sm">
