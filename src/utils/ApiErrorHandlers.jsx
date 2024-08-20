@@ -240,8 +240,7 @@ export const handleLoginError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail:
-            "Username atau password yang Anda masukkan salah. Silakan coba lagi.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;

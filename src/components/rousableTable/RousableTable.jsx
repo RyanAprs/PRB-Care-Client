@@ -310,7 +310,7 @@ export default function ReusableTable({
             resizableColumns
             sortMode="multiple"
           >
-            {path !== "pengguna" && (
+            {!(path === "pengguna" || path === "dataApotekPuskesmas") && (
               <Column
                 header="Aksi"
                 headerStyle={{ width: "5%", minWidth: "2rem" }}
@@ -318,6 +318,7 @@ export default function ReusableTable({
                 bodyStyle={{ textAlign: "center" }}
               />
             )}
+
             {columns.map((col, index) => (
               <Column
                 key={index}
