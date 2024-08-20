@@ -11,6 +11,7 @@ import {
   Stethoscope,
   CircleUser,
   UserRoundPlus,
+  User,
   Settings2,
   GitPullRequestClosed,
   LockKeyhole,
@@ -84,6 +85,20 @@ const NavbarAdmin = ({ children }) => {
     alamat: "",
     waktuOperasional: "",
   });
+
+  const [detailDataPuskesmas, setDetailDataPuskesmas] = useState({
+    namaPuskesmas: "",
+    telepon: "",
+    alamat: "",
+    waktuOperasional: "",
+  });
+  const [detailDataApotek, setDetailDataApotek] = useState({
+    namaPuskesmas: "",
+    telepon: "",
+    alamat: "",
+    waktuOperasional: "",
+  });
+
   const [prevAddress, setPrevAddress] = useState({});
   const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
@@ -281,7 +296,7 @@ const NavbarAdmin = ({ children }) => {
                     : ""
                 } rounded transition-all`}
               >
-                <CircleUser />
+                <User />
                 <h1>Pengguna</h1>
               </Link>
               <Link
@@ -353,17 +368,6 @@ const NavbarAdmin = ({ children }) => {
               >
                 <UserRoundPlus />
                 <h1>Pasien</h1>
-              </Link>
-              <Link
-                to="/puskesmas/data-apotek"
-                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                  location.pathname === "/puskesmas/data-apotek"
-                    ? "bg-lightGreen dark:bg-mainGreen"
-                    : ""
-                } rounded transition-all`}
-              >
-                <HousePlus />
-                <h1>Apotek</h1>
               </Link>
               <Link
                 to="/puskesmas/data-kontrol-balik"
@@ -457,29 +461,31 @@ const NavbarAdmin = ({ children }) => {
     setVisibleDetailProfile(true);
     if (role === "nakes") {
       setIsApotekUpdate(false);
-      setDataPuskesmas({});
+      setDetailDataPuskesmas({});
       try {
         const dataResponse = await getCurrentAdminPuskesmas();
         if (dataResponse) {
-          setDataPuskesmas({
+          setDetailDataPuskesmas({
             namaPuskesmas: dataResponse.namaPuskesmas,
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
             waktuOperasional: dataResponse.waktuOperasional,
           });
+          setVisibleDetailProfile(true);
         }
       } catch (error) {
+        setVisibleDetailProfile(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
     if (role === "apoteker") {
       setIsApotekUpdate(true);
-      setDataApotek({});
+      setDetailDataApotek({});
       try {
         const dataResponse = await getCurrentAdminApotek();
         if (dataResponse) {
-          setDataApotek({
+          setDetailDataApotek({
             namaApotek: dataResponse.namaApotek,
             alamat: dataResponse.alamat,
             telepon: dataResponse.telepon,
@@ -496,9 +502,9 @@ const NavbarAdmin = ({ children }) => {
   const { setIsUpdated } = useModalUpdate();
 
   const handleUpdateProfileModal = async () => {
+    setVisibleDetailProfile(false);
     setErrors({});
     setVisibleUpdateProfile(true);
-
     if (role === "nakes") {
       setIsApotekUpdate(false);
       try {
@@ -513,9 +519,9 @@ const NavbarAdmin = ({ children }) => {
             telepon: dataResponse.telepon,
             waktuOperasional: dataResponse.waktuOperasional,
           });
-          setVisibleDetailProfile(false);
         }
       } catch (error) {
+        setVisibleUpdateProfile(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -567,7 +573,9 @@ const NavbarAdmin = ({ children }) => {
 
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
+          handleDetailProfileModal();
         }
+        
       } else {
         const updatedDatas = {
           ...dataPuskesmas,
@@ -578,6 +586,7 @@ const NavbarAdmin = ({ children }) => {
 
         const response = await updateCurrentPuskesmas(updatedDatas);
         if (response.status === 200) {
+          handleDetailProfileModal();
           toast.current.show({
             severity: "success",
             summary: "Berhasil",
@@ -587,6 +596,8 @@ const NavbarAdmin = ({ children }) => {
 
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
+          handleDetailProfileModal();
+          
         }
       }
     } catch (error) {
@@ -609,6 +620,8 @@ const NavbarAdmin = ({ children }) => {
   };
 
   const handleModalChangePassword = () => {
+    setDataPassword({});
+    setErrors({});
     setIsMenuVisible(false);
     setVisibleChangePassword(true);
   };
@@ -643,6 +656,7 @@ const NavbarAdmin = ({ children }) => {
         });
         setErrors(newErrors);
       } else {
+        setVisibleChangePassword(false);
         handleChangePasswordError(error, toast);
         console.log(error);
       }
@@ -762,8 +776,8 @@ const NavbarAdmin = ({ children }) => {
             className="p-input text-lg p-3 rounded"
             value={
               isApotekUpdate
-                ? dataApotek.namaApotek
-                : dataPuskesmas.namaPuskesmas
+                ? detailDataApotek.namaApotek
+                : detailDataPuskesmas.namaPuskesmas
             }
           />
 
@@ -775,7 +789,7 @@ const NavbarAdmin = ({ children }) => {
             variant="filled"
             disabled
             className="p-input text-lg p-3 rounded"
-            value={isApotekUpdate ? dataApotek.telepon : dataPuskesmas.telepon}
+            value={isApotekUpdate ? detailDataApotek.telepon : detailDataPuskesmas.telepon}
           />
 
           <label htmlFor="" className="-mb-3">
@@ -786,16 +800,16 @@ const NavbarAdmin = ({ children }) => {
             disabled
             autoResize
             className="p-input text-lg p-3 rounded"
-            value={isApotekUpdate ? dataApotek.alamat : dataPuskesmas.alamat}
+            value={isApotekUpdate ? detailDataApotek.alamat : detailDataPuskesmas.alamat}
           />
 
           <label htmlFor="" className="-mb-3">
             Waktu Operasional:
           </label>
-          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] border dark:border-none ">
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none ">
             {isApotekUpdate
-              ? validasiWaktuOperasional(dataApotek.waktuOperasional)
-              : validasiWaktuOperasional(dataPuskesmas.waktuOperasional)}
+              ? validasiWaktuOperasional(detailDataApotek.waktuOperasional)
+              : validasiWaktuOperasional(detailDataPuskesmas.waktuOperasional)}
           </div>
 
           <Button
@@ -817,7 +831,9 @@ const NavbarAdmin = ({ children }) => {
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
+          handleDetailProfileModal();
         }}
+        
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">

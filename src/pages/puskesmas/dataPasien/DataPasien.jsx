@@ -13,8 +13,8 @@ import {
 import { Calendar } from "primereact/calendar";
 import { addLocale } from "primereact/api";
 import {
-  pasienCreateSchema,
-  pasienUpdateSchema,
+  pasienCreateSchemaAdminPuskesmas,
+  pasienUpdateSchemaAdminPuskesmas,
 } from "../../../validations/PasienSchema";
 import { ZodError } from "zod";
 import {
@@ -120,7 +120,7 @@ const DataPasien = () => {
 
   const handleCreate = async () => {
     try {
-      pasienCreateSchema.parse(datas);
+      pasienCreateSchemaAdminPuskesmas.parse(datas);
       const response = await createPasien(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -183,7 +183,7 @@ const DataPasien = () => {
   };
   const handleUpdate = async () => {
     try {
-      pasienUpdateSchema.parse(datas);
+      pasienUpdateSchemaAdminPuskesmas.parse(datas);
       const response = await updatePasien(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
@@ -326,24 +326,6 @@ const DataPasien = () => {
     return <span>Pilih Pasien</span>;
   };
 
-  const itemTemplatePuskesmas = (option) => {
-    return (
-      <div>
-        {option.namaPuskesmas} - {option.telepon}
-      </div>
-    );
-  };
-
-  const valueTemplatePuskesmas = (option) => {
-    if (option) {
-      return (
-        <div>
-          {option.namaPuskesmas} - {option.telepon}
-        </div>
-      );
-    }
-    return <span>Pilih Puskesmas</span>;
-  };
 
   if (loading)
     return (

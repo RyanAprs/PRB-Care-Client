@@ -7,7 +7,14 @@ import { ModalUpdateProvider } from "./config/context/ModalUpdateContext.jsx";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { InstallPromptProvider } from './config/context/InstallPromptContext.jsx';
 const helmetContext = {};
-
+PrimeReactProvider.autoZIndex = false;
+PrimeReactProvider.zIndex = {
+    modal: 1100,
+    overlay: 1000,
+    menu: 1000,
+    tooltip: 1100,
+    toast: 2000
+};
 ReactDOM.createRoot(document.getElementById("root")).render(
   <InstallPromptProvider>
   <HelmetProvider context={helmetContext}>
