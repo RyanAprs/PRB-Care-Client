@@ -50,7 +50,6 @@ const DataPasien = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleDone, setVisibleDone] = useState(false);
-  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
   const [pengguna, setPengguna] = useState([]);
   const [datas, setDatas] = useState({
     noRekamMedis: "",
@@ -88,16 +87,7 @@ const DataPasien = () => {
       }
     };
 
-    const fetchDataAdminPuskesmas = async () => {
-      try {
-        const response = await getAllPuskesmas();
-        setAdminPuskesmas(response);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
+
 
     const fetchDataPengguna = async () => {
       try {
@@ -111,9 +101,7 @@ const DataPasien = () => {
         setLoading(false);
       }
     };
-
     fetchDataPengguna();
-    fetchDataAdminPuskesmas();
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -307,7 +295,9 @@ const DataPasien = () => {
   const columns = [
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Lengkap", field: "pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Telepon", field: "pengguna.telepon" },
+    { header: "Telepon Keluarga", field: "pengguna.teleponKeluarga" },
+    { header: "Alamat", field: "pengguna.alamat" },
     { header: "Tanggal Periksa", field: "tanggalDaftar" },
     { header: "Status", field: "status" },
   ];
@@ -438,38 +428,8 @@ const DataPasien = () => {
           {errors.idPengguna && (
             <small className="p-error -mt-3 text-sm">{errors.idPengguna}</small>
           )}
-          <label htmlFor="" className="-mb-3">
-            Pilih puskesmas:
-          </label>
 
-          <Dropdown
-            value={
-              adminPuskesmas && adminPuskesmas.length > 0
-                ? adminPuskesmas.find(
-                    (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
-                  ) || null
-                : null
-            }
-            filter
-            options={adminPuskesmas || []}
-            optionLabel="namaPuskesmas"
-            itemTemplate={itemTemplatePuskesmas}
-            valueTemplate={valueTemplatePuskesmas}
-            placeholder="Pilih Puskesmas"
-            className="p-2 rounded"
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                idAdminPuskesmas: e.value.id,
-              }))
-            }
-          />
 
-          {errors.idAdminPuskesmas && (
-            <small className="p-error -mt-3 text-sm">
-              {errors.idAdminPuskesmas}
-            </small>
-          )}
 
           <label htmlFor="" className="-mb-3">
             Tanggal periksa:

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
-import { Minus, Plus } from "lucide-react";
+import { CopyMinus, CopyPlus } from "lucide-react";
 
 const WaktuOperasional = ({ setWaktuOperasionalList }) => {
   const [inputs, setInputs] = useState([
@@ -67,21 +67,23 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
   }, [inputs, setWaktuOperasionalList]);
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <h3>Atur Waktu Operasional</h3>
+    <div className="flex flex-col w-full">
+      <h3>Waktu Operasional:</h3>
       {inputs.map((input, index) => (
-        <div key={index} className="flex justify-between items-center">
-          <div>
+        <div key={index} className="flex md:flex-row flex-col justify-between items-center gap-2">
+          <div className="w-full">
             <Dropdown
               id={`day-${index}`}
+              className=" w-full"
               value={input.selectedDay}
               options={days}
               onChange={(e) => handleInputChange(index, "selectedDay", e.value)}
               placeholder="Pilih Hari"
             />
           </div>
-          <div>
+          <div className="w-full">
             <Calendar
+            className=" w-full"
               id={`waktuBuka-${index}`}
               value={input.waktuBuka}
               onChange={(e) => handleInputChange(index, "waktuBuka", e.value)}
@@ -90,8 +92,9 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
               showTime
             />
           </div>
-          <div>
+          <div className="w-full">
             <Calendar
+            className=" w-full"
               id={`waktuTutup-${index}`}
               value={input.waktuTutup}
               onChange={(e) => handleInputChange(index, "waktuTutup", e.value)}
@@ -100,18 +103,22 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
               showTime
             />
           </div>
+          <div className="flex gap-2 w-full">
           <Button
-            label={<Plus />}
+            className="block py-3 w-full rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
+            label={<CopyPlus className="mx-auto" />}
             onClick={() => handleAddOperational(index)}
             disabled={
               !input.waktuBuka || !input.waktuTutup || !input.selectedDay
             }
           />
           <Button
-            label={<Minus />}
+            className="block w-full py-3 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
+            label={<CopyMinus className="mx-auto"/>}
             onClick={() => handleRemoveOperational(index)}
             disabled={inputs.length <= 1}
           />
+          </div>
         </div>
       ))}
     </div>

@@ -346,6 +346,7 @@ const NavbarPengguna = () => {
             }`}
           >
             <HomeIcon size={25} />
+            
             <div className="text-sm">Beranda</div>
           </Link>
           <Link

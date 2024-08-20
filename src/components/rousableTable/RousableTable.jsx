@@ -308,6 +308,7 @@ export default function ReusableTable({
             editMode="row"
             removableSort
             resizableColumns
+            sortMode="multiple"
           >
             {path !== "pengguna" ||
               (path !== "dataApotekPuskesmas" && (

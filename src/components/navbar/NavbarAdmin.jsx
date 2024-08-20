@@ -9,11 +9,11 @@ import {
   Pill,
   ShoppingCart,
   Stethoscope,
-  User,
+  CircleUser,
   UserRoundPlus,
   Settings2,
-  X,
-  Lock,
+  GitPullRequestClosed,
+  LockKeyhole,
 } from "lucide-react";
 import { Menu } from "primereact/menu";
 import icon from "../../assets/prbcare.svg";
@@ -31,7 +31,6 @@ import {
   handleChangePasswordError,
 } from "../../utils/ApiErrorHandlers";
 import { updatePassword } from "../../services/SuperAdminService";
-import Cookies from "js-cookie";
 import {
   getCurrentAdminPuskesmas,
   updateCurrentPuskesmas,
@@ -70,7 +69,7 @@ const NavbarAdmin = ({ children }) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
-  const role = Cookies.get("role");
+  const { role } = useContext(AuthContext);
   const { dispatch } = useContext(AuthContext);
   const [isApotekUpdate, setIsApotekUpdate] = useState(false);
   const [dataApotek, setDataApotek] = useState({
@@ -170,7 +169,7 @@ const NavbarAdmin = ({ children }) => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <User />
+          <CircleUser />
           <h1>Profile</h1>
         </div>
       ),
@@ -179,7 +178,7 @@ const NavbarAdmin = ({ children }) => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <Lock />
+          <LockKeyhole />
           <h1>Password</h1>
         </div>
       ),
@@ -199,7 +198,7 @@ const NavbarAdmin = ({ children }) => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <Lock />
+          <LockKeyhole />
           <h1>Password</h1>
         </div>
       ),
@@ -282,7 +281,7 @@ const NavbarAdmin = ({ children }) => {
                     : ""
                 } rounded transition-all`}
               >
-                <User />
+                <CircleUser />
                 <h1>Pengguna</h1>
               </Link>
               <Link
@@ -441,9 +440,9 @@ const NavbarAdmin = ({ children }) => {
 
     if (valueString.includes("<br />")) {
       return (
-        <ul className="list-disc pl-5">
+        <ul className="list-disc pl-5 bg-[#fbfbfc] dark:bg-[#282828]">
           {valueString.split("<br />").map((item, index) => (
-            <li key={index}>{item.trim()}</li>
+            <li className="text-[#989da0] dark:text-[#6e6e6e]" key={index}>{item.trim()}</li>
           ))}
         </ul>
       );
@@ -556,7 +555,7 @@ const NavbarAdmin = ({ children }) => {
           waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
         };
         apotekUpdateCurrentSchema.parse(updatedDatas);
-
+        
         const response = await updateCurrentApotek(updatedDatas);
         if (response.status === 200) {
           toast.current.show({
@@ -591,6 +590,7 @@ const NavbarAdmin = ({ children }) => {
         }
       }
     } catch (error) {
+      
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -725,24 +725,14 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
+              severity="secondary"
               onClick={toggleMenuVisibility}
-              className="p-1 rounded-full cursor-pointer bg-lightGreen dark:bg-mainGreen"
-              label={
-                !isMenuVisible ? (
-                  <Settings2 className="text-white" />
-                ) : (
-                  <X className="text-white" />
-                )
-              }
+              text
+              className="p-1 rounded-full cursor-pointer "
+              label={!isMenuVisible ?<Settings2 className="dark:text-white text-black" /> : <GitPullRequestClosed className="dark:text-white text-black" />}
             ></Button>
           </div>
-          <Menu
-            key={key}
-            className={` ${
-              isMenuVisible ? "visible" : "hidden"
-            } absolute top-[80px] right-0 `}
-            model={role === "admin" ? itemsAdmin : itemsNotAdmin}
-          />
+          <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} shadow-md absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
         </div>
 
         <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto md:pl-80    pt-20 overflow-y-scroll w-full overflow-x-auto">
@@ -802,7 +792,7 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Waktu Operasional:
           </label>
-          <div className="p-input text-lg p-3 rounded bg-gray-100">
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] border dark:border-none ">
             {isApotekUpdate
               ? validasiWaktuOperasional(dataApotek.waktuOperasional)
               : validasiWaktuOperasional(dataPuskesmas.waktuOperasional)}

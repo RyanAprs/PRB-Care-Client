@@ -318,9 +318,11 @@ const DataPengambilanObat = () => {
 
   const columns = [
     { header: "Resi", field: "resi" },
-    { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
-    { header: "Apotek", field: "obat.adminApotek.namaApotek" },
+    
+    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+    { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
+    { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
     { header: "Obat", field: "obat.namaObat" },
     { header: "Jumlah Obat", field: "jumlah" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
@@ -354,7 +356,7 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+        {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
         {option.adminApotek.telepon}
       </div>
     );
@@ -364,7 +366,7 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - {option.adminApotek.namaApotek} -{" "}
+          {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
           {option.adminApotek.telepon}
         </div>
       );
