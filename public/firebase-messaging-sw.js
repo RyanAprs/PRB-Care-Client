@@ -1,11 +1,8 @@
-// firebase-messaging-sw.js
-
 importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
 importScripts(
   "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
 );
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -16,22 +13,57 @@ const firebaseConfig = {
   measurementId: "G-122Y1K7VRS",
 };
 
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Initialize Firebase Messaging
 const messaging = firebase.messaging();
 
-// Function to convert Unix timestamp (seconds) to local time
-function convertUnixTimestampToLocalTime(timestamp) {
-  const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-  const localDate = date.toLocaleString("id-ID", {
-    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
+// IndexedDB setup
+const DB_NAME = "fcm_notifications";
+let db;
+
+function openIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, 1); // Version 1
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      const objectStore = db.createObjectStore("notifications", {
+        keyPath: "type", // Use notification type as the key
+      });
+    };
+
+    request.onsuccess = (event) => {
+      db = event.target.result;
+      resolve(db);
+    };
+
+    request.onerror = (event) => {
+      console.error("IndexedDB error:", event.target.error);
+      reject(event.target.error);
+    };
   });
-  return localDate;
+}
+
+async function storeNotificationData(type, data) {
+  const db = await openIndexedDB();
+  const transaction = db.transaction(["notifications"], "readwrite");
+  const objectStore = transaction.objectStore("notifications");
+  const request = objectStore.put({ type, data });
+
+  request.onsuccess = () => console.log(`${type} stored in IndexedDB`);
+  request.onerror = (event) =>
+    console.error("Error storing notification:", event.target.error);
+}
+
+async function getStoredNotification(type) {
+  const db = await openIndexedDB();
+  const transaction = db.transaction(["notifications"], "readonly");
+  const objectStore = transaction.objectStore("notifications");
+  const request = objectStore.get(type);
+
+  return new Promise((resolve, reject) => {
+    request.onsuccess = (event) => resolve(event.target.result);
+    request.onerror = (event) => reject(event.target.error);
+  });
 }
 
 messaging.onBackgroundMessage((payload) => {
@@ -61,18 +93,13 @@ messaging.onBackgroundMessage((payload) => {
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal pengambilan obat pada tanggal ${tanggalAmbilLocal} pada apotek ${namaApotek} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
     notificationType = "notifikasiPengambilanObat";
-    const storedNotification = localStorage.getItem(notificationType);
-    if (!storedNotification) {
-      const notificationData = {
-        title: notificationTitle,
-        body: notificationBody,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem(notificationType, JSON.stringify(notificationData));
-      console.log(`${notificationType} stored in localStorage`);
-    } else {
-      console.log(`${notificationType} already exists in localStorage`);
-    }
+
+    const notificationData = {
+      title: notificationTitle,
+      body: notificationBody,
+      timestamp: Date.now(),
+    };
+    storeNotificationData(notificationType, notificationData);
   } else if (namaPuskesmas) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
       parseInt(tanggalKontrol)
@@ -81,18 +108,13 @@ messaging.onBackgroundMessage((payload) => {
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol balik pada tanggal ${tanggalAmbilLocal} di puskesmas ${namaPuskesmas} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
     notificationType = "notifikasiKontrolBalik";
-    const storedNotification = localStorage.getItem(notificationType);
-    if (!storedNotification) {
-      const notificationData = {
-        title: notificationTitle,
-        body: notificationBody,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem(notificationType, JSON.stringify(notificationData));
-      console.log(`${notificationType} stored in localStorage`);
-    } else {
-      console.log(`${notificationType} already exists in localStorage`);
-    }
+
+    const notificationData = {
+      title: notificationTitle,
+      body: notificationBody,
+      timestamp: Date.now(),
+    };
+    storeNotificationData(notificationType, notificationData);
   }
 
   const notificationOptions = {
@@ -102,3 +124,14 @@ messaging.onBackgroundMessage((payload) => {
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
+
+function convertUnixTimestampToLocalTime(timestamp) {
+  const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+  const localDate = date.toLocaleString("id-ID", {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  });
+  return localDate;
+}

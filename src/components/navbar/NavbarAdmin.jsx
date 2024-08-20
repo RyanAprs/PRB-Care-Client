@@ -356,6 +356,17 @@ const NavbarAdmin = ({ children }) => {
                 <h1>Pasien</h1>
               </Link>
               <Link
+                to="/puskesmas/data-apotek"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-apotek"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <HousePlus />
+                <h1>Apotek</h1>
+              </Link>
+              <Link
                 to="/puskesmas/data-kontrol-balik"
                 className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
                   location.pathname === "/puskesmas/data-kontrol-balik"

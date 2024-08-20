@@ -278,7 +278,9 @@ export default function ReusableTable({
             <Button
               onClick={onCreate}
               className={`${
-                path === "pengguna" || path === "pengambilanObatApoteker"
+                path === "pengguna" ||
+                path === "pengambilanObatApoteker" ||
+                path === "dataApotekPuskesmas"
                   ? "hidden"
                   : ""
               } block p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`}
@@ -307,14 +309,15 @@ export default function ReusableTable({
             removableSort
             resizableColumns
           >
-            {path !== "pengguna" && (
-              <Column
-                header="Aksi"
-                headerStyle={{ width: "5%", minWidth: "2rem" }}
-                body={actionBodyTemplate}
-                bodyStyle={{ textAlign: "center" }}
-              />
-            )}
+            {path !== "pengguna" ||
+              (path !== "dataApotekPuskesmas" && (
+                <Column
+                  header="Aksi"
+                  headerStyle={{ width: "5%", minWidth: "2rem" }}
+                  body={actionBodyTemplate}
+                  bodyStyle={{ textAlign: "center" }}
+                />
+              ))}
             {columns.map((col, index) => (
               <Column
                 key={index}

@@ -28,7 +28,6 @@ const convertUnixTimestampToLocalTime = (timestamp) => {
 const LoginPengguna = () => {
   const API_URI = `${import.meta.env.VITE_API_BASE_URI}/api/pengguna/login`;
   const [token, setToken] = useState("");
-  const [permission, setPermission] = useState(Notification.permission);
 
   useEffect(() => {
     const registerServiceWorker = async () => {
@@ -62,7 +61,7 @@ const LoginPengguna = () => {
       }
     };
 
-    if (permission === "granted") {
+    if (Notification.permission === "granted") {
       registerServiceWorker();
     }
 
@@ -81,7 +80,6 @@ const LoginPengguna = () => {
 
       let tanggalAmbilLocal, tanggalBatalLocal;
       let notificationTitle, notificationBody;
-      let notificationType;
 
       if (namaApotek) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
@@ -92,22 +90,6 @@ const LoginPengguna = () => {
         );
         notificationTitle = title;
         notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
-        notificationType = "notifikasiPengambilanObat";
-        const storedNotification = localStorage.getItem(notificationType);
-        if (!storedNotification) {
-          const notificationData = {
-            title: notificationTitle,
-            body: notificationBody,
-            timestamp: Date.now(),
-          };
-          localStorage.setItem(
-            notificationType,
-            JSON.stringify(notificationData)
-          );
-          console.log(`${notificationType} stored in localStorage`);
-        } else {
-          console.log(`${notificationType} already exists in localStorage`);
-        }
       } else if (namaPuskesmas) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
@@ -117,22 +99,6 @@ const LoginPengguna = () => {
         );
         notificationTitle = title;
         notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
-        notificationType = "notifikasiKontrolBalik";
-        const storedNotification = localStorage.getItem(notificationType);
-        if (!storedNotification) {
-          const notificationData = {
-            title: notificationTitle,
-            body: notificationBody,
-            timestamp: Date.now(),
-          };
-          localStorage.setItem(
-            notificationType,
-            JSON.stringify(notificationData)
-          );
-          console.log(`${notificationType} stored in localStorage`);
-        } else {
-          console.log(`${notificationType} already exists in localStorage`);
-        }
       }
 
       const notificationOptions = {
@@ -140,18 +106,7 @@ const LoginPengguna = () => {
       };
       new Notification(notificationTitle, notificationOptions);
     });
-  }, [permission]);
-
-  const handleRequestPermission = () => {
-    Notification.requestPermission().then((result) => {
-      setPermission(result);
-      if (result === "granted") {
-        console.log("Notification permission granted.");
-      } else {
-        console.log("Notification permission denied.");
-      }
-    });
-  };
+  }, [token]);
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center p-8">

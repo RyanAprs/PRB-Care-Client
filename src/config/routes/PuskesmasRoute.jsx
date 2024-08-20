@@ -1,10 +1,5 @@
 import { useContext } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import NotFound from "../../pages/NotFound";
 import useDarkMode from "use-dark-mode";
@@ -16,6 +11,7 @@ import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrol
 import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
+import DataApotek from "../../pages/puskesmas/dataApotek/DataApotek";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -36,7 +32,7 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 
   if (token && userRole === role) {
     return <Navigate to="/puskesmas/beranda" />;
-  } 
+  }
 
   return children;
 };
@@ -55,12 +51,7 @@ const PuskesmasRoute = () => {
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
-        <Route
-            path="/"
-            element={
-              <Navigate to="/puskesmas/login" />
-            }
-          />
+        <Route path="/" element={<Navigate to="/puskesmas/login" />} />
         <Route
           path="/login"
           element={
@@ -86,6 +77,17 @@ const PuskesmasRoute = () => {
             <PrivateRoute role="nakes">
               <NavbarAdmin>
                 <DataPasien />
+                <Footer />
+              </NavbarAdmin>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/data-apotek"
+          element={
+            <PrivateRoute role="nakes">
+              <NavbarAdmin>
+                <DataApotek />
                 <Footer />
               </NavbarAdmin>
             </PrivateRoute>
