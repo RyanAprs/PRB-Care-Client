@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
-import { Menu } from 'primereact/menu';
+import { Menu } from "primereact/menu";
 import {
   Bell,
   HomeIcon,
@@ -12,7 +12,7 @@ import {
   CircleUser,
   LockKeyhole,
   LogOut,
-  GitPullRequestClosed
+  GitPullRequestClosed,
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
@@ -62,6 +62,54 @@ const NavbarPengguna = () => {
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [key, setKey] = useState(0);
   const { address } = useContext(AddressContext);
+  const [hasNotifications, setHasNotifications] = useState(false);
+
+  useEffect(() => {
+    const openIndexedDB = () => {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("notificationDB", 1);
+
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains("notifications")) {
+            db.createObjectStore("notifications", { keyPath: "type" });
+          }
+        };
+
+        request.onsuccess = (event) => {
+          resolve(event.target.result);
+        };
+
+        request.onerror = (event) => {
+          reject(event.target.error);
+        };
+      });
+    };
+
+    const getNotificationsFromDB = async () => {
+      try {
+        const db = await openIndexedDB();
+        const transaction = db.transaction("notifications", "readonly");
+        const objectStore = transaction.objectStore("notifications");
+        const request = objectStore.getAll();
+
+        request.onsuccess = (event) => {
+          const notifications = event.target.result;
+          if (notifications.length > 0) {
+            setHasNotifications(true);
+          }
+        };
+
+        request.onerror = (event) => {
+          console.error("Error fetching notifications:", event.target.error);
+        };
+      } catch (error) {
+        console.error("Failed to open IndexedDB:", error);
+      }
+    };
+
+    getNotificationsFromDB();
+  }, []);
 
   useEffect(() => {
     const formattedAddress = [
@@ -84,7 +132,7 @@ const NavbarPengguna = () => {
   const location = useLocation();
 
   const handleModalLogout = () => {
-    setIsMenuVisible(false)
+    setIsMenuVisible(false);
     setVisibleLogout(true);
   };
 
@@ -103,9 +151,9 @@ const NavbarPengguna = () => {
   };
 
   const handleModalChangePassword = () => {
-    setDataPassword({})
-    setErrors({})
-    setIsMenuVisible(false)
+    setDataPassword({});
+    setErrors({});
+    setIsMenuVisible(false);
     setVisibleChangePassword(true);
   };
 
@@ -130,7 +178,7 @@ const NavbarPengguna = () => {
         });
         setErrors(newErrors);
       } else {
-        setVisibleChangePassword(false)
+        setVisibleChangePassword(false);
         handleChangePasswordError(error, toast);
         console.log(error);
       }
@@ -138,7 +186,7 @@ const NavbarPengguna = () => {
   };
 
   const handleDetailProfileModal = async () => {
-    setIsMenuVisible(false)
+    setIsMenuVisible(false);
     setVisibleDetailProfile(true);
     try {
       const dataResponse = await getCurrentPengguna();
@@ -158,7 +206,7 @@ const NavbarPengguna = () => {
   };
 
   const handleUpdateProfileModal = async () => {
-    setErrors({})
+    setErrors({});
     setVisibleDetailProfile(false);
     setVisibleUpdateProfile(true);
     try {
@@ -216,22 +264,40 @@ const NavbarPengguna = () => {
   };
   const items = [
     {
-      label: <div className="flex justify-center items-center gap-2"><CircleUser/><h1>Profile</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <CircleUser />
+          <h1>Profile</h1>
+        </div>
+      ),
       command: () => handleDetailProfileModal(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><LockKeyhole/><h1>Password</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <LockKeyhole />
+          <h1>Password</h1>
+        </div>
+      ),
       command: () => handleModalChangePassword(),
     },
     {
-      label: <div className="flex justify-center items-center gap-2"><LogOut/><h1>Keluar</h1></div>,
+      label: (
+        <div className="flex justify-center items-center gap-2">
+          <LogOut />
+          <h1>Keluar</h1>
+        </div>
+      ),
       command: () => handleModalLogout(),
     },
   ];
   return (
     <>
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
-        <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+        <Toast
+          ref={toast}
+          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+        />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
           <div className="font-extrabold text-black dark:text-white">
@@ -268,7 +334,6 @@ const NavbarPengguna = () => {
               >
                 Kontrol
               </h1>
-            
             </Link>
             <Link
               to="/obat"
@@ -283,7 +348,6 @@ const NavbarPengguna = () => {
               >
                 Obat
               </h1>
-            
             </Link>
             <Link
               to="/medis"
@@ -298,11 +362,10 @@ const NavbarPengguna = () => {
               >
                 Medis
               </h1>
-            
             </Link>
             <Link
               to="/notifikasi"
-              className=" transition-all flex flex-col items-center justify-center"
+              className="transition-all flex flex-col items-center justify-center relative"
             >
               <h1
                 className={
@@ -313,7 +376,11 @@ const NavbarPengguna = () => {
               >
                 Notifikasi
               </h1>
-            
+              {hasNotifications && (
+                <div className="absolute top-1 right-0 mt-[-4px] mr-[-4px]">
+                  <span className="bg-mainGreen rounded-full h-2 w-2 block"></span>
+                </div>
+              )}
             </Link>
           </div>
           <div className="relative flex gap-2 md:gap-2 items-center justify-center">
@@ -324,16 +391,25 @@ const NavbarPengguna = () => {
                 text
                 severity="secondary"
                 className="p-1 rounded-full cursor-pointer "
-                label={!isMenuVisible ?<Settings2 className="text-black dark:text-white" /> : <GitPullRequestClosed className="text-black dark:text-white"/>}
+                label={
+                  !isMenuVisible ? (
+                    <Settings2 className="text-black dark:text-white" />
+                  ) : (
+                    <GitPullRequestClosed className="text-black dark:text-white" />
+                  )
+                }
               ></Button>
             </div>
-            
           </div>
-          
         </div>
-        
-      </header> 
-      <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} absolute  right-0 `} model={items} />
+      </header>
+      <Menu
+        key={key}
+        className={` ${
+          isMenuVisible ? "visible" : "hidden"
+        } absolute  right-0 `}
+        model={items}
+      />
       <div
         className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
         style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.1)" }}
@@ -346,7 +422,7 @@ const NavbarPengguna = () => {
             }`}
           >
             <HomeIcon size={25} />
-            
+
             <div className="text-sm">Beranda</div>
           </Link>
           <Link
@@ -378,16 +454,20 @@ const NavbarPengguna = () => {
           </Link>
           <Link
             to="/notifikasi"
-            className={`flex flex-col items-center justify-center transition-all  ${
+            className={`flex flex-col items-center justify-center transition-all relative ${
               location.pathname === "/notifikasi" ? "opacity-100" : "opacity-50"
             }`}
           >
             <Bell />
+            {hasNotifications && (
+              <div className="absolute top-0 right-4 mt-[-4px] mr-[-4px]">
+                <span className="bg-mainGreen rounded-full h-2 w-2 block"></span>
+              </div>
+            )}
             <div className="text-sm">Notifikasi</div>
           </Link>
         </div>
       </div>
-      
 
       {/* Modal Logout */}
       <Dialog

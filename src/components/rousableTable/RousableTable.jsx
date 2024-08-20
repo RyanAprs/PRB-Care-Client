@@ -310,15 +310,14 @@ export default function ReusableTable({
             resizableColumns
             sortMode="multiple"
           >
-            {path !== "pengguna" ||
-              (path !== "dataApotekPuskesmas" && (
-                <Column
-                  header="Aksi"
-                  headerStyle={{ width: "5%", minWidth: "2rem" }}
-                  body={actionBodyTemplate}
-                  bodyStyle={{ textAlign: "center" }}
-                />
-              ))}
+            {path !== "pengguna" && (
+              <Column
+                header="Aksi"
+                headerStyle={{ width: "5%", minWidth: "2rem" }}
+                body={actionBodyTemplate}
+                bodyStyle={{ textAlign: "center" }}
+              />
+            )}
             {columns.map((col, index) => (
               <Column
                 key={index}

@@ -1,6 +1,6 @@
 import LoginForm from "../../../components/form/LoginForm";
 import { initializeApp } from "firebase/app";
-import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getMessaging, getToken } from "firebase/messaging";
 import { useEffect, useState } from "react";
 
 const firebaseConfig = {
@@ -16,15 +16,6 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-const convertUnixTimestampToLocalTime = (timestamp) => {
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleString("id-ID", {
-    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  });
-};
 const LoginPengguna = () => {
   const API_URI = `${import.meta.env.VITE_API_BASE_URI}/api/pengguna/login`;
   const [token, setToken] = useState("");
@@ -64,48 +55,6 @@ const LoginPengguna = () => {
     if (Notification.permission === "granted") {
       registerServiceWorker();
     }
-
-    onMessage(messaging, (payload) => {
-      console.log("Message received. ", payload);
-
-      const {
-        title,
-        namaLengkap,
-        namaApotek,
-        namaPuskesmas,
-        tanggalPengambilan,
-        tanggalKontrol,
-        tanggalBatal,
-      } = payload.data;
-
-      let tanggalAmbilLocal, tanggalBatalLocal;
-      let notificationTitle, notificationBody;
-
-      if (namaApotek) {
-        tanggalAmbilLocal = convertUnixTimestampToLocalTime(
-          parseInt(tanggalPengambilan)
-        );
-        tanggalBatalLocal = convertUnixTimestampToLocalTime(
-          parseInt(tanggalBatal)
-        );
-        notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
-      } else if (namaPuskesmas) {
-        tanggalAmbilLocal = convertUnixTimestampToLocalTime(
-          parseInt(tanggalKontrol)
-        );
-        tanggalBatalLocal = convertUnixTimestampToLocalTime(
-          parseInt(tanggalBatal)
-        );
-        notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
-      }
-
-      const notificationOptions = {
-        body: notificationBody,
-      };
-      new Notification(notificationTitle, notificationOptions);
-    });
   }, [token]);
 
   return (
