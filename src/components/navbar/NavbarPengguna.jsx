@@ -53,6 +53,12 @@ const NavbarPengguna = () => {
     teleponKeluarga: "",
     alamat: "",
   });
+  const [detailDataPengguna, setDetailDataPengguna] = useState({
+    namaLengkap: "",
+    telepon: "",
+    teleponKeluarga: "",
+    alamat: "",
+  });
   const [errors, setErrors] = useState({});
   const [visibleDetailProfile, setVisibleDetailProfile] = useState(false);
   const [visibleUpdateProfile, setVisibleUpdateProfile] = useState(false);
@@ -191,7 +197,7 @@ const NavbarPengguna = () => {
     try {
       const dataResponse = await getCurrentPengguna();
       if (dataResponse) {
-        setDataPengguna({
+        setDetailDataPengguna({
           namaLengkap: dataResponse.namaLengkap,
           alamat: dataResponse.alamat,
           telepon: dataResponse.telepon,
@@ -244,6 +250,7 @@ const NavbarPengguna = () => {
           life: 3000,
         });
         setVisibleUpdateProfile(false);
+        handleDetailProfileModal();
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -519,7 +526,7 @@ const NavbarPengguna = () => {
             variant="filled"
             disabled
             className="p-input text-lg p-3 rounded"
-            value={dataPengguna.namaLengkap}
+            value={detailDataPengguna.namaLengkap}
           />
           <label htmlFor="" className="-mb-3">
             Telepon:
@@ -529,7 +536,7 @@ const NavbarPengguna = () => {
             variant="filled"
             disabled
             className="p-input text-lg p-3 rounded"
-            value={dataPengguna.telepon}
+            value={detailDataPengguna.telepon}
           />
           <label htmlFor="" className="-mb-3">
             Telepon Keluarga:
@@ -539,7 +546,7 @@ const NavbarPengguna = () => {
             variant="filled"
             disabled
             className="p-input text-lg p-3 rounded"
-            value={dataPengguna.teleponKeluarga}
+            value={detailDataPengguna.teleponKeluarga}
           />
           <label htmlFor="" className="-mb-3">
             Alamat:
@@ -548,7 +555,7 @@ const NavbarPengguna = () => {
             variant="filled"
             disabled
             className="p-input text-lg p-3 rounded"
-            value={dataPengguna.alamat}
+            value={detailDataPengguna.alamat}
             autoResize
           />
           <Button
@@ -568,6 +575,7 @@ const NavbarPengguna = () => {
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
+          handleDetailProfileModal();
         }}
       >
         <div className="flex flex-col p-4 gap-4">

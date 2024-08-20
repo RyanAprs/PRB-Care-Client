@@ -67,7 +67,7 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
   }, [inputs, setWaktuOperasionalList]);
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full gap-2">
       <h3>Waktu Operasional:</h3>
       {inputs.map((input, index) => (
         <div key={index} className="flex md:flex-row flex-col justify-between items-center gap-2">
@@ -113,7 +113,8 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
             }
           />
           <Button
-            className="block w-full py-3 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
+            className="block w-full py-3 rounded-xl "
+            severity="danger"
             label={<CopyMinus className="mx-auto"/>}
             onClick={() => handleRemoveOperational(index)}
             disabled={inputs.length <= 1}

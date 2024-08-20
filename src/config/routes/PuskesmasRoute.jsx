@@ -83,17 +83,6 @@ const PuskesmasRoute = () => {
           }
         />
         <Route
-          path="/data-apotek"
-          element={
-            <PrivateRoute role="nakes">
-              <NavbarAdmin>
-                <DataApotek />
-                <Footer />
-              </NavbarAdmin>
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/data-kontrol-balik"
           element={
             <PrivateRoute role="nakes">
