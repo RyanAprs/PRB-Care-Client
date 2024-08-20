@@ -210,6 +210,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      console.log(errors);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {

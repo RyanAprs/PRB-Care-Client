@@ -108,3 +108,10 @@ p-toast{
 .p-menu{
   z-index: 900 !important;
 }
+.ps-sidebar-root{
+  border: none !important;
+}
+
+.css-wx7wi4{
+  min-width: fit-content !important;
+}

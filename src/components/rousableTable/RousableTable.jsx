@@ -5,14 +5,14 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dropdown } from "primereact/dropdown";
 import {
-  FilePlus2,
+  CirclePlus,
   Ban,
   CircleCheckBig,
   Search,
   Trash2,
   Edit,
   CircleOff,
-  FileDown,
+  CircleArrowDown,
 } from "lucide-react";
 
 export default function ReusableTable({
@@ -271,7 +271,7 @@ export default function ReusableTable({
               className=""
             />
           </div>
-          <div className="flex gap-4  items-center justify-center">
+          <div className="flex gap-2  items-center justify-center">
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}
@@ -284,12 +284,12 @@ export default function ReusableTable({
                   ? "hidden"
                   : ""
               } block p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`}
-              label={<FilePlus2 />}
+              label={<CirclePlus />}
             />
             <Button
               onClick={onDownload}
               className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
-              label={<FileDown />}
+              label={<CircleArrowDown />}
             />
           </div>
         </div>
