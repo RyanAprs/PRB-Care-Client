@@ -222,7 +222,7 @@ const RegisterPengguna = () => {
             Captcha:
           </label>
           <ReCAPTCHA
-            className="rounded-lg"
+            className="rounded-lg "
             ref={recaptchaRef}
             sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"
             value={datas.tokenRecaptcha}
@@ -243,7 +243,7 @@ const RegisterPengguna = () => {
 
         <div className="flex flex-col w-full gap-4">
           <Button
-            className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             type="submit"
             disabled={isLoading}
             onClick={handleRegister}

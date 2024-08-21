@@ -58,8 +58,8 @@ const Obat = () => {
         <div className="row p-1 grid  grid-cols-1 gap-6 overflow-y-auto h-full">
           {data.length > 0 ? (
             data.map((item, index) => (
-              <Card key={index} className={`bg-lightGreen dark:bg-mainGreen rounded-xl h-fit`}>
-               <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center text-white">
+              <Card key={index} className={`bg-mainGreen text-white  dark:bg-extraLightGreen dark:text-black  rounded-xl h-fit`}>
+               <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center ">
                   <div className="flex flex-col gap-4 items-center md:items-start justify-center">
                     <div className="flex">
                       <AlarmClock />{" "}
@@ -69,8 +69,7 @@ const Obat = () => {
                     </div>
                     <h1 className="font-poppins md:text-start text-center">
                       {item.obat.adminApotek.namaApotek},{" "}
-                      {item.obat.adminApotek.telepon},{" "}
-                      {item.obat.adminApotek.alamat}, {item.obat.namaObat} {"("}{item.jumlah}×{")."}
+                      {item.obat.adminApotek.telepon}. {item.obat.namaObat} {"("}{item.jumlah}×{")."}
                     </h1>
                   </div>
                   <div className="flex items-center justify-center ">

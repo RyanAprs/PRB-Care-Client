@@ -21,7 +21,7 @@ const Kontrol = () => {
       try {
         const response = await getAllKontrolBalik();
         console.log(response);
-
+        console.log(token); //log dulu
         setData(response || []);
         setLoading(false);
       } catch (error) {
@@ -57,29 +57,30 @@ const Kontrol = () => {
       startY: 20,
     });
 
-    doc.save("data-medis.pdf");
+    doc.save("data-kontrol.pdf");
   };
 
   const columns = [
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
     { header: "Nomor Antrean", field: "noAntrean" },
-    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
-    { header: "Alamat Puskesmas", field: "pasien.adminPuskesmas.alamat" },
     { header: "Telepon Puskesmas", field: "pasien.adminPuskesmas.telepon" },
+    { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
-    { header: "Tekanan Darah", field: "tekananDarah" },
     { header: "Denyut Nadi", field: "denyutNadi" },
-    { header: "Hasil Lab", field: "hasilLab" },
+    { header: "Tekanan Darah", field: "tekananDarah" },
+    { header: "Hasil LAB", field: "hasilLab" },
     { header: "Hasil EKG", field: "hasilEkg" },
-    { header: "Tanggal Kontrol", field: "tanggalKontrol" },
+    { header: "Hasil Diagnosa", field: "hasilDiagnosa" },
     { header: "Status", field: "status" },
   ];
 
   if (loading) {
     return (
-      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
-        <div className="p-8 w-full h-full flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays max-h-fit min-h-screen  flex justify-center items-center">
+        <div className="p-8 w-full max-h-fit min-h-screen flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
           <ProgressSpinner />
         </div>
       </div>
@@ -87,16 +88,16 @@ const Kontrol = () => {
   }
 
   return (
-    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
-      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
-        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
+    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
+        <div className="flex flex-col p-1 gap-4  min-h-screen max-h-fit">
           {data.length > 0 ? (
             <div className="row grid grid-cols-1 gap-6">
               <ReusableTable
                 columns={columns}
                 data={data}
-                onDownload={handleDownload}
                 path={"pengguna"}
+                onDownload={handleDownload}
               />
             </div>
           ) : (

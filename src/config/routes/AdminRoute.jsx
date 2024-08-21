@@ -15,7 +15,7 @@ import { AuthContext } from "../context/AuthContext";
 import DataPengguna from "../../pages/admin/dataPengguna/DataPengguna";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
-
+import NoNavbar from "../../components/navbar/NoNavbar";
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
@@ -45,6 +45,7 @@ const AdminRoute = () => {
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
+        <NoNavbar/>
         <ProgressSpinner />
       </div>
     );
@@ -62,6 +63,7 @@ const AdminRoute = () => {
           path="/login"
           element={
             <AlreadyLoggedInRoute role="admin">
+              <NoNavbar/>
               <LoginAdmin />
             </AlreadyLoggedInRoute>
           }
@@ -154,8 +156,8 @@ const AdminRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
     </div>
   );

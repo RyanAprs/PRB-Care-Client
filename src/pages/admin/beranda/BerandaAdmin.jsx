@@ -3,7 +3,7 @@ import {
   Hospital,
   Pill,
   ShoppingCart,
-  Activity,
+  Stethoscope,
   User2Icon,
   UserPlus,
   HousePlus,
@@ -68,7 +68,7 @@ const DashboardAdmin = () => {
       route: "/admin/data-obat",
     },
     {
-      icon: <Activity size={54}  strokeWidth={1} />,
+      icon: <Stethoscope size={54}  strokeWidth={1} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
       route: "/admin/data-kontrol-balik",

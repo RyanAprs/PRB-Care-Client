@@ -10,7 +10,7 @@ import {
   ArrowLeft,
   Pill,
   ShoppingCart,
-  Activity,
+  Stethoscope,
   CircleUser,
   User,
   Settings2,
@@ -516,7 +516,7 @@ const NavbarAdmin = ({ children }) => {
                 className={`${expanded ? "block" : "hidden"} w-auto px-2 max-h-20`}
               />
 
-              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[63px]" : "mb-1"}`} />
+              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[62px] " : "mb-1"}`} />
             </div>
 
           </Menu>
@@ -605,7 +605,7 @@ const NavbarAdmin = ({ children }) => {
               
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3" }`}
-                icon={<Activity />}
+                icon={<Stethoscope />}
                 component={
                   <Link
                     to="/admin/data-kontrol-balik"
@@ -688,7 +688,7 @@ const NavbarAdmin = ({ children }) => {
               </MenuItem>
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3" }`}
-                icon={<Activity />}
+                icon={<Stethoscope />}
                 component={
                   <Link
                     to="/puskesmas/data-kontrol-balik"

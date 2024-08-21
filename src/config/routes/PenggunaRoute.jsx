@@ -18,6 +18,7 @@ import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
+import NoNavbar from "../../components/navbar/NoNavbar";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -48,6 +49,7 @@ const PenggunaRoute = () => {
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
+        <NoNavbar/>
         <ProgressSpinner />
       </div>
     );
@@ -55,12 +57,13 @@ const PenggunaRoute = () => {
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
-        <Route path="/register" element={<RegisterPengguna />} />
+        <Route path="/register" element={<><NoNavbar/><RegisterPengguna /></>} />
         <Route
           path="/login"
           element={
             <AlreadyLoggedInRoute role="pengguna">
-              <LoginPengguna />
+                <NoNavbar/>
+                <LoginPengguna />
             </AlreadyLoggedInRoute>
           }
         />
@@ -115,8 +118,8 @@ const PenggunaRoute = () => {
           }
         />
 
-        <Route path="/page/not-found" element={<NotFound />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
     </div>
   );

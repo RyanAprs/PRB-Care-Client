@@ -74,15 +74,17 @@ const DataApotek = () => {
 
   if (loading)
     return (
-      <div className="h-screen flex justify-center items-center">
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
+      <div className="p-8 w-full min-h-screen flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
         <ProgressSpinner />
       </div>
+    </div>
     );
 
   return (
-    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
-      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
-        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
+    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
+        <div className="flex flex-col p-1 gap-4  min-h-screen max-h-fit">
           {data.length > 0 ? (
             <div className="row grid grid-cols-1 gap-6">
               <ReusableTable

@@ -1,4 +1,4 @@
-import { TabletSmartphone, Bell } from "lucide-react";
+import { TabletSmartphone, Bell, Hospital, HousePlus } from "lucide-react";
 import img from "../../../assets/home.png";
 import { useState } from "react";
 import { Button } from "primereact/button";
@@ -6,6 +6,9 @@ import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import { updateCurrentTokenPerangkatPengguna } from "../../../services/PenggunaService";
 import { useInstallPrompt } from "../../../config/context/InstallPromptContext.jsx";
+import { Link } from "react-router-dom";
+import { Ripple } from 'primereact/ripple';
+
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -126,7 +129,32 @@ const HomePengguna = () => {
               </p>
             </div>
             <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
-              <Button
+              {permission === "granted" && installPromptEvent === null? 
+              (<>
+                <Link
+                  to="/data-puskesmas"
+                  target="_blank"
+                  className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                >
+                  <div className="flex gap-2 justify-center items-center text-lg">
+                  Cari Puskesmas
+                  </div>
+                  <Ripple />
+                </Link>
+                <Link
+                  to="/data-apotek"
+                  target="_blank"
+                  className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                >
+                  <div className="flex gap-2 justify-center items-center text-lg">
+                  Cari Apotek
+                  </div>
+                  <Ripple />
+                </Link>
+              </>)
+              :
+              (<>
+                <Button
                 onClick={handleNotificationSetup}
                 className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                 disabled={permission === "granted"}
@@ -154,6 +182,9 @@ const HomePengguna = () => {
                   </div>
                 }
               />
+              </>)
+              }
+              
             </div>
           </div>
           <img

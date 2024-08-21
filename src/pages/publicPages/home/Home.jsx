@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import img from "../../../assets/prbcare.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../../config/context/AuthContext";
+import { Ripple } from 'primereact/ripple';
 
 const Home = () => {
   const { token } = useContext(AuthContext);
@@ -12,11 +13,11 @@ const Home = () => {
           <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
             <img src={img} className="md:hidden w-4/5" alt="img" />
             <h1 className="md:text-6xl text-3xl font-semibold text-justify md:text-start dark:text-whiteHover">
-              Kesehatan anda, diujung jari anda
+              Kesehatan Anda di Ujung Jari Anda
             </h1>
             <div className="flex flex-col items-center">
               <p className="text-lg text-justify w-full">
-                PRB Care adalah solusi kesehatan digital Anda yang memastikan
+                PRBCare adalah solusi kesehatan digital Anda yang memastikan
                 Anda tidak pernah melewatkan waktu penting. Dapatkan notifikasi
                 otomatis untuk pengambilan obat dan jadwal kontrol balik,
                 sehingga Anda selalu tepat waktu dalam menjaga kesehatan Anda.
@@ -26,20 +27,22 @@ const Home = () => {
               {token ? (
                 <Link
                   to="/pengguna/beranda"
-                  className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                  className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                 >
                   <div className="flex gap-2 justify-center items-center text-lg">
-                    Mulai Jelajahi Sekarang
+                    Jelajahi Sekarang
                   </div>
+                  <Ripple />
                 </Link>
               ) : (
                 <Link
-                  to="/pengguna/login"
-                  className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                  to="/pengguna/register"
+                  className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                 >
                   <div className="flex gap-2 justify-center items-center text-lg">
-                    Mulai Bergabung Sekarang
+                    Mulai Bergabung
                   </div>
+                  <Ripple />
                 </Link>
               )}
             </div>

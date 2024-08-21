@@ -11,7 +11,7 @@ import DataKontrolBalik from "../../pages/puskesmas/dataKontrolBalik/DataKontrol
 import DataPengambilanObat from "../../pages/puskesmas/dataPengambilanObat/DataPengambilanObat";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
-
+import NoNavbar from "../../components/navbar/NoNavbar";
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
@@ -43,7 +43,7 @@ const PuskesmasRoute = () => {
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
+        <NoNavbar/><ProgressSpinner />
       </div>
     );
 
@@ -55,6 +55,7 @@ const PuskesmasRoute = () => {
           path="/login"
           element={
             <AlreadyLoggedInRoute role="nakes">
+              <NoNavbar/>
               <LoginPuskesmas />
             </AlreadyLoggedInRoute>
           }
@@ -103,8 +104,8 @@ const PuskesmasRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
     </div>
   );

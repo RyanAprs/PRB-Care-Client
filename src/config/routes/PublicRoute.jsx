@@ -6,6 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import KebijakanPrivasi from "../../pages/publicPages/kebijakanPrivasi/KebijakanPrivasi";
 import NavbarPublicPage from "../../components/navbar/NavbarPublicPage";
+import NoNavbar from "../../components/navbar/NoNavbar";
 import PublicFooter from "../../components/footer/PublicFooter";
 import Home from "../../pages/publicPages/home/Home";
 import DataPuskesmas from "../../pages/publicPages/dataPuskesmas/DataPuskesmas";
@@ -18,7 +19,7 @@ const PublicRoute = () => {
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
+        <NoNavbar/><ProgressSpinner />
       </div>
     );
 
@@ -59,11 +60,11 @@ const PublicRoute = () => {
           path="/kebijakan-privasi"
           element={
             <>
-              <KebijakanPrivasi />
+              <NoNavbar/><KebijakanPrivasi/>
             </>
           }
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
     </div>
   );

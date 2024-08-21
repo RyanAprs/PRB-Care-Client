@@ -1,4 +1,4 @@
-import { ShoppingCart, Activity, UserPlus } from "lucide-react";
+import { ShoppingCart, Stethoscope, UserPlus } from "lucide-react";
 import { Card } from "primereact/card";
 import { useEffect, useRef, useState } from "react";
 import { getCurrentAdminPuskesmas } from "../../../services/PuskesmasService";
@@ -49,7 +49,7 @@ const DashboardPuskesmas = () => {
       route: "/puskesmas/data-pasien",
     },
     {
-      icon: <Activity size={54} strokeWidth={1} />,
+      icon: <Stethoscope size={54} strokeWidth={1} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
       route: "/puskesmas/data-kontrol-balik",

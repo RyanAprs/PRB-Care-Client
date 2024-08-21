@@ -11,7 +11,7 @@ import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { updateCurrentTokenPerangkatPengguna } from "../../services/PenggunaService";
-
+import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -126,7 +126,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
 
           <div className="flex flex-col w-full gap-4">
             <Button
-              className="bg-mainGreen text-white  hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
               type="submit"
               disabled={isLoading}
             >

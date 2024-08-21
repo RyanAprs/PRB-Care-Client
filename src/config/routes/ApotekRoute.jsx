@@ -15,7 +15,7 @@ import DataObat from "../../pages/apotek/dataObat/DataObat";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
-
+import NoNavbar from "../../components/navbar/NoNavbar";
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
@@ -45,6 +45,7 @@ const ApotekRoute = () => {
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
+        <NoNavbar/>
         <ProgressSpinner />
       </div>
     );
@@ -62,6 +63,7 @@ const ApotekRoute = () => {
           path="/login"
           element={
             <AlreadyLoggedInRoute role="apoteker">
+              <NoNavbar/>
               <LoginApotek />
             </AlreadyLoggedInRoute>
           }
@@ -99,8 +101,8 @@ const ApotekRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/page/not-found" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/page/not-found" />} />
+        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
     </div>
   );

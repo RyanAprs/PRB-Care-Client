@@ -265,8 +265,10 @@ const DataPengguna = () => {
 
   if (loading)
     return (
-      <div className="h-screen flex justify-center items-center">
-        <ProgressSpinner />
+      <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+        <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
+          <ProgressSpinner />
+        </div>
       </div>
     );
   return (
@@ -275,7 +277,7 @@ const DataPengguna = () => {
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
-      <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
+      <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
           columns={columns}
           data={data}

@@ -12,7 +12,7 @@ import {
   Trash2,
   Edit,
   CircleOff,
-  CircleArrowDown,
+  FileText,
 } from "lucide-react";
 
 export default function ReusableTable({
@@ -289,7 +289,7 @@ export default function ReusableTable({
             <Button
               onClick={onDownload}
               className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
-              label={<CircleArrowDown />}
+              label={<FileText />}
             />
           </div>
         </div>

@@ -44,10 +44,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                   id="theme-link"
                   rel="stylesheet"
                   href={
-                    new URL(
-                      "primereact/resources/themes/saga-green/theme.css",
-                      import.meta.url
-                    ).href
+                    localStorage.getItem("darkMode") === "false"
+                ? new URL('primereact/resources/themes/saga-green/theme.css', import.meta.url).href
+                : new URL('primereact/resources/themes/arya-green/theme.css', import.meta.url).href
                   }
                 />
               </Helmet>

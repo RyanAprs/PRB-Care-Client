@@ -3,7 +3,7 @@ import { MoonIcon, Sun } from 'lucide-react';
 import useDarkMode from 'use-dark-mode';
 import { Button } from "primereact/button";
 
-export const ThemeSwitcher = () => {
+export const ThemeSwitcher = ({ className = '' }) => {
     const darkMode = useDarkMode(false);
     useEffect(() => {
         const themeLink = document.getElementById('theme-link');
@@ -17,7 +17,7 @@ export const ThemeSwitcher = () => {
     }, [darkMode.value]);
 
     return (
-        <div className="flex justify-center px-2">
+        <div className={`flex justify-center px-2 ${className}`}>
             <Button
                 rounded
                 text

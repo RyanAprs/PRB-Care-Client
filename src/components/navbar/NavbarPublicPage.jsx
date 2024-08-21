@@ -1,9 +1,10 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
-import { HomeIcon, Hospital, HousePlus } from "lucide-react";
+import { HomeIcon, Hospital, HousePlus, LogIn } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Toast } from "primereact/toast";
+import { Ripple } from 'primereact/ripple';
 
 const NavbarPublicPage = () => {
   const toast = useRef(null);
@@ -69,6 +70,17 @@ const NavbarPublicPage = () => {
           </div>
           <div className="relative flex gap-2 md:gap-2 items-center justify-center">
             <ThemeSwitcher />
+            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2">
+            <Link
+              to={"/pengguna/login"}
+              className="p-1 rounded-full cursor-pointer p-ripple mx-auto transition-all flex flex-col items-center justify-center"
+            >
+              <LogIn className="text-black dark:text-white" />
+              <Ripple/>
+            </Link>
+            </div>
+            </div>
           </div>
         </div>
       </header>
@@ -77,7 +89,7 @@ const NavbarPublicPage = () => {
         className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
         style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.1)" }}
       >
-        <div className="flex  justify-between items-center ">
+        <div className="flex  justify-between items-center mx-2">
           <Link
             to={"/"}
             className={`flex flex-col items-center justify-center transition-all  ${

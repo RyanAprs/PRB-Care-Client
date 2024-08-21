@@ -144,15 +144,6 @@ const NavbarPengguna = () => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    const themeLink = document.getElementById("theme-link");
-    if (themeLink) {
-      const themeUrl = new URL(
-        "primereact/resources/themes/saga-green/theme.css",
-        import.meta.url
-      ).href;
-      themeLink.href = themeUrl;
-    }
-    document.body.classList.remove("dark");
     navigate("/pengguna/beranda");
   };
 
@@ -329,6 +320,20 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
+              to="/pengguna/medis"
+              className=" transition-all flex flex-col items-center justify-center"
+            >
+              <h1
+                className={
+                  location.pathname === "/pengguna/medis"
+                    ? "text-lightGreen dark:text-mainGreen"
+                    : ""
+                }
+              >
+                Medis
+              </h1>
+            </Link>
+            <Link
               to="/pengguna/kontrol"
               className=" transition-all flex flex-col items-center justify-center"
             >
@@ -356,20 +361,7 @@ const NavbarPengguna = () => {
                 Obat
               </h1>
             </Link>
-            <Link
-              to="/pengguna/medis"
-              className=" transition-all flex flex-col items-center justify-center"
-            >
-              <h1
-                className={
-                  location.pathname === "/pengguna/medis"
-                    ? "text-lightGreen dark:text-mainGreen"
-                    : ""
-                }
-              >
-                Medis
-              </h1>
-            </Link>
+            
             <Link
               to="/pengguna/notifikasi"
               className="transition-all flex flex-col items-center justify-center relative"
@@ -435,6 +427,17 @@ const NavbarPengguna = () => {
             <div className="text-sm">Beranda</div>
           </Link>
           <Link
+            to="/pengguna/medis"
+            className={`flex flex-col items-center justify-center transition-all  ${
+              location.pathname === "/pengguna/medis"
+                ? "opacity-100"
+                : "opacity-50"
+            }`}
+          >
+            <UserPlus />
+            <div className="text-sm">Medis</div>
+          </Link>
+          <Link
             to="/pengguna/kontrol"
             className={`flex flex-col items-center justify-center transition-all  ${
               location.pathname === "/pengguna/kontrol"
@@ -456,17 +459,7 @@ const NavbarPengguna = () => {
             <ShoppingCart />
             <div className="text-sm">Obat</div>
           </Link>
-          <Link
-            to="/pengguna/medis"
-            className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/pengguna/medis"
-                ? "opacity-100"
-                : "opacity-50"
-            }`}
-          >
-            <UserPlus />
-            <div className="text-sm">Medis</div>
-          </Link>
+          
           <Link
             to="/pengguna/notifikasi"
             className={`flex flex-col items-center justify-center transition-all relative ${
