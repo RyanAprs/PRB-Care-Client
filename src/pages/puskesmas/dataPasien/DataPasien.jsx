@@ -86,23 +86,10 @@ const DataPasien = () => {
       }
     };
 
-    const fetchDataPengguna = async () => {
-      try {
-        const response = await getAllPengguna();
-
-        setPengguna(response);
-
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-    fetchDataPengguna();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -113,6 +100,15 @@ const DataPasien = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+    try {
+      const responsePengguna = await getAllPengguna();
+      setPengguna(responsePengguna);
+
+      setLoading(false);
+    } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {

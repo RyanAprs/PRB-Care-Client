@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useContext, useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
@@ -29,6 +28,7 @@ import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized"
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { getAllApotek } from "../../../services/ApotekService";
 
 const DataObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -71,30 +71,10 @@ const DataObat = () => {
       }
     };
 
-    const fetchDataAdminApotek = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek`,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token")}`,
-            },
-          }
-        );
-        setDataAdminApotek(response.data.data);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchDataAdminApotek();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setDatas({
       namaObat: "",
@@ -103,6 +83,15 @@ const DataObat = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+
+    try {
+      const responseApotek = await getAllApotek();
+      setDataAdminApotek(responseApotek);
+      setLoading(false);
+    } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {
@@ -274,7 +263,10 @@ const DataObat = () => {
 
   return (
     <div className="flex flex-col gap-4 p-4 min-h-screen ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}

@@ -103,23 +103,10 @@ const DataKontrolBalik = () => {
       }
     };
 
-    const fetchDataPasien = async () => {
-      try {
-        const response = await getAllPasienAktif();
-        setPasien(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    fetchDataPasien();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -138,6 +125,15 @@ const DataKontrolBalik = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+    try {
+      const response = await getAllPasienAktif();
+      setPasien(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {

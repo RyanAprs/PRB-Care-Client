@@ -447,16 +447,20 @@ const NavbarAdmin = ({ children }) => {
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const handleClickOutside = (event) => {
-    if (buttonRef.current && !buttonRef.current.contains(event.target) &&
-        menuRef.current && !menuRef.current.contains(event.target)) {
+    if (
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target) &&
+      menuRef.current &&
+      !menuRef.current.contains(event.target)
+    ) {
       setIsMenuVisible(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -504,7 +508,11 @@ const NavbarAdmin = ({ children }) => {
                 className="w-auto px-2 max-h-20"
               />
               <h1 className="mb-2">{expanded ? " " : "PRBCare"}</h1>
-              <hr className={`w-full border-b border-lightGreen ${expanded ? "invisible" : "block"}`} />
+              <hr
+                className={`w-full border-b border-lightGreen ${
+                  expanded ? "invisible" : "block"
+                }`}
+              />
             </div>
           </Menu>
           {role === "admin" ? (
@@ -839,7 +847,7 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-            ref={buttonRef}
+              ref={buttonRef}
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
@@ -854,7 +862,6 @@ const NavbarAdmin = ({ children }) => {
             ></Button>
           </div>
           <Menuk
-           
             key={key}
             className={` ${
               isMenuVisible ? "visible" : "hidden"

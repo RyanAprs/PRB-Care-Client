@@ -88,36 +88,10 @@ const DataPengambilanObat = () => {
       }
     };
 
-    const fetchDataPasien = async () => {
-      try {
-        const responseData = await getAllPasienAktif();
-        setPasien(responseData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    const fetchDataObat = async () => {
-      try {
-        const responseData = await getAllObat();
-        setObat(responseData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    fetchDataObat();
-    fetchDataPasien();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setIsEditMode(false);
     setSelectedDate(null);
     setErrors({});
@@ -128,6 +102,17 @@ const DataPengambilanObat = () => {
       tanggalPengambilan: 0,
     });
     setVisible(true);
+    try {
+      const responseObat = await getAllObat();
+      setObat(responseObat);
+      const responsePasien = await getAllPasienAktif();
+      setPasien(responsePasien);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+    }
   };
 
   const handleCreate = async () => {

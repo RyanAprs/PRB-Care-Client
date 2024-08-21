@@ -7,11 +7,10 @@ import { getCurrentAdminApotek } from "../../../services/ApotekService";
 import { useModalUpdate } from "../../../config/context/ModalUpdateContext";
 
 const DashboardApotek = () => {
-  const [name, setName] = useState("");
   const [showToast, setShowToast] = useState(false);
   const toast = useRef(null);
   const navigate = useNavigate();
-  const { isUpdated, setIsUpdated } = useModalUpdate();
+  const { isUpdated } = useModalUpdate();
 
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
@@ -35,8 +34,7 @@ const DashboardApotek = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getCurrentAdminApotek();
-        setName(response.namaApotek);
+        await getCurrentAdminApotek();
       } catch (error) {
         console.log(error);
       }
@@ -66,7 +64,10 @@ const DashboardApotek = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <Card

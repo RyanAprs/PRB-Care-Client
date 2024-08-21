@@ -103,23 +103,10 @@ const DataKontrolBalik = () => {
       }
     };
 
-    const fetchDataPasien = async () => {
-      try {
-        const response = await getAllPasienAktif();
-        setPasien(response);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    fetchDataPasien();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -138,6 +125,15 @@ const DataKontrolBalik = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+    try {
+      const response = await getAllPasienAktif();
+      setPasien(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {
@@ -357,7 +353,7 @@ const DataKontrolBalik = () => {
     { header: "Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
-    { header: "Nomor Antrean", field: "noAntrean" },    
+    { header: "Nomor Antrean", field: "noAntrean" },
     { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
@@ -382,28 +378,34 @@ const DataKontrolBalik = () => {
       </div>
     );
 
-    const itemTemplate = (option) => {
+  const itemTemplate = (option) => {
+    return (
+      <div>
+        {option.pengguna.namaLengkap} - {option.noRekamMedis},{" "}
+        {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplate = (option) => {
+    if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis},{" "}
+          {option.adminPuskesmas.namaPuskesmas} -{" "}
+          {option.adminPuskesmas.telepon}
         </div>
       );
-    };
-  
-    const valueTemplate = (option) => {
-      if (option) {
-        return (
-          <div>
-            {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
-          </div>
-        );
-      }
-      return <span>Pilih Pasien</span>;
-    };
+    }
+    return <span>Pilih Pasien</span>;
+  };
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}

@@ -88,36 +88,10 @@ const DataPasien = () => {
       }
     };
 
-    const fetchDataAdminPuskesmas = async () => {
-      try {
-        const response = await getAllPuskesmas();
-        setAdminPuskesmas(response);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    const fetchDataPengguna = async () => {
-      try {
-        const response = await getAllPengguna();
-
-        setPengguna(response);
-
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
-      }
-    };
-
-    fetchDataPengguna();
-    fetchDataAdminPuskesmas();
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -128,6 +102,19 @@ const DataPasien = () => {
     });
     setVisible(true);
     setIsEditMode(false);
+
+    try {
+      const responsePuskesmas = await getAllPuskesmas();
+      setAdminPuskesmas(responsePuskesmas);
+
+      const responsePengguna = await getAllPengguna();
+      setPengguna(responsePengguna);
+
+      setLoading(false);
+    } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {
