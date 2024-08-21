@@ -29,8 +29,7 @@ export const handleApiError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail:
-            "Username atau nomor telepon yang Anda masukkan sudah terdaftar. Mohon gunakan yang lain.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;
@@ -61,7 +60,7 @@ export const handleApiError = (error, toast) => {
   }
 };
 
-export const handleDeleteError = (error, toast, title) => {
+export const handleDeleteError = (error, toast) => {
   if (error.response) {
     switch (error.response.status) {
       case 401:
@@ -84,7 +83,7 @@ export const handleDeleteError = (error, toast, title) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail: `Data ${title}  ini masih terkait dengan data lain. Mohon periksa kembali.`,
+          detail: error.response.data.error,
           life: 3000,
         });
         break;
@@ -138,8 +137,7 @@ export const handleDoneError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail:
-            "Pasien ini masih harus melakukan pengambilan obat atau kontrol balik, mohon periksa kembali.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;
@@ -193,8 +191,7 @@ export const handleChangePasswordError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail:
-            "Pasien ini masih harus melakukan pengambilan obat atau kontrol balik, mohon periksa kembali.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;
@@ -302,8 +299,7 @@ export const handleCreatePengambilanObatError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail:
-            "Jumlah obat yang Anda masukkan melebihi stok. Mohon periksa kembali.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;
@@ -365,7 +361,7 @@ export const handleKontrolBalikError = (error, toast) => {
         toast.current.show({
           severity: "error",
           summary: "Gagal",
-          detail: "Nomor antrean pada tanggal tersebut sudah digunakan.",
+          detail: error.response.data.error,
           life: 3000,
         });
         break;

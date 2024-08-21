@@ -38,7 +38,6 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getAllPengguna } from "../../../services/PenggunaService";
-import { getAllPuskesmas } from "../../../services/PuskesmasService";
 
 addLocale("id", dateLocaleId);
 
@@ -86,8 +85,6 @@ const DataPasien = () => {
         setLoading(false);
       }
     };
-
-
 
     const fetchDataPengguna = async () => {
       try {
@@ -326,7 +323,6 @@ const DataPasien = () => {
     return <span>Pilih Pasien</span>;
   };
 
-
   if (loading)
     return (
       <div className="h-screen flex justify-center items-center">
@@ -410,8 +406,6 @@ const DataPasien = () => {
           {errors.idPengguna && (
             <small className="p-error -mt-3 text-sm">{errors.idPengguna}</small>
           )}
-
-
 
           <label htmlFor="" className="-mb-3">
             Tanggal periksa:

@@ -26,10 +26,9 @@ import {
 } from "../../../validations/KontrolBalikSchema";
 import { ZodError } from "zod";
 import {
-  handleApiError,
+  handleKontrolBalikError,
   handleDeleteError,
   handleDoneError,
-  handleKontrolBalikError,
 } from "../../../utils/ApiErrorHandlers";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
@@ -167,7 +166,7 @@ const DataKontrolBalik = () => {
       } else {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
 
-        handleApiError(error, toast);
+        handleKontrolBalikError(error, toast);
       }
     }
   };
@@ -211,7 +210,7 @@ const DataKontrolBalik = () => {
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      handleApiError(error, toast);
+      handleKontrolBalikError(error, toast);
     }
   };
 
@@ -654,7 +653,7 @@ const DataKontrolBalik = () => {
                   {errors.hasilDiagnosa}
                 </small>
               )}
-              
+
               {errors.keluhan && (
                 <small className="p-error -mt-3 text-sm">
                   {errors.keluhan}

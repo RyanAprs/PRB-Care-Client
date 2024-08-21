@@ -373,7 +373,8 @@ const DataPengambilanObat = () => {
   const itemTemplatePasien = (option) => {
     return (
       <div>
-        {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
+        {option.pengguna.namaLengkap} - {option.noRekamMedis},{" "}
+        {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
       </div>
     );
   };
@@ -382,7 +383,9 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.pengguna.namaLengkap} - {option.noRekamMedis}, {option.adminPuskesmas.namaPuskesmas} - {option.adminPuskesmas.telepon}
+          {option.pengguna.namaLengkap} - {option.noRekamMedis},{" "}
+          {option.adminPuskesmas.namaPuskesmas} -{" "}
+          {option.adminPuskesmas.telepon}
         </div>
       );
     }
@@ -392,8 +395,8 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
-        {option.adminApotek.telepon}
+        {option.namaObat} - Stock: {option.jumlah},{" "}
+        {option.adminApotek.namaApotek} - {option.adminApotek.telepon}
       </div>
     );
   };
@@ -402,8 +405,8 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
-          {option.adminApotek.telepon}
+          {option.namaObat} - Stock: {option.jumlah},{" "}
+          {option.adminApotek.namaApotek} - {option.adminApotek.telepon}
         </div>
       );
     }
@@ -412,7 +415,10 @@ const DataPengambilanObat = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
 
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable

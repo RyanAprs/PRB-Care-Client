@@ -13,7 +13,7 @@ import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import { ZodError } from "zod";
 import {
-  handleApiError,
+  handleCreatePengambilanObatError,
   handleDeleteError,
   handleDoneError,
 } from "../../../utils/ApiErrorHandlers";
@@ -155,7 +155,7 @@ const DataPengambilanObat = () => {
         setErrors(newErrors);
       } else {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        handleApiError(error, toast);
+        handleCreatePengambilanObatError(error, toast);
       }
     }
   };
@@ -190,7 +190,7 @@ const DataPengambilanObat = () => {
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      handleApiError(error, toast);
+      handleCreatePengambilanObatError(error, toast);
     }
   };
 
@@ -228,7 +228,7 @@ const DataPengambilanObat = () => {
         setErrors(newErrors);
       } else {
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        handleApiError(error, toast);
+        handleCreatePengambilanObatError(error, toast);
       }
     }
   };
@@ -318,7 +318,7 @@ const DataPengambilanObat = () => {
 
   const columns = [
     { header: "Resi", field: "resi" },
-    
+
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
     { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
@@ -356,8 +356,8 @@ const DataPengambilanObat = () => {
   const itemTemplateObat = (option) => {
     return (
       <div>
-        {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
-        {option.adminApotek.telepon}
+        {option.namaObat} - Stock: {option.jumlah},{" "}
+        {option.adminApotek.namaApotek} - {option.adminApotek.telepon}
       </div>
     );
   };
@@ -366,8 +366,8 @@ const DataPengambilanObat = () => {
     if (option) {
       return (
         <div>
-          {option.namaObat} - Stock: {option.jumlah}, {option.adminApotek.namaApotek} -{" "}
-          {option.adminApotek.telepon}
+          {option.namaObat} - Stock: {option.jumlah},{" "}
+          {option.adminApotek.namaApotek} - {option.adminApotek.telepon}
         </div>
       );
     }
