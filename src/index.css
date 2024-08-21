@@ -95,3 +95,33 @@ body,
 .p-input:hover  {
   border-color: #56b588;
 }
+
+.p-dialog {
+  z-index: 1000 !important;
+  border-radius: 1rem;
+
+}
+.p-dialog-content{
+  border-radius:  0px 0px 1rem 1rem; 
+}
+.p-dialog-header , p-dialog-default{
+  border-radius: 1rem 1rem 0px 0px;
+}
+
+.p-dialog-mask{
+  z-index: 999 !important;
+}
+p-toast{
+  z-index: 1100 !important;
+}
+.p-menu{
+  z-index: 900 !important;
+}
+.ps-sidebar-root{
+  border: none !important;
+}
+
+.css-wx7wi4{
+  min-width: fit-content !important;
+}
+

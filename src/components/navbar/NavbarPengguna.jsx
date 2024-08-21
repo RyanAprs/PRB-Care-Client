@@ -11,7 +11,7 @@ import {
   UserPlus,
   CircleUser,
   LockKeyhole,
-  LogOut,
+  DoorOpen,
   GitPullRequestClosed,
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
@@ -274,7 +274,7 @@ const NavbarPengguna = () => {
       label: (
         <div className="flex justify-center items-center gap-2">
           <CircleUser />
-          <h1>Profile</h1>
+          <h1>Detail Profile</h1>
         </div>
       ),
       command: () => handleDetailProfileModal(),
@@ -283,7 +283,7 @@ const NavbarPengguna = () => {
       label: (
         <div className="flex justify-center items-center gap-2">
           <LockKeyhole />
-          <h1>Password</h1>
+          <h1>Ganti Password</h1>
         </div>
       ),
       command: () => handleModalChangePassword(),
@@ -291,7 +291,7 @@ const NavbarPengguna = () => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <LogOut />
+          <DoorOpen />
           <h1>Keluar</h1>
         </div>
       ),

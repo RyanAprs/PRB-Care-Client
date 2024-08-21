@@ -5,7 +5,7 @@ import {
   LayoutGrid,
   Hospital,
   HousePlus,
-  LogOut,
+  DoorOpen,
   ArrowRight,
   ArrowLeft,
   Pill,
@@ -161,9 +161,9 @@ const NavbarAdmin = ({ children }) => {
   const itemsNotAdmin = [
     {
       label: (
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center mx-auto gap-2 ">
           <CircleUser />
-          <h1>Profile</h1>
+          <h1>Detail Profile</h1>
         </div>
       ),
       command: () => handleDetailProfileModal(),
@@ -172,7 +172,7 @@ const NavbarAdmin = ({ children }) => {
       label: (
         <div className="flex justify-center items-center gap-2">
           <LockKeyhole />
-          <h1>Password</h1>
+          <h1>Ganti Password</h1>
         </div>
       ),
       command: () => handleModalChangePassword(),
@@ -180,7 +180,7 @@ const NavbarAdmin = ({ children }) => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <LogOut />
+          <DoorOpen />
           <h1>Keluar</h1>
         </div>
       ),
@@ -192,7 +192,7 @@ const NavbarAdmin = ({ children }) => {
       label: (
         <div className="flex justify-center items-center gap-2">
           <LockKeyhole />
-          <h1>Password</h1>
+          <h1>Ganti Password</h1>
         </div>
       ),
       command: () => handleModalChangePassword(),
@@ -200,7 +200,7 @@ const NavbarAdmin = ({ children }) => {
     {
       label: (
         <div className="flex justify-center items-center gap-2">
-          <LogOut />
+          <DoorOpen />
           <h1>Keluar</h1>
         </div>
       ),
@@ -444,6 +444,22 @@ const NavbarAdmin = ({ children }) => {
     }
   };
 
+  const buttonRef = useRef(null);
+  const menuRef = useRef(null);
+  const handleClickOutside = (event) => {
+    if (buttonRef.current && !buttonRef.current.contains(event.target) &&
+        menuRef.current && !menuRef.current.contains(event.target)) {
+      setIsMenuVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="flex h-screen w-full">
       <Toast
@@ -488,7 +504,7 @@ const NavbarAdmin = ({ children }) => {
                 className="w-auto px-2 max-h-20"
               />
               <h1 className="mb-2">{expanded ? " " : "PRBCare"}</h1>
-              <hr className="w-4/5 border-b border-lightGreen" />
+              <hr className={`w-full border-b border-lightGreen ${expanded ? "invisible" : "block"}`} />
             </div>
           </Menu>
           {role === "admin" ? (
@@ -746,7 +762,7 @@ const NavbarAdmin = ({ children }) => {
 
       <div className="flex flex-col w-full overflow-hidden ">
         {/* Navbar */}
-        <div className="flex items-center px-6  w-full z-40 shadow-md dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
+        <div className="flex items-center px-6  w-full z-40 shadow-md  dark:shadow-none dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
           <div className="flex py-6 w-full items-center gap-4">
             <Button
               severity="secondary"
@@ -823,6 +839,7 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
+            ref={buttonRef}
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
@@ -837,12 +854,15 @@ const NavbarAdmin = ({ children }) => {
             ></Button>
           </div>
           <Menuk
+           
             key={key}
             className={` ${
               isMenuVisible ? "visible" : "hidden"
-            } shadow-md absolute top-[80px] right-0 `}
+            } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
             model={role === "admin" ? itemsAdmin : itemsNotAdmin}
-          />
+          >
+            <div ref={menuRef}></div>
+          </Menuk>
         </div>
 
         <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">

@@ -57,9 +57,9 @@ const DashboardAdmin = () => {
     },
     {
       icon: <User2Icon size={54} strokeWidth={1.5} />,
-      title: "User",
-      desc: "Kelola data user",
-      route: "/admin/data-user",
+      title: "Pengguna",
+      desc: "Kelola data pengguna",
+      route: "/admin/data-pengguna",
     },
     {
       icon: <Pill size={54} strokeWidth={1.5} />,
