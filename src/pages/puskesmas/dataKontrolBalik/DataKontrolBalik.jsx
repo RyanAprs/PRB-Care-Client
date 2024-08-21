@@ -439,7 +439,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputText
-                type="text"
+                type="number"
                 placeholder="Nomor Antrean"
                 className="p-input  text-lg p-3  rounded"
                 value={datas.noAntrean}

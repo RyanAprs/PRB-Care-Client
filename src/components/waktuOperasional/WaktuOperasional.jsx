@@ -104,12 +104,13 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
             />
           </div>
           <div className="flex gap-2 w-full">
+            {console.log(inputs.length)}
           <Button
             className="block py-3 w-full rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
             label={<CopyPlus className="mx-auto" />}
             onClick={() => handleAddOperational(index)}
             disabled={
-              !input.waktuBuka || !input.waktuTutup || !input.selectedDay
+              !input.waktuBuka || !input.waktuTutup || !input.selectedDay  ||  index !== inputs.length - 1
             }
           />
           <Button
