@@ -46,37 +46,13 @@ export const pasienUpdateSchema = z.object({
     .int()
     .positive()
     .refine((val) => val > 0, "Admin Puskesmas tidak boleh kosong"),
-  beratBadan: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Berat Badan harus lebih dari 0"),
-  tinggiBadan: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Tinggi Badan harus lebih dari 0"),
-  tekananDarah: z
-    .string()
-    .min(3)
-    .max(20)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Tekanan Darah minimal 3 karakter"
-    ),
-  denyutNadi: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Denyut Nadi harus lebih dari 0"),
-  hasilLab: z.string().optional(),
-  hasilEkg: z.string().optional(),
   tanggalDaftar: z
     .number()
     .int()
     .positive()
     .refine((val) => val > 0, "Tanggal Periksa harus diisi"), // Adjust to Date or Timestamp as needed
 });
+
 
 export const pasienCreateSchemaAdminPuskesmas = z.object({
   noRekamMedis: z
@@ -118,5 +94,5 @@ export const pasienUpdateSchemaAdminPuskesmas = z.object({
     .number()
     .int()
     .positive()
-    .refine((val) => val > 0, "Tanggal Periksa harus diisi"), // Adjust to Date or Timestamp as needed
+    .refine((val) => val > 0, "Tanggal Periksa harus diisi"), 
 });

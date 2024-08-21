@@ -58,8 +58,8 @@ const DashboardPuskesmas = () => {
     },
     {
       icon: <ShoppingCart size={54} strokeWidth={1.5} />,
-      title: "Pengambilan Obat",
-      desc: "Kelola data pengambilan obat",
+      title: "Ambil Obat",
+      desc: "Kelola data ambil obat",
       route: "/puskesmas/data-pengambilan-obat",
     },
   ];

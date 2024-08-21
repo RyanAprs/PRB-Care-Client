@@ -6,16 +6,21 @@ import {
   Hospital,
   HousePlus,
   LogOut,
+  ArrowRight,
+  ArrowLeft,
   Pill,
   ShoppingCart,
   Stethoscope,
   CircleUser,
   UserRoundPlus,
+  User,
   Settings2,
   GitPullRequestClosed,
   LockKeyhole,
+  UserPlus,
 } from "lucide-react";
-import { Menu } from "primereact/menu";
+import { Sidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
+import { Menu as Menuk } from "primereact/menu";
 import icon from "../../assets/prbcare.svg";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
@@ -25,7 +30,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
-import { ZodError } from "zod";
+import { set, ZodError } from "zod";
 import {
   handleApiError,
   handleChangePasswordError,
@@ -101,7 +106,8 @@ const NavbarAdmin = ({ children }) => {
   const [prevAddress, setPrevAddress] = useState({});
   const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
-
+  const [expanded, setExpanded] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const { address } = useContext(AddressContext);
 
   useEffect(() => {
@@ -367,6 +373,17 @@ const NavbarAdmin = ({ children }) => {
               >
                 <UserRoundPlus />
                 <h1>Pasien</h1>
+              </Link>
+              <Link
+                to="/puskesmas/data-apotek"
+                className={`flex px-8 py-4 gap-4 hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                  location.pathname === "/puskesmas/data-apotek"
+                    ? "bg-lightGreen dark:bg-mainGreen"
+                    : ""
+                } rounded transition-all`}
+              >
+                <HousePlus />
+                <h1>Apotek</h1>
               </Link>
               <Link
                 to="/puskesmas/data-kontrol-balik"
@@ -663,32 +680,180 @@ const NavbarAdmin = ({ children }) => {
   };
 
   return (
+    
     <div className="flex h-screen w-full">
+
       <Toast
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
 
-      {isSidebarOpen && (
-        <div
-          ref={overlayRef}
-          className="fixed inset-0 md:bg-transparent md:bg-opacity-0"
-          onClick={toggleSidebar}
-        ></div>
-      )}
-      {/* Sidebar */}
-      <Sidebar />
-      <div className="flex flex-col w-full">
+
+
+      <Sidebar className="md:w-1/4 md:block  text-white border-r-white " 
+      backgroundColor={localStorage.getItem('darkMode')==="false"?"#40916C":"#276f4c"} 
+      collapsed={(toggle ? false : (expanded) )} 
+      breakPoint={"md"} 
+      toggled={toggle}
+      onBackdropClick={()=>{setToggle(!toggle)}}>
+        <Menu 
+            menuItemStyles={{
+              button: {
+                ['&:hover']: localStorage.getItem('darkMode')==="true"? {
+                  backgroundColor: '#40916C',
+                  color: 'white',
+
+                } : {backgroundColor: '#56A17E',
+                  color: 'white',},
+              },
+              span: {
+                marginRight: '0px',
+              }
+            }}
+        className={` ${expanded?"":"px-3"}`}>
+
+          <Menu>
+          <div className={`flex flex-col  font-semibold text-lg mb-4 mt-3 items-center justify-center`}>
+            <img src={icon} alt="LOGO PRB CARE" className="w-auto px-2 max-h-20" />
+            <h1 className="mb-2" >{expanded ? " " : "PRBCare"}</h1>
+            <hr className="w-4/5 border-b border-lightGreen" />
+          </div>
+          </Menu>
+          {
+            role === "admin" ? 
+            (
+              <>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<LayoutGrid />} 
+                  component={<Link to="/admin/beranda" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/beranda" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Beranda
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<Hospital />} 
+                  component={<Link to="/admin/data-puskesmas" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-puskesmas" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Puskesmas
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<HousePlus />} 
+                  component={<Link to="/admin/data-apotek" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-apotek" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Apotek
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<User />} 
+                  component={<Link to="/admin/data-pengguna" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-pengguna" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Pengguna
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<UserPlus />} 
+                  component={<Link to="/admin/data-pasien" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-pasien" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Pasien
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<Pill />} 
+                  component={<Link to="/admin/data-obat" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-obat" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Obat
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<Stethoscope />} 
+                  component={<Link to="/admin/data-kontrol-balik" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-kontrol-balik" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Kontrol Balik
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<ShoppingCart />} 
+                  component={<Link to="/admin/data-pengambilan-obat" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/admin/data-pengambilan-obat" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Ambil Obat
+                </MenuItem>
+              </>
+            )
+            : 
+            (
+              role === "nakes" ? 
+              (
+                <>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<LayoutGrid />} 
+                  component={<Link to="/puskesmas/beranda" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/puskesmas/beranda" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Beranda
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<UserPlus />} 
+                  component={<Link to="/puskesmas/data-pasien" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/puskesmas/data-pasien" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Pasien
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<Stethoscope />} 
+                  component={<Link to="/puskesmas/data-kontrol-balik" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/puskesmas/data-kontrol-balik" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Kontrol Balik
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<ShoppingCart />} 
+                  component={<Link to="/puskesmas/data-pengambilan-obat" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/puskesmas/data-pengambilan-obat" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Ambil Obat
+                </MenuItem>
+                </>
+              )
+              : 
+              (
+                <>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<LayoutGrid />} 
+                  component={<Link to="/apotek/beranda" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/apotek/beranda" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Beranda
+                </MenuItem>
+                <MenuItem 
+                  className="mb-3"
+                  icon={<Pill />} 
+                  component={<Link to="/apotek/data-obat" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/apotek/data-obat" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Obat
+                </MenuItem>
+                  <MenuItem 
+                  className="mb-3"
+                  icon={<ShoppingCart />} 
+                  component={<Link to="/apotek/data-pengambilan-obat" className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${location.pathname === "/apotek/data-pengambilan-obat" ? "bg-lightGreen dark:bg-mainGreen" : ""} rounded ${expanded?"mx-2":""} transition-all`}></Link>}> 
+                  Ambil Obat
+                </MenuItem>
+                </>
+              )
+            )
+          }
+
+        </Menu>
+      </Sidebar>
+      
+
+      <div className="flex flex-col w-full overflow-hidden ">
         {/* Navbar */}
-        <div className="h-20 w-full flex items-center px-8 justify-between fixed  z-40 shadow-md dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
-          <div className="flex justify-center items-center gap-4 md:pl-80 pl-0">
+        <div className="flex items-center px-6  w-full z-40 shadow-md dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
+          <div className="flex py-6 w-full items-center gap-4">
             <Button
               severity="secondary"
-              onClick={toggleSidebar}
+              onClick={()=>{setToggle(!toggle)}}
               text
               className="p-1 rounded-full cursor-pointer md:hidden"
               label={<AlignJustify className="dark:text-white text-black" />}
             ></Button>
+
+            <Button
+              severity="secondary"
+              onClick={()=>{setExpanded(!expanded)}}
+              text
+              className="p-1 rounded-full cursor-pointer hidden md:block"
+              label={expanded ? <ArrowRight className="dark:text-white text-black" /> : <ArrowLeft className="dark:text-white text-black" /> }
+            ></Button>
+
             {role === "admin" && (
               <h1 className="text-xl">
                 {location.pathname === "/admin/beranda" ? "Beranda" : ""}
@@ -703,7 +868,7 @@ const NavbarAdmin = ({ children }) => {
                   ? "Kontrol Balik"
                   : ""}
                 {location.pathname === "/admin/data-pengambilan-obat"
-                  ? "Pengambilan Obat"
+                  ? "Ambil Obat"
                   : ""}
               </h1>
             )}
@@ -718,7 +883,7 @@ const NavbarAdmin = ({ children }) => {
                   ? "Kontrol Balik"
                   : ""}
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
-                  ? "Pengambilan Obat"
+                  ? "Ambil Obat"
                   : ""}
               </h1>
             )}
@@ -728,7 +893,7 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/apotek/profile" ? "Profile" : ""}
                 {location.pathname === "/apotek/data-obat" ? "Obat" : ""}
                 {location.pathname === "/apotek/data-pengambilan-obat"
-                  ? "Pengambilan Obat"
+                  ? "Ambil Obat"
                   : ""}
               </h1>
             )}
@@ -745,10 +910,10 @@ const NavbarAdmin = ({ children }) => {
               label={!isMenuVisible ?<Settings2 className="dark:text-white text-black" /> : <GitPullRequestClosed className="dark:text-white text-black" />}
             ></Button>
           </div>
-          <Menu key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} shadow-md absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
+          <Menuk key={key} className={` ${isMenuVisible ? 'visible' : 'hidden'} shadow-md absolute top-[80px] right-0 `} model={role==="admin"?itemsAdmin:itemsNotAdmin} />
         </div>
 
-        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto md:pl-80    pt-20 overflow-y-scroll w-full overflow-x-auto">
+        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
       </div>

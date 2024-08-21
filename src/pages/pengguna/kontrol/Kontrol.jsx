@@ -3,17 +3,17 @@ import { getAllKontrolBalik } from "../../../services/KontrolBalikService";
 import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
-import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Card } from "primereact/card";
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import img from "../../../assets/data_empty.png";
+
 const Kontrol = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];

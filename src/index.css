@@ -95,13 +95,3 @@ body,
 .p-input:hover  {
   border-color: #56b588;
 }
-
-.p-dialog{
-  z-index: 1000 !important;
-}
-.p-dialog-mask{
-  z-index: 999 !important;
-}
-p-toast{
-  z-index: 1100 !important;
-}

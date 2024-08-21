@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
-import Cookies from "js-cookie";
 import { getAllPasienAktif } from "../../../services/PasienService";
 import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -15,7 +14,7 @@ const Medis = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchData = async () => {
