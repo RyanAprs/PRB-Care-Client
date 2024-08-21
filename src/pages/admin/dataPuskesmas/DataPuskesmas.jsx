@@ -22,7 +22,6 @@ import {
   handleApiError,
   handleDeleteError,
 } from "../../../utils/ApiErrorHandlers";
-import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
@@ -52,7 +51,7 @@ const DataPuskesmas = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const title = "Puskesmas";
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});

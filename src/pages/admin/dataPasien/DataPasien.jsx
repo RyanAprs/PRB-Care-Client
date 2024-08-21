@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
@@ -46,7 +45,7 @@ const DataPasien = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleDone, setVisibleDone] = useState(false);

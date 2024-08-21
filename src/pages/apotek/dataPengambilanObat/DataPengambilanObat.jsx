@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Dialog } from "primereact/dialog";
@@ -20,8 +19,7 @@ const DataPengambilanObat = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visibleDone, setVisibleDone] = useState(false);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [currentId, setCurrentId] = useState("");
   const [currentName, setCurrentName] = useState("");
   const toast = useRef(null);
@@ -143,7 +141,10 @@ const DataPengambilanObat = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
 
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable

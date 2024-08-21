@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {
   convertHumanToUnix,
@@ -63,7 +62,7 @@ const DataKontrolBalik = () => {
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [visibleDone, setVisibleDone] = useState(false);
   const [visibleCancelled, setVisibleCancelled] = useState(false);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");

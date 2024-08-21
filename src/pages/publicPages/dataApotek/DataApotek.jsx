@@ -66,7 +66,7 @@ const DataApotek = () => {
   };
 
   const columns = [
-    { field: "namaApotek", header: "Nama Aotek" },
+    { field: "namaApotek", header: "Nama Aptek" },
     { field: "telepon", header: "Telepon" },
     { field: "alamat", header: "Alamat" },
     { field: "waktuOperasional", header: "Waktu Operasional" },

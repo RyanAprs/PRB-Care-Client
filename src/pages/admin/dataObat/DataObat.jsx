@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -38,7 +37,7 @@ const DataObat = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [datas, setDatas] = useState({
     namaObat: "",
     jumlah: 0,

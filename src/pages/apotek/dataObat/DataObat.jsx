@@ -1,5 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -35,7 +34,7 @@ const DataObat = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const [datas, setDatas] = useState({
     namaObat: "",
     jumlah: 0,
@@ -228,7 +227,10 @@ const DataObat = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4  ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}

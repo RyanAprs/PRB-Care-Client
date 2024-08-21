@@ -16,7 +16,6 @@ import {
   apotekCreateSchema,
   apotekUpdateSchema,
 } from "../../../validations/ApotekSchema";
-import Cookies from "js-cookie";
 import { ProgressSpinner } from "primereact/progressspinner";
 import {
   createApotek,
@@ -56,7 +55,7 @@ const DataApotek = () => {
   const [prevAddress, setPrevAddress] = useState({});
   const [waktuOperasionalList, setWaktuOperasionalList] = useState([]);
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const customSort = (a, b) => {

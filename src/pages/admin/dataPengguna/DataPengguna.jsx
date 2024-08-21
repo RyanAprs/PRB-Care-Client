@@ -1,6 +1,4 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import axios from "axios";
-import Cookies from "js-cookie";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import { AddressContext } from "../../../config/context/AdressContext";
@@ -45,7 +43,7 @@ const DataPengguna = () => {
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
-  const token = Cookies.get("token");
+  const { token } = useContext(AuthContext);
   const { address } = useContext(AddressContext);
   const [currentName, setCurrentName] = useState("");
   const toast = useRef(null);
@@ -273,7 +271,10 @@ const DataPengguna = () => {
     );
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="bg-white dark:bg-blackHover p-4 rounded-xl">
         <ReusableTable
           columns={columns}
