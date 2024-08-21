@@ -320,7 +320,7 @@ const NavbarPengguna = () => {
             >
               <h1
                 className={
-                  location.pathname === "/beranda"
+                  location.pathname === "/pengguna/beranda"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
@@ -334,7 +334,7 @@ const NavbarPengguna = () => {
             >
               <h1
                 className={
-                  location.pathname === "/kontrol"
+                  location.pathname === "/pengguna/kontrol"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
@@ -348,7 +348,7 @@ const NavbarPengguna = () => {
             >
               <h1
                 className={
-                  location.pathname === "/obat"
+                  location.pathname === "/pengguna/obat"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
@@ -362,7 +362,7 @@ const NavbarPengguna = () => {
             >
               <h1
                 className={
-                  location.pathname === "/medis"
+                  location.pathname === "/pengguna/medis"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
@@ -376,7 +376,7 @@ const NavbarPengguna = () => {
             >
               <h1
                 className={
-                  location.pathname === "/notifikasi"
+                  location.pathname === "/pengguna/notifikasi"
                     ? "text-lightGreen dark:text-mainGreen"
                     : ""
                 }
@@ -425,7 +425,9 @@ const NavbarPengguna = () => {
           <Link
             to={"/pengguna/beranda"}
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/beranda" ? "opacity-100" : "opacity-50"
+              location.pathname === "/pengguna/beranda"
+                ? "opacity-100"
+                : "opacity-50"
             }`}
           >
             <HomeIcon size={25} />
@@ -435,7 +437,9 @@ const NavbarPengguna = () => {
           <Link
             to="/pengguna/kontrol"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/kontrol" ? "opacity-100" : "opacity-50"
+              location.pathname === "/pengguna/kontrol"
+                ? "opacity-100"
+                : "opacity-50"
             }`}
           >
             <Stethoscope />
@@ -444,7 +448,9 @@ const NavbarPengguna = () => {
           <Link
             to="/pengguna/obat"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/obat" ? "opacity-100" : "opacity-50"
+              location.pathname === "/pengguna/obat"
+                ? "opacity-100"
+                : "opacity-50"
             }`}
           >
             <ShoppingCart />
@@ -453,7 +459,9 @@ const NavbarPengguna = () => {
           <Link
             to="/pengguna/medis"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/medis" ? "opacity-100" : "opacity-50"
+              location.pathname === "/pengguna/medis"
+                ? "opacity-100"
+                : "opacity-50"
             }`}
           >
             <UserPlus />
@@ -462,7 +470,9 @@ const NavbarPengguna = () => {
           <Link
             to="/pengguna/notifikasi"
             className={`flex flex-col items-center justify-center transition-all relative ${
-              location.pathname === "/notifikasi" ? "opacity-100" : "opacity-50"
+              location.pathname === "/pengguna/notifikasi"
+                ? "opacity-100"
+                : "opacity-50"
             }`}
           >
             <Bell />
