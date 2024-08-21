@@ -10,7 +10,7 @@ import {
   ArrowLeft,
   Pill,
   ShoppingCart,
-  Stethoscope,
+  Activity,
   CircleUser,
   User,
   Settings2,
@@ -447,20 +447,16 @@ const NavbarAdmin = ({ children }) => {
   const buttonRef = useRef(null);
   const menuRef = useRef(null);
   const handleClickOutside = (event) => {
-    if (
-      buttonRef.current &&
-      !buttonRef.current.contains(event.target) &&
-      menuRef.current &&
-      !menuRef.current.contains(event.target)
-    ) {
+    if (buttonRef.current && !buttonRef.current.contains(event.target) &&
+        menuRef.current && !menuRef.current.contains(event.target)) {
       setIsMenuVisible(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -499,26 +495,35 @@ const NavbarAdmin = ({ children }) => {
           className={` ${expanded ? "" : "px-3"}`}
         >
           <Menu>
+
             <div
-              className={`flex flex-col  font-semibold text-lg mb-4 mt-3 items-center justify-center`}
+              className={`flex flex-col  font-semibold text-lg mb-2 items-center mt-0.5 justify-center`}
             >
+              <>
+                <div>
+                  <img
+                  src={icon}
+                  alt="LOGO PRB CARE"
+                  className={`${expanded ? "hidden" : "block"} w-auto px-2 max-h-20 mt-3 `}
+                />
+                <h1 className={`text-center ${expanded ? "mb-2" : "mb-3" }`}>{expanded ? " " : "PRBCare"}</h1>
+                </div>
+              </>
+
               <img
                 src={icon}
                 alt="LOGO PRB CARE"
-                className="w-auto px-2 max-h-20"
+                className={`${expanded ? "block" : "hidden"} w-auto px-2 max-h-20`}
               />
-              <h1 className="mb-2">{expanded ? " " : "PRBCare"}</h1>
-              <hr
-                className={`w-full border-b border-lightGreen ${
-                  expanded ? "invisible" : "block"
-                }`}
-              />
+
+              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[63px]" : "mb-1"}`} />
             </div>
+
           </Menu>
           {role === "admin" ? (
             <>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<LayoutGrid />}
                 component={
                   <Link
@@ -534,7 +539,7 @@ const NavbarAdmin = ({ children }) => {
                 Beranda
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<Hospital />}
                 component={
                   <Link
@@ -550,7 +555,7 @@ const NavbarAdmin = ({ children }) => {
                 Puskesmas
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<HousePlus />}
                 component={
                   <Link
@@ -566,7 +571,7 @@ const NavbarAdmin = ({ children }) => {
                 Apotek
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<User />}
                 component={
                   <Link
@@ -582,7 +587,7 @@ const NavbarAdmin = ({ children }) => {
                 Pengguna
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<UserPlus />}
                 component={
                   <Link
@@ -597,8 +602,25 @@ const NavbarAdmin = ({ children }) => {
               >
                 Pasien
               </MenuItem>
+              
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
+                icon={<Activity />}
+                component={
+                  <Link
+                    to="/admin/data-kontrol-balik"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/admin/data-kontrol-balik"
+                        ? "bg-lightGreen dark:bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Kontrol Balik
+              </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<Pill />}
                 component={
                   <Link
@@ -614,23 +636,7 @@ const NavbarAdmin = ({ children }) => {
                 Obat
               </MenuItem>
               <MenuItem
-                className="mb-3"
-                icon={<Stethoscope />}
-                component={
-                  <Link
-                    to="/admin/data-kontrol-balik"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-kontrol-balik"
-                        ? "bg-lightGreen dark:bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Kontrol Balik
-              </MenuItem>
-              <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<ShoppingCart />}
                 component={
                   <Link
@@ -649,7 +655,7 @@ const NavbarAdmin = ({ children }) => {
           ) : role === "nakes" ? (
             <>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<LayoutGrid />}
                 component={
                   <Link
@@ -665,7 +671,7 @@ const NavbarAdmin = ({ children }) => {
                 Beranda
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<UserPlus />}
                 component={
                   <Link
@@ -681,8 +687,8 @@ const NavbarAdmin = ({ children }) => {
                 Pasien
               </MenuItem>
               <MenuItem
-                className="mb-3"
-                icon={<Stethoscope />}
+                className={`${expanded ? "mb-2" : "mb-3" }`}
+                icon={<Activity />}
                 component={
                   <Link
                     to="/puskesmas/data-kontrol-balik"
@@ -697,7 +703,7 @@ const NavbarAdmin = ({ children }) => {
                 Kontrol Balik
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<ShoppingCart />}
                 component={
                   <Link
@@ -716,7 +722,7 @@ const NavbarAdmin = ({ children }) => {
           ) : (
             <>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<LayoutGrid />}
                 component={
                   <Link
@@ -732,7 +738,7 @@ const NavbarAdmin = ({ children }) => {
                 Beranda
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<Pill />}
                 component={
                   <Link
@@ -748,7 +754,7 @@ const NavbarAdmin = ({ children }) => {
                 Obat
               </MenuItem>
               <MenuItem
-                className="mb-3"
+                className={`${expanded ? "mb-2" : "mb-3" }`}
                 icon={<ShoppingCart />}
                 component={
                   <Link
@@ -847,7 +853,7 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-              ref={buttonRef}
+            ref={buttonRef}
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
@@ -862,6 +868,7 @@ const NavbarAdmin = ({ children }) => {
             ></Button>
           </div>
           <Menuk
+           
             key={key}
             className={` ${
               isMenuVisible ? "visible" : "hidden"

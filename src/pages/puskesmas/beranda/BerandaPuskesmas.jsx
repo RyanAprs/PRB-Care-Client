@@ -1,4 +1,4 @@
-import { ShoppingCart, Stethoscope, UserPlus } from "lucide-react";
+import { ShoppingCart, Activity, UserPlus } from "lucide-react";
 import { Card } from "primereact/card";
 import { useEffect, useRef, useState } from "react";
 import { getCurrentAdminPuskesmas } from "../../../services/PuskesmasService";
@@ -43,19 +43,19 @@ const DashboardPuskesmas = () => {
   }, [isUpdated]);
   const list = [
     {
-      icon: <UserPlus size={54} strokeWidth={1.5} />,
+      icon: <UserPlus size={54} strokeWidth={1} />,
       title: "Pasien",
       desc: "Kelola data pasien",
       route: "/puskesmas/data-pasien",
     },
     {
-      icon: <Stethoscope size={54} strokeWidth={1.5} />,
+      icon: <Activity size={54} strokeWidth={1} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
       route: "/puskesmas/data-kontrol-balik",
     },
     {
-      icon: <ShoppingCart size={54} strokeWidth={1.5} />,
+      icon: <ShoppingCart size={54} strokeWidth={1} />,
       title: "Ambil Obat",
       desc: "Kelola data ambil obat",
       route: "/puskesmas/data-pengambilan-obat",
@@ -76,7 +76,7 @@ const DashboardPuskesmas = () => {
         {list.map((item, index) => (
           <Card
             key={index}
-            className="rounded-xl p-4 shadow-md flex flex-col items-center justify-center cursor-pointer"
+           className="min-w-10 rounded-xl shadow-md flex flex-col items-center justify-center cursor-pointer "
             style={{
               fontFamily: "Poppins, sans-serif",
               color: "var(--surface-900) !important",
