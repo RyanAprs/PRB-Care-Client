@@ -153,7 +153,7 @@ const NavbarPengguna = () => {
       themeLink.href = themeUrl;
     }
     document.body.classList.remove("dark");
-    navigate("/beranda");
+    navigate("/pengguna/beranda");
   };
 
   const handleModalChangePassword = () => {
@@ -315,7 +315,7 @@ const NavbarPengguna = () => {
         <div className="flex gap-10 items-center text-xl ">
           <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
             <Link
-              to={"/beranda"}
+              to={"/pengguna/beranda"}
               className="mx-auto transition-all flex flex-col items-center justify-center"
             >
               <h1
@@ -329,7 +329,7 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/kontrol"
+              to="/pengguna/kontrol"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
@@ -343,7 +343,7 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/obat"
+              to="/pengguna/obat"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
@@ -357,7 +357,7 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/medis"
+              to="/pengguna/medis"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
@@ -371,7 +371,7 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/notifikasi"
+              to="/pengguna/notifikasi"
               className="transition-all flex flex-col items-center justify-center relative"
             >
               <h1
@@ -423,7 +423,7 @@ const NavbarPengguna = () => {
       >
         <div className="flex  justify-between items-center ">
           <Link
-            to={"/beranda"}
+            to={"/pengguna/beranda"}
             className={`flex flex-col items-center justify-center transition-all  ${
               location.pathname === "/beranda" ? "opacity-100" : "opacity-50"
             }`}
@@ -433,7 +433,7 @@ const NavbarPengguna = () => {
             <div className="text-sm">Beranda</div>
           </Link>
           <Link
-            to="/kontrol"
+            to="/pengguna/kontrol"
             className={`flex flex-col items-center justify-center transition-all  ${
               location.pathname === "/kontrol" ? "opacity-100" : "opacity-50"
             }`}
@@ -442,7 +442,7 @@ const NavbarPengguna = () => {
             <div className="text-sm">Kontrol</div>
           </Link>
           <Link
-            to="/obat"
+            to="/pengguna/obat"
             className={`flex flex-col items-center justify-center transition-all  ${
               location.pathname === "/obat" ? "opacity-100" : "opacity-50"
             }`}
@@ -451,7 +451,7 @@ const NavbarPengguna = () => {
             <div className="text-sm">Obat</div>
           </Link>
           <Link
-            to="/medis"
+            to="/pengguna/medis"
             className={`flex flex-col items-center justify-center transition-all  ${
               location.pathname === "/medis" ? "opacity-100" : "opacity-50"
             }`}
@@ -460,7 +460,7 @@ const NavbarPengguna = () => {
             <div className="text-sm">Medis</div>
           </Link>
           <Link
-            to="/notifikasi"
+            to="/pengguna/notifikasi"
             className={`flex flex-col items-center justify-center transition-all relative ${
               location.pathname === "/notifikasi" ? "opacity-100" : "opacity-50"
             }`}

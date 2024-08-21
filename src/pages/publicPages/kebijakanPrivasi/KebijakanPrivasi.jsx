@@ -1,4 +1,4 @@
-import img from "../../assets/prbcare.svg";
+import img from "../../../assets/prbcare.svg";
 const KebijakanPrivasi = () => {
   return (
     <div className="min-h-screen bg-white  text-gray-800  p-8 md:px-40">

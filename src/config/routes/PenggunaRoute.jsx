@@ -18,13 +18,12 @@ import Notifikasi from "../../pages/pengguna/notifikasi/Notifikasi";
 import Medis from "../../pages/pengguna/medis/Medis";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
-import KebijakanPrivasi from "../../pages/guides/KebijakanPrivasi";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
 
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/pengguna/login" />;
   }
 
   if (userRole !== role) {
@@ -37,7 +36,7 @@ const PrivateRoute = ({ children, role }) => {
 const AlreadyLoggedInRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
   if (token && userRole === role) {
-    return <Navigate to="/beranda" />;
+    return <Navigate to="/pengguna/beranda" />;
   }
   return children;
 };
@@ -56,12 +55,6 @@ const PenggunaRoute = () => {
   return (
     <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
-      <Route
-            path="/"
-            element={
-              <Navigate to="/login" />
-            }
-          />
         <Route path="/register" element={<RegisterPengguna />} />
         <Route
           path="/login"
@@ -121,14 +114,7 @@ const PenggunaRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/kebijakan-privasi"
-          element={
-            <>
-              <KebijakanPrivasi />
-            </>
-          }
-        />
+
         <Route path="/page/not-found" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

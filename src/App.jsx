@@ -5,6 +5,7 @@ import PenggunaRoute from "./config/routes/PenggunaRoute";
 import PuskesmasRoute from "./config/routes/PuskesmasRoute";
 import { AuthContextProvider } from "./config/context/AuthContext";
 import NotFound from "./pages/NotFound";
+import PublicRoute from "./config/routes/PublicRoute";
 
 window.global = window;
 
@@ -13,7 +14,8 @@ function App() {
     <AuthContextProvider>
       <Router>
         <Routes>
-          <Route path="/*" element={<PenggunaRoute />} />
+          <Route path="/*" element={<PublicRoute />} />
+          <Route path="/pengguna/*" element={<PenggunaRoute />} />
           <Route path="/admin/*" element={<AdminRoute />} />
           <Route path="/puskesmas/*" element={<PuskesmasRoute />} />
           <Route path="/apotek/*" element={<ApotekRoute />} />

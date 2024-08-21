@@ -28,7 +28,7 @@ const RegisterPengguna = () => {
   const [isLoading, setLoading] = useState(false);
   const toast = useRef(null);
   const [resetAddress, setResetAddress] = useState(true);
-  const recaptchaRef = useRef(null); 
+  const recaptchaRef = useRef(null);
 
   const { address } = useContext(AddressContext);
 
@@ -96,7 +96,10 @@ const RegisterPengguna = () => {
 
   return (
     <div className="min-h-screen w-full flex justify-center items-center p-8">
-      <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
+      <Toast
+        ref={toast}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
         <div className="flex flex-col w-full justify-center items-center">
           <img className="h-auto w-48" src={icon} alt="" />
@@ -220,7 +223,7 @@ const RegisterPengguna = () => {
           </label>
           <ReCAPTCHA
             className="rounded-lg"
-            ref={recaptchaRef} 
+            ref={recaptchaRef}
             sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"
             value={datas.tokenRecaptcha}
             onChange={(value) => {
@@ -237,7 +240,7 @@ const RegisterPengguna = () => {
             </span>
           )}
         </div>
-       
+
         <div className="flex flex-col w-full gap-4">
           <Button
             className="bg-mainGreen text-white   hover:bg-mainDarkGreen  p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all "
@@ -271,7 +274,7 @@ const RegisterPengguna = () => {
           </p>
           <div className="flex w-full gap-2 items-center justify-center">
             Sudah punya akun?
-            <Link to="/login" className="text-mainGreen font-semibold">
+            <Link to="/pengguna/login" className="text-mainGreen font-semibold">
               Masuk
             </Link>
           </div>

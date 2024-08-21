@@ -22,7 +22,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const loginUser = location.pathname === "/login";
+  const loginUser = location.pathname === "/pengguna/login";
 
   const handleUpdate = async () => {
     try {
@@ -144,7 +144,10 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
             {loginUser && (
               <div className="flex w-full gap-2 items-center justify-center">
                 Belum punya akun?
-                <Link to="/register" className="text-mainGreen font-semibold">
+                <Link
+                  to="/pengguna/register"
+                  className="text-mainGreen font-semibold"
+                >
                   Daftar
                 </Link>
               </div>
