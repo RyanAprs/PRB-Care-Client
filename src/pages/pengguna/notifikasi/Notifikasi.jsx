@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { View, X } from "lucide-react";
+import { Eraser } from "lucide-react";
 import img from "../../../assets/data_empty.png";
 import { DataView } from "primereact/dataview";
 import { Dropdown } from "primereact/dropdown";
@@ -7,10 +7,11 @@ import { Button } from "primereact/button";
 
 const Notifikasi = () => {
   const [notifikasiList, setNotifikasiList] = useState([]);
-  const [sortOrder, setSortOrder] = useState(1); // Default to newest first
+  const [rawNotifikasiList, setRawNotifikasiList] = useState([]); 
+  const [sortOrder, setSortOrder] = useState(0);
   const sortOptions = [
-    { label: "Terbaru ", value: 1 },
-    { label: "Terlama ", value: 2 },
+    { label: 'Terbaru ke Terlama', value: 1 },
+    { label: 'Terlama ke Terbaru', value: 2 }
   ];
 
   const openIndexedDB = () => {
@@ -37,6 +38,7 @@ const Notifikasi = () => {
     });
   };
 
+  
   useEffect(() => {
     const getNotificationsFromDB = async () => {
       try {
@@ -47,7 +49,7 @@ const Notifikasi = () => {
 
         request.onsuccess = (event) => {
           const result = event.target.result;
-          setNotifikasiList(
+          setRawNotifikasiList(
             result.map((n) => ({
               ...n.data,
               isRead: n.isRead,
@@ -64,15 +66,17 @@ const Notifikasi = () => {
       }
     };
 
-    const sortedNotifications = [...notifikasiList].sort((a, b) => {
+    getNotificationsFromDB();
+  }, []); 
+
+  useEffect(() => {
+    const sortedNotifications = [...rawNotifikasiList].sort((a, b) => {
       return sortOrder === 1
         ? b.timestamp - a.timestamp
         : a.timestamp - b.timestamp;
     });
     setNotifikasiList(sortedNotifications);
-
-    getNotificationsFromDB();
-  }, [sortOrder, notifikasiList]);
+  }, [sortOrder, rawNotifikasiList]);
 
   const deleteNotification = async (id) => {
     try {
@@ -82,7 +86,7 @@ const Notifikasi = () => {
       objectStore.delete(id);
 
       transaction.oncomplete = () => {
-        setNotifikasiList((prevList) =>
+        setRawNotifikasiList((prevList) =>
           prevList.filter((notifikasi) => notifikasi.id !== id)
         );
       };
@@ -96,42 +100,45 @@ const Notifikasi = () => {
   };
 
   const handleDeleteClick = (id) => {
-    // Add animation class before removing notification
     const element = document.querySelector(`#notifikasi-${id}`);
     if (element) {
       element.classList.add("slide-out");
       setTimeout(() => {
         deleteNotification(id);
-      }, 300); // Duration of slide-out animation
+      }, 300);
     }
   };
 
   const listTemplate = (notifikasi) => {
     return (
-      <div
-        id={`notifikasi-${notifikasi.id}`}
-        className="py-4 w-full border-b-[1px] shadow-lg text-black slide-in"
-      >
-        <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-start">
-          <div className="flex flex-col items-start justify-center">
-            <div className="flex">
-              <h1 className="font-poppins font-bold text-start">
-                {notifikasi.title}
+      <div id={`notifikasi-${notifikasi.id}`} className="py-4 w-full border-b-[1px]">
+        <div className="">
+          <div className="flex w-full md:flex-row flex-col md:gap-0  gap-4 text-xl px-4 justify-between items-center">
+            <div className="flex flex-col items-start justify-center">
+              <div className="flex justify-between w-full">
+                <div className="flex flex-col">
+                  <h1 className="font-poppins font-bold text-start">
+                    {notifikasi.title}
+                  </h1>
+                  <h1 className="text-md md:flex-row flex-col flex justify-center items-center w-fit">
+                    {new Date(notifikasi.timestamp).toLocaleString()}
+                  </h1>
+                </div>
+                <Button
+                  onClick={() => handleDeleteClick(notifikasi.id)}
+                  severity="danger"
+                  className="p-2 h-fit rounded-xl "
+                  label={<Eraser />}
+                />
+              </div>
+              
+              
+              <h1 className="font-poppins md:text-start text-justify mt-4">
+                {notifikasi.body}
               </h1>
             </div>
-            <h1 className="text-md md:flex-row flex-col flex justify-center items-center">
-              {new Date(notifikasi.timestamp).toLocaleString()}
-            </h1>
-            <h1 className="font-poppins md:text-start text-justify mt-4">
-              {notifikasi.body}
-            </h1>
-          </div>
-          <Button
-            className="p-2 bg-transparent text-black"
-            onClick={() => handleDeleteClick(notifikasi.id)}
-          >
-            <X size={30} />
-          </Button>
+            </div>
+            
         </div>
       </div>
     );
@@ -140,27 +147,26 @@ const Notifikasi = () => {
   return (
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen">
       <div className="p-8 w-full min-h-screen bg-white dark:bg-blackHover rounded-xl">
-        <div className="flex md:justify-end justify-center mb-4 gap-2">
-          <Dropdown
-            value={sortOrder}
-            options={sortOptions}
-            onChange={(e) => setSortOrder(e.value)}
-            placeholder="Pilih dan Urutan"
-          />
-          <Button
-            label={<View className="md:hidden" />}
-            className="p-2 md:px-3 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
-          >
-            <p className="hidden md:block">Sudah Dibaca</p>
-          </Button>
-        </div>
+        
         <div className="flex flex-col p-1 gap- overflow-y-auto h-full">
           {notifikasiList.length > 0 ? (
-            <DataView
+            <>
+              <div className="flex md:justify-end justify-center mb-4 gap-2">
+                <Dropdown
+                  value={sortOrder}
+                  options={sortOptions}
+                  onChange={(e) => setSortOrder(e.value)}
+                  placeholder="Pilih dan Urutan"
+                />
+
+              </div>
+              <DataView
               value={notifikasiList}
               layout="list"
               itemTemplate={listTemplate}
             />
+            </>
+            
           ) : (
             <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
               <img src={img} className="md:w-80 w-64" alt="img" />
