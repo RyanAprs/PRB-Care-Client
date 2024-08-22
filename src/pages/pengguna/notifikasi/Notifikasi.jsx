@@ -5,31 +5,31 @@ import img from "../../../assets/data_empty.png";
 const Notifikasi = () => {
   const [notifikasiList, setNotifikasiList] = useState([]);
 
+  const openIndexedDB = () => {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open("fcm_notifications", 1);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("notifications")) {
+          db.createObjectStore("notifications", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+        }
+      };
+
+      request.onsuccess = (event) => {
+        resolve(event.target.result);
+      };
+
+      request.onerror = (event) => {
+        reject(event.target.error);
+      };
+    });
+  };
+
   useEffect(() => {
-    const openIndexedDB = () => {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open("fcm_notifications", 1);
-
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains("notifications")) {
-            db.createObjectStore("notifications", {
-              keyPath: "id",
-              autoIncrement: true,
-            });
-          }
-        };
-
-        request.onsuccess = (event) => {
-          resolve(event.target.result);
-        };
-
-        request.onerror = (event) => {
-          reject(event.target.error);
-        };
-      });
-    };
-
     const getNotificationsFromDB = async () => {
       try {
         const db = await openIndexedDB();
@@ -42,7 +42,14 @@ const Notifikasi = () => {
           const sortedNotifications = result.sort(
             (a, b) => b.data.timestamp - a.data.timestamp
           );
-          setNotifikasiList(sortedNotifications.map((n) => n.data));
+
+          setNotifikasiList(
+            sortedNotifications.map((n) => ({
+              ...n.data,
+              isRead: n.isRead,
+              id: n.id,
+            }))
+          );
         };
 
         request.onerror = (event) => {
@@ -56,6 +63,33 @@ const Notifikasi = () => {
     getNotificationsFromDB();
   }, []);
 
+  const deleteNotification = async (id) => {
+    const db = await openIndexedDB();
+    const transaction = db.transaction("notifications", "readwrite");
+    const objectStore = transaction.objectStore("notifications");
+    objectStore.delete(id);
+
+    transaction.oncomplete = () => {
+      setNotifikasiList((prevList) =>
+        prevList.filter((notifikasi) => notifikasi.id !== id)
+      );
+    };
+
+    transaction.onerror = (event) => {
+      console.error("Error deleting notification:", event.target.error);
+    };
+  };
+
+  const handleDeleteClick = (id, index) => {
+    const element = document.getElementById(`notifikasi-${index}`);
+    if (element) {
+      element.classList.add("slide-out");
+      setTimeout(() => {
+        deleteNotification(id);
+      }, 300);
+    }
+  };
+
   return (
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
       <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
@@ -64,9 +98,13 @@ const Notifikasi = () => {
             notifikasiList.map((notifikasi, index) => (
               <div
                 key={index}
-                className="bg-lightGreen dark:bg-mainGreen text-white rounded"
+                id={`notifikasi-${index}`}
+                className="bg-lightGreen dark:bg-mainGreen text-white rounded slide-in"
               >
-                <div className="flex justify-end p-1 cursor-pointer">
+                <div
+                  className="flex justify-end p-1 cursor-pointer"
+                  onClick={() => handleDeleteClick(notifikasi.id, index)}
+                >
                   <X />
                 </div>
                 <div className="p-4 w-full mb-4">

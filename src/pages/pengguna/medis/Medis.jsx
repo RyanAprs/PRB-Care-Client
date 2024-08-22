@@ -19,8 +19,6 @@ const Medis = () => {
     const fetchData = async () => {
       try {
         const response = await getAllPasien();
-        console.log(response);
-        console.log(token); //log dulu
         setData(response || []);
         setLoading(false);
       } catch (error) {

@@ -25,10 +25,11 @@ function openIndexedDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      db.createObjectStore("notifications", {
+      const objectStore = db.createObjectStore("notifications", {
         keyPath: "id",
         autoIncrement: true,
       });
+      objectStore.createIndex("isRead", "isRead", { unique: false });
     };
 
     request.onsuccess = (event) => {
@@ -48,16 +49,15 @@ async function storeNotificationData(data) {
   const transaction = db.transaction(["notifications"], "readwrite");
   const objectStore = transaction.objectStore("notifications");
 
-  const request = objectStore.add({ data });
+  const notificationData = { data, isRead: false };
 
-  request.onsuccess = () => console.log(`Notification stored in IndexedDB`);
+  const request = objectStore.add(notificationData);
+
   request.onerror = (event) =>
     console.error("Error storing notification:", event.target.error);
 }
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("Received background message ", payload.data);
-
   const {
     title,
     namaLengkap,

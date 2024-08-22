@@ -69,6 +69,7 @@ const NavbarPengguna = () => {
   const [key, setKey] = useState(0);
   const { address } = useContext(AddressContext);
   const [hasNotifications, setHasNotifications] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const openIndexedDB = () => {
@@ -95,6 +96,39 @@ const NavbarPengguna = () => {
       });
     };
 
+    const markAllAsRead = async () => {
+      try {
+        const db = await openIndexedDB();
+        const transaction = db.transaction("notifications", "readwrite");
+        const objectStore = transaction.objectStore("notifications");
+
+        const request = objectStore.getAll();
+
+        request.onsuccess = (event) => {
+          const notifications = event.target.result;
+
+          const updatedNotifications = notifications.map((notification) => {
+            if (!notification.isRead) {
+              notification.isRead = true;
+            }
+            return notification;
+          });
+
+          updatedNotifications.forEach((notification) => {
+            objectStore.put(notification);
+          });
+
+          setHasNotifications(updatedNotifications.some((n) => !n.isRead));
+        };
+
+        request.onerror = (event) => {
+          console.error("Error updating notifications:", event.target.error);
+        };
+      } catch (error) {
+        console.error("Failed to open IndexedDB:", error);
+      }
+    };
+
     const getNotificationsFromDB = async () => {
       try {
         const db = await openIndexedDB();
@@ -104,9 +138,10 @@ const NavbarPengguna = () => {
 
         request.onsuccess = (event) => {
           const notifications = event.target.result;
-          if (notifications.length > 0) {
-            setHasNotifications(true);
-          }
+          const hasUnread = notifications.some(
+            (notification) => !notification.isRead
+          );
+          setHasNotifications(hasUnread);
         };
 
         request.onerror = (event) => {
@@ -117,8 +152,12 @@ const NavbarPengguna = () => {
       }
     };
 
-    getNotificationsFromDB();
-  }, []);
+    if (location.pathname === "/pengguna/notifikasi") {
+      markAllAsRead();
+    } else {
+      getNotificationsFromDB();
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const formattedAddress = [
@@ -138,7 +177,6 @@ const NavbarPengguna = () => {
   }, [address]);
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleModalLogout = () => {
     setIsMenuVisible(false);

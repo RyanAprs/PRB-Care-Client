@@ -20,8 +20,6 @@ const Kontrol = () => {
     const fetchData = async () => {
       try {
         const response = await getAllKontrolBalik();
-        console.log(response);
-        console.log(token); //log dulu
         setData(response || []);
         setLoading(false);
       } catch (error) {

@@ -12,7 +12,6 @@ import { useEffect } from "react";
 
 window.global = window;
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -60,14 +59,14 @@ async function storeNotificationData(data) {
   const transaction = db.transaction(["notifications"], "readwrite");
   const objectStore = transaction.objectStore("notifications");
 
-  const request = objectStore.add({ data });
+  const notificationData = { data, isRead: false };
 
-  request.onsuccess = () => console.log("Notification stored in IndexedDB");
+  const request = objectStore.add(notificationData);
+
   request.onerror = (event) =>
     console.error("Error storing notification:", event.target.error);
 }
 
-// Convert Unix timestamp to local time
 function convertUnixTimestampToLocalTime(timestamp) {
   const date = new Date(timestamp * 1000);
   return date.toLocaleString("id-ID", {
@@ -78,7 +77,6 @@ function convertUnixTimestampToLocalTime(timestamp) {
   });
 }
 
-// Register service worker and get FCM token
 function App() {
   useEffect(() => {
     const registerServiceWorker = async () => {
@@ -86,10 +84,6 @@ function App() {
         try {
           const registration = await navigator.serviceWorker.register(
             "/firebase-messaging-sw.js"
-          );
-          console.log(
-            "Service Worker registered with scope:",
-            registration.scope
           );
 
           const currentToken = await getToken(messaging, {
@@ -116,11 +110,8 @@ function App() {
     }
   }, []);
 
-  // Listener for foreground messages
   useEffect(() => {
     onMessage(messaging, (payload) => {
-      console.log("Message received:", payload);
-
       const {
         title,
         namaLengkap,
