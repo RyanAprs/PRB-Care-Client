@@ -73,12 +73,15 @@ const NavbarPengguna = () => {
   useEffect(() => {
     const openIndexedDB = () => {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("notificationDB", 1);
+        const request = indexedDB.open("fcm_notifications", 1);
 
         request.onupgradeneeded = (event) => {
           const db = event.target.result;
           if (!db.objectStoreNames.contains("notifications")) {
-            db.createObjectStore("notifications", { keyPath: "type" });
+            db.createObjectStore("notifications", {
+              keyPath: "id",
+              autoIncrement: true,
+            });
           }
         };
 
@@ -361,7 +364,7 @@ const NavbarPengguna = () => {
                 Obat
               </h1>
             </Link>
-            
+
             <Link
               to="/pengguna/notifikasi"
               className="transition-all flex flex-col items-center justify-center relative"
@@ -459,7 +462,7 @@ const NavbarPengguna = () => {
             <ShoppingCart />
             <div className="text-sm">Obat</div>
           </Link>
-          
+
           <Link
             to="/pengguna/notifikasi"
             className={`flex flex-col items-center justify-center transition-all relative ${

@@ -16,18 +16,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// IndexedDB setup
 const DB_NAME = "fcm_notifications";
 let db;
 
 function openIndexedDB() {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1); // Version 1
+    const request = indexedDB.open(DB_NAME, 1);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      const objectStore = db.createObjectStore("notifications", {
-        keyPath: "type", // Use notification type as the key
+      db.createObjectStore("notifications", {
+        keyPath: "id",
+        autoIncrement: true,
       });
     };
 
@@ -43,33 +43,21 @@ function openIndexedDB() {
   });
 }
 
-async function storeNotificationData(type, data) {
+async function storeNotificationData(data) {
   const db = await openIndexedDB();
   const transaction = db.transaction(["notifications"], "readwrite");
   const objectStore = transaction.objectStore("notifications");
-  const request = objectStore.put({ type, data });
 
-  request.onsuccess = () => console.log(`${type} stored in IndexedDB`);
+  const request = objectStore.add({ data });
+
+  request.onsuccess = () => console.log(`Notification stored in IndexedDB`);
   request.onerror = (event) =>
     console.error("Error storing notification:", event.target.error);
-}
-
-async function getStoredNotification(type) {
-  const db = await openIndexedDB();
-  const transaction = db.transaction(["notifications"], "readonly");
-  const objectStore = transaction.objectStore("notifications");
-  const request = objectStore.get(type);
-
-  return new Promise((resolve, reject) => {
-    request.onsuccess = (event) => resolve(event.target.result);
-    request.onerror = (event) => reject(event.target.error);
-  });
 }
 
 messaging.onBackgroundMessage((payload) => {
   console.log("Received background message ", payload.data);
 
-  // Extract data
   const {
     title,
     namaLengkap,
@@ -80,10 +68,8 @@ messaging.onBackgroundMessage((payload) => {
     tanggalBatal,
   } = payload.data;
 
-  // Convert timestamps to local time
   let tanggalAmbilLocal, tanggalBatalLocal;
   let notificationTitle, notificationBody;
-  let notificationType;
 
   if (namaApotek) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
@@ -92,14 +78,13 @@ messaging.onBackgroundMessage((payload) => {
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal pengambilan obat pada tanggal ${tanggalAmbilLocal} pada apotek ${namaApotek} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
-    notificationType = "notifikasiPengambilanObat";
 
     const notificationData = {
       title: notificationTitle,
       body: notificationBody,
       timestamp: Date.now(),
     };
-    storeNotificationData(notificationType, notificationData);
+    storeNotificationData(notificationData);
   } else if (namaPuskesmas) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
       parseInt(tanggalKontrol)
@@ -107,14 +92,13 @@ messaging.onBackgroundMessage((payload) => {
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
     notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol balik pada tanggal ${tanggalAmbilLocal} di puskesmas ${namaPuskesmas} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
-    notificationType = "notifikasiKontrolBalik";
 
     const notificationData = {
       title: notificationTitle,
       body: notificationBody,
       timestamp: Date.now(),
     };
-    storeNotificationData(notificationType, notificationData);
+    storeNotificationData(notificationData);
   }
 
   const notificationOptions = {
@@ -126,7 +110,7 @@ messaging.onBackgroundMessage((payload) => {
 });
 
 function convertUnixTimestampToLocalTime(timestamp) {
-  const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+  const date = new Date(timestamp * 1000);
   const localDate = date.toLocaleString("id-ID", {
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     year: "numeric",

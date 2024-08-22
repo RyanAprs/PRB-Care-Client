@@ -8,12 +8,15 @@ const Notifikasi = () => {
   useEffect(() => {
     const openIndexedDB = () => {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open("notificationDB", 1);
+        const request = indexedDB.open("fcm_notifications", 1);
 
         request.onupgradeneeded = (event) => {
           const db = event.target.result;
           if (!db.objectStoreNames.contains("notifications")) {
-            db.createObjectStore("notifications", { keyPath: "type" });
+            db.createObjectStore("notifications", {
+              keyPath: "id",
+              autoIncrement: true,
+            });
           }
         };
 
