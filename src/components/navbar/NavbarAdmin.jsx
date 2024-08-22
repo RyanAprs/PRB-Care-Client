@@ -236,7 +236,7 @@ const NavbarAdmin = ({ children }) => {
       );
     }
 
-    return <span>{valueString}</span>;
+    return <span className="text-[#989da0] dark:text-[#6e6e6e]" >{valueString}</span>;
   };
 
   const handleDetailProfileModal = async () => {
@@ -444,22 +444,6 @@ const NavbarAdmin = ({ children }) => {
     }
   };
 
-  const buttonRef = useRef(null);
-  const menuRef = useRef(null);
-  const handleClickOutside = (event) => {
-    if (buttonRef.current && !buttonRef.current.contains(event.target) &&
-        menuRef.current && !menuRef.current.contains(event.target)) {
-      setIsMenuVisible(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
   return (
     <div className="flex h-screen w-full">
       <Toast
@@ -516,7 +500,7 @@ const NavbarAdmin = ({ children }) => {
                 className={`${expanded ? "block" : "hidden"} w-auto px-2 max-h-20`}
               />
 
-              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[62px] " : "mb-1"}`} />
+              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[60px] " : "mb-1"}`} />
             </div>
 
           </Menu>
@@ -853,7 +837,6 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
-            ref={buttonRef}
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
@@ -875,7 +858,6 @@ const NavbarAdmin = ({ children }) => {
             } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
             model={role === "admin" ? itemsAdmin : itemsNotAdmin}
           >
-            <div ref={menuRef}></div>
           </Menuk>
         </div>
 
@@ -929,17 +911,11 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <InputTextarea
-            variant="filled"
-            disabled
-            autoResize
-            className="p-input text-lg p-3 rounded"
-            value={
-              isApotekUpdate
-                ? detailDataApotek.alamat
-                : detailDataPuskesmas.alamat
-            }
-          />
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none ">
+              <p className="text-[#989da0] dark:text-[#6e6e6e]" >{isApotekUpdate
+              ? detailDataApotek.alamat
+              : detailDataPuskesmas.alamat}</p>
+          </div>
 
           <label htmlFor="" className="-mb-3">
             Waktu Operasional:

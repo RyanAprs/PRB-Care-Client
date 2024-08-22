@@ -12,7 +12,6 @@ import { useEffect } from "react";
 
 window.global = window;
 
-// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -23,11 +22,9 @@ const firebaseConfig = {
   measurementId: "G-122Y1K7VRS",
 };
 
-// Initialize Firebase and Messaging
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-// IndexedDB configuration
 const DB_NAME = "fcm_notifications";
 let db;
 
@@ -67,7 +64,6 @@ async function storeNotificationData(data) {
     console.error("Error storing notification:", event.target.error);
 }
 
-// Convert Unix timestamp to local time
 function convertUnixTimestampToLocalTime(timestamp) {
   const date = new Date(timestamp * 1000);
   return date.toLocaleString("id-ID", {
@@ -78,7 +74,6 @@ function convertUnixTimestampToLocalTime(timestamp) {
   });
 }
 
-// Register service worker and get FCM token
 function App() {
   useEffect(() => {
     const registerServiceWorker = async () => {
@@ -116,7 +111,6 @@ function App() {
     }
   }, []);
 
-  // Listener for foreground messages
   useEffect(() => {
     onMessage(messaging, (payload) => {
       console.log("Message received:", payload);
@@ -143,7 +137,7 @@ function App() {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
       } else if (namaPuskesmas) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
@@ -152,7 +146,7 @@ function App() {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationBody = `${namaLengkap}, jadwal kontrol balik anda  di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
       }
 
       const notificationData = {

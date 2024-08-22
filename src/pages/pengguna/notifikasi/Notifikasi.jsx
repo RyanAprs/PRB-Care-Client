@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
 import img from "../../../assets/data_empty.png";
-
+import { DataView } from 'primereact/dataview';
+import { Dropdown } from 'primereact/dropdown';
+import { Button } from 'primereact/button';
+import {
+  View
+} from "lucide-react";
 const Notifikasi = () => {
   const [notifikasiList, setNotifikasiList] = useState([]);
+  const [sortOrder, setSortOrder] = useState(-1); 
+  const sortOptions = [
+    { label: 'Terbaru ke Terlama', value: 1 },
+    { label: 'Terlama ke Terbaru', value: 2 }
+  ];
 
   useEffect(() => {
     const openIndexedDB = () => {
@@ -56,30 +65,62 @@ const Notifikasi = () => {
     getNotificationsFromDB();
   }, []);
 
+  const handleSortChange = (e) => {
+    const order = e.value;
+    const sortedNotifications = [...notifikasiList].sort((a, b) => {
+      return order === 1
+        ? b.timestamp - a.timestamp 
+        : a.timestamp - b.timestamp; 
+    });
+    setNotifikasiList(sortedNotifications);
+    setSortOrder(order);
+  };
+
+  const listTemplate = (notifikasi) => {
+    return (
+      <div className="py-4 w-full border-b-[1px]">
+        <div className="">
+          <div className="flex w-full md:flex-row flex-col md:gap-0  gap-4 text-xl px-4 justify-between items-center">
+            <div className="flex flex-col items-start justify-center">
+              <div className="flex">
+                <h1 className="font-poppins font-bold text-start">
+                  {notifikasi.title}
+                </h1>
+              </div>
+              <h1 className="text-md md:flex-row flex-col flex justify-center items-center">
+                {new Date(notifikasi.timestamp).toLocaleString()}
+              </h1>
+              <h1 className="font-poppins md:text-start text-justify mt-4">
+                {notifikasi.body}
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
-      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen">
+      <div className="p-8 w-full min-h-screen bg-white dark:bg-blackHover rounded-xl">
+        <div className="flex md:justify-end justify-center mb-4 gap-2">
+        <Dropdown
+            value={sortOrder}
+            options={sortOptions}
+            onChange={handleSortChange}
+            placeholder="Pilih dan Urutan"
+          />
+          <Button label={<View className="md:hidden" />} className="p-2 md:px-3 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen" >
+          <p className="hidden md:block">Sudah Dibaca</p>
+          </Button>
+        </div>
         <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
           {notifikasiList.length > 0 ? (
-            notifikasiList.map((notifikasi, index) => (
-              <div
-                key={index}
-                className="bg-lightGreen dark:bg-mainGreen text-white rounded"
-              >
-                <div className="flex justify-end p-1 cursor-pointer">
-                  <X />
-                </div>
-                <div className="p-4 w-full mb-4">
-                  <h1 className="text-xl font-semibold mb-2">
-                    {notifikasi.title}
-                  </h1>
-                  <p className="mb-2">{notifikasi.body}</p>
-                  <p className="text-sm text-white">
-                    {new Date(notifikasi.timestamp).toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            ))
+            <DataView
+              value={notifikasiList}
+              layout="list"
+              itemTemplate={listTemplate}
+            />
           ) : (
             <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
               <img src={img} className="md:w-80 w-64" alt="img" />

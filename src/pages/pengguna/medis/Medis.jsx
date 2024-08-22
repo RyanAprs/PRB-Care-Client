@@ -58,7 +58,10 @@ const Medis = () => {
 
     doc.save("data-medis.pdf");
   };
-
+  const statuses = [
+    { key: "aktif", label: "Aktif" },
+    { key: "selesai", label: "Selesai" },
+  ];
   const columns = [
     { header: "No Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
@@ -82,6 +85,7 @@ const Medis = () => {
           {data.length > 0 ? (
             <div className="row grid grid-cols-1 gap-6">
               <ReusableTable
+                statuses={statuses}
                 columns={columns}
                 data={data}
                 path={"pengguna"}

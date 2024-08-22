@@ -76,7 +76,11 @@ const Kontrol = () => {
     { header: "Hasil Diagnosa", field: "hasilDiagnosa" },
     { header: "Status", field: "status" },
   ];
-
+  const statuses = [
+    { key: "menunggu", label: "Menunggu" },
+    { key: "selesai", label: "Selesai" },
+    { key: "batal", label: "Batal" },
+  ];
   if (loading) {
     return (
       <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays max-h-fit min-h-screen  flex justify-center items-center">
@@ -94,6 +98,7 @@ const Kontrol = () => {
           {data.length > 0 ? (
             <div className="row grid grid-cols-1 gap-6">
               <ReusableTable
+                statuses={statuses}
                 columns={columns}
                 data={data}
                 path={"pengguna"}

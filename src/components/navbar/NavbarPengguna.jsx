@@ -557,13 +557,9 @@ const NavbarPengguna = () => {
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <InputTextarea
-            variant="filled"
-            disabled
-            className="p-input text-lg p-3 rounded"
-            value={detailDataPengguna.alamat}
-            autoResize
-          />
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none ">
+              <p className="text-[#989da0] dark:text-[#6e6e6e]" >{detailDataPengguna.alamat}</p>
+          </div>
           <Button
             label="Edit Profile"
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"

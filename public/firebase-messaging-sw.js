@@ -77,7 +77,7 @@ messaging.onBackgroundMessage((payload) => {
     );
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
-    notificationBody = `${namaLengkap}, anda memiliki jadwal pengambilan obat pada tanggal ${tanggalAmbilLocal} pada apotek ${namaApotek} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+    notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
 
     const notificationData = {
       title: notificationTitle,
@@ -91,7 +91,7 @@ messaging.onBackgroundMessage((payload) => {
     );
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
-    notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol balik pada tanggal ${tanggalAmbilLocal} di puskesmas ${namaPuskesmas} dan akan dibatalkan otomatis pada tanggal ${tanggalBatalLocal}`;
+    notificationBody = `${namaLengkap}, jadwal kontrol balik anda  di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
 
     const notificationData = {
       title: notificationTitle,
