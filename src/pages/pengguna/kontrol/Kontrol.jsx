@@ -8,6 +8,7 @@ import ReusableTable from "../../../components/rousableTable/RousableTable";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import img from "../../../assets/data_empty.png";
+import ErrorConnection  from "../../../components/errorConnection/ErrorConnection";
 
 const Kontrol = () => {
   const [data, setData] = useState([]);
@@ -15,19 +16,44 @@ const Kontrol = () => {
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
+  const [isConnectionError, setisConnectionError] = useState(false);
+  
+  const customSort = (a, b) => {
+    const statusOrder = ["menunggu", "selesai", "batal"];
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.pasien.tanggalKontrol < b.pasien.tanggalKontrol) return -1;
+    if (a.pasien.tanggalKontrol > b.pasien.tanggalKontrol) return 1;
+    return 0;
+  };
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllKontrolBalik();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false); 
+    } catch (error) {
+      if ( error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE") {
+        setisConnectionError(true);
+      }
+      setLoading(false);
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllKontrolBalik();
-        setData(response || []);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        HandleUnauthorizedPengguna(error.response, dispatch, navigate);
-      }
-    };
-
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -79,6 +105,7 @@ const Kontrol = () => {
     { key: "selesai", label: "Selesai" },
     { key: "batal", label: "Batal" },
   ];
+  
   if (loading) {
     return (
       <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays max-h-fit min-h-screen  flex justify-center items-center">
@@ -86,6 +113,12 @@ const Kontrol = () => {
           <ProgressSpinner />
         </div>
       </div>
+    );
+  }
+
+  if (isConnectionError) {
+    return (
+      <ErrorConnection fetchData={fetchData}/>
     );
   }
 

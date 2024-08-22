@@ -911,7 +911,7 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Alamat:
           </label>
-          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none ">
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
               <p className="text-[#989da0] dark:text-[#6e6e6e]" >{isApotekUpdate
               ? detailDataApotek.alamat
               : detailDataPuskesmas.alamat}</p>
@@ -920,7 +920,7 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Waktu Operasional:
           </label>
-          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none ">
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
             {isApotekUpdate
               ? validasiWaktuOperasional(detailDataApotek.waktuOperasional)
               : validasiWaktuOperasional(detailDataPuskesmas.waktuOperasional)}

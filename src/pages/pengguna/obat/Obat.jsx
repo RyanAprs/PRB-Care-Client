@@ -3,17 +3,17 @@ import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
-
-import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
 import img from "../../../assets/data_empty.png";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ErrorConnection  from "../../../components/errorConnection/ErrorConnection";
 const Obat = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
+  const [isConnectionError, setisConnectionError] = useState(false);
   const handleDownload = () => {
     const doc = new jsPDF();
 
@@ -66,19 +66,32 @@ const Obat = () => {
     { key: "batal", label: "Batal" },
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllPengambilanObat();
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllPengambilanObat();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false); 
+    } catch (error) {
+      if ( error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE") {
+        setisConnectionError(true);
       }
-    };
+      setLoading(false);
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -90,7 +103,11 @@ const Obat = () => {
         </div>
       </div>
     );
-
+  if (isConnectionError) {
+    return (
+      <ErrorConnection fetchData={fetchData}/>
+    );
+  }
   return (
     <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">

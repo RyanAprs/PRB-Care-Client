@@ -99,14 +99,6 @@ body,
 
 .p-dialog {
   z-index: 1000 !important;
-  border-radius: 1rem;
-
-}
-.p-dialog-content{
-  border-radius:  0px 0px 1rem 1rem; 
-}
-.p-dialog-header , p-dialog-default{
-  border-radius: 1rem 1rem 0px 0px;
 }
 
 .p-dialog-mask{

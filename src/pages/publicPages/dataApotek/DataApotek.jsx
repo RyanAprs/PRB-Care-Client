@@ -2,39 +2,50 @@ import { useContext, useEffect, useState } from "react";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
-import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
 import img from "../../../assets/data_empty.png";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getAllApotek } from "../../../services/ApotekService";
-
+import ErrorConnection  from "../../../components/errorConnection/ErrorConnection";
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const [isConnectionError, setisConnectionError] = useState(false);
   const customSort = (a, b) => {
     if (a.namaPuskesmas < b.namaPuskesmas) return -1;
     if (a.namaPuskesmas > b.namaPuskesmas) return 1;
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllApotek();
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllApotek();
         const sortedData = response.sort(customSort);
         setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
+      setLoading(false);
+      setisConnectionError(false); 
+    } catch (error) {
+      if ( error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE") {
+        setisConnectionError(true);
       }
-    };
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -80,7 +91,11 @@ const DataApotek = () => {
       </div>
     </div>
     );
-
+    if (isConnectionError) {
+      return (
+        <ErrorConnection fetchData={fetchData}/>
+      );
+    }
   return (
     <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
