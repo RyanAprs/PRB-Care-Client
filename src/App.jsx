@@ -22,11 +22,9 @@ const firebaseConfig = {
   measurementId: "G-122Y1K7VRS",
 };
 
-// Initialize Firebase and Messaging
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
-// IndexedDB configuration
 const DB_NAME = "fcm_notifications";
 let db;
 
@@ -134,7 +132,7 @@ function App() {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal pengambilan obat Anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
       } else if (namaPuskesmas) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
@@ -143,7 +141,7 @@ function App() {
           parseInt(tanggalBatal)
         );
         notificationTitle = title;
-        notificationBody = `${namaLengkap}, jadwal kontrol balik Anda di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pilih waktu dalam jam operasional.`;
+        notificationBody = `${namaLengkap}, jadwal kontrol balik anda  di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
       }
 
       const notificationData = {

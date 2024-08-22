@@ -3,18 +3,43 @@ import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Card } from "primereact/card";
+
 import { Ban, CircleCheck, History, AlarmClock } from "lucide-react";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
 import img from "../../../assets/data_empty.png";
-
+import ReusableTable from "../../../components/rousableTable/RousableTable";
 const Obat = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
+  const handleDownload = () => {
+    const doc = new jsPDF();
 
+    doc.text("Data Pasien", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-medis.pdf");
+  };
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "diambil", "batal"];
 
@@ -26,6 +51,20 @@ const Obat = () => {
 
     return 0;
   };
+  const columns = [
+    { header: "Resi", field: "resi" },
+    { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
+    { header: "Nama Obat", field: "obat.namaObat" },
+    {header: "Jumlah", field: "jumlah"},
+    { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
+    { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
+    {header: "Status", field: "status"}
+  ];
+  const statuses = [
+    { key: "menunggu", label: "Menunggu" },
+    { key: "diambil", label: "Diambil" },
+    { key: "batal", label: "Batal" },
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,53 +92,26 @@ const Obat = () => {
     );
 
   return (
-    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen">
-      <div className="p-8 w-full h-full bg-white dark:bg-blackHover rounded-xl">
-        <div className="row p-1 grid  grid-cols-1 gap-6 overflow-y-auto h-full">
+    <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
+        <div className="flex flex-col p-1 gap-4  min-h-screen max-h-fit">
           {data.length > 0 ? (
-            data.map((item, index) => (
-              <Card key={index} className={`bg-mainGreen text-white  dark:bg-extraLightGreen dark:text-black  rounded-xl h-fit`}>
-               <div className="flex w-full md:flex-row flex-col md:gap-0 gap-4 text-xl px-4 justify-between items-center ">
-                  <div className="flex flex-col gap-4 items-center md:items-start justify-center">
-                    <div className="flex">
-                      <AlarmClock />{" "}
-                      <h1 className="ml-2 font-poppins font-bold">
-                        {item.tanggalPengambilan}
-                      </h1>
-                    </div>
-                    <h1 className="font-poppins md:text-start text-center">
-                      {item.obat.adminApotek.namaApotek},{" "}
-                      {item.obat.adminApotek.telepon}. {item.obat.namaObat} {"("}{item.jumlah}×{")."}
-                    </h1>
-                  </div>
-                  <div className="flex items-center justify-center ">
-                    {item.status === "menunggu" && (
-                      <div className="font-poppins flex flex-col gap-2 items-center justify-center ">
-                        <History size={35} />
-                        <p>Menunggu</p>
-                      </div>
-                    )}
-                    {item.status === "diambil" && (
-                      <div className="font-poppins flex flex-col gap-2 items-center justify-center">
-                        <CircleCheck size={35} />
-                        <p>Selesai</p>
-                      </div>
-                    )}
-                    {item.status === "batal" && (
-                      <div className="font-poppins flex flex-col gap-2 items-center justify-center">
-                        <Ban size={35} />
-                        <p>Batal</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </Card>
-            ))
+            <div className="row grid grid-cols-1 gap-6">
+              <ReusableTable
+                statuses={statuses}
+                columns={columns}
+                data={data}
+                path={"pengguna"}
+                onDownload={handleDownload}
+              />
+            </div>
           ) : (
-            <div className="flex flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+            <div className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
               <img src={img} className="md:w-80 w-64" alt="img" />
               Belum Ada Data
-              <p className="font-medium text-xl">Data akan muncul di sini ketika tersedia.</p>
+              <p className="font-medium text-xl">
+                Data akan muncul di sini ketika tersedia.
+              </p>
             </div>
           )}
         </div>

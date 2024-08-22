@@ -258,7 +258,7 @@ export default function ReusableTable({
   return (
     <div className="p-4 w-full ">
       <div className="card p-6 w-full flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-end md:items-center mb-4">
+        <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-center mb-4">
           <div className="p-inputgroup md:w-1/2">
             <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
               <Search size={16} />
