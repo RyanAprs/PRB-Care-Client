@@ -497,10 +497,10 @@ const NavbarAdmin = ({ children }) => {
               <img
                 src={icon}
                 alt="LOGO PRB CARE"
-                className={`${expanded ? "block" : "hidden"} w-auto px-2 max-h-20`}
+                className={`${expanded ? "block mb-5" : "hidden"} w-auto px-2 max-h-20`}
               />
 
-              <hr className={`w-full border-b border-lightGreen ${expanded ? "mt-3 w-[60px] " : "mb-1"}`} />
+              <hr className={`w-full border-b border-lightGreen ${expanded ? "hidden" : "mb-1"}`} />
             </div>
 
           </Menu>

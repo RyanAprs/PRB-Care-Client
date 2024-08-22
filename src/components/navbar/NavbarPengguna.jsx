@@ -32,16 +32,12 @@ import {
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-import { Skeleton } from 'primereact/skeleton';
-
 import { ZodError } from "zod";
 import {
   penggunaChangePasswordSchema,
   penggunaUpdateCurrentSchema,
 } from "../../validations/PenggunaSchema";
 import DynamicAddress from "../dynamicAddress/DynamicAddress";
-import { ProgressSpinner } from "primereact/progressspinner";
-import ErrorConnection  from "../../components/errorConnection/ErrorConnection";
 
 const NavbarPengguna = () => {
   const { dispatch } = useContext(AuthContext);
@@ -74,9 +70,7 @@ const NavbarPengguna = () => {
   const { address } = useContext(AddressContext);
   const [hasNotifications, setHasNotifications] = useState(false);
   const location = useLocation();
-  const [modalLoading, setModalLoading] = useState(null);
-  const [modalError, setModalError] = useState(null);
-  const [isButtonLoading, setButtonLoading] = useState(null);
+
   useEffect(() => {
     const openIndexedDB = () => {
       return new Promise((resolve, reject) => {
@@ -229,10 +223,10 @@ const NavbarPengguna = () => {
     }
   };
 
-  const fetchData = async () => {
+  const handleDetailProfileModal = async () => {
+    setIsMenuVisible(false);
+    setVisibleDetailProfile(true);
     try {
-      setModalLoading(true);
-      setModalError(false);
       const dataResponse = await getCurrentPengguna();
       if (dataResponse) {
         setDetailDataPengguna({
@@ -242,47 +236,36 @@ const NavbarPengguna = () => {
           teleponKeluarga: dataResponse.teleponKeluarga,
         });
       }
-      setModalLoading(false);
     } catch (error) {
-      setModalLoading(false);
-      if ( error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE") {
-        setModalError(true);
-        return;
-      }
+      setVisibleDetailProfile(false);
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
-  }
-
-  const handleDetailProfileModal = () => {
-    setIsMenuVisible(false);
-    setVisibleDetailProfile(true);
-    fetchData();
   };
 
   const handleUpdateProfileModal = async () => {
     setErrors({});
     setVisibleDetailProfile(false);
-    setPrevAddress(detailDataPengguna.alamat);
-    setDataPengguna({
-      namaLengkap: detailDataPengguna.namaLengkap,
-      alamat: detailDataPengguna.alamat,
-      telepon: detailDataPengguna.telepon,
-      teleponKeluarga: detailDataPengguna.teleponKeluarga,
-    });
     setVisibleUpdateProfile(true);
+    try {
+      const dataResponse = await getCurrentPengguna();
+      setPrevAddress(dataResponse.alamat);
+      if (dataResponse) {
+        setDataPengguna({
+          namaLengkap: dataResponse.namaLengkap,
+          alamat: dataResponse.alamat,
+          telepon: dataResponse.telepon,
+          teleponKeluarga: dataResponse.teleponKeluarga,
+        });
+      }
+    } catch (error) {
+      setVisibleUpdateProfile(false);
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+      handleApiError(error, toast);
+    }
   };
 
   const handleUpdateProfile = async () => {
-    setButtonLoading(true);
     try {
       const updatedDatas = {
         ...dataPengguna,
@@ -299,14 +282,7 @@ const NavbarPengguna = () => {
           life: 3000,
         });
         setVisibleUpdateProfile(false);
-        setDetailDataPengguna({
-          namaLengkap: dataPengguna.namaLengkap,
-          alamat: dataPengguna.alamat,
-          telepon: dataPengguna.telepon,
-          teleponKeluarga: dataPengguna.teleponKeluarga,
-          alamat: dataPengguna.alamat || prevAddress
-        });
-        setVisibleDetailProfile(true);
+        handleDetailProfileModal();
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -316,12 +292,9 @@ const NavbarPengguna = () => {
         });
         setErrors(newErrors);
       } else {
-        setVisibleUpdateProfile(false);
         HandleUnauthorizedPengguna(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
-    }finally{
-      setButtonLoading(false);
     }
   };
   const toggleMenuVisibility = () => {
@@ -588,75 +561,49 @@ const NavbarPengguna = () => {
           setVisibleDetailProfile(false);
         }}
       >
-        {
-          modalLoading ? 
-
-          <div className="w-full min-h-full flex items-center justify-center">
-            < ProgressSpinner  className="mx-auto"/>
+        <div className="flex flex-col p-4 gap-4">
+          <label htmlFor="" className="-mb-3">
+            Nama Pengguna
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={detailDataPengguna.namaLengkap}
+          />
+          <label htmlFor="" className="-mb-3">
+            Telepon:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={detailDataPengguna.telepon}
+          />
+          <label htmlFor="" className="-mb-3">
+            Telepon Keluarga:
+          </label>
+          <InputText
+            type="text"
+            variant="filled"
+            disabled
+            className="p-input text-lg p-3 rounded"
+            value={detailDataPengguna.teleponKeluarga}
+          />
+          <label htmlFor="" className="-mb-3">
+            Alamat:
+          </label>
+          <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
+              <p className="text-[#989da0] dark:text-[#6e6e6e]" >{detailDataPengguna.alamat}</p>
           </div>
-
-          :
-
-          modalError ? 
-
-          <div className="flex  min-h-full flex-col items-center justify-center text-center font-bold gap-3 text-xl">
-            Koneksi Terputus
-            <p className="font-medium text-[17px]">
-              Sepertinya terjadi kesalahan pada koneksi internet Anda. Silakan coba lagi.
-            </p>
-            <Button
-              label="Coba Lagi"
-              onClick={fetchData}
-              className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-            />
-         </div>
-
-          :
-
-          <div className="flex flex-col p-4 gap-4">
-            <label htmlFor="" className="-mb-3">
-              Nama Pengguna
-            </label>
-            <InputText
-              type="text"
-              variant="filled"
-              disabled
-              className="p-input text-lg p-3 rounded"
-              value={detailDataPengguna.namaLengkap}
-            />
-            <label htmlFor="" className="-mb-3">
-              Telepon:
-            </label>
-            <InputText
-              type="text"
-              variant="filled"
-              disabled
-              className="p-input text-lg p-3 rounded"
-              value={detailDataPengguna.telepon}
-            />
-            <label htmlFor="" className="-mb-3">
-              Telepon Keluarga:
-            </label>
-            <InputText
-              type="text"
-              variant="filled"
-              disabled
-              className="p-input text-lg p-3 rounded"
-              value={detailDataPengguna.teleponKeluarga}
-            />
-            <label htmlFor="" className="-mb-3">
-              Alamat:
-            </label>
-            <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
-                <p className="text-[#989da0] dark:text-[#6e6e6e]" >{detailDataPengguna.alamat}</p>
-            </div>
-            <Button
-              label="Edit Profile"
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
-              onClick={handleUpdateProfileModal}
-            />
+          <Button
+            label="Edit Profile"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+            onClick={handleUpdateProfileModal}
+          />
         </div>
-        }
       </Dialog>
 
       {/* Modal Update Profile */}
@@ -668,7 +615,7 @@ const NavbarPengguna = () => {
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
-          setVisibleDetailProfile(true);
+          handleDetailProfileModal();
         }}
       >
         <div className="flex flex-col p-4 gap-4">
@@ -679,7 +626,7 @@ const NavbarPengguna = () => {
             type="text"
             placeholder="Nama Lengkap"
             className="p-input text-lg p-3 rounded"
-            value={detailDataPengguna.namaLengkap}
+            value={dataPengguna.namaLengkap}
             onChange={(e) =>
               setDataPengguna((prev) => ({
                 ...prev,
@@ -700,7 +647,7 @@ const NavbarPengguna = () => {
             type="text"
             placeholder="Telepon"
             className="p-input text-lg p-3 rounded"
-            value={detailDataPengguna.telepon}
+            value={dataPengguna.telepon}
             onChange={(e) =>
               setDataPengguna((prev) => ({
                 ...prev,
@@ -718,7 +665,7 @@ const NavbarPengguna = () => {
             type="text"
             placeholder="Telepon Keluarga"
             className="p-input text-lg p-3 rounded"
-            value={detailDataPengguna.teleponKeluarga}
+            value={dataPengguna.teleponKeluarga}
             onChange={(e) =>
               setDataPengguna((prev) => ({
                 ...prev,
@@ -742,13 +689,7 @@ const NavbarPengguna = () => {
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}
           <Button
-            label={isButtonLoading ? <ProgressSpinner
-              style={{ width: "25px", height: "25px" }}
-              strokeWidth="8"
-              animationDuration="1s"
-              color="white"
-            /> : "Edit"}
-            disabled={isButtonLoading}
+            label="Edit"
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
           />
