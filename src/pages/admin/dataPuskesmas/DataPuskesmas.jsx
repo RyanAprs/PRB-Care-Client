@@ -29,6 +29,7 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataPuskesmas = () => {
   const { dispatch } = useContext(AuthContext);
@@ -57,6 +58,7 @@ const DataPuskesmas = () => {
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
   const toast = useRef(null);
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     if (a.namaPuskesmas < b.namaPuskesmas) return -1;
@@ -81,19 +83,32 @@ const DataPuskesmas = () => {
     }));
   }, [address]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllPuskesmas();
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const response = await getAllPuskesmas();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
-
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -289,6 +304,10 @@ const DataPuskesmas = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">

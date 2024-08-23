@@ -168,6 +168,15 @@ const DataPasien = () => {
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
+      const responsePengguna = await getAllPengguna();
+      setPengguna(responsePengguna);
+
+      setLoading(false);
+    } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      setLoading(false);
+    }
+    try {
       const dataResponse = await getPasienById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(

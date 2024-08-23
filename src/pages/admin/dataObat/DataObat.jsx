@@ -28,6 +28,7 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getAllApotek } from "../../../services/ApotekService";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -49,6 +50,7 @@ const DataObat = () => {
   const title = "Obat";
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     if (a.namaObat < b.namaObat) return -1;
@@ -56,20 +58,32 @@ const DataObat = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllObat();
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const response = await getAllObat();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
-
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -125,6 +139,14 @@ const DataObat = () => {
 
   const handleModalUpdate = async (data) => {
     setErrors({});
+    try {
+      const responseApotek = await getAllApotek();
+      setDataAdminApotek(responseApotek);
+      setLoading(false);
+    } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
     try {
       const dataResponse = await getObatById(data.id);
       if (dataResponse) {
@@ -261,6 +283,10 @@ const DataObat = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   return (
     <div className="flex  flex-col gap-4 p-4 min-h-screen ">

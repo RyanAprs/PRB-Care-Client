@@ -54,7 +54,7 @@ export const handleApiError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -108,7 +108,7 @@ export const handleDeleteError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -162,7 +162,7 @@ export const handleDoneError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -216,7 +216,7 @@ export const handleChangePasswordError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -262,7 +262,7 @@ export const handleLoginError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -324,7 +324,7 @@ export const handleCreatePengambilanObatError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }
@@ -386,7 +386,7 @@ export const handleKontrolBalikError = (error, toast) => {
     toast.current.show({
       severity: "error",
       summary: "Gagal",
-      detail: "Terjadi kesalahan. Mohon coba lagi nanti.",
+      detail: "Terjadi kesalahan, Periksa kembali koneksi internet anda.",
       life: 3000,
     });
   }

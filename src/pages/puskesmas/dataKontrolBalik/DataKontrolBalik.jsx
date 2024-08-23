@@ -89,7 +89,6 @@ const DataKontrolBalik = () => {
   const fetchData = async () => {
     try {
       const response = await getAllKontrolBalik();
-      console.log(response);
 
       const sortedData = response.sort(customSort);
       setData(sortedData);
@@ -191,6 +190,15 @@ const DataKontrolBalik = () => {
 
   const handleModalUpdate = async (data) => {
     setErrors({});
+    try {
+      const response = await getAllPasienAktif();
+      setPasien(response);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      setLoading(false);
+    }
     try {
       const dataResponse = await getKontrolBalikById(data.id);
 

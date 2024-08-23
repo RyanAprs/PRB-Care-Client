@@ -38,6 +38,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataPengambilanObat = () => {
   const { dispatch } = useContext(AuthContext);
@@ -64,6 +65,7 @@ const DataPengambilanObat = () => {
   const toast = useRef(null);
   const title = "Pengambilan Obat";
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "diambil", "batal"];
@@ -77,21 +79,32 @@ const DataPengambilanObat = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllPengambilanObat();
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const response = await getAllPengambilanObat();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setisConnectionError(false);
+      setLoading(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
-
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -160,6 +173,17 @@ const DataPengambilanObat = () => {
 
   const handleModalUpdate = async (data) => {
     setErrors({});
+    try {
+      const responseObat = await getAllObat();
+      setObat(responseObat);
+      const responsePasien = await getAllPasienAktif();
+      setPasien(responsePasien);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+    }
     try {
       const dataResponse = await getPengambilanObatById(data.id);
       if (dataResponse) {
@@ -355,6 +379,10 @@ const DataPengambilanObat = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   const itemTemplatePasien = (option) => {
     return (

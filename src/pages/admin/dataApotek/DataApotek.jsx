@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
@@ -57,6 +58,7 @@ const DataApotek = () => {
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     if (a.namaApotek < b.namaApotek) return -1;
@@ -81,21 +83,33 @@ const DataApotek = () => {
     }));
   }, [address]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllApotek();
-
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+  const fetchData = async () => {
+    try {
+      const response = await getAllApotek();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
+      setLoading(false);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -288,6 +302,10 @@ const DataApotek = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
       <Toast

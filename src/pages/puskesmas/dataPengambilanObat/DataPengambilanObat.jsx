@@ -171,6 +171,17 @@ const DataPengambilanObat = () => {
   const handleModalUpdate = async (data) => {
     setErrors({});
     try {
+      const responseObat = await getAllObat();
+      setObat(responseObat);
+      const responsePasien = await getAllPasienAktif();
+      setPasien(responsePasien);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setLoading(false);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+    }
+    try {
       const dataResponse = await getPengambilanObatById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
