@@ -91,6 +91,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

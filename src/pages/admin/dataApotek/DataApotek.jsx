@@ -163,6 +163,7 @@ const DataApotek = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -226,6 +227,7 @@ const DataApotek = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -255,6 +257,7 @@ const DataApotek = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }

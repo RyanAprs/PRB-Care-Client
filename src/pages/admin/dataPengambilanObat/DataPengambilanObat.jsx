@@ -156,6 +156,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);
       }
@@ -240,6 +241,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -269,6 +271,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -295,6 +298,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -322,6 +326,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleCancelled(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

@@ -155,6 +155,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -234,6 +235,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -262,6 +264,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -289,6 +292,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

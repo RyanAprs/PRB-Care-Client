@@ -89,6 +89,7 @@ const DataObat = () => {
       namaObat: "",
       jumlah: 0,
     });
+
     setVisible(true);
     setIsEditMode(false);
   };
@@ -96,7 +97,9 @@ const DataObat = () => {
   const handleCreate = async () => {
     try {
       createObatSchemaAdminApotek.parse(datas);
+
       const response = await createObat(datas);
+
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
@@ -117,6 +120,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -166,6 +170,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -195,6 +200,7 @@ const DataObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }

@@ -150,6 +150,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -222,6 +223,7 @@ const DataPasien = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -250,6 +252,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -277,6 +280,7 @@ const DataPasien = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

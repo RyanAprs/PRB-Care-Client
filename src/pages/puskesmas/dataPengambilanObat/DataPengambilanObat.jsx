@@ -153,6 +153,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);
       }
@@ -237,6 +238,7 @@ const DataPengambilanObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);
       }
@@ -267,6 +269,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -294,6 +297,7 @@ const DataPengambilanObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleCancelled(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

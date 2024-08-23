@@ -131,6 +131,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         handleApiError(error, toast);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       }
@@ -189,6 +190,7 @@ const DataObat = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         handleApiError(error, toast);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       }
@@ -218,6 +220,7 @@ const DataObat = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       handleDeleteError(error, toast, title);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
     }

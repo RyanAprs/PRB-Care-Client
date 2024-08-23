@@ -170,8 +170,8 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-
         handleApiError(error, toast);
       }
     }
@@ -254,6 +254,7 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleKontrolBalikError(error, toast);
       }
@@ -282,6 +283,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -309,6 +311,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -336,6 +339,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleCancelled(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }

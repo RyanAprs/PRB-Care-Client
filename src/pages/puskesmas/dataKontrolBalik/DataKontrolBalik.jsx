@@ -89,7 +89,6 @@ const DataKontrolBalik = () => {
   const fetchData = async () => {
     try {
       const response = await getAllKontrolBalik();
-
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setisConnectionError(false);
@@ -172,8 +171,8 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-
         handleKontrolBalikError(error, toast);
       }
     }
@@ -201,7 +200,6 @@ const DataKontrolBalik = () => {
     }
     try {
       const dataResponse = await getKontrolBalikById(data.id);
-
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
           dataResponse.tanggalKontrol
@@ -256,6 +254,7 @@ const DataKontrolBalik = () => {
         });
         setErrors(newErrors);
       } else {
+        setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleKontrolBalikError(error, toast);
       }
@@ -284,6 +283,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDelete(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -311,6 +311,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleDone(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -338,6 +339,7 @@ const DataKontrolBalik = () => {
         setData(sortedData);
       }
     } catch (error) {
+      setVisibleCancelled(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
