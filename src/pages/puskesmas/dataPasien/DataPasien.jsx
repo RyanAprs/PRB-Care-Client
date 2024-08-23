@@ -37,6 +37,7 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { getAllPengguna } from "../../../services/PenggunaService";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 addLocale("id", dateLocaleId);
 
@@ -63,6 +64,7 @@ const DataPasien = () => {
   const toast = useRef(null);
   const title = "Pasien";
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
@@ -72,19 +74,33 @@ const DataPasien = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllPasien();
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      const response = await getAllPasien();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -326,6 +342,10 @@ const DataPasien = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">

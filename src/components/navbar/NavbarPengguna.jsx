@@ -31,7 +31,6 @@ import {
 } from "../../utils/ApiErrorHandlers";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
 import { ZodError } from "zod";
 import {
   penggunaChangePasswordSchema,
@@ -596,7 +595,9 @@ const NavbarPengguna = () => {
             Alamat:
           </label>
           <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
-              <p className="text-[#989da0] dark:text-[#6e6e6e]" >{detailDataPengguna.alamat}</p>
+            <p className="text-[#989da0] dark:text-[#6e6e6e]">
+              {detailDataPengguna.alamat}
+            </p>
           </div>
           <Button
             label="Edit Profile"

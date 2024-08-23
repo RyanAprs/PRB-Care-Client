@@ -37,6 +37,7 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataKontrolBalik = () => {
   const { dispatch } = useContext(AuthContext);
@@ -70,6 +71,7 @@ const DataKontrolBalik = () => {
   const toast = useRef(null);
   const title = "Kontrol Balik";
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];
@@ -84,24 +86,36 @@ const DataKontrolBalik = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllKontrolBalik();
-        console.log(response);
+  const fetchData = async () => {
+    try {
+      const response = await getAllKontrolBalik();
+      console.log(response);
 
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-
-        setLoading(false);
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setisConnectionError(false);
+      setLoading(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
 
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, [token, navigate, dispatch]);
 
@@ -387,6 +401,10 @@ const DataKontrolBalik = () => {
       </div>
     );
   };
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   const valueTemplate = (option) => {
     if (option) {

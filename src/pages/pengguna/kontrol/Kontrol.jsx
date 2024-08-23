@@ -8,7 +8,7 @@ import ReusableTable from "../../../components/rousableTable/RousableTable";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import img from "../../../assets/data_empty.png";
-import ErrorConnection  from "../../../components/errorConnection/ErrorConnection";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const Kontrol = () => {
   const [data, setData] = useState([]);
@@ -17,7 +17,7 @@ const Kontrol = () => {
   const { dispatch } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
   const [isConnectionError, setisConnectionError] = useState(false);
-  
+
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];
     if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
@@ -35,9 +35,10 @@ const Kontrol = () => {
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
-      setisConnectionError(false); 
+      setisConnectionError(false);
     } catch (error) {
-      if ( error.code === "ERR_NETWORK" ||
+      if (
+        error.code === "ERR_NETWORK" ||
         error.code === "ETIMEDOUT" ||
         error.code === "ECONNABORTED" ||
         error.code === "ENOTFOUND" ||
@@ -45,7 +46,8 @@ const Kontrol = () => {
         error.code === "EAI_AGAIN" ||
         error.code === "EHOSTUNREACH" ||
         error.code === "ECONNRESET" ||
-        error.code === "EPIPE") {
+        error.code === "EPIPE"
+      ) {
         setisConnectionError(true);
       }
       setLoading(false);
@@ -105,7 +107,7 @@ const Kontrol = () => {
     { key: "selesai", label: "Selesai" },
     { key: "batal", label: "Batal" },
   ];
-  
+
   if (loading) {
     return (
       <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays max-h-fit min-h-screen  flex justify-center items-center">
@@ -117,9 +119,7 @@ const Kontrol = () => {
   }
 
   if (isConnectionError) {
-    return (
-      <ErrorConnection fetchData={fetchData}/>
-    );
+    return <ErrorConnection fetchData={fetchData} />;
   }
 
   return (

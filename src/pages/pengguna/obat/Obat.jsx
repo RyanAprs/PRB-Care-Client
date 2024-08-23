@@ -6,7 +6,10 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { getAllPengambilanObat } from "../../../services/PengambilanObatService";
 import img from "../../../assets/data_empty.png";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
-import ErrorConnection  from "../../../components/errorConnection/ErrorConnection";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
 const Obat = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,10 +58,10 @@ const Obat = () => {
     { header: "Resi", field: "resi" },
     { header: "Tanggal Pengambilan", field: "tanggalPengambilan" },
     { header: "Nama Obat", field: "obat.namaObat" },
-    {header: "Jumlah", field: "jumlah"},
+    { header: "Jumlah", field: "jumlah" },
     { header: "Nama Apotek", field: "obat.adminApotek.namaApotek" },
     { header: "Telepon Apotek", field: "obat.adminApotek.telepon" },
-    {header: "Status", field: "status"}
+    { header: "Status", field: "status" },
   ];
   const statuses = [
     { key: "menunggu", label: "Menunggu" },
@@ -73,9 +76,10 @@ const Obat = () => {
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
-      setisConnectionError(false); 
+      setisConnectionError(false);
     } catch (error) {
-      if ( error.code === "ERR_NETWORK" ||
+      if (
+        error.code === "ERR_NETWORK" ||
         error.code === "ETIMEDOUT" ||
         error.code === "ECONNABORTED" ||
         error.code === "ENOTFOUND" ||
@@ -83,7 +87,8 @@ const Obat = () => {
         error.code === "EAI_AGAIN" ||
         error.code === "EHOSTUNREACH" ||
         error.code === "ECONNRESET" ||
-        error.code === "EPIPE") {
+        error.code === "EPIPE"
+      ) {
         setisConnectionError(true);
       }
       setLoading(false);
@@ -104,9 +109,7 @@ const Obat = () => {
       </div>
     );
   if (isConnectionError) {
-    return (
-      <ErrorConnection fetchData={fetchData}/>
-    );
+    return <ErrorConnection fetchData={fetchData} />;
   }
   return (
     <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">

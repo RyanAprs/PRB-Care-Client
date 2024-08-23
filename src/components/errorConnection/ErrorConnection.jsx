@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button } from "primereact/button";
 
 const ErrorConnection = ({ fetchData }) => {
@@ -8,7 +7,8 @@ const ErrorConnection = ({ fetchData }) => {
         <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
           Koneksi Terputus
           <p className="font-medium text-xl">
-            Sepertinya terjadi kesalahan pada koneksi internet Anda. Silakan coba lagi.
+            Sepertinya terjadi kesalahan pada koneksi internet Anda. Silakan
+            coba lagi.
           </p>
           <Button
             label="Coba Lagi"

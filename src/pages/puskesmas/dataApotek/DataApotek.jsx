@@ -7,12 +7,14 @@ import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthori
 import { useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataApotek = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
 
   const customSort = (a, b) => {
     if (a.namaApotek < b.namaApotek) return -1;
@@ -20,21 +22,33 @@ const DataApotek = () => {
     return 0;
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getAllApotek();
-        console.log(response);
-
-        const sortedData = response.sort(customSort);
-        setData(sortedData);
-        setLoading(false);
-      } catch (error) {
-        setLoading(false);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+  const fetchData = async () => {
+    try {
+      const response = await getAllApotek();
+      const sortedData = response.sort(customSort);
+      setData(sortedData);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
       }
-    };
+      setLoading(false);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [navigate, dispatch]);
 
@@ -80,6 +94,11 @@ const DataApotek = () => {
         </div>
       </div>
     );
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">

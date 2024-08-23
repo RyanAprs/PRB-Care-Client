@@ -7,11 +7,11 @@ import { Button } from "primereact/button";
 
 const Notifikasi = () => {
   const [notifikasiList, setNotifikasiList] = useState([]);
-  const [rawNotifikasiList, setRawNotifikasiList] = useState([]); 
+  const [rawNotifikasiList, setRawNotifikasiList] = useState([]);
   const [sortOrder, setSortOrder] = useState(0);
   const sortOptions = [
-    { label: 'Terbaru ke Terlama', value: 1 },
-    { label: 'Terlama ke Terbaru', value: 2 }
+    { label: "Terbaru ke Terlama", value: 1 },
+    { label: "Terlama ke Terbaru", value: 2 },
   ];
 
   const openIndexedDB = () => {
@@ -38,7 +38,6 @@ const Notifikasi = () => {
     });
   };
 
-  
   useEffect(() => {
     const getNotificationsFromDB = async () => {
       try {
@@ -67,7 +66,7 @@ const Notifikasi = () => {
     };
 
     getNotificationsFromDB();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const sortedNotifications = [...rawNotifikasiList].sort((a, b) => {
@@ -111,34 +110,33 @@ const Notifikasi = () => {
 
   const listTemplate = (notifikasi) => {
     return (
-      <div id={`notifikasi-${notifikasi.id}`} className="py-4 w-full border-b-[1px]">
-        <div className="">
-          <div className="flex w-full md:flex-row flex-col md:gap-0  gap-4 text-xl px-4 justify-between items-center">
-            <div className="flex flex-col items-start justify-center">
-              <div className="flex justify-between w-full">
-                <div className="flex flex-col">
-                  <h1 className="font-poppins font-bold text-start">
-                    {notifikasi.title}
-                  </h1>
-                  <h1 className="text-md md:flex-row flex-col flex justify-center items-center w-fit">
-                    {new Date(notifikasi.timestamp).toLocaleString()}
-                  </h1>
-                </div>
-                <Button
-                  onClick={() => handleDeleteClick(notifikasi.id)}
-                  severity="danger"
-                  className="p-2 h-fit rounded-xl "
-                  label={<Eraser />}
-                />
+      <div
+        id={`notifikasi-${notifikasi.id}`}
+        className="py-4 w-full rounded-xl bg-gray-100 dark:bg-darkGrays"
+      >
+        <div className="flex  md:flex-row flex-col md:gap-0  gap-4 text-xl px-4 justify-between items-center">
+          <div className="flex flex-col items-start justify-center">
+            <div className="flex justify-between w-full">
+              <div className="flex flex-col">
+                <h1 className="font-poppins font-bold text-start">
+                  {notifikasi.title}
+                </h1>
+                <h1 className="text-md md:flex-row flex-col flex justify-center items-center w-fit">
+                  {new Date(notifikasi.timestamp).toLocaleString()}
+                </h1>
               </div>
-              
-              
-              <h1 className="font-poppins md:text-start text-justify mt-4">
-                {notifikasi.body}
-              </h1>
+              <Button
+                onClick={() => handleDeleteClick(notifikasi.id)}
+                severity="danger"
+                className="p-2 h-fit rounded-xl "
+                label={<Eraser />}
+              />
             </div>
-            </div>
-            
+
+            <h1 className="font-poppins md:text-start text-justify mt-4">
+              {notifikasi.body}
+            </h1>
+          </div>
         </div>
       </div>
     );
@@ -147,8 +145,7 @@ const Notifikasi = () => {
   return (
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen">
       <div className="p-8 w-full min-h-screen bg-white dark:bg-blackHover rounded-xl">
-        
-        <div className="flex flex-col p-1 gap- overflow-y-auto h-full">
+        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
           {notifikasiList.length > 0 ? (
             <>
               <div className="flex md:justify-end justify-center mb-4 gap-2">
@@ -158,15 +155,13 @@ const Notifikasi = () => {
                   onChange={(e) => setSortOrder(e.value)}
                   placeholder="Pilih dan Urutan"
                 />
-
               </div>
               <DataView
-              value={notifikasiList}
-              layout="list"
-              itemTemplate={listTemplate}
-            />
+                value={notifikasiList}
+                layout="list"
+                itemTemplate={listTemplate}
+              />
             </>
-            
           ) : (
             <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
               <img src={img} className="md:w-80 w-64" alt="img" />
