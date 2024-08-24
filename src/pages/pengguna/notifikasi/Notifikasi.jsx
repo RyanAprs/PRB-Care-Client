@@ -101,10 +101,7 @@ const Notifikasi = () => {
   const handleDeleteClick = (id) => {
     const element = document.querySelector(`#notifikasi-${id}`);
     if (element) {
-      element.classList.add("slide-out");
-      setTimeout(() => {
-        deleteNotification(id);
-      }, 300);
+      deleteNotification(id);
     }
   };
 
@@ -112,10 +109,10 @@ const Notifikasi = () => {
     return (
       <div
         id={`notifikasi-${notifikasi.id}`}
-        className="py-4 w-full rounded-xl bg-gray-100 dark:bg-darkGrays"
+        className="py-4 w-full rounded-xl bg-gray-100 dark:bg-darkGrays mb-4"
       >
-        <div className="flex  md:flex-row flex-col md:gap-0  gap-4 text-xl px-4 justify-between items-center">
-          <div className="flex flex-col items-start justify-center">
+        <div className="flex  md:flex-row flex-col   gap-4 text-xl px-4 items-center w-full">
+          <div className="flex flex-col items-start w-full justify-center">
             <div className="flex justify-between w-full">
               <div className="flex flex-col">
                 <h1 className="font-poppins font-bold text-start">
@@ -125,12 +122,15 @@ const Notifikasi = () => {
                   {new Date(notifikasi.timestamp).toLocaleString()}
                 </h1>
               </div>
+              <div>
               <Button
                 onClick={() => handleDeleteClick(notifikasi.id)}
                 severity="danger"
-                className="p-2 h-fit rounded-xl "
-                label={<Eraser />}
-              />
+                className="p-2  w-fit h-fit mt-0.5 rounded-xl"
+              >
+                <Eraser />
+              </Button>
+              </div>
             </div>
 
             <h1 className="font-poppins md:text-start text-justify mt-4">
@@ -160,6 +160,8 @@ const Notifikasi = () => {
                 value={notifikasiList}
                 layout="list"
                 itemTemplate={listTemplate}
+                className="overflow-y-auto h-screen"
+                
               />
             </>
           ) : (

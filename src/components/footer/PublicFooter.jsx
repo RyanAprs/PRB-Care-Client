@@ -36,13 +36,19 @@ const PublicFooter = () => {
             className="hover:text-lightGreen hover:dark:text-mainGreen"
             to="/data-puskesmas"
           >
-            Puskesmas
+            Puskesmas Terdaftar
           </Link>
           <Link
             className="hover:text-lightGreen hover:dark:text-mainGreen"
             to="/data-apotek"
           >
-            Apotek
+            Apotek Terdaftar
+          </Link>
+          <Link
+            className="hover:text-lightGreen hover:dark:text-mainGreen"
+            to="/kebijakan-privasi"
+          >
+            Kebijakan Privasi
           </Link>
         </div>
 

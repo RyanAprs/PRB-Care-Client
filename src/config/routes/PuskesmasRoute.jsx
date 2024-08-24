@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import NotFound from "../../pages/NotFound";
-import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
 import DashboardPuskesmas from "../../pages/puskesmas/beranda/BerandaPuskesmas";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
@@ -37,25 +36,23 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 };
 
 const PuskesmasRoute = () => {
-  const darkMode = useDarkMode(false);
   const { isLoading } = useContext(AuthContext);
 
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
-        <NoNavbar/><ProgressSpinner />
+        <NoNavbar /><ProgressSpinner />
       </div>
     );
 
   return (
-    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route path="/" element={<Navigate to="/puskesmas/login" />} />
         <Route
           path="/login"
           element={
             <AlreadyLoggedInRoute role="nakes">
-              <NoNavbar/>
+              <NoNavbar className="absolute right-0 m-2"/>
               <LoginPuskesmas />
             </AlreadyLoggedInRoute>
           }
@@ -107,7 +104,6 @@ const PuskesmasRoute = () => {
         <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
         <Route path="*" element={<><NoNavbar/><NotFound /></>} />
       </Routes>
-    </div>
   );
 };
 

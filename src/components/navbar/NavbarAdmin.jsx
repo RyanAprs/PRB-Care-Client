@@ -27,6 +27,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import useDarkMode from 'use-dark-mode';
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
 import { ZodError } from "zod";
@@ -57,6 +58,7 @@ import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 
 const NavbarAdmin = ({ children }) => {
+  const darkMode = useDarkMode(false,{classNameDark : "dark"});
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
   const [visibleDetailProfile, setVisibleDetailProfile] = useState(false);
@@ -136,16 +138,6 @@ const NavbarAdmin = ({ children }) => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    const themeLink = document.getElementById("theme-link");
-    if (themeLink) {
-      const themeUrl = new URL(
-        "primereact/resources/themes/saga-green/theme.css",
-        import.meta.url
-      ).href;
-      themeLink.href = themeUrl;
-      document.body.classList.remove("dark");
-    }
-
     if (role === "admin") {
       navigate("/admin/login");
     } else if (role === "nakes") {
@@ -454,7 +446,7 @@ const NavbarAdmin = ({ children }) => {
       <Sidebar
         className="md:w-1/4 md:block  text-white border-r-white "
         backgroundColor={
-          localStorage.getItem("darkMode") === "false" ? "#40916C" : "#276f4c"
+          darkMode.value ? "#276f4c" : "#40916C"
         }
         collapsed={toggle ? false : expanded}
         breakPoint={"md"}
@@ -465,7 +457,7 @@ const NavbarAdmin = ({ children }) => {
           menuItemStyles={{
             button: {
               ["&:hover"]:
-                localStorage.getItem("darkMode") === "true"
+              darkMode.value === "true"
                   ? {
                       backgroundColor: "#40916C",
                       color: "white",

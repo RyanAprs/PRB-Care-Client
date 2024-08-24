@@ -1,8 +1,8 @@
 import img from "../../../assets/prbcare.svg";
 const KebijakanPrivasi = () => {
   return (
-    <div className="min-h-screen dark:text-white dark:bg-black bg-white text-black p-8 md:px-40">
-      <img src={img} className="mb-2 md:w-1/5 w-4/5 mx-auto" alt="img" />
+    <div className="min-h-screen dark:text-white  text-black p-8 md:px-40">
+      <img src={img} className="mb-2 w-60 mx-auto" alt="img" />
       <h1 className="text-4xl font-bold mb-6 text-center">Kebijakan Privasi</h1>
       <div className="max-w-3xl mx-auto">
         <p className="mb-4">

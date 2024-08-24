@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
-import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import KebijakanPrivasi from "../../pages/publicPages/kebijakanPrivasi/KebijakanPrivasi";
@@ -13,7 +12,6 @@ import DataPuskesmas from "../../pages/publicPages/dataPuskesmas/DataPuskesmas";
 import DataApotek from "../../pages/publicPages/dataApotek/DataApotek";
 
 const PublicRoute = () => {
-  const darkMode = useDarkMode(false);
   const { isLoading } = useContext(AuthContext);
 
   if (isLoading)
@@ -24,7 +22,6 @@ const PublicRoute = () => {
     );
 
   return (
-    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route
           path="/"
@@ -64,9 +61,8 @@ const PublicRoute = () => {
             </>
           }
         />
-        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar /><NotFound /></>} />
       </Routes>
-    </div>
   );
 };
 

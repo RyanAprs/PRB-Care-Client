@@ -42,33 +42,40 @@ const Footer = () => {
           <h2 className="text-xl font-bold mb-4  text-center">Tautan Cepat</h2>
           <Link
             className="hover:text-lightGreen hover:dark:text-mainGreen"
-            to="/beranda"
+            to="/pengguna/beranda"
           >
             Beranda
           </Link>
           <Link
             className="hover:text-lightGreen hover:dark:text-mainGreen"
-            to="/kontrol"
-          >
-            Kontrol Balik
-          </Link>
-          <Link
-            className="hover:text-lightGreen hover:dark:text-mainGreen"
-            to="/obat"
-          >
-            Pengambilan Obat
-          </Link>
-          <Link
-            className="hover:text-lightGreen hover:dark:text-mainGreen"
-            to="/medis"
+            to="/pengguna/medis"
           >
             Rekam Medis
           </Link>
           <Link
             className="hover:text-lightGreen hover:dark:text-mainGreen"
-            to="/notifikasi"
+            to="/pengguna/kontrol"
           >
-            Pemberitahuan
+            Kontrol Balik
+          </Link>
+          <Link
+            className="hover:text-lightGreen hover:dark:text-mainGreen"
+            to="/pengguna/obat"
+          >
+            Ambil Obat
+          </Link>
+         
+          <Link
+            className="hover:text-lightGreen hover:dark:text-mainGreen"
+            to="/pengguna/notifikasi"
+          >
+            Notifikasi
+          </Link>
+          <Link
+            className="hover:text-lightGreen hover:dark:text-mainGreen"
+            to="/kebijakan-privasi"
+          >
+            Kebijakan Privasi
           </Link>
         </div>
 

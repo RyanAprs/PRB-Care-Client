@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
 import LoginApotek from "../../pages/apotek/login/LoginApotek";
-import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
 import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
 import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
@@ -39,19 +38,17 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 };
 
 const ApotekRoute = () => {
-  const darkMode = useDarkMode(false);
   const { isLoading } = useContext(AuthContext);
 
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
-        <NoNavbar/>
+        <NoNavbar  />
         <ProgressSpinner />
       </div>
     );
 
   return (
-    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
         <Route
             path="/"
@@ -63,7 +60,7 @@ const ApotekRoute = () => {
           path="/login"
           element={
             <AlreadyLoggedInRoute role="apoteker">
-              <NoNavbar/>
+              <NoNavbar className="absolute right-0 m-2" />
               <LoginApotek />
             </AlreadyLoggedInRoute>
           }
@@ -101,10 +98,9 @@ const ApotekRoute = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
-        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="/page/not-found" element={<><NoNavbar /><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar /><NotFound /></>} />
       </Routes>
-    </div>
   );
 };
 

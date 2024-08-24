@@ -6,7 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
-import useDarkMode from "use-dark-mode";
 import { AuthContext } from "../context/AuthContext";
 import LoginPengguna from "../../pages/pengguna/login/LoginPengguna";
 import RegisterPengguna from "../../pages/pengguna/register/RegisterPengguna";
@@ -43,26 +42,24 @@ const AlreadyLoggedInRoute = ({ children, role }) => {
 };
 
 const PenggunaRoute = () => {
-  const darkMode = useDarkMode(false);
   const { isLoading } = useContext(AuthContext);
 
   if (isLoading)
     return (
       <div className="h-screen flex justify-center items-center">
-        <NoNavbar/>
+        <NoNavbar  />
         <ProgressSpinner />
       </div>
     );
 
   return (
-    <div className={`${darkMode.value ? "dark" : ""}`}>
       <Routes>
-        <Route path="/register" element={<><NoNavbar/><RegisterPengguna /></>} />
+        <Route path="/register" element={<><NoNavbar className="absolute right-0 m-2" /><RegisterPengguna /></>} />
         <Route
           path="/login"
           element={
             <AlreadyLoggedInRoute role="pengguna">
-                <NoNavbar/>
+                <NoNavbar className="absolute right-0 m-2" />
                 <LoginPengguna />
             </AlreadyLoggedInRoute>
           }
@@ -118,10 +115,9 @@ const PenggunaRoute = () => {
           }
         />
 
-        <Route path="/page/not-found" element={<><NoNavbar/><NotFound /></>} />
-        <Route path="*" element={<><NoNavbar/><NotFound /></>} />
+        <Route path="/page/not-found" element={<><NoNavbar /><NotFound /></>} />
+        <Route path="*" element={<><NoNavbar /><NotFound /></>} />
       </Routes>
-    </div>
   );
 };
 

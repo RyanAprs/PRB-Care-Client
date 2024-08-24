@@ -12,8 +12,9 @@ import { handleApiError } from "../../../utils/ApiErrorHandlers";
 import { Toast } from "primereact/toast";
 import { registerPengguna } from "../../../services/PenggunaService";
 import ReCAPTCHA from "react-google-recaptcha";
-
+import useDarkMode from 'use-dark-mode';
 const RegisterPengguna = () => {
+  const darkMode = useDarkMode(false,{classNameDark : "dark"});
   const [datas, setDatas] = useState({
     namaLengkap: "",
     username: "",
@@ -222,6 +223,7 @@ const RegisterPengguna = () => {
             Captcha:
           </label>
           <ReCAPTCHA
+            theme={darkMode.value ? "dark" : ""}
             className="rounded-lg "
             ref={recaptchaRef}
             sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"

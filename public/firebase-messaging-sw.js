@@ -63,6 +63,8 @@ messaging.onBackgroundMessage((payload) => {
     namaLengkap,
     namaApotek,
     namaPuskesmas,
+    namaObat,
+    jumlahObat,
     tanggalPengambilan,
     tanggalKontrol,
     tanggalBatal,
@@ -77,7 +79,7 @@ messaging.onBackgroundMessage((payload) => {
     );
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
-    notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
+    notificationBody = `${namaLengkap}, jadwal pengambilan obat ${namaObat} (${jumlahObat}×) anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
 
     const notificationData = {
       title: notificationTitle,
@@ -91,7 +93,7 @@ messaging.onBackgroundMessage((payload) => {
     );
     tanggalBatalLocal = convertUnixTimestampToLocalTime(parseInt(tanggalBatal));
     notificationTitle = title;
-    notificationBody = `${namaLengkap}, jadwal kontrol balik anda  di puskesmas ${namaPuskesmas} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
+    notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol di puskesmas ${namaPuskesmas} pada ${tanggalAmbilLocal}. Pastikan datang pada jam operasional.`;
 
     const notificationData = {
       title: notificationTitle,
