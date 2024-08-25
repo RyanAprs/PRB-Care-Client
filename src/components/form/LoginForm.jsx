@@ -11,8 +11,8 @@ import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginSchema } from "../../validations/LoginSchema";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { updateCurrentTokenPerangkatPengguna } from "../../services/PenggunaService";
-import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
-const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
+
+const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -23,19 +23,6 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
   const navigate = useNavigate();
 
   const loginUser = location.pathname === "/pengguna/login";
-
-  const handleUpdate = async () => {
-    try {
-      const data = { TokenPerangkat: tokenPerangkat };
-      const response = await updateCurrentTokenPerangkatPengguna(data);
-      if (response.status === 200) {
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -58,16 +45,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role, tokenPerangkat }) => {
           type: "LOGIN",
           payload: { token: response.data.token, role: role },
         });
-
         localStorage.setItem("isLogin", "true");
-
         navigate(navigateUser);
-
-        if (role === "pengguna") {
-          setTimeout(async () => {
-            await handleUpdate();
-          }, 2000);
-        }
       }
     } catch (error) {
       if (error instanceof ZodError) {

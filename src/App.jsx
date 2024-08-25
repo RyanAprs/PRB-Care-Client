@@ -56,7 +56,7 @@ async function storeNotificationData(data) {
   const db = await openIndexedDB();
   const transaction = db.transaction(["notifications"], "readwrite");
   const objectStore = transaction.objectStore("notifications");
-
+  
   const notificationData = { data, isRead: false };
 
   const request = objectStore.add(notificationData);
@@ -76,38 +76,6 @@ function convertUnixTimestampToLocalTime(timestamp) {
 }
 
 function App() {
-  useEffect(() => {
-    const registerServiceWorker = async () => {
-      if ("serviceWorker" in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register(
-            "/firebase-messaging-sw.js"
-          );
-
-          const currentToken = await getToken(messaging, {
-            vapidKey:
-              "BC0gBRfdNhV5uA9P3ohrvAlRYh5ir_sgnyUkP3QXdzT1wJtNOIk2XgYJw-6yI5nac0o_Nm082ba1BLCJ7Z1TeD0",
-            serviceWorkerRegistration: registration,
-          });
-
-          if (currentToken) {
-            console.log("FCM Token:", currentToken);
-          } else {
-            console.log(
-              "No registration token available. Request permission to generate one."
-            );
-          }
-        } catch (error) {
-          console.error("Service Worker registration failed:", error);
-        }
-      }
-    };
-
-    if (Notification.permission === "granted") {
-      registerServiceWorker();
-    }
-  }, []);
-
   useEffect(() => {
     onMessage(messaging, (payload) => {
       const {

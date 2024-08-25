@@ -77,6 +77,11 @@ const HomePengguna = () => {
     }
   };
 
+  if(localStorage.getItem("isLogin") === "true") {
+    handleNotificationSetup();
+    localStorage.removeItem("isLogin");
+  }
+
   return (
     <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
       <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
