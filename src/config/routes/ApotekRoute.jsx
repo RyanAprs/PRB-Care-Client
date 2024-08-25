@@ -1,107 +1,108 @@
-import React, { useContext } from "react";
+import React, {useContext} from "react";
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
 import LoginApotek from "../../pages/apotek/login/LoginApotek";
-import { AuthContext } from "../context/AuthContext";
+import {AuthContext} from "../context/AuthContext";
 import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
 import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
 import DataObat from "../../pages/apotek/dataObat/DataObat";
 import NavbarAdmin from "../../components/navbar/NavbarAdmin";
-import { ProgressSpinner } from "primereact/progressspinner";
+import {ProgressSpinner} from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
 import NoNavbar from "../../components/navbar/NoNavbar";
-const PrivateRoute = ({ children, role }) => {
-  const { token, role: userRole } = useContext(AuthContext);
 
-  if (!token) {
-    return <Navigate to="/apotek/login" />;
-  }
+const PrivateRoute = ({children, role}) => {
+    const {token, role: userRole} = useContext(AuthContext);
 
-  if (userRole !== role) {
-    return <Navigate to="/page/not-found" />;
-  }
+    if (!token) {
+        return <Navigate to="/apotek/login"/>;
+    }
 
-  return children;
+    if (userRole !== role) {
+        return <Navigate to="/page/not-found"/>;
+    }
+
+    return children;
 };
 
-const AlreadyLoggedInRoute = ({ children, role }) => {
-  const { token, role: userRole } = useContext(AuthContext);
-  if (token && userRole === role) {
-    return <Navigate to="/apotek/beranda" />;
-  }
-  return children;
+const AlreadyLoggedInRoute = ({children, role}) => {
+    const {token, role: userRole} = useContext(AuthContext);
+    if (token && userRole === role) {
+        return <Navigate to="/apotek/beranda"/>;
+    }
+    return children;
 };
 
 const ApotekRoute = () => {
-  const { isLoading } = useContext(AuthContext);
+    const {isLoading} = useContext(AuthContext);
 
-  if (isLoading)
+    if (isLoading)
+        return (
+            <div className="h-screen flex justify-center items-center">
+                <NoNavbar/>
+                <ProgressSpinner/>
+            </div>
+        );
+
     return (
-      <div className="h-screen flex justify-center items-center">
-        <NoNavbar  />
-        <ProgressSpinner />
-      </div>
+        <Routes>
+            <Route
+                path="/"
+                element={
+                    <Navigate to="/apotek/login"/>
+                }
+            />
+            <Route
+                path="/login"
+                element={
+                    <AlreadyLoggedInRoute role="apoteker">
+                        <NoNavbar className="absolute right-0 m-2"/>
+                        <LoginApotek/>
+                    </AlreadyLoggedInRoute>
+                }
+            />
+            <Route
+                path="/beranda"
+                element={
+                    <PrivateRoute role="apoteker">
+                        <NavbarAdmin>
+                            <DashboardApotek/>
+                            <Footer/>
+                        </NavbarAdmin>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/data-obat"
+                element={
+                    <PrivateRoute role="apoteker">
+                        <NavbarAdmin>
+                            <DataObat/>
+                            <Footer/>
+                        </NavbarAdmin>
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/data-pengambilan-obat"
+                element={
+                    <PrivateRoute role="apoteker">
+                        <NavbarAdmin>
+                            <DataPengambilanObat/>
+                            <Footer/>
+                        </NavbarAdmin>
+                    </PrivateRoute>
+                }
+            />
+            <Route path="/page/not-found" element={<><NoNavbar/><NotFound/></>}/>
+            <Route path="*" element={<><NoNavbar/><NotFound/></>}/>
+        </Routes>
     );
-
-  return (
-      <Routes>
-        <Route
-            path="/"
-            element={
-              <Navigate to="/apotek/login" />
-            }
-          />
-        <Route
-          path="/login"
-          element={
-            <AlreadyLoggedInRoute role="apoteker">
-              <NoNavbar className="absolute right-0 m-2" />
-              <LoginApotek />
-            </AlreadyLoggedInRoute>
-          }
-        />
-        <Route
-          path="/beranda"
-          element={
-            <PrivateRoute role="apoteker">
-              <NavbarAdmin>
-                <DashboardApotek />
-                <Footer />
-              </NavbarAdmin>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/data-obat"
-          element={
-            <PrivateRoute role="apoteker">
-              <NavbarAdmin>
-                <DataObat />
-                <Footer />
-              </NavbarAdmin>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/data-pengambilan-obat"
-          element={
-            <PrivateRoute role="apoteker">
-              <NavbarAdmin>
-                <DataPengambilanObat />
-                <Footer />
-              </NavbarAdmin>
-            </PrivateRoute>
-          }
-        />
-        <Route path="/page/not-found" element={<><NoNavbar /><NotFound /></>} />
-        <Route path="*" element={<><NoNavbar /><NotFound /></>} />
-      </Routes>
-  );
 };
 
 export default ApotekRoute;

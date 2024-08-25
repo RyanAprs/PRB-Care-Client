@@ -1,10 +1,9 @@
-import React from 'react';
-import { ThemeSwitcher } from '../themeSwitcher/ThemeSwitcher';
+import {ThemeSwitcher} from '../themeSwitcher/ThemeSwitcher';
 
-const NoNavbar = ({className=""}) => {
+const NoNavbar = ({className = ""}) => {
     return (
         <div className={className !== "" ? className : "hidden"}>
-            <ThemeSwitcher />
+            <ThemeSwitcher/>
         </div>
     );
 };
