@@ -7,6 +7,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { ZodError } from "zod";
+
 import { AuthContext } from "../../../config/context/AuthContext";
 import {
   handleApiError,
@@ -59,7 +60,7 @@ const DataApotek = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     if (a.namaApotek < b.namaApotek) return -1;
     if (a.namaApotek > b.namaApotek) return 1;
@@ -135,6 +136,7 @@ const DataApotek = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       const formattedWaktuOperasional = formatWaktuOperasional();
 
       const newDatas = {
@@ -156,13 +158,17 @@ const DataApotek = () => {
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
       }
+      setButtonLoading(false);
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
       } else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
@@ -198,6 +204,7 @@ const DataApotek = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       const formattedWaktuOperasional = formatWaktuOperasional();
 
       const updatedDatas = {
@@ -220,14 +227,18 @@ const DataApotek = () => {
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
       }
+      setButtonLoading(false);
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      }else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -310,7 +321,7 @@ const DataApotek = () => {
   if (isConnectionError) {
     return <ErrorConnection fetchData={fetchData} />;
   }
-
+  
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
       <Toast
@@ -445,10 +456,21 @@ const DataApotek = () => {
             </small>
           )}
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+          {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

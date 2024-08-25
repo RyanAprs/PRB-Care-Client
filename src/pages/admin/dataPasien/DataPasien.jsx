@@ -67,7 +67,7 @@ const DataPasien = () => {
   const title = "Pasien";
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
@@ -134,6 +134,7 @@ const DataPasien = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       pasienCreateSchema.parse(datas);
       const response = await createPasien(datas);
       if (response.status === 201) {
@@ -147,8 +148,10 @@ const DataPasien = () => {
         const responseData = await getAllPasien();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -213,6 +216,7 @@ const DataPasien = () => {
   };
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       pasienUpdateSchema.parse(datas);
       const response = await updatePasien(currentId, datas);
       if (response.status === 200) {
@@ -226,9 +230,10 @@ const DataPasien = () => {
         const responseData = await getAllPasien();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
-      console.log(errors);
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -251,6 +256,7 @@ const DataPasien = () => {
 
   const handleDelete = async () => {
     try {
+      setVisibleDelete(false);
       const response = await deletePasien(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -259,13 +265,11 @@ const DataPasien = () => {
           detail: "Data pasien dihapus",
           life: 3000,
         });
-        setVisibleDelete(false);
         const responseData = await getAllPasien();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDelete(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -279,6 +283,7 @@ const DataPasien = () => {
 
   const handleDone = async () => {
     try {
+      setVisibleDone(false);
       const response = await pasienDone(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -287,13 +292,11 @@ const DataPasien = () => {
           detail: "Pasien berhasil diselesaikan",
           life: 3000,
         });
-        setVisibleDone(false);
         const responseData = await getAllPasien();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDone(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -522,10 +525,21 @@ const DataPasien = () => {
             </small>
           )}
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+             {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

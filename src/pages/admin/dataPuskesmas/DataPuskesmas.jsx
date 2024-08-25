@@ -59,7 +59,7 @@ const DataPuskesmas = () => {
   const toast = useRef(null);
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     if (a.namaPuskesmas < b.namaPuskesmas) return -1;
     if (a.namaPuskesmas > b.namaPuskesmas) return 1;
@@ -134,6 +134,7 @@ const DataPuskesmas = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       const formattedWaktuOperasional = formatWaktuOperasional();
 
       const newDatas = {
@@ -155,15 +156,20 @@ const DataPuskesmas = () => {
         const data = await getAllPuskesmas();
         const sortedData = data.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      }  
+      else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -198,6 +204,7 @@ const DataPuskesmas = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       const formattedWaktuOperasional = formatWaktuOperasional();
 
       const updatedDatas = {
@@ -221,15 +228,20 @@ const DataPuskesmas = () => {
         const data = await getAllPuskesmas();
         const sortedData = data.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      }  
+      else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -448,10 +460,21 @@ const DataPuskesmas = () => {
           )}
 
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+             {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

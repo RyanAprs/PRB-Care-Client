@@ -56,7 +56,7 @@ const DataPengguna = () => {
   const title = "Pengguna";
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     if (a.namaLengkap < b.namaLengkap) return -1;
     if (a.namaLengkap > b.namaLengkap) return 1;
@@ -127,6 +127,7 @@ const DataPengguna = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       penggunaCreateSchema.parse(datas);
       const response = await createPengguna(datas);
 
@@ -141,15 +142,20 @@ const DataPengguna = () => {
         const dataResponse = await getAllPengguna();
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      } 
+      else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -183,6 +189,7 @@ const DataPengguna = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       const updatedDatas = {
         ...datas,
         alamat: datas.alamat || prevAddress,
@@ -203,15 +210,20 @@ const DataPengguna = () => {
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
         setResetAddress(true);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      } 
+      else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -434,10 +446,21 @@ const DataPengguna = () => {
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+             {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 
