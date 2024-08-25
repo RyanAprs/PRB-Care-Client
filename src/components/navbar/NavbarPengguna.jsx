@@ -2,6 +2,7 @@ import { useState, useContext, useEffect, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
 import { Menu } from "primereact/menu";
+import { ProgressSpinner } from "primereact/progressspinner";
 import {
   Bell,
   HomeIcon,
@@ -196,6 +197,7 @@ const NavbarPengguna = () => {
 
   const handleChangePassword = async () => {
     try {
+      setButtonLoading(true);
       penggunaChangePasswordSchema.parse(dataPassword);
       const response = await updatePasswordPengguna(dataPassword);
       if (response.status === 200) {
@@ -206,14 +208,18 @@ const NavbarPengguna = () => {
           life: 3000,
         });
         setVisibleChangePassword(false);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
+      }else if (error.response && error.response.status === 401) {
+        handleChangePasswordError(error, toast);
       } else {
         setVisibleChangePassword(false);
         handleChangePasswordError(error, toast);
@@ -224,7 +230,6 @@ const NavbarPengguna = () => {
 
   const handleDetailProfileModal = async () => {
     setIsMenuVisible(false);
-    setVisibleDetailProfile(true);
     try {
       const dataResponse = await getCurrentPengguna();
       if (dataResponse) {
@@ -234,9 +239,9 @@ const NavbarPengguna = () => {
           telepon: dataResponse.telepon,
           teleponKeluarga: dataResponse.teleponKeluarga,
         });
+        setVisibleDetailProfile(true);
       }
     } catch (error) {
-      setVisibleDetailProfile(false);
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
@@ -245,7 +250,6 @@ const NavbarPengguna = () => {
   const handleUpdateProfileModal = async () => {
     setErrors({});
     setVisibleDetailProfile(false);
-    setVisibleUpdateProfile(true);
     try {
       const dataResponse = await getCurrentPengguna();
       setPrevAddress(dataResponse.alamat);
@@ -257,8 +261,8 @@ const NavbarPengguna = () => {
           teleponKeluarga: dataResponse.teleponKeluarga,
         });
       }
+      setVisibleUpdateProfile(true);
     } catch (error) {
-      setVisibleUpdateProfile(false);
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
@@ -266,6 +270,7 @@ const NavbarPengguna = () => {
 
   const handleUpdateProfile = async () => {
     try {
+      setButtonLoading(true)
       const updatedDatas = {
         ...dataPengguna,
         alamat: dataPengguna.alamat || prevAddress,
@@ -281,18 +286,23 @@ const NavbarPengguna = () => {
           life: 3000,
         });
         setVisibleUpdateProfile(false);
+        setButtonLoading(false);
         handleDetailProfileModal();
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
+      }  else {
         HandleUnauthorizedPengguna(error.response, dispatch, navigate);
         handleApiError(error, toast);
+        setVisibleUpdateProfile(false);
       }
     }
   };
@@ -329,6 +339,7 @@ const NavbarPengguna = () => {
       command: () => handleModalLogout(),
     },
   ];
+  const [isButtonLoading, setButtonLoading] = useState(null);
   return (
     <>
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
@@ -690,10 +701,21 @@ const NavbarPengguna = () => {
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
           )}
           <Button
-            label="Edit"
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>Edit</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 
@@ -771,10 +793,21 @@ const NavbarPengguna = () => {
             </small>
           )}
           <Button
-            label={"Edit"}
-            className="p-4 bg-lightGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainGreen dark:hover:bg-lightGreen rounded-xl  transition-all"
+            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+            disabled={isButtonLoading}
             onClick={handleChangePassword}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>Edit</p>
+              )}
+          </Button>
         </div>
       </Dialog>
     </>

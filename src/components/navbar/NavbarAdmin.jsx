@@ -18,6 +18,7 @@ import {
   LockKeyhole,
   UserPlus,
 } from "lucide-react";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Menu as Menuk } from "primereact/menu";
 import icon from "../../assets/prbcare.svg";
@@ -234,7 +235,7 @@ const NavbarAdmin = ({ children }) => {
   const handleDetailProfileModal = async () => {
     setErrors({});
     setIsMenuVisible(false);
-    setVisibleDetailProfile(true);
+   
     if (role === "nakes") {
       setIsApotekUpdate(false);
       setDetailDataPuskesmas({});
@@ -247,8 +248,8 @@ const NavbarAdmin = ({ children }) => {
             telepon: dataResponse.telepon,
             waktuOperasional: dataResponse.waktuOperasional,
           });
-          setVisibleDetailProfile(true);
         }
+        setVisibleDetailProfile(true);
       } catch (error) {
         setVisibleDetailProfile(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -267,6 +268,7 @@ const NavbarAdmin = ({ children }) => {
             telepon: dataResponse.telepon,
             waktuOperasional: dataResponse.waktuOperasional,
           });
+          setVisibleDetailProfile(true);
         }
       } catch (error) {
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
@@ -280,14 +282,12 @@ const NavbarAdmin = ({ children }) => {
   const handleUpdateProfileModal = async () => {
     setVisibleDetailProfile(false);
     setErrors({});
-    setVisibleUpdateProfile(true);
     if (role === "nakes") {
       setIsApotekUpdate(false);
       try {
         const dataResponse = await getCurrentAdminPuskesmas();
         setPrevAddress(dataResponse.alamat);
         setPrevWaktuOperasional(dataResponse.waktuOperasional);
-
         if (dataResponse) {
           setDataPuskesmas({
             namaPuskesmas: dataResponse.namaPuskesmas,
@@ -296,8 +296,8 @@ const NavbarAdmin = ({ children }) => {
             waktuOperasional: dataResponse.waktuOperasional,
           });
         }
+        setVisibleUpdateProfile(true);
       } catch (error) {
-        setVisibleUpdateProfile(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
@@ -317,8 +317,8 @@ const NavbarAdmin = ({ children }) => {
             telepon: dataResponse.telepon,
             waktuOperasional: dataResponse.waktuOperasional,
           });
-          setVisibleDetailProfile(false);
         }
+        setVisibleUpdateProfile(true);
       } catch (error) {
         HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
         handleApiError(error, toast);
@@ -326,10 +326,11 @@ const NavbarAdmin = ({ children }) => {
     }
   };
 
+  
   const handleUpdateProfile = async () => {
     const formattedWaktuOperasional = formatWaktuOperasional();
-
     try {
+      setButtonLoading(true);
       if (isApotekUpdate) {
         const updatedDatas = {
           ...dataApotek,
@@ -346,7 +347,7 @@ const NavbarAdmin = ({ children }) => {
             detail: "Apotek diperbarui",
             life: 3000,
           });
-
+          setButtonLoading(false);
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
           handleDetailProfileModal();
@@ -368,19 +369,22 @@ const NavbarAdmin = ({ children }) => {
             detail: "Puskesmas diperbarui",
             life: 3000,
           });
-
+          setButtonLoading(false);
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
           handleDetailProfileModal();
         }
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
+      }else if (error.response && error.response.status === 409) {
+        handleApiError(error, toast);
       } else {
         if (isApotekUpdate) {
           HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
@@ -388,6 +392,7 @@ const NavbarAdmin = ({ children }) => {
           HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         }
         handleApiError(error, toast);
+        setVisibleUpdateProfile(false);
       }
     }
   };
@@ -401,8 +406,8 @@ const NavbarAdmin = ({ children }) => {
 
   const handleChangePassword = async () => {
     try {
+      setButtonLoading(true);
       superAdminChangePasswordSchema.parse(dataPassword);
-
       let response;
       if (role === "admin") {
         response = await updatePassword(dataPassword);
@@ -420,21 +425,26 @@ const NavbarAdmin = ({ children }) => {
           life: 3000,
         });
         setVisibleChangePassword(false);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
+      } else if (error.response && error.response.status === 401) {
+        handleChangePasswordError(error, toast);
       } else {
         setVisibleChangePassword(false);
         handleChangePasswordError(error, toast);
-        console.log(error);
       }
     }
   };
+  const [isButtonLoading, setButtonLoading] = useState(null);
+
 
   return (
     <div className="flex h-screen w-full">
@@ -1017,10 +1027,21 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <Button
-            label="Edit"
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleUpdateProfile}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>Edit</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 
@@ -1098,10 +1119,22 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <Button
-            label={"Edit"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={handleChangePassword}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>Edit</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

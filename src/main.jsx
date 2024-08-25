@@ -11,21 +11,19 @@ import { ModalUpdateProvider } from "./config/context/ModalUpdateContext.jsx";
 
 const helmetContext = {};
 
-PrimeReactProvider.autoZIndex = false;
-PrimeReactProvider.zIndex = {
-  modal: 1100,
-  overlay: 1000,
-  menu: 1000,
-  tooltip: 1100,
-  toast: 2000,
-};
 
 function Main() {
   const darkMode = useDarkMode(false, {classNameDark : "dark"});
   return (
     <InstallPromptProvider>
       <HelmetProvider context={helmetContext}>
-        <PrimeReactProvider
+        <PrimeReactProvider autoZIndex={false} zIndex={{
+            modal: 1100,
+            overlay: 1000,
+            menu: 1000,
+            tooltip: 1100,
+            toast: 2000,
+          }}
           value={{
             ripple: true,
             pt: {
