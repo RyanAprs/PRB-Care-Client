@@ -252,13 +252,19 @@ export default function ReusableTable({
         </ul>
       );
     }
+    if (field === "telepon" || field === "teleponKeluarga") {
+      return (
+        <a href={`https://api.whatsapp.com/send/?phone=${valueString}`} target="_blank" className="hover:text-lightGreen hover:dark:text-mainGreen">{valueString}</a>
+        )
+    }
+
     return <span>{valueString}</span>;
   };
 
   return (
     <div className="p-4 w-full ">
       <div className="card p-6 w-full flex flex-col gap-4">
-        <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-center md:mb-4">
           <div className="p-inputgroup md:w-1/2">
             <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
               <Search size={16} />
@@ -271,7 +277,7 @@ export default function ReusableTable({
               className=""
             />
           </div>
-          <div className="flex gap-2  items-center justify-center">
+          <div className={`flex gap-2 items-center ${statuses && statuses.length > 0 ?"justify-center md:justify-end" : "justify-end"} w-full`}>
             {statuses && statuses.length > 0 && (
               <div>{statusRowFilterTemplate}</div>
             )}

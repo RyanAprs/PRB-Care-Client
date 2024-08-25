@@ -832,7 +832,7 @@ const NavbarAdmin = ({ children }) => {
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
-              className="p-1 rounded-full cursor-pointer "
+              className="p-1 ml-2 rounded-full cursor-pointer "
               label={
                 !isMenuVisible ? (
                   <Settings2 className="dark:text-white text-black" />
