@@ -85,6 +85,7 @@ const DataPuskesmas = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllPuskesmas();
       const sortedData = response.sort(customSort);
       setData(sortedData);

@@ -65,6 +65,7 @@ const DataPengguna = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllPengguna();
       const sortedData = response.sort(customSort);
       setData(sortedData);

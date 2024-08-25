@@ -60,6 +60,7 @@ const DataObat = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllObat();
       const sortedData = response.sort(customSort);
       setData(sortedData);

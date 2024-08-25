@@ -24,6 +24,7 @@ const DataApotek = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllApotek();
       const sortedData = response.sort(customSort);
       setData(sortedData);

@@ -78,6 +78,7 @@ const DataPengambilanObat = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllPengambilanObat();
       const sortedData = response.sort(customSort);
       setData(sortedData);

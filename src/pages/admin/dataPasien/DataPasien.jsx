@@ -78,6 +78,7 @@ const DataPasien = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllPasien();
       const sortedData = response.sort(customSort);
       setData(sortedData);

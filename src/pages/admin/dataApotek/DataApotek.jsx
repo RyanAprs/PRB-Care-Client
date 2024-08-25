@@ -85,6 +85,7 @@ const DataApotek = () => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await getAllApotek();
       const sortedData = response.sort(customSort);
       setData(sortedData);
@@ -309,6 +310,7 @@ const DataApotek = () => {
   if (isConnectionError) {
     return <ErrorConnection fetchData={fetchData} />;
   }
+
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
       <Toast
