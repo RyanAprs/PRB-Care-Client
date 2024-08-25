@@ -3,7 +3,7 @@ import ReusableTable from "../../../components/rousableTable/RousableTable";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { ZodError } from "zod";
+import { set, ZodError } from "zod";
 import { Toast } from "primereact/toast";
 import {
   handleApiError,
@@ -47,7 +47,7 @@ const DataObat = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     if (a.namaObat < b.namaObat) return -1;
     if (a.namaObat > b.namaObat) return 1;
@@ -97,6 +97,7 @@ const DataObat = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       createObatSchemaAdminApotek.parse(datas);
 
       const response = await createObat(datas);
@@ -112,8 +113,10 @@ const DataObat = () => {
         const dataResponse = await getAllObat();
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -149,6 +152,7 @@ const DataObat = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       updateObatSchemaAdminApotek.parse(datas);
       const response = await updateObat(currentId, datas);
       if (response.status === 200) {
@@ -162,8 +166,10 @@ const DataObat = () => {
         const dataResponse = await getAllObat();
         const sortedData = dataResponse.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -322,10 +328,21 @@ const DataObat = () => {
           )}
 
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

@@ -78,6 +78,7 @@ const DataPengambilanObat = () => {
 
   const handleDone = async () => {
     try {
+      setVisibleDone(false);
       const response = await PengambilanObatDone(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -86,13 +87,11 @@ const DataPengambilanObat = () => {
           detail: "Kontrol balik berhasil diselesaikan dari kontrol balik",
           life: 3000,
         });
-        setVisibleDone(false);
         const responseData = await getAllPengambilanObat();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDone(false);
       HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
