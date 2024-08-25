@@ -1,8 +1,8 @@
 import img from "../../../assets/prbcare.svg";
 const KebijakanPrivasi = () => {
   return (
-    <div className="min-h-screen dark:text-white  text-black p-8 md:px-40">
-      <img src={img} className="mb-2 w-60 mx-auto" alt="img" />
+    <div className="min-h-screen dark:text-white  text-black p-8 md:px-40 text-justify">
+      <img src={img} className="mb-2 w-32 mx-auto" alt="img" />
       <h1 className="text-4xl font-bold mb-6 text-center">Kebijakan Privasi</h1>
       <div className="max-w-3xl mx-auto">
         <p className="mb-4">
@@ -67,11 +67,6 @@ const KebijakanPrivasi = () => {
         <p className="mb-4">
           Kami dapat memperbarui Kebijakan Privasi ini dari waktu ke waktu.
           Perubahan akan diberitahukan melalui aplikasi atau website kami.
-        </p>
-
-        <p className="mb-4">
-          Jika Anda memiliki pertanyaan atau kekhawatiran tentang Kebijakan
-          Privasi ini, Anda dapat menghubungi kami di prbcare@gmail.com.
         </p>
       </div>
     </div>

@@ -9,10 +9,9 @@ import { HelmetProvider, Helmet } from "react-helmet-async";
 import { InstallPromptProvider } from "./config/context/InstallPromptContext.jsx";
 import { ModalUpdateProvider } from "./config/context/ModalUpdateContext.jsx";
 
-const helmetContext = {};
-
-
 function Main() {
+  window.console.log = () => {};
+  const helmetContext = {};
   const darkMode = useDarkMode(false, {classNameDark : "dark"});
   return (
     <InstallPromptProvider>

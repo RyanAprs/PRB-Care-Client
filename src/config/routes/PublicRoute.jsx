@@ -57,7 +57,7 @@ const PublicRoute = () => {
           path="/kebijakan-privasi"
           element={
             <>
-              <NoNavbar/><KebijakanPrivasi/>
+              <NoNavbar className="absolute right-0 m-2"/><KebijakanPrivasi/>
             </>
           }
         />

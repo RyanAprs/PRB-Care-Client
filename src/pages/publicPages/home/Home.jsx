@@ -3,8 +3,8 @@ import img from "../../../assets/prbcare.svg";
 import { useContext } from "react";
 import { AuthContext } from "../../../config/context/AuthContext";
 import { Ripple } from 'primereact/ripple';
-
 const Home = () => {
+  const {token, role} = useContext(AuthContext);
   return (
     <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
       <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
@@ -23,7 +23,15 @@ const Home = () => {
               </p>
             </div>
             <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
-            <Link
+            {token && role === "pengguna" ? ( <Link
+                  to="/pengguna/beranda"
+                  className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                >
+                  <div className="flex gap-2 justify-center items-center text-lg">
+                    Jelajahi sekarang
+                  </div>
+                  <Ripple />
+                </Link>):(<Link
                   to="/pengguna/register"
                   className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                 >
@@ -31,7 +39,8 @@ const Home = () => {
                     Mulai Bergabung
                   </div>
                   <Ripple />
-                </Link>
+                </Link>)}
+               
             </div>
           </div>
           <img
