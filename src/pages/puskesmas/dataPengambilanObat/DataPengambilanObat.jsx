@@ -10,7 +10,7 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
-import { ZodError } from "zod";
+import { set, ZodError } from "zod";
 import {
   handleCreatePengambilanObatError,
   handleDeleteError,
@@ -63,7 +63,7 @@ const DataPengambilanObat = () => {
   const title = "Kontrol Balik";
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "diambil", "batal"];
 
@@ -132,6 +132,7 @@ const DataPengambilanObat = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       pengambilanObatCreateSchema.parse(datas);
       const response = await createPengambilanObat(datas);
       if (response.status === 201) {
@@ -145,8 +146,10 @@ const DataPengambilanObat = () => {
         const responseData = await getAllPengambilanObat();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -208,6 +211,7 @@ const DataPengambilanObat = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       pengambilanObatUpdateSchema.parse(datas);
 
       const updatedData = {
@@ -230,8 +234,10 @@ const DataPengambilanObat = () => {
         const responseData = await getAllPengambilanObat();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -254,9 +260,8 @@ const DataPengambilanObat = () => {
 
   const handleDelete = async () => {
     try {
+      setVisibleDelete(false);
       const response = await deletePengambilanObat(currentId);
-      console.log(response);
-
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -264,13 +269,11 @@ const DataPengambilanObat = () => {
           detail: "Data kontrol balik dihapus",
           life: 3000,
         });
-        setVisibleDelete(false);
         const responseData = await getAllPengambilanObat();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDelete(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -284,6 +287,7 @@ const DataPengambilanObat = () => {
 
   const handleCancelled = async () => {
     try {
+      setVisibleCancelled(false);
       const response = await PengambilanObatCancelled(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -292,13 +296,11 @@ const DataPengambilanObat = () => {
           detail: "Pasien berhasil dibatalkan dari kontrol balik",
           life: 3000,
         });
-        setVisibleCancelled(false);
         const responseData = await getAllPengambilanObat();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleCancelled(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -530,10 +532,21 @@ const DataPengambilanObat = () => {
             </small>
           )}
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={!isEditMode ? handleCreate : handleUpdate}
-          />
+          >
+             {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

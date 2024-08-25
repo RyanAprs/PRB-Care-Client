@@ -12,7 +12,7 @@ const Footer = () => {
           &copy; {new Date().getFullYear()} PRBCare, Made with ❤ by{" "}
           <a href="https://github.com/RyanAprs">Ryan</a>
           <span>&</span>
-          <a href="https://github.com/ScrKiddie">Hilmi</a>.
+          <a href="https://github.com/ScrKiddie">Hilmi.</a>
         </h1>
       </div>
     </footer>
@@ -93,7 +93,7 @@ const Footer = () => {
           &copy; {new Date().getFullYear()} PRBCare, Made with ❤ by{" "}
           <a href="https://github.com/RyanAprs">Ryan</a>
           <span>&</span>
-          <a href="https://github.com/ScrKiddie">Hilmi</a>.
+          <a href="https://github.com/ScrKiddie">Hilmi.</a>
         </h1>
       </div>
     </footer>

@@ -223,7 +223,7 @@ const RegisterPengguna = () => {
             Captcha:
           </label>
           <ReCAPTCHA
-            theme={darkMode.value ? "dark" : ""}
+            theme={darkMode.value ? "dark" : "light"}
             className="rounded-lg "
             ref={recaptchaRef}
             sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"

@@ -467,7 +467,7 @@ const NavbarAdmin = ({ children }) => {
           menuItemStyles={{
             button: {
               ["&:hover"]:
-              darkMode.value === "true"
+              darkMode.value
                   ? {
                       backgroundColor: "#40916C",
                       color: "white",

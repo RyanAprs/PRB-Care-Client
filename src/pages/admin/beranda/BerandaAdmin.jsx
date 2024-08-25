@@ -11,8 +11,11 @@ import {
 import { Card } from "primereact/card";
 import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
+import { Ripple } from 'primereact/ripple';
+import useDarkMode from 'use-dark-mode';
 
 const DashboardAdmin = () => {
+  const darkMode = useDarkMode(false,{classNameDark : "dark"});
   const toast = useRef(null);
   const navigate = useNavigate();
   const [showToast, setShowToast] = useState(false);
@@ -89,12 +92,18 @@ const DashboardAdmin = () => {
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
       <Toast ref={toast} position={window.innerWidth <= 767 ? "top-center":"top-right"} />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {list.map((item, index) => (
+       {list.map((item, index) => (
+         <div onClick={() => handleCardClick(item.route)} className=" shadow-md rounded-xl w-full h-full p-ripple">
+          <Ripple
+        pt={darkMode.value ? "" : {
+          root: { style: { background: 'rgba(64, 145, 108, 0.3)' } }
+      }}
+    />
           <Card
             key={index}
-            className="min-w-10 rounded-xl shadow-md flex flex-col items-center justify-center cursor-pointer "
+            className="min-w-10  flex flex-col items-center justify-center cursor-pointer "
             style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
-            onClick={() => handleCardClick(item.route)}
+            
           >
             <div className="flex flex-col items-center justify-center h-full">
               <div className="text-xl font-semibold mb-4">{item.title}</div>
@@ -102,7 +111,9 @@ const DashboardAdmin = () => {
               <div className="text-xl text-center">{item.desc}</div>
             </div>
           </Card>
+          </div>
         ))}
+        
       </div>
     </div>
   );

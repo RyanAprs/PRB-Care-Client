@@ -5,8 +5,10 @@ import { Toast } from "primereact/toast";
 import { useNavigate } from "react-router-dom";
 import { getCurrentAdminApotek } from "../../../services/ApotekService";
 import { useModalUpdate } from "../../../config/context/ModalUpdateContext";
-
+import { Ripple } from 'primereact/ripple';
+import useDarkMode from 'use-dark-mode';
 const DashboardApotek = () => {
+  const darkMode = useDarkMode(false,{classNameDark : "dark"});
   const [showToast, setShowToast] = useState(false);
   const toast = useRef(null);
   const navigate = useNavigate();
@@ -69,15 +71,18 @@ const DashboardApotek = () => {
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {list.map((item, index) => (
+      {list.map((item, index) => (
+         <div onClick={() => handleCardClick(item.route)} className="  shadow-md rounded-xl w-full h-full p-ripple">
+          <Ripple
+        pt={darkMode.value ? "" : {
+          root: { style: { background: 'rgba(64, 145, 108, 0.3)' } }
+      }}
+    />
           <Card
             key={index}
-           className="min-w-10 rounded-xl shadow-md flex flex-col items-center justify-center cursor-pointer "
-            style={{
-              fontFamily: "Poppins, sans-serif",
-              color: "var(--surface-900) !important",
-            }}
-            onClick={() => handleCardClick(item.route)}
+            className="min-w-10  flex flex-col items-center justify-center cursor-pointer "
+            style={{ fontFamily: "Poppins, sans-serif", color:"var(--surface-900) !important" }}
+            
           >
             <div className="flex flex-col items-center justify-center h-full">
               <div className="text-xl font-semibold mb-4">{item.title}</div>
@@ -85,6 +90,7 @@ const DashboardApotek = () => {
               <div className="text-xl text-center">{item.desc}</div>
             </div>
           </Card>
+          </div>
         ))}
       </div>
     </div>

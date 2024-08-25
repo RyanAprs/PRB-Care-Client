@@ -23,7 +23,7 @@ import {
   kontrolBalikCreateSchema,
   kontrolBalikUpdateSchema,
 } from "../../../validations/KontrolBalikSchema";
-import { ZodError } from "zod";
+import { set, ZodError } from "zod";
 import {
   handleKontrolBalikError,
   handleDeleteError,
@@ -72,7 +72,7 @@ const DataKontrolBalik = () => {
   const title = "Kontrol Balik";
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-
+  const [isButtonLoading, setButtonLoading] = useState(null);
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];
 
@@ -150,6 +150,7 @@ const DataKontrolBalik = () => {
 
   const handleCreate = async () => {
     try {
+      setButtonLoading(true);
       kontrolBalikCreateSchema.parse(datas);
       const response = await createKontrolBalik(datas);
       if (response.status === 201) {
@@ -163,8 +164,10 @@ const DataKontrolBalik = () => {
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -232,6 +235,7 @@ const DataKontrolBalik = () => {
 
   const handleUpdate = async () => {
     try {
+      setButtonLoading(true);
       kontrolBalikUpdateSchema.parse(datas);
       const response = await updateKontrolBalik(currentId, datas);
       if (response.status === 200) {
@@ -246,14 +250,18 @@ const DataKontrolBalik = () => {
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
+        setButtonLoading(false);
       }
     } catch (error) {
+      setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
+      }else if (error.response && error.response.status === 409) {
+        handleKontrolBalikError(error, toast);
       } else {
         setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -270,6 +278,7 @@ const DataKontrolBalik = () => {
 
   const handleDelete = async () => {
     try {
+      setVisibleDelete(false);
       const response = await deleteKontrolBalik(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -278,13 +287,11 @@ const DataKontrolBalik = () => {
           detail: "Data kontrol balik dihapus",
           life: 3000,
         });
-        setVisibleDelete(false);
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDelete(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     }
@@ -298,6 +305,7 @@ const DataKontrolBalik = () => {
 
   const handleDone = async () => {
     try {
+      setVisibleDone(false);
       const response = await kontrolBalikDone(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -306,13 +314,11 @@ const DataKontrolBalik = () => {
           detail: "Kontrol balik berhasil diselesaikan dari kontrol balik",
           life: 3000,
         });
-        setVisibleDone(false);
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleDone(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -326,6 +332,7 @@ const DataKontrolBalik = () => {
 
   const handleCancelled = async () => {
     try {
+      setVisibleCancelled(false);
       const response = await kontrolBalikCancelled(currentId);
       if (response.status === 200) {
         toast.current.show({
@@ -334,13 +341,11 @@ const DataKontrolBalik = () => {
           detail: "Pasien berhasil dibatalkan dari kontrol balik",
           life: 3000,
         });
-        setVisibleCancelled(false);
         const responseData = await getAllKontrolBalik();
         const sortedData = responseData.sort(customSort);
         setData(sortedData);
       }
     } catch (error) {
-      setVisibleCancelled(false);
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     }
@@ -711,10 +716,21 @@ const DataKontrolBalik = () => {
             </small>
           )}
           <Button
-            label={isEditMode ? "Edit" : "Simpan"}
+            disabled={isButtonLoading}
             className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             onClick={isEditMode ? handleUpdate : handleCreate}
-          />
+          >
+            {isButtonLoading ? (
+                <ProgressSpinner
+                  style={{ width: "25px", height: "25px" }}
+                  strokeWidth="8"
+                  animationDuration="1s"
+                  color="white"
+                />
+              ) : (
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
+              )}
+          </Button>
         </div>
       </Dialog>
 

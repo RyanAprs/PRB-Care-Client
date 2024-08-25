@@ -261,7 +261,11 @@ const DataKontrolBalik = () => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }
+      else if (error.response && error.response.status === 409) {
+        handleKontrolBalikError(error, toast);
+      } 
+      else {
         setVisible(false);
         HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleKontrolBalikError(error, toast);
