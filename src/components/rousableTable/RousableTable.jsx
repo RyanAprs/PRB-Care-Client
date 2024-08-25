@@ -233,7 +233,8 @@ export default function ReusableTable({
     }
   };
 
-  const formatCellContent = (data, field) => {
+  const formatWaktuOperasional = (data) => {
+    const field = "waktuOperasional";
     const fields = field.split(".");
     let value = data;
 
@@ -243,10 +244,10 @@ export default function ReusableTable({
 
     const valueString = value ? value.toString() : "";
 
-    if (valueString.includes("<br />")) {
+    if (valueString.includes(",")) {
       return (
         <ul className="list-disc pl-5">
-          {valueString.split("<br />").map((item, index) => (
+          {valueString.split(",").map((item, index) => (
             <li key={index}>{item.trim()}</li>
           ))}
         </ul>
@@ -325,7 +326,13 @@ export default function ReusableTable({
                 field={col.field}
                 header={col.header}
                 sortable
-                body={(data) => formatCellContent(data, col.field)}
+                body={(data) =>
+                  col.field === "waktuOperasional" ? (
+                    formatWaktuOperasional(data)
+                  ) : (
+                    <span>{data[col.field]}</span>
+                  )
+                }
                 className="p-4"
               />
             ))}

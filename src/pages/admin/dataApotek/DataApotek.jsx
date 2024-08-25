@@ -129,7 +129,7 @@ const DataApotek = () => {
   };
 
   const formatWaktuOperasional = () => {
-    return waktuOperasionalList.join(" <br /> ");
+    return waktuOperasionalList.join(", ");
   };
 
   const handleCreate = async () => {
