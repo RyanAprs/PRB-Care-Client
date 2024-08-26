@@ -2,6 +2,7 @@ importScripts("https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js");
 importScripts(
   "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
 );
+import icon from "../src/assets/prbcare.svg";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -105,7 +106,7 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body: notificationBody,
-    icon: "/firebase-logo.png",
+    icon: icon,
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
