@@ -189,7 +189,11 @@ const NavbarPengguna = () => {
     };
 
     const handleModalChangePassword = () => {
-        setDataPassword({});
+        setDataPassword({
+            currentPassword: "",
+            newPassword: "",
+            confirmPassword: "",
+        });
         setErrors({});
         setIsMenuVisible(false);
         setVisibleChangePassword(true);
