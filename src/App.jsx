@@ -9,7 +9,6 @@ import PublicRoute from "./config/routes/PublicRoute";
 import { initializeApp } from "firebase/app";
 import { getMessaging, onMessage } from "firebase/messaging";
 import { useEffect } from "react";
-import icon from "./assets/prbcare.svg";
 
 window.global = window;
 
@@ -125,7 +124,6 @@ function App() {
 
       const notificationOptions = {
         body: notificationBody,
-        icon: icon,
       };
 
       new Notification(notificationTitle, notificationOptions);
