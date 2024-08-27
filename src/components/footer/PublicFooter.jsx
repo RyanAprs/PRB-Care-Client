@@ -4,7 +4,7 @@ import img from "../../assets/prbcare.svg";
 
 const PublicFooter = () => {
     return (
-        <footer className="dark:bg-black bg-whiteGrays dark:text-white pt-12  md:pb-3">
+        <footer className="dark:bg-black bg-whiteGrays dark:text-white pt-10  md:pb-3">
             <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="flex flex-col mx-auto items-center">
                     <div className="flex items-center">

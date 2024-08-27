@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom";
-import img from "../../../assets/prbcare.svg";
+import img from "../../../assets/beranda.png";
 import {useContext} from "react";
 import {AuthContext} from "../../../config/context/AuthContext";
 import {Ripple} from 'primereact/ripple';
