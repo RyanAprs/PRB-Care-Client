@@ -1,4 +1,4 @@
-import { TabletSmartphone, Bell, Hospital, HousePlus } from "lucide-react";
+import { TabletSmartphone, Bell } from "lucide-react";
 import img from "../../../assets/home.png";
 import { useState } from "react";
 import { Button } from "primereact/button";
