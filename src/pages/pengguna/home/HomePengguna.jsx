@@ -88,7 +88,7 @@ const HomePengguna = () => {
             </h1>
             <div className="flex flex-col items-center">
               <p
-                className={`text-lg text-justify w-full ${
+                className={`text-lg text-justify w-full md:pr-10 ${
                   permission === "granted" ? "hidden" : ""
                 }`}
               >
@@ -100,7 +100,7 @@ const HomePengguna = () => {
                 mengenai kontrol balik dan pengambilan obat.
               </p>
               <p
-                className={`text-lg text-justify w-full ${
+                className={`text-lg text-justify w-full md:pr-10 ${
                   permission !== "granted" || installPromptEvent === null
                     ? "hidden"
                     : ""
@@ -112,7 +112,7 @@ const HomePengguna = () => {
                 "Install" untuk menambahkan aplikasi ke perangkat Anda.
               </p>
               <p
-                className={`text-lg text-justify w-full ${
+                className={`text-lg text-justify w-full md:pr-10 ${
                   permission !== "granted" || installPromptEvent !== null
                     ? "hidden"
                     : ""

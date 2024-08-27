@@ -1,12 +1,10 @@
-import React, {useContext} from "react";
+import {useContext} from "react";
 import {
-    BrowserRouter as Router,
     Routes,
     Route,
     Navigate,
 } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
-import LoginApotek from "../../pages/apotek/login/LoginApotek";
 import {AuthContext} from "../context/AuthContext";
 import DashboardApotek from "../../pages/apotek/beranda/BerandaApotek";
 import DataPengambilanObat from "../../pages/apotek/dataPengambilanObat/DataPengambilanObat";
@@ -33,7 +31,7 @@ const PrivateRoute = ({children, role}) => {
 const AlreadyLoggedInRoute = ({children, role}) => {
     const {token, role: userRole} = useContext(AuthContext);
     if (token && userRole === role) {
-        return <Navigate to="/apotek/beranda"/>;
+        return <Navigate to="/admin/beranda"/>;
     }
     return children;
 };
@@ -54,16 +52,7 @@ const ApotekRoute = () => {
             <Route
                 path="/"
                 element={
-                    <Navigate to="/apotek/login"/>
-                }
-            />
-            <Route
-                path="/login"
-                element={
-                    <AlreadyLoggedInRoute role="apoteker">
-                        <NoNavbar className="absolute right-0 m-2"/>
-                        <LoginApotek/>
-                    </AlreadyLoggedInRoute>
+                    <Navigate to="/admin/login"/>
                 }
             />
             <Route

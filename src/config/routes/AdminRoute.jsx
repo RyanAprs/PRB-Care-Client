@@ -32,8 +32,12 @@ const PrivateRoute = ({children, role}) => {
 
 const AlreadyLoggedInRoute = ({children, role}) => {
     const {token, role: userRole} = useContext(AuthContext);
-    if (token && userRole === role) {
+    if (token && userRole === "admin") {
         return <Navigate to="/admin/beranda"/>;
+    }else if (token && userRole === "nakes") {
+        return <Navigate to="/puskesmas/beranda"/>;
+    }else if (token && userRole === "apoteker") {
+        return <Navigate to="/apotek/beranda"/>;
     }
     return children;
 };

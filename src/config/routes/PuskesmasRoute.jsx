@@ -1,6 +1,5 @@
 import {useContext} from "react";
 import {Routes, Route, Navigate} from "react-router-dom";
-import LoginPuskesmas from "../../pages/puskesmas/login/LoginPuskesmas";
 import NotFound from "../../pages/NotFound";
 import {AuthContext} from "../context/AuthContext";
 import DashboardPuskesmas from "../../pages/puskesmas/beranda/BerandaPuskesmas";
@@ -16,7 +15,7 @@ const PrivateRoute = ({children, role}) => {
     const {token, role: userRole} = useContext(AuthContext);
 
     if (!token) {
-        return <Navigate to="/puskesmas/login"/>;
+        return <Navigate to="/admin/login"/>;
     }
 
     if (userRole !== role) {
@@ -48,16 +47,7 @@ const PuskesmasRoute = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<Navigate to="/puskesmas/login"/>}/>
-            <Route
-                path="/login"
-                element={
-                    <AlreadyLoggedInRoute role="nakes">
-                        <NoNavbar className="absolute right-0 m-2"/>
-                        <LoginPuskesmas/>
-                    </AlreadyLoggedInRoute>
-                }
-            />
+            <Route path="/" element={<Navigate to="/admin/login"/>}/>
             <Route
                 path="/beranda"
                 element={

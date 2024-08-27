@@ -15,7 +15,7 @@ export const HandleUnauthorizedAdminPuskesmas = (
     if (response) {
         if (response.status === 401 || response.status === 403) {
             dispatch({type: "LOGOUT"});
-            navigate("/puskesmas/login");
+            navigate("/admin/login");
         }
     }
 };
@@ -24,7 +24,7 @@ export const HandleUnauthorizedAdminApotek = (response, dispatch, navigate) => {
     if (response) {
         if (response.status === 401 || response.status === 403) {
             dispatch({type: "LOGOUT"});
-            navigate("/apotek/login");
+            navigate("/admin/login");
         }
     }
 };
@@ -33,7 +33,7 @@ export const HandleUnauthorizedPengguna = (response, dispatch, navigate) => {
     if (response) {
         if (response.status === 401 || response.status === 403) {
             dispatch({type: "LOGOUT"});
-            navigate("/login");
+            navigate("/pengguna/login");
         }
     }
 };

@@ -466,7 +466,7 @@ const NavbarPengguna = () => {
                 model={items}
             />
             <div
-                className="fixed z-50 md:hidden bottom-0 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
+                className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
                 style={{boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.05)"}}
             >
                 <div className="flex  justify-between items-center ">
