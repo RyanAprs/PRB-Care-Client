@@ -252,11 +252,11 @@ export default function ReusableTable({
                 </ul>
             );
         }
-        if (field === "telepon" || field === "teleponKeluarga") {
+        if (field.includes("telepon")) {
             return (
                 <a href={`https://api.whatsapp.com/send/?phone=${valueString}`} target="_blank"
                    className="hover:text-lightGreen hover:dark:text-mainGreen">{valueString}</a>
-            )
+            );
         }
 
         return <span>{valueString}</span>;

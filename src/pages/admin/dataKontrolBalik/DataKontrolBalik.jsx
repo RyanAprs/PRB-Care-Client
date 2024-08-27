@@ -380,8 +380,8 @@ const DataKontrolBalik = () => {
     };
 
     const columns = [
-        {header: "Pasien", field: "pasien.pengguna.namaLengkap"},
-        {header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas"},
+        {header: "Nama Pasien", field: "pasien.pengguna.namaLengkap"},
+        {header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas"},
         {header: "Tanggal Kontrol", field: "tanggalKontrol"},
         {header: "Nomor Antrean", field: "noAntrean"},
         {header: "Keluhan", field: "keluhan"},
@@ -525,6 +525,27 @@ const DataKontrolBalik = () => {
 
                     {isEditMode && (
                         <>
+                            <label htmlFor="" className="-mb-3">
+                                Keluhan:
+                            </label>
+
+                            <InputTextarea
+                                type="text"
+                                placeholder="Keluhan"
+                                className="p-input text-lg p-3  rounded"
+                                value={datas.keluhan}
+                                onChange={(e) =>
+                                    setDatas((prev) => ({
+                                        ...prev,
+                                        keluhan: e.target.value,
+                                    }))
+                                }
+                            />
+                            {errors.keluhan && (
+                                <small className="p-error -mt-3 text-sm">
+                                    {errors.keluhan}
+                                </small>
+                            )}
                             <label htmlFor="" className="-mb-3">
                                 Tinggi badan:
                             </label>
@@ -672,27 +693,7 @@ const DataKontrolBalik = () => {
                                     {errors.hasilDiagnosa}
                                 </small>
                             )}
-                            <label htmlFor="" className="-mb-3">
-                                Keluhan:
-                            </label>
 
-                            <InputTextarea
-                                type="text"
-                                placeholder="Keluhan"
-                                className="p-input text-lg p-3  rounded"
-                                value={datas.keluhan}
-                                onChange={(e) =>
-                                    setDatas((prev) => ({
-                                        ...prev,
-                                        keluhan: e.target.value,
-                                    }))
-                                }
-                            />
-                            {errors.keluhan && (
-                                <small className="p-error -mt-3 text-sm">
-                                    {errors.keluhan}
-                                </small>
-                            )}
                         </>
                     )}
 

@@ -367,10 +367,10 @@ const DataPengambilanObat = () => {
 
     const columns = [
         {header: "Resi", field: "resi"},
-        {header: "Pasien", field: "pasien.pengguna.namaLengkap"},
-        {header: "Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas"},
-        {header: "Apotek", field: "obat.adminApotek.namaApotek"},
-        {header: "Obat", field: "obat.namaObat"},
+        {header: "Nama Pasien", field: "pasien.pengguna.namaLengkap"},
+        {header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas"},
+        {header: "Nama Apotek", field: "obat.adminApotek.namaApotek"},
+        {header: "Nama Obat", field: "obat.namaObat"},
         {header: "Jumlah Obat", field: "jumlah"},
         {header: "Tanggal Pengambilan", field: "tanggalPengambilan"},
         {header: "Status", field: "status"},
