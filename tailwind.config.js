@@ -66,7 +66,7 @@ module.exports = {
         extraLightGreen: "#56b588",
         darkColor: "#081C15",
         whiteHover: "#EEEEEE",
-        blackHover: "#1a1a1a ",
+        blackHover: "#1e1e1e",
         grays:"#f8f9fa",
         darkGrays:"#212121",
         whiteGrays:"#e5e7eb",

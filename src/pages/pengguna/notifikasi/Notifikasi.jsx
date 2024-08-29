@@ -160,7 +160,7 @@ const Notifikasi = () => {
                                 value={notifikasiList}
                                 layout="list"
                                 itemTemplate={listTemplate}
-                                className="overflow-y-auto h-screen"
+                                className="overflow-y-auto h-screen bg-white dark:bg-blackHover"
 
                             />
                         </>

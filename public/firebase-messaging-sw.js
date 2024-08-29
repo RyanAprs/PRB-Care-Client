@@ -105,6 +105,7 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body: notificationBody,
+    icon: '/assets/prbcare.png'
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);

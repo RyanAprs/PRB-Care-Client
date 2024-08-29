@@ -124,6 +124,7 @@ function App() {
 
       const notificationOptions = {
         body: notificationBody,
+        icon: '/assets/prbcare.png'
       };
 
       new Notification(notificationTitle, notificationOptions);

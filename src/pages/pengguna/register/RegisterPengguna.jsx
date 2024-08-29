@@ -70,7 +70,7 @@ const RegisterPengguna = () => {
                 });
 
                 setTimeout(() => {
-                    navigate("/login");
+                    navigate("/pengguna/login");
                 }, 1500);
                 setLoading(false);
             }
