@@ -4,6 +4,7 @@ import logo from "../../assets/prbcare.svg";
 import { HomeIcon, Hospital, HousePlus, LogIn } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Toast } from "primereact/toast";
+import { Ripple } from "primereact/ripple";
 
 const NavbarPublicPage = () => {
   const toast = useRef(null);
@@ -66,14 +67,19 @@ const NavbarPublicPage = () => {
                 Apotek
               </h1>
             </Link>
-            <div className="relative flex gap-2 md:gap-6 items-center justify-center">
-              <ThemeSwitcher />
-              <Link
-                to={"/pengguna/login"}
-                className="mx-auto transition-all flex flex-col items-center justify-center"
-              >
-                <LogIn />
-              </Link>
+          </div>
+          <div className="relative flex gap-2 md:gap-2 items-center justify-center">
+            <ThemeSwitcher />
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <Link
+                  to={"/pengguna/login"}
+                  className="p-1 rounded-full cursor-pointer p-ripple mx-auto transition-all flex flex-col items-center justify-center"
+                >
+                  <LogIn className="text-black dark:text-white" />
+                  <Ripple />
+                </Link>
+              </div>
             </div>
           </div>
         </div>
