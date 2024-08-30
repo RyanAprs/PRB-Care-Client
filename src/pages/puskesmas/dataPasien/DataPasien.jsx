@@ -52,7 +52,6 @@ const DataPasien = () => {
     const [pengguna, setPengguna] = useState([]);
     const [datas, setDatas] = useState({
         noRekamMedis: "",
-        idAdminPuskesmas: "",
         idPengguna: "",
         tanggalDaftar: 0,
     });
@@ -110,7 +109,6 @@ const DataPasien = () => {
         setSelectedDate(null);
         setDatas({
             noRekamMedis: "",
-            idAdminPuskesmas: 0,
             idPengguna: 0,
             tanggalDaftar: 0,
         });
@@ -190,7 +188,6 @@ const DataPasien = () => {
                 setSelectedDate(convertDate);
                 setDatas({
                     noRekamMedis: dataResponse.noRekamMedis,
-                    idAdminPuskesmas: dataResponse.idAdminPuskesmas,
                     idPengguna: dataResponse.idPengguna,
                     tanggalDaftar: dataResponse.tanggalDaftar,
                 });
