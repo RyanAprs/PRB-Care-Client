@@ -20,7 +20,9 @@ export const authReducer = (state, action) => {
                 role = 'apoteker';
             }
 
-            Cookies.set("token", token);
+            const expiresAt = new Date(decodedToken.exp * 1000);
+
+            Cookies.set("token", token, { expires: expiresAt });
 
             return {token, role, isLoading: false};
         case "LOGOUT":
@@ -30,7 +32,6 @@ export const authReducer = (state, action) => {
             return state;
     }
 };
-
 export const AuthContextProvider = ({children}) => {
     const [state, dispatch] = useReducer(authReducer, {
         token: null,

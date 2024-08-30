@@ -45,7 +45,6 @@ const DataKontrolBalik = () => {
     const [loading, setLoading] = useState(true);
     const [datas, setDatas] = useState({
         noAntrean: 0,
-        idAdminPuskesmas: "",
         idPasien: "",
         tinggiBadan: 0,
         beratBadan: 0,
@@ -123,7 +122,6 @@ const DataKontrolBalik = () => {
         setSelectedDate(null);
         setDatas({
             noAntrean: 0,
-            idAdminPuskesmas: 0,
             idPasien: 0,
             tinggiBadan: 0,
             beratBadan: 0,
@@ -211,7 +209,6 @@ const DataKontrolBalik = () => {
                 setSelectedDate(convertDate);
                 setDatas({
                     noAntrean: dataResponse.noAntrean,
-                    idAdminPuskesmas: data.pasien.adminPuskesmas.id,
                     idPasien: dataResponse.idPasien,
                     tanggalKontrol: dataResponse.tanggalKontrol,
                     tinggiBadan: dataResponse.tinggiBadan,
@@ -511,7 +508,6 @@ const DataKontrolBalik = () => {
                             setDatas((prev) => ({
                                 ...prev,
                                 idPasien: selectedPasien.id,
-                                idAdminPuskesmas: selectedPasien.adminPuskesmas.id,
                             }));
                         }}
                     />

@@ -13,7 +13,7 @@ import {Toast} from "primereact/toast";
 import {registerPengguna} from "../../../services/PenggunaService";
 import ReCAPTCHA from "react-google-recaptcha";
 import useDarkMode from 'use-dark-mode';
-
+const VITE_RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_KEY;
 const RegisterPengguna = () => {
     const darkMode = useDarkMode(false, {classNameDark: "dark"});
     const [datas, setDatas] = useState({
@@ -227,7 +227,7 @@ const RegisterPengguna = () => {
                         theme={darkMode.value ? "dark" : "light"}
                         className="rounded-lg "
                         ref={recaptchaRef}
-                        sitekey="6LeCyigqAAAAADPb7nle3nyhCWG3coStAI6DagvO"
+                        sitekey={`${VITE_RECAPTCHA_KEY}`}
                         value={datas.tokenRecaptcha}
                         onChange={(value) => {
                             setDatas((prev) => ({
