@@ -5,14 +5,12 @@ import useDarkMode from 'use-dark-mode';
 import {AddressProvider} from "./config/context/AdressContext.jsx";
 import {PrimeReactProvider} from "primereact/api";
 import {HelmetProvider, Helmet} from "react-helmet-async";
-import {InstallPromptProvider} from "./config/context/InstallPromptContext.jsx";
 import {ModalUpdateProvider} from "./config/context/ModalUpdateContext.jsx";
 
 function Main() {
     const helmetContext = {};
     const darkMode = useDarkMode(false, {classNameDark: "dark"});
     return (
-        <InstallPromptProvider>
             <HelmetProvider context={helmetContext}>
                 <PrimeReactProvider
                     autoZIndex={false}
@@ -60,7 +58,6 @@ function Main() {
                     </main>
                 </PrimeReactProvider>
             </HelmetProvider>
-        </InstallPromptProvider>
     );
 }
 
