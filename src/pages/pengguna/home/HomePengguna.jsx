@@ -87,7 +87,7 @@ const HomePengguna = () => {
       handleNotificationSetup();
       localStorage.removeItem("isLogin");
     }
-  }, []);
+  }, [handleNotificationSetup]);
 
   return (
       <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
@@ -102,7 +102,7 @@ const HomePengguna = () => {
                 .
               </h1>
 
-              <div className={`flex flex items-center `}>
+              <div className={`flex  items-center `}>
                 <div className={`${permission !== "granted" ||
                 isFloating === true || isAndroid === false ? "hidden" : "" }`}>
                   <img
