@@ -24,7 +24,9 @@ const messaging = getMessaging(firebaseApp);
 const HomePengguna = () => {
   const [permission, setPermission] = useState(Notification.permission);
   const [isAndroid, setIsAndroid] = useState(false);
-  const [isFloating, setIsFloating] = useState(localStorage.getItem("floating") === "true");
+  const [isFloating, setIsFloating] = useState(
+    localStorage.getItem("floating") === "true"
+  );
 
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -43,12 +45,12 @@ const HomePengguna = () => {
       if (result === "granted") {
         if ("serviceWorker" in navigator) {
           const registration = await navigator.serviceWorker.register(
-              "/firebase-messaging-sw.js"
+            "/firebase-messaging-sw.js"
           );
 
           const currentToken = await getToken(messaging, {
             vapidKey:
-                "BC0gBRfdNhV5uA9P3ohrvAlRYh5ir_sgnyUkP3QXdzT1wJtNOIk2XgYJw-6yI5nac0o_Nm082ba1BLCJ7Z1TeD0",
+              "BC0gBRfdNhV5uA9P3ohrvAlRYh5ir_sgnyUkP3QXdzT1wJtNOIk2XgYJw-6yI5nac0o_Nm082ba1BLCJ7Z1TeD0",
             serviceWorkerRegistration: registration,
           });
 
@@ -80,7 +82,7 @@ const HomePengguna = () => {
 
   const handleSelanjutnya = () => {
     setIsFloating(true);
-  }
+  };
 
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
@@ -90,122 +92,135 @@ const HomePengguna = () => {
   }, []);
 
   return (
-      <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
-        <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
-          <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
-            <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
-              <img src={img} className="md:hidden w-4/5" alt="img" />
-              <h1 className="md:text-6xl text-3xl font-semibold text-justify md:text-start dark:text-whiteHover">
-                {permission !== "granted" || (isFloating === false && isAndroid === true)
-                    ? "Selamat Datang, Ikuti Instruksi di Bawah ini Untuk Memulai"
-                    : "Anda Telah Bergabung dengan PRBCare"}
-                .
-              </h1>
+    <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
+      <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
+        <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
+          <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
+            <img src={img} className="md:hidden w-4/5" alt="img" />
+            <h1 className="md:text-6xl text-3xl font-semibold text-justify md:text-start dark:text-whiteHover">
+              {permission !== "granted" ||
+              (isFloating === false && isAndroid === true)
+                ? "Selamat Datang, Ikuti Instruksi di Bawah ini Untuk Memulai"
+                : "Anda Telah Bergabung dengan PRBCare"}
+              .
+            </h1>
 
-              <div className={`flex flex items-center `}>
-                <div className={`${permission !== "granted" ||
-                isFloating === true || isAndroid === false ? "hidden" : "" }`}>
-                  <img
-                      src={gif}
-                      className="rounded-xl mb-5 border"
-                      alt="img"
-                  />
-                  <p
-                      className={`text-lg text-justify w-full md:pr-10 `}
-                  >
-                    Untuk memastikan Anda mendapatkan pengalaman terbaik dengan notifikasi dari aplikasi kami, aktifkan
-                    izin notifikasi mengambang seperti pada contoh di atas. Jika sudah selesai, klik tombol selanjutnya di
-                    bawah ini.
-                  </p>
-                </div>
-
-                <p
-                    className={`text-lg text-justify w-full md:pr-10 ${
-                        permission === "granted" ? "hidden" : ""
-                    }`}
-                >
-                  Jangan lupa untuk mengaktifkan permintaan izin untuk notifikasi
-                  di browser anda, Jika Anda belum melihat permintaan izin untuk
-                  notifikasi, tekan tombol "Aktifkan Notifikasi" lalu pilih
-                  "Allow" atau "Izinkan". Setelah itu anda bisa mendapatkan notifikasi dari kami
-                  mengenai kontrol balik dan pengambilan obat.
+            <div className={`flex  items-center `}>
+              <div
+                className={`${
+                  permission !== "granted" ||
+                  isFloating === true ||
+                  isAndroid === false
+                    ? "hidden"
+                    : ""
+                }`}
+              >
+                <img src={gif} className="rounded-xl mb-5 border" alt="img" />
+                <p className={`text-lg text-justify w-full md:pr-10 `}>
+                  Untuk memastikan Anda mendapatkan pengalaman terbaik dengan
+                  notifikasi dari aplikasi kami, aktifkan izin notifikasi
+                  mengambang seperti pada contoh di atas. Jika sudah selesai,
+                  klik tombol selanjutnya di bawah ini.
                 </p>
-                <p
-                    className={`text-lg text-justify w-full md:pr-10 ${
-                        permission !== "granted" || (isFloating === false && isAndroid === true)
-                            ? "hidden"
-                            : ""
-                    }`}
-                >
-                  Terima kasih telah bergabung dengan PRBCare! Untuk memulai,
-                  silakan cari puskesmas terdekat dari lokasi Anda. Hubungi
-                  puskesmas melalui nomor yang tertera, dan pihak puskesmas akan
-                  memberikan nomor antrean untuk Anda. Jika Anda membutuhkan
-                  bantuan lebih lanjut, jangan ragu untuk menghubungi kami.
-                </p>
-
               </div>
-              <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
-                {permission === "granted" &&  (isFloating === true || isAndroid === false) ? (
-                    <>
-                      <Link
-                          to="/data-puskesmas"
-                          target="_blank"
-                          className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-                      >
-                        <div className="flex gap-2 justify-center items-center text-lg">
-                          Cari Puskesmas
-                        </div>
-                        <Ripple/>
-                      </Link>
-                      <Link
-                          to="/data-apotek"
-                          target="_blank"
-                          className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-                      >
-                        <div className="flex gap-2 justify-center items-center text-lg">
-                          Cari Apotek
-                        </div>
-                        <Ripple />
-                      </Link>
-                    </>
-                ) : (
-                    <>
-                      <Button
-                          onClick={handleNotificationSetup}
-                          className={`${permission === "granted" && "hidden"} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
-                          label={
-                            <div className="flex gap-2 justify-center items-center text-lg ">
-                              {permission === "granted"
-                                  ? "Notifikasi Aktif"
-                                  : "Aktifkan Notifikasi"}
-                            </div>
-                          }
-                      />
 
-                      <Button
-                          onClick={handleSelanjutnya}
-                          className={`${
-                              permission !== "granted" || (isFloating === true && isAndroid) ? "hidden" : ""
-                          } bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
-                          label={
-                            <div className="flex gap-2 justify-center items-center text-lg">
-                              Selanjutnya
-                            </div>
-                          }
-                      />
-                    </>
-                )}
-              </div>
+              <p
+                className={`text-lg text-justify w-full md:pr-10 ${
+                  permission === "granted" ? "hidden" : ""
+                }`}
+              >
+                Jangan lupa untuk mengaktifkan permintaan izin untuk notifikasi
+                di browser anda, Jika Anda belum melihat permintaan izin untuk
+                notifikasi, tekan tombol "Aktifkan Notifikasi" lalu pilih
+                "Allow" atau "Izinkan". Setelah itu anda bisa mendapatkan
+                notifikasi dari kami mengenai kontrol balik dan pengambilan
+                obat.
+              </p>
+              <p
+                className={`text-lg text-justify w-full md:pr-10 ${
+                  permission !== "granted" ||
+                  (isFloating === false && isAndroid === true)
+                    ? "hidden"
+                    : ""
+                }`}
+              >
+                Terima kasih telah bergabung dengan PRBCare! Untuk memulai,
+                silakan cari puskesmas terdekat dari lokasi Anda. Hubungi
+                puskesmas melalui nomor yang tertera, dan pihak puskesmas akan
+                memberikan nomor antrean untuk Anda. Jika Anda membutuhkan
+                bantuan lebih lanjut, jangan ragu untuk menghubungi kami.
+              </p>
             </div>
-            <img
-                src={img}
-                className="md:w-1/3 min-[1980px]:w-1/4 md:block hidden"
-                alt="img"
-            />
+            <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
+              {permission === "granted" &&
+              (isFloating === true || isAndroid === false) ? (
+                <>
+                  <Link
+                    to="/data-puskesmas"
+                    target="_blank"
+                    className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                  >
+                    <div className="flex gap-2 justify-center items-center text-lg">
+                      Cari Puskesmas
+                    </div>
+                    <Ripple />
+                  </Link>
+                  <Link
+                    to="/data-apotek"
+                    target="_blank"
+                    className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                  >
+                    <div className="flex gap-2 justify-center items-center text-lg">
+                      Cari Apotek
+                    </div>
+                    <Ripple />
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleNotificationSetup}
+                    className={`${
+                      permission === "granted" && "hidden"
+                    } bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                    label={
+                      <div className="flex gap-2 justify-center items-center text-lg ">
+                        {permission === "granted"
+                          ? "Notifikasi Aktif"
+                          : "Aktifkan Notifikasi"}
+                      </div>
+                    }
+                  />
+
+                  <Button
+                    onClick={handleSelanjutnya}
+                    className={`${
+                      permission !== "granted" ||
+                      (isFloating === true && isAndroid)
+                        ? "hidden"
+                        : ""
+                    } bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                    label={
+                      <Link
+                        to="/cara-mengaktifkan-notifikasi"
+                        className="flex gap-2 justify-center items-center text-lg"
+                      >
+                        Selanjutnya
+                      </Link>
+                    }
+                  />
+                </>
+              )}
+            </div>
           </div>
+          <img
+            src={img}
+            className="md:w-1/3 min-[1980px]:w-1/4 md:block hidden"
+            alt="img"
+          />
         </div>
       </div>
+    </div>
   );
 };
 
