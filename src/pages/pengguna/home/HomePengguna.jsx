@@ -7,7 +7,7 @@ import { initializeApp } from "firebase/app";
 import { updateCurrentTokenPerangkatPengguna } from "../../../services/PenggunaService";
 import { Link } from "react-router-dom";
 import { Ripple } from "primereact/ripple";
-
+const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -22,15 +22,35 @@ const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
 const HomePengguna = () => {
-  const [permission, setPermission] = useState(Notification.permission);
+  const [permission, setPermission] = useState(
+    typeof Notification !== "undefined" ? Notification.permission : "granted"
+  );
   const [isAndroid, setIsAndroid] = useState(false);
+  const [isChromeAndroid, setIsChromeAndroid] = useState(false);
   const [isFloating, setIsFloating] = useState(
     localStorage.getItem("floating") === "true"
   );
 
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
-    setIsAndroid(/android/i.test(userAgent));
+    const isAndroidDevice = /android/i.test(userAgent);
+    const isChrome =
+      /chrome/i.test(userAgent) &&
+      !/edg/i.test(userAgent) &&
+      !/opr/i.test(userAgent) &&
+      !/samsung/i.test(userAgent) &&
+      !/ucbrowser/i.test(userAgent) &&
+      !/brave/i.test(userAgent) &&
+      !/vivaldi/i.test(userAgent) &&
+      !/firefox/i.test(userAgent) &&
+      !/duckduckgo/i.test(userAgent) &&
+      !/puffin/i.test(userAgent) &&
+      !/miuibrowser/i.test(userAgent) &&
+      !/kiwi/.test(userAgent) &&
+      !/tor/i.test(userAgent) &&
+      !/yabrowser/i.test(userAgent);
+    setIsAndroid(isAndroidDevice);
+    setIsChromeAndroid(isChrome && isAndroidDevice);
   }, []);
 
   useEffect(() => {
@@ -38,6 +58,12 @@ const HomePengguna = () => {
   }, [isFloating]);
 
   const handleNotificationSetup = async () => {
+    if (!("Notification" in window)) {
+      console.log("This browser does not support notifications.");
+      setPermission("granted");
+      return;
+    }
+
     try {
       const result = await Notification.requestPermission();
       setPermission(result);
@@ -45,12 +71,14 @@ const HomePengguna = () => {
       if (result === "granted") {
         if ("serviceWorker" in navigator) {
           const registration = await navigator.serviceWorker.register(
-            "/firebase-messaging-sw.js"
+            "/firebase-messaging-sw.js",
+            {
+              scope: "/",
+            }
           );
 
           const currentToken = await getToken(messaging, {
-            vapidKey:
-              "BC0gBRfdNhV5uA9P3ohrvAlRYh5ir_sgnyUkP3QXdzT1wJtNOIk2XgYJw-6yI5nac0o_Nm082ba1BLCJ7Z1TeD0",
+            vapidKey: `${VITE_VAPID_KEY}`,
             serviceWorkerRegistration: registration,
           });
 
@@ -105,12 +133,13 @@ const HomePengguna = () => {
               .
             </h1>
 
-            <div className={`flex  items-center `}>
+            <div className={`flex flex items-center `}>
               <div
                 className={`${
                   permission !== "granted" ||
                   isFloating === true ||
-                  isAndroid === false
+                  isAndroid !== true ||
+                  (isAndroid === true && isChromeAndroid !== true)
                     ? "hidden"
                     : ""
                 }`}
@@ -120,9 +149,27 @@ const HomePengguna = () => {
                   Untuk memastikan Anda mendapatkan pengalaman terbaik dengan
                   notifikasi dari aplikasi kami, aktifkan izin notifikasi
                   mengambang seperti pada contoh di atas. Jika sudah selesai,
-                  klik tombol selanjutnya di bawah ini.
+                  klik tombol "Selanjutnya" di bawah ini.
                 </p>
               </div>
+
+              <p
+                className={`text-lg text-justify w-full md:pr-10 ${
+                  permission === "granted" &&
+                  isAndroid === true &&
+                  isChromeAndroid === false &&
+                  isFloating !== true
+                    ? ""
+                    : "hidden"
+                }`}
+              >
+                Anda tampaknya menggunakan browser selain Chrome di Android.
+                Untuk pengalaman terbaik, kami sarankan Anda menginstall Chrome
+                dari Play Store dengan melakukan klik pada tombol "Install
+                Chrome". Namun jika Anda tetap ingin melanjutkan, klik tombol
+                "Selanjutnya" di bawah ini. Harap diperhatikan bahwa notifikasi
+                mungkin tidak berjalan dengan baik atau bahkan tidak tersedia.
+              </p>
 
               <p
                 className={`text-lg text-justify w-full md:pr-10 ${
@@ -191,14 +238,31 @@ const HomePengguna = () => {
                       </div>
                     }
                   />
-
+                  <Link
+                    to="https://play.google.com/store/apps/details?id=com.android.chrome"
+                    target="_blank"
+                    className={`${
+                      permission === "granted" &&
+                      isAndroid === true &&
+                      isChromeAndroid === false &&
+                      isFloating !== true
+                        ? ""
+                        : "hidden"
+                    } p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                  >
+                    <div className="flex gap-2 justify-center items-center text-lg">
+                      Install Chrome
+                    </div>
+                    <Ripple />
+                  </Link>
                   <Button
                     onClick={handleSelanjutnya}
                     className={`${
-                      permission !== "granted" ||
-                      (isFloating === true && isAndroid)
-                        ? "hidden"
-                        : ""
+                      permission === "granted" &&
+                      isFloating === false &&
+                      isAndroid === true
+                        ? ""
+                        : "hidden"
                     } bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                     label={
                       <div className="flex gap-2 justify-center items-center text-lg">

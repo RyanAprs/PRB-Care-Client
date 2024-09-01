@@ -143,11 +143,10 @@ const Notifikasi = () => {
     };
 
     return (
-        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen">
-            <div className="p-8 w-full min-h-screen bg-white dark:bg-blackHover rounded-xl">
-                <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
+        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+            <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
                     {notifikasiList.length > 0 ? (
-                        <>
+                        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full p-8">
                             <div className="flex md:justify-end justify-center mb-4 gap-2">
                                 <Dropdown
                                     value={sortOrder}
@@ -163,8 +162,9 @@ const Notifikasi = () => {
                                 className="overflow-y-auto h-screen bg-white dark:bg-blackHover"
 
                             />
-                        </>
+                        </div>
                     ) : (
+                        <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
                         <div
                             className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
                             <img src={img} className="md:w-80 w-64" alt="img"/>
@@ -173,8 +173,8 @@ const Notifikasi = () => {
                                 Data akan muncul di sini ketika tersedia.
                             </p>
                         </div>
+                        </div>
                     )}
-                </div>
             </div>
         </div>
     );
