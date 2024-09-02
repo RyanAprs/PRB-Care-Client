@@ -56,8 +56,9 @@ import { puskesmasUpdateCurrentSchema } from "../../validations/PuskesmasSchema"
 import { AddressContext } from "../../config/context/AdressContext";
 import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
-
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 const NavbarAdmin = ({ children }) => {
+  const [beforeModalLoading,setBeforeModalLoading] = useState(false)
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
@@ -228,6 +229,7 @@ const NavbarAdmin = ({ children }) => {
   };
 
   const handleDetailProfileModal = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setIsMenuVisible(false);
 
@@ -270,11 +272,13 @@ const NavbarAdmin = ({ children }) => {
         handleApiError(error, toast);
       }
     }
+    setBeforeModalLoading(false);
   };
 
   const { setIsUpdated } = useModalUpdate();
 
   const handleUpdateProfileModal = async () => {
+    setBeforeModalLoading(true);
     setVisibleDetailProfile(false);
     setErrors({});
     if (role === "nakes") {
@@ -319,6 +323,7 @@ const NavbarAdmin = ({ children }) => {
         handleApiError(error, toast);
       }
     }
+    setBeforeModalLoading(false);
   };
 
   const handleUpdateProfile = async () => {
@@ -445,6 +450,7 @@ const NavbarAdmin = ({ children }) => {
 
   return (
     <div className="flex h-screen w-full">
+      <ModalLoading className={beforeModalLoading?``:`hidden`} />
       <Toast
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}

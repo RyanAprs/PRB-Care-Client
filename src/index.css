@@ -135,3 +135,8 @@ p-toast {
     min-width: fit-content !important;
 }
 
+iframe {
+    border-radius: 3px;
+    width: 301.5px;
+    height: 76px;
+}

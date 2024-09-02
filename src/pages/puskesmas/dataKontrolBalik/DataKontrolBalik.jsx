@@ -38,8 +38,9 @@ import "jspdf-autotable";
 import {InputTextarea} from "primereact/inputtextarea";
 import {InputText} from "primereact/inputtext";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 const DataKontrolBalik = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -190,6 +191,7 @@ const DataKontrolBalik = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const response = await getAllPasienAktif();
@@ -228,6 +230,7 @@ const DataKontrolBalik = () => {
             HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
             handleKontrolBalikError(error, toast);
         }
+        setBeforeModalLoading(false);
     };
 
     const handleUpdate = async () => {
@@ -433,6 +436,7 @@ const DataKontrolBalik = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

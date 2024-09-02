@@ -6,6 +6,7 @@ import {Dialog} from "primereact/dialog";
 import {Dropdown} from "primereact/dropdown";
 import {ZodError} from "zod";
 import {Toast} from "primereact/toast";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {
     handleApiError,
     handleDeleteError,
@@ -31,6 +32,7 @@ import {getAllApotek} from "../../../services/ApotekService";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataObat = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [dataAdminApotek, setDataAdminApotek] = useState([]);
@@ -144,6 +146,7 @@ const DataObat = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true)
         setErrors({});
         try {
             const responseApotek = await getAllApotek();
@@ -169,6 +172,7 @@ const DataObat = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false)
     };
 
     const handleUpdate = async () => {
@@ -302,6 +306,7 @@ const DataObat = () => {
 
     return (
         <div className="flex  flex-col gap-4 p-4 min-h-screen ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

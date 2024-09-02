@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
 import { Menu } from "primereact/menu";
 import { ProgressSpinner } from "primereact/progressspinner";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {
   Bell,
   HomeIcon,
@@ -15,6 +16,7 @@ import {
   DoorOpen,
   GitPullRequestClosed,
 } from "lucide-react";
+import { useNotifications  } from "../../config/context/NotificationContext.jsx";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -69,89 +71,80 @@ const NavbarPengguna = () => {
   const [key, setKey] = useState(0);
   const { address } = useContext(AddressContext);
   const [hasNotifications, setHasNotifications] = useState(false);
+  const { notifications } = useNotifications();
   const location = useLocation();
+  const [beforeModalLoading,setBeforeModalLoading] = useState(false)
+  const openIndexedDB = () => {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open("fcm_notifications", 1);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("notifications")) {
+          db.createObjectStore("notifications", {
+            keyPath: "id",
+            autoIncrement: true,
+          });
+        }
+      };
+
+      request.onsuccess = (event) => resolve(event.target.result);
+      request.onerror = (event) => reject(event.target.error);
+    });
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const db = await openIndexedDB();
+      const transaction = db.transaction("notifications", "readwrite");
+      const objectStore = transaction.objectStore("notifications");
+
+      const request = objectStore.getAll();
+      request.onsuccess = (event) => {
+        const notifications = event.target.result;
+
+        const updatedNotifications = notifications.map((notification) => {
+          if (!notification.isRead) {
+            notification.isRead = true;
+          }
+          return notification;
+        });
+
+        updatedNotifications.forEach((notification) => {
+          objectStore.put(notification);
+        });
+
+        setHasNotifications(updatedNotifications.some((n) => !n.isRead));
+      };
+      request.onerror = (event) => console.error("Error updating notifications:", event.target.error);
+    } catch (error) {
+      console.error("Failed to open IndexedDB:", error);
+    }
+  };
+
+  const getNotificationsFromDB = async () => {
+    try {
+      const db = await openIndexedDB();
+      const transaction = db.transaction("notifications", "readonly");
+      const objectStore = transaction.objectStore("notifications");
+      const request = objectStore.getAll();
+
+      request.onsuccess = (event) => {
+        const notifications = event.target.result;
+        const hasUnread = notifications.some((notification) => !notification.isRead);
+        setHasNotifications(hasUnread);
+      };
+      request.onerror = (event) => console.error("Error fetching notifications:", event.target.error);
+    } catch (error) {
+      console.error("Failed to open IndexedDB:", error);
+    }
+  };
 
   useEffect(() => {
-    const openIndexedDB = () => {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open("fcm_notifications", 1);
+    setHasNotifications(notifications.length > 0);
+  }, [notifications]);
 
-        request.onupgradeneeded = (event) => {
-          const db = event.target.result;
-          if (!db.objectStoreNames.contains("notifications")) {
-            db.createObjectStore("notifications", {
-              keyPath: "id",
-              autoIncrement: true,
-            });
-          }
-        };
-
-        request.onsuccess = (event) => {
-          resolve(event.target.result);
-        };
-
-        request.onerror = (event) => {
-          reject(event.target.error);
-        };
-      });
-    };
-
-    const markAllAsRead = async () => {
-      try {
-        const db = await openIndexedDB();
-        const transaction = db.transaction("notifications", "readwrite");
-        const objectStore = transaction.objectStore("notifications");
-
-        const request = objectStore.getAll();
-
-        request.onsuccess = (event) => {
-          const notifications = event.target.result;
-
-          const updatedNotifications = notifications.map((notification) => {
-            if (!notification.isRead) {
-              notification.isRead = true;
-            }
-            return notification;
-          });
-
-          updatedNotifications.forEach((notification) => {
-            objectStore.put(notification);
-          });
-
-          setHasNotifications(updatedNotifications.some((n) => !n.isRead));
-        };
-
-        request.onerror = (event) => {
-          console.error("Error updating notifications:", event.target.error);
-        };
-      } catch (error) {
-        console.error("Failed to open IndexedDB:", error);
-      }
-    };
-
-    const getNotificationsFromDB = async () => {
-      try {
-        const db = await openIndexedDB();
-        const transaction = db.transaction("notifications", "readonly");
-        const objectStore = transaction.objectStore("notifications");
-        const request = objectStore.getAll();
-
-        request.onsuccess = (event) => {
-          const notifications = event.target.result;
-          const hasUnread = notifications.some(
-            (notification) => !notification.isRead
-          );
-          setHasNotifications(hasUnread);
-        };
-
-        request.onerror = (event) => {
-          console.error("Error fetching notifications:", event.target.error);
-        };
-      } catch (error) {
-        console.error("Failed to open IndexedDB:", error);
-      }
-    };
-
+  useEffect(() => {
     if (location.pathname === "/pengguna/notifikasi") {
       markAllAsRead();
     } else {
@@ -232,6 +225,7 @@ const NavbarPengguna = () => {
   };
 
   const handleDetailProfileModal = async () => {
+    setBeforeModalLoading(true);
     setIsMenuVisible(false);
     try {
       const dataResponse = await getCurrentPengguna();
@@ -247,10 +241,13 @@ const NavbarPengguna = () => {
     } catch (error) {
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
+    } finally {
+      setBeforeModalLoading(false);
     }
   };
 
   const handleUpdateProfileModal = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setVisibleDetailProfile(false);
     try {
@@ -268,6 +265,8 @@ const NavbarPengguna = () => {
     } catch (error) {
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
+    }finally {
+      setBeforeModalLoading(false);
     }
   };
 
@@ -345,6 +344,7 @@ const NavbarPengguna = () => {
   const [isButtonLoading, setButtonLoading] = useState(null);
   return (
     <>
+      <ModalLoading className={beforeModalLoading?``:`hidden`} />
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
         <Toast
           ref={toast}

@@ -33,19 +33,19 @@ const DashboardPuskesmas = () => {
 
     const list = [
         {
-            icon: <UserPlus size={54} strokeWidth={1}/>,
+            icon: <UserPlus size={54} strokeWidth={1.5}/>,
             title: "Pasien",
             desc: "Kelola data pasien",
             route: "/puskesmas/data-pasien",
         },
         {
-            icon: <Stethoscope size={54} strokeWidth={1}/>,
+            icon: <Stethoscope size={54} strokeWidth={1.5}/>,
             title: "Kontrol Balik",
             desc: "Kelola data kontrol balik",
             route: "/puskesmas/data-kontrol-balik",
         },
         {
-            icon: <ShoppingCart size={54} strokeWidth={1}/>,
+            icon: <ShoppingCart size={54} strokeWidth={1.5}/>,
             title: "Ambil Obat",
             desc: "Kelola data ambil obat",
             route: "/puskesmas/data-pengambilan-obat",

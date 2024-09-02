@@ -5,6 +5,7 @@ import {Button} from "primereact/button";
 import {Dialog} from "primereact/dialog";
 import {ZodError} from "zod";
 import {Toast} from "primereact/toast";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {
     handleApiError,
     handleDeleteError,
@@ -29,6 +30,7 @@ import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataObat = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -132,6 +134,7 @@ const DataObat = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const dataResponse = await getObatById(data.id);
@@ -148,6 +151,7 @@ const DataObat = () => {
             HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false);
     };
 
     const handleUpdate = async () => {
@@ -261,6 +265,7 @@ const DataObat = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4  ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

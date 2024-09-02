@@ -3,6 +3,7 @@ importScripts(
   "https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"
 );
 
+// hardcode config :v ganti konfigurasi firebase ini dengan milik proyek kamu sendiri
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
   authDomain: "prb-care-v1-70a29.firebaseapp.com",

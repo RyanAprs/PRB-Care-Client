@@ -39,10 +39,11 @@ import "jspdf-autotable";
 import {getAllPengguna} from "../../../services/PenggunaService";
 import {getAllPuskesmas} from "../../../services/PuskesmasService";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 addLocale("id", dateLocaleId);
 
 const DataPasien = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -176,6 +177,7 @@ const DataPasien = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const responsePuskesmas = await getAllPuskesmas();
@@ -211,6 +213,7 @@ const DataPasien = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false)
     };
     const handleUpdate = async () => {
         try {
@@ -394,6 +397,7 @@ const DataPasien = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

@@ -33,13 +33,13 @@ const DashboardApotek = () => {
 
     const list = [
         {
-            icon: <Pill size={54} strokeWidth={1}/>,
+            icon: <Pill size={54} strokeWidth={1.5}/>,
             title: "Obat",
             desc: "Kelola data obat",
             route: "/apotek/data-obat",
         },
         {
-            icon: <ShoppingCart size={54} strokeWidth={1}/>,
+            icon: <ShoppingCart size={54} strokeWidth={1.5}/>,
             title: "Ambil Obat",
             desc: "Kelola data ambil obat",
             route: "/apotek/data-pengambilan-obat",
