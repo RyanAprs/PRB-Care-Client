@@ -271,14 +271,14 @@ const RegisterPengguna = () => {
                             target="_blank"
                             className="font-semibold text-mainGreen"
                         >
-                            Kebijakan Privasi
+                            kebijakan privasi
                         </Link>
                         <span className="font-normal"> kami </span>
                     </p>
-                    <div className="flex w-full gap-2 items-center justify-center">
+                    <div className="flex w-full gap-1 items-center justify-center">
                         Sudah punya akun?
                         <Link to="/pengguna/login" className="text-mainGreen font-semibold">
-                            Masuk
+                            masuk
                         </Link>
                     </div>
                 </div>

@@ -109,7 +109,7 @@ const Notifikasi = () => {
         return (
             <div
                 id={`notifikasi-${notifikasi.id}`}
-                className="py-4 w-full rounded-xl bg-gray-100 dark:bg-darkGrays mb-4"
+                className="py-4 w-full rounded-xl bg-gray-100 dark:bg-[#282828] mb-4"
             >
                 <div className="flex  md:flex-row flex-col   gap-4 text-xl px-4 items-center w-full">
                     <div className="flex flex-col items-start w-full justify-center">

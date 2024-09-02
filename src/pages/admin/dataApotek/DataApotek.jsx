@@ -7,7 +7,7 @@ import {Button} from "primereact/button";
 import {Dialog} from "primereact/dialog";
 import {Toast} from "primereact/toast";
 import {ZodError} from "zod";
-
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {AuthContext} from "../../../config/context/AuthContext";
 import {
     handleApiError,
@@ -33,6 +33,7 @@ import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasio
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataApotek = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -178,6 +179,7 @@ const DataApotek = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const dataResponse = await getApotekById(data.id);
@@ -200,6 +202,7 @@ const DataApotek = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false)
     };
 
     const handleUpdate = async () => {
@@ -325,6 +328,7 @@ const DataApotek = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

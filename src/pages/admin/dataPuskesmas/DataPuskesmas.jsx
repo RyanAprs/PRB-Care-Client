@@ -1,5 +1,6 @@
 import {useContext, useEffect, useRef, useState} from "react";
 import {AddressContext} from "../../../config/context/AdressContext";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import {Dialog} from "primereact/dialog";
@@ -32,6 +33,7 @@ import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasio
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataPuskesmas = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -177,6 +179,7 @@ const DataPuskesmas = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const dataResponse = await getPuskesmasById(data.id);
@@ -199,6 +202,7 @@ const DataPuskesmas = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false);
     };
 
     const handleUpdate = async () => {
@@ -326,6 +330,7 @@ const DataPuskesmas = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

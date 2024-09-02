@@ -255,7 +255,7 @@ export default function ReusableTable({
         if (field.includes("telepon")) {
             return (
                 <a href={`https://api.whatsapp.com/send/?phone=${valueString}`} target="_blank"
-                   className="hover:text-lightGreen hover:dark:text-mainGreen">{valueString}</a>
+                   className="text-lightGreen dark:text-mainGreen ">{valueString}</a>
             );
         }
 

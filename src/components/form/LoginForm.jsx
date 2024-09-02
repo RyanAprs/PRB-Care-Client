@@ -177,13 +177,13 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
               )}
             </Button>
             {loginUser && (
-              <div className="flex w-full gap-2 items-center justify-center">
+              <div className="flex w-full gap-1 items-center justify-center">
                 Belum punya akun?
                 <Link
-                  to="/pengguna/register"
-                  className="text-mainGreen font-semibold"
+                    to="/pengguna/register"
+                    className="text-mainGreen font-semibold"
                 >
-                  Daftar
+                  daftar
                 </Link>
               </div>
             )}

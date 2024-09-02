@@ -3,7 +3,7 @@
   "name": "PRBCare",
   "icons": [
     {
-      "src": "prbcare.png",
+      "src": "/assets/prbcare.png",
       "sizes": "512x512",
       "type": "image/png"
     }

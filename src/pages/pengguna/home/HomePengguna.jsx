@@ -120,7 +120,9 @@ const HomePengguna = () => {
   }, []);
 
   return (
+
       <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
+
         <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
           <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
             <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">

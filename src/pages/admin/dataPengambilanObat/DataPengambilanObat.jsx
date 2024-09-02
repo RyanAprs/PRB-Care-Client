@@ -11,6 +11,7 @@ import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
 import {Calendar} from "primereact/calendar";
 import {ZodError} from "zod";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {
     handleApiError,
     handleCreatePengambilanObatError,
@@ -41,6 +42,7 @@ import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataPengambilanObat = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -179,6 +181,7 @@ const DataPengambilanObat = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true)
         setErrors({});
         try {
             const responseObat = await getAllObat();
@@ -212,6 +215,7 @@ const DataPengambilanObat = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false)
     };
 
     const handleUpdate = async () => {

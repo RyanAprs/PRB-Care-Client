@@ -37,8 +37,9 @@ import {AuthContext} from "../../../config/context/AuthContext";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 const DataPengambilanObat = () => {
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -174,6 +175,7 @@ const DataPengambilanObat = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const responseObat = await getAllObat();
@@ -207,6 +209,7 @@ const DataPengambilanObat = () => {
             HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
             handleCreatePengambilanObatError(error, toast);
         }
+        setBeforeModalLoading(false);
     };
 
     const handleUpdate = async () => {
@@ -407,6 +410,7 @@ const DataPengambilanObat = () => {
 
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}

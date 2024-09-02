@@ -7,6 +7,7 @@ import {Dialog} from "primereact/dialog";
 import {InputText} from "primereact/inputtext";
 import {Button} from "primereact/button";
 import {ZodError} from "zod";
+import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
 import {
     penggunaCreateSchema,
     penggunaUpdateSchema,
@@ -42,6 +43,7 @@ const DataPengguna = () => {
         teleponKeluarga: "",
         alamat: "",
     });
+    const [beforeModalLoading,setBeforeModalLoading] = useState(false)
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentId, setCurrentId] = useState("");
     const {token} = useContext(AuthContext);
@@ -163,6 +165,7 @@ const DataPengguna = () => {
     };
 
     const handleModalUpdate = async (data) => {
+        setBeforeModalLoading(true);
         setErrors({});
         try {
             const dataResponse = await getPenggunaById(data.id);
@@ -184,6 +187,7 @@ const DataPengguna = () => {
             HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
             handleApiError(error, toast);
         }
+        setBeforeModalLoading(false);
     };
 
     const handleUpdate = async () => {
@@ -307,6 +311,7 @@ const DataPengguna = () => {
     }
     return (
         <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+            <ModalLoading className={beforeModalLoading?``:`hidden`} />
             <Toast
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}
