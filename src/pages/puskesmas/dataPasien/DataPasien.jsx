@@ -106,7 +106,6 @@ const DataPasien = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
-    setBeforeModalLoading(true);
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -125,7 +124,6 @@ const DataPasien = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       setLoading(false);
     }
-    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -301,7 +299,6 @@ const DataPasien = () => {
           detail: "Data pasien dihapus",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllPasien();
@@ -330,6 +327,8 @@ const DataPasien = () => {
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -353,7 +352,6 @@ const DataPasien = () => {
           detail: "Pasien berhasil diselesaikan",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllPasien();
@@ -382,6 +380,8 @@ const DataPasien = () => {
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -600,7 +600,7 @@ const DataPasien = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
             >
               {isButtonLoading ? (
@@ -641,7 +641,7 @@ const DataPasien = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDone}
             >
               {isButtonLoading ? (

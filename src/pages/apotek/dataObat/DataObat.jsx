@@ -87,7 +87,6 @@ const DataObat = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = () => {
-    setBeforeModalLoading(true);
     setErrors({});
     setDatas({
       namaObat: "",
@@ -96,7 +95,6 @@ const DataObat = () => {
 
     setVisible(true);
     setIsEditMode(false);
-    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -252,7 +250,6 @@ const DataObat = () => {
           detail: "Data Obat dihapus",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllObat();
@@ -282,6 +279,8 @@ const DataObat = () => {
       setVisibleDelete(false);
       HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -437,7 +436,7 @@ const DataObat = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
             >
               {isButtonLoading ? (

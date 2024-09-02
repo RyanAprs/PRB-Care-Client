@@ -112,7 +112,6 @@ const DataPengambilanObat = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
-    setBeforeModalLoading(true);
     setIsEditMode(false);
     setSelectedDate(null);
     setErrors({});
@@ -134,7 +133,6 @@ const DataPengambilanObat = () => {
       setLoading(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
     }
-    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -325,7 +323,6 @@ const DataPengambilanObat = () => {
           detail: "Data kontrol balik dihapus",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllPengambilanObat();
@@ -354,8 +351,11 @@ const DataPengambilanObat = () => {
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
+    } finally {
+      setButtonLoading(false);
     }
   };
+
   const handleModalDone = (data) => {
     setBeforeModalLoading(true);
     setCurrentId(data.id);
@@ -376,7 +376,6 @@ const DataPengambilanObat = () => {
           detail: "Kontrol balik berhasil diselesaikan dari kontrol balik",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllPengambilanObat();
@@ -405,6 +404,8 @@ const DataPengambilanObat = () => {
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
+    } finally {
+      setButtonLoading(false);
     }
   };
   const handleModalCancelled = (data) => {
@@ -427,7 +428,6 @@ const DataPengambilanObat = () => {
           detail: "Pasien berhasil dibatalkan dari kontrol balik",
           life: 3000,
         });
-        setButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllPengambilanObat();
@@ -456,6 +456,8 @@ const DataPengambilanObat = () => {
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -727,7 +729,7 @@ const DataPengambilanObat = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
             >
               {isButtonLoading ? (
@@ -767,7 +769,7 @@ const DataPengambilanObat = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDone}
             >
               {isButtonLoading ? (
@@ -807,7 +809,7 @@ const DataPengambilanObat = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleCancelled}
             >
               {isButtonLoading ? (
