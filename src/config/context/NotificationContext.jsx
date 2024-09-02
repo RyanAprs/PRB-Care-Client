@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, onMessage } from 'firebase/messaging';
 
-// Replace with your own Firebase configuration
+// hardcode config :v ganti konfigurasi firebase ini dengan milik proyek kamu sendiri
 const firebaseConfig = {
     apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
     authDomain: "prb-care-v1-70a29.firebaseapp.com",
@@ -116,12 +116,15 @@ export function NotificationProvider({ children }) {
 
             storeNotificationData(notificationData);
 
-            const notificationOptions = {
-                body: notificationBody,
-                icon: '/assets/prbcare.png',
-            };
+            if (navigator.serviceWorker) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification(notificationTitle, {
+                        body: notificationBody,
+                        icon: '/assets/prbcare.png',
+                    });
+                });
+            }
 
-            new Notification(notificationTitle, notificationOptions);
             setNotifications((prev) => [...prev, notificationData]);
         };
 
