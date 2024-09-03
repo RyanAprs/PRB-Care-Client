@@ -41,43 +41,43 @@ const DashboardAdmin = () => {
 
   const list = [
     {
-      icon: <Hospital size={54} strokeWidth={1.5} />,
+      icon: <Hospital size={54} strokeWidth={1.2} />,
       title: "Puskesmas",
       desc: "Kelola data puskesmas",
       route: "/admin/data-puskesmas",
     },
     {
-      icon: <HousePlus size={54} strokeWidth={1.5} />,
+      icon: <HousePlus size={54} strokeWidth={1.2} />,
       title: "Apotek",
       desc: "Kelola data apotek",
       route: "/admin/data-apotek",
     },
     {
-      icon: <UserPlus size={54} strokeWidth={1.5} />,
+      icon: <UserPlus size={54} strokeWidth={1.2} />,
       title: "Pasien",
       desc: "Kelola data pasien",
       route: "/admin/data-pasien",
     },
     {
-      icon: <User2Icon size={54} strokeWidth={1.5} />,
+      icon: <User2Icon size={54} strokeWidth={1.2} />,
       title: "Pengguna",
       desc: "Kelola data pengguna",
       route: "/admin/data-pengguna",
     },
     {
-      icon: <Pill size={54} strokeWidth={1.5} />,
+      icon: <Pill size={54} strokeWidth={1.2} />,
       title: "Obat",
       desc: "Kelola data obat",
       route: "/admin/data-obat",
     },
     {
-      icon: <Stethoscope size={54} strokeWidth={1.5} />,
+      icon: <Stethoscope size={54} strokeWidth={1.2} />,
       title: "Kontrol Balik",
       desc: "Kelola data kontrol balik",
       route: "/admin/data-kontrol-balik",
     },
     {
-      icon: <ShoppingCart size={54} strokeWidth={1.5} />,
+      icon: <ShoppingCart size={54} strokeWidth={1.2} />,
       title: "Ambil Obat",
       desc: "Kelola data ambil obat",
       route: "/admin/data-pengambilan-obat",

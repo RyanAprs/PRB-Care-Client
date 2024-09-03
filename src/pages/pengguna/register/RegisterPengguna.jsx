@@ -31,9 +31,11 @@ const RegisterPengguna = () => {
     const toast = useRef(null);
     const [resetAddress, setResetAddress] = useState(true);
     const recaptchaRef = useRef(null);
-
+    const [recaptchaKey, setRecaptchaKey] = useState(0);
     const {address} = useContext(AddressContext);
-
+    useEffect(() => {
+        setRecaptchaKey((prevKey) => prevKey + 1);
+    }, [darkMode.value]);
     useEffect(() => {
         const formattedAddress = [
             address.detail,
@@ -224,6 +226,7 @@ const RegisterPengguna = () => {
                         Captcha:
                     </label>
                     <ReCAPTCHA
+                        key={recaptchaKey}
                         theme={darkMode.value ? "dark" : "light"}
                         className="rounded-lg "
                         ref={recaptchaRef}
@@ -232,7 +235,7 @@ const RegisterPengguna = () => {
                         onChange={(value) => {
                             setDatas((prev) => ({
                                 ...prev,
-                                tokenRecaptcha: value,
+                                tokenRecaptcha: value ? value : "",
                             }));
                         }}
                     />

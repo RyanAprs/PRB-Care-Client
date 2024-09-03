@@ -257,7 +257,7 @@ export default function ReusableTable({
         <a
           href={`https://api.whatsapp.com/send/?phone=${valueString}`}
           target="_blank"
-          className="text-lightGreen dark:text-mainGreen "
+          className="dark:text-lightGreen text-mainGreen underline underline-offset-2 decoration-1"
         >
           {valueString}
         </a>

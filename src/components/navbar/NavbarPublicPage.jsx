@@ -32,7 +32,7 @@ const NavbarPublicPage = () => {
               <h1
                 className={
                   location.pathname === "/"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -46,7 +46,7 @@ const NavbarPublicPage = () => {
               <h1
                 className={
                   location.pathname === "/data-puskesmas"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -60,7 +60,7 @@ const NavbarPublicPage = () => {
               <h1
                 className={
                   location.pathname === "/data-apotek"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >

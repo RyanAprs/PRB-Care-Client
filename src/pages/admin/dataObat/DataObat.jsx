@@ -496,7 +496,7 @@ const DataObat = () => {
           >
             {isButtonLoading ? (
               <ProgressSpinner
-                style={{ width: "25px", height: "25px" }}
+                style={{ width: "24px", height: "24px" }}
                 strokeWidth="8"
                 animationDuration="1s"
                 color="white"
@@ -526,12 +526,12 @@ const DataObat = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-20 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen w-[85px] items-center justify-center text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen flex rounded-xl transition-all"
               onClick={handleDelete}
             >
               {isButtonLoading ? (
                 <ProgressSpinner
-                  style={{ width: "25px", height: "25px" }}
+                  style={{ width: "24px", height: "24px" }}
                   strokeWidth="8"
                   animationDuration="1s"
                   color="white"

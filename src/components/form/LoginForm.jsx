@@ -167,7 +167,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
             >
               {isLoading ? (
                 <ProgressSpinner
-                  style={{ width: "25px", height: "25px" }}
+                  style={{ width: "24px", height: "24px" }}
                   strokeWidth="8"
                   animationDuration="1s"
                   color="white"

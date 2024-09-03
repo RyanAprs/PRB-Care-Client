@@ -366,7 +366,7 @@ const NavbarPengguna = () => {
               <h1
                 className={
                   location.pathname === "/pengguna/beranda"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -380,7 +380,7 @@ const NavbarPengguna = () => {
               <h1
                 className={
                   location.pathname === "/pengguna/medis"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -394,7 +394,7 @@ const NavbarPengguna = () => {
               <h1
                 className={
                   location.pathname === "/pengguna/kontrol"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -408,7 +408,7 @@ const NavbarPengguna = () => {
               <h1
                 className={
                   location.pathname === "/pengguna/obat"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >
@@ -423,7 +423,7 @@ const NavbarPengguna = () => {
               <h1
                 className={
                   location.pathname === "/pengguna/notifikasi"
-                    ? "text-lightGreen dark:text-mainGreen"
+                    ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
               >

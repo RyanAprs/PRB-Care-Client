@@ -13,13 +13,13 @@ const PublicFooter = () => {
                     </div>
 
                     <div className="flex space-x-4 mt-4">
-                        <Link to="" className=" hover:text-blue-700">
+                        <Link to="" className=" ">
                             <FacebookIcon/>
                         </Link>
-                        <Link to="" className=" hover:text-blue-400">
+                        <Link to="" className=" ">
                             <TwitterIcon/>
                         </Link>
-                        <Link to="" className=" hover:text-pink-500">
+                        <Link to="" className=" ">
                             <InstagramIcon/>
                         </Link>
                     </div>
@@ -28,25 +28,25 @@ const PublicFooter = () => {
                 <div className="flex flex-col mx-auto items-center md:items-start ">
                     <h2 className="text-xl font-bold mb-4  text-center">Tautan Cepat</h2>
                     <Link
-                        className="hover:text-lightGreen hover:dark:text-mainGreen"
+                        className=""
                         to="/"
                     >
                         Beranda
                     </Link>
                     <Link
-                        className="hover:text-lightGreen hover:dark:text-mainGreen"
+                        className=""
                         to="/data-puskesmas"
                     >
                         Puskesmas Terdaftar
                     </Link>
                     <Link
-                        className="hover:text-lightGreen hover:dark:text-mainGreen"
+                        className=""
                         to="/data-apotek"
                     >
                         Apotek Terdaftar
                     </Link>
                     <Link
-                        className="hover:text-lightGreen hover:dark:text-mainGreen"
+                        className=""
                         to="/kebijakan-privasi"
                     >
                         Kebijakan Privasi
