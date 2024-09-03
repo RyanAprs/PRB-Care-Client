@@ -110,7 +110,6 @@ const DataKontrolBalik = () => {
         setisConnectionError(true);
       }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-
       setLoading(false);
     }
   };
@@ -141,7 +140,20 @@ const DataKontrolBalik = () => {
       setPasien(response);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+        setVisible(false);
+      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       setLoading(false);
     }
@@ -183,7 +195,6 @@ const DataKontrolBalik = () => {
             setisConnectionError(true);
           }
           HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-
           setLoading(false);
         }
       }

@@ -118,9 +118,22 @@ const DataPasien = () => {
     try {
       const responsePengguna = await getAllPengguna();
       setPengguna(responsePengguna);
-
       setLoading(false);
     } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+        setVisible(false);
+      }
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       setLoading(false);
     }

@@ -108,6 +108,8 @@ const DataPasien = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setVisible(true);
+    setBeforeModalLoading(true);
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -119,7 +121,6 @@ const DataPasien = () => {
     setIsEditMode(false);
 
     try {
-      setVisible(true);
       const responsePuskesmas = await getAllPuskesmas();
       setAdminPuskesmas(responsePuskesmas);
       const responsePengguna = await getAllPengguna();
@@ -127,8 +128,24 @@ const DataPasien = () => {
 
       setLoading(false);
     } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+        setVisible(false);
+      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       setLoading(false);
+    } finally {
+      setBeforeModalLoading(false);
     }
   };
 
@@ -489,11 +506,11 @@ const DataPasien = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <Toast
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
           columns={columns}
