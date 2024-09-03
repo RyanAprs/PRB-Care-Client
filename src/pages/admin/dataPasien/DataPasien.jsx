@@ -494,6 +494,10 @@ const DataPasien = () => {
   if (loading)
     return (
       <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+        <Toast
+          ref={toast}
+          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+        />
         <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
           <ProgressSpinner />
         </div>

@@ -33,6 +33,7 @@ import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasio
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const DataPuskesmas = () => {
+  const toast = useRef(null);
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
@@ -58,7 +59,6 @@ const DataPuskesmas = () => {
   const [resetAddress, setResetAddress] = useState(false);
   const [prevAddress, setPrevAddress] = useState({});
   const [prevWaktuOperasional, setPrevWaktuOperasional] = useState({});
-  const toast = useRef(null);
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setButtonLoading] = useState(null);
@@ -235,20 +235,19 @@ const DataPuskesmas = () => {
         alamat: datas.alamat || prevAddress,
         waktuOperasional: formattedWaktuOperasional || prevWaktuOperasional,
       };
-
       puskesmasUpdateSchema.parse(updatedDatas);
-
       const response = await updatePuskesmas(currentId, updatedDatas);
 
       if (response.status === 200) {
         setVisible(false);
+        setButtonLoading(false);
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
           detail: "Data Puskesmas diperbarui",
           life: 3000,
         });
-        setButtonLoading(false);
+
         try {
           setLoading(true);
           const response = await getAllPuskesmas();
@@ -306,12 +305,6 @@ const DataPuskesmas = () => {
       const response = await deletepuskesmas(currentId);
       if (response.status === 200) {
         setVisibleDelete(false);
-        toast.current.show({
-          severity: "success",
-          summary: "Berhasil",
-          detail: "Data Puskesmas dihapus",
-          life: 3000,
-        });
         try {
           setLoading(true);
           const response = await getAllPuskesmas();
@@ -337,10 +330,17 @@ const DataPuskesmas = () => {
           setLoading(false);
         }
       }
+      toast.current.show({
+        severity: "success",
+        summary: "Berhasil",
+        detail: "Data Puskesmas dihapus",
+        life: 3000,
+      });
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };
@@ -382,6 +382,10 @@ const DataPuskesmas = () => {
   if (loading)
     return (
       <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+        <Toast
+          ref={toast}
+          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+        />
         <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
           <ProgressSpinner />
         </div>
@@ -394,11 +398,11 @@ const DataPuskesmas = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
-      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <Toast
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
           columns={columns}

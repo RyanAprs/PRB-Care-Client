@@ -86,6 +86,17 @@ export const handleDeleteError = (error, toast) => {
                     detail: error.response.data.error,
                     life: 3000,
                 });
+                 toast("Data Puskesmas berhasil diperbarui", {
+                   position: "top-right",
+                   autoClose: 5000,
+                   hideProgressBar: false,
+                   closeOnClick: true,
+                   pauseOnHover: true,
+                   draggable: true,
+                   progress: undefined,
+                   theme: "light",
+                   type: "success",
+                 });
                 break;
             case 500:
                 toast.current.show({
