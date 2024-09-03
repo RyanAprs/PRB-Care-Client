@@ -898,7 +898,7 @@ const DataKontrolBalik = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-20 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDelete}
             >
               {isButtonLoading ? (
@@ -938,7 +938,7 @@ const DataKontrolBalik = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-20 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleDone}
             >
               {isButtonLoading ? (
@@ -978,7 +978,7 @@ const DataKontrolBalik = () => {
             />
             <Button
               disabled={isButtonLoading}
-              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-40 flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 min-w-20 flex justify-center rounded-xl hover:mainGreen transition-all"
               onClick={handleCancelled}
             >
               {isButtonLoading ? (
