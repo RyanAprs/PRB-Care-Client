@@ -109,7 +109,6 @@ const DataPasien = () => {
 
   const handleModalCreate = async () => {
     setVisible(true);
-    setBeforeModalLoading(true);
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -144,9 +143,7 @@ const DataPasien = () => {
       }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       setLoading(false);
-    } finally {
-      setBeforeModalLoading(false);
-    }
+    } 
   };
 
   const handleCreate = async () => {
