@@ -308,10 +308,17 @@ const NavbarPengguna = () => {
       }
     }
   };
-  const toggleMenuVisibility = () => {
-    setIsMenuVisible(!isMenuVisible);
-    setKey((prev) => prev + 1);
+  const buttonRef = useRef(null);
+  const toggleMenuVisibility = (event) => {
+    event.stopPropagation();
+    setIsMenuVisible(prev => {
+      if (!prev) {
+        setKey(prevKey => prevKey + 1);
+      }
+      return !prev;
+    });
   };
+
   const items = [
     {
       label: (
@@ -342,6 +349,21 @@ const NavbarPengguna = () => {
     },
   ];
   const [isButtonLoading, setButtonLoading] = useState(null);
+  const menuContainerRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (menuContainerRef.current && !menuContainerRef.current.contains(event.target) &&
+        buttonRef.current && !buttonRef.current.contains(event.target)) {
+      setIsMenuVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <ModalLoading className={beforeModalLoading?``:`hidden`} />
@@ -440,6 +462,7 @@ const NavbarPengguna = () => {
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <Button
+                  ref={buttonRef}
                 onClick={toggleMenuVisibility}
                 text
                 severity="secondary"
@@ -456,6 +479,7 @@ const NavbarPengguna = () => {
           </div>
         </div>
       </header>
+      <div ref={menuContainerRef}>
       <Menu
         key={key}
         className={` ${
@@ -463,6 +487,7 @@ const NavbarPengguna = () => {
         } absolute  right-0 `}
         model={items}
       />
+      </div>
       <div
         className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
         style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.05)" }}

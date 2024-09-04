@@ -7,26 +7,29 @@ import { AuthContextProvider } from "./config/context/AuthContext";
 import NotFound from "./pages/NotFound";
 import PublicRoute from "./config/routes/PublicRoute";
 import { NotificationProvider } from "./config/context/NotificationContext.jsx";
+import {InstallPromptProvider} from "./config/context/InstallPromptContext.jsx";
 
 window.global = window;
 
 
 function App() {
   return (
-    <AuthContextProvider>
-      <NotificationProvider>
-        <Router>
-          <Routes>
-            <Route path="/*" element={<PublicRoute />} />
-            <Route path="/pengguna/*" element={<PenggunaRoute />} />
-            <Route path="/admin/*" element={<AdminRoute />} />
-            <Route path="/puskesmas/*" element={<PuskesmasRoute />} />
-            <Route path="/apotek/*" element={<ApotekRoute />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Router>
-      </NotificationProvider>
-    </AuthContextProvider>
+      <InstallPromptProvider>
+        <AuthContextProvider>
+          <NotificationProvider>
+            <Router>
+              <Routes>
+                <Route path="/*" element={<PublicRoute />} />
+                <Route path="/pengguna/*" element={<PenggunaRoute />} />
+                <Route path="/admin/*" element={<AdminRoute />} />
+                <Route path="/puskesmas/*" element={<PuskesmasRoute />} />
+                <Route path="/apotek/*" element={<ApotekRoute />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Router>
+          </NotificationProvider>
+        </AuthContextProvider>
+        </InstallPromptProvider>
   );
 }
 

@@ -199,9 +199,15 @@ const NavbarAdmin = ({ children }) => {
     setIsMenuVisible(false);
     setVisibleLogout(true);
   };
-  const toggleMenuVisibility = () => {
-    setIsMenuVisible(!isMenuVisible);
-    setKey((prev) => prev + 1);
+  const buttonRef = useRef(null);
+  const toggleMenuVisibility = (event) => {
+    event.stopPropagation();
+    setIsMenuVisible(prev => {
+      if (!prev) {
+        setKey(prevKey => prevKey + 1);
+      }
+      return !prev;
+    });
   };
 
   const formatWaktuOperasional = () => {
@@ -447,6 +453,21 @@ const NavbarAdmin = ({ children }) => {
     }
   };
   const [isButtonLoading, setButtonLoading] = useState(null);
+  const menuContainerRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (menuContainerRef.current && !menuContainerRef.current.contains(event.target) &&
+        buttonRef.current && !buttonRef.current.contains(event.target)) {
+      setIsMenuVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className="flex h-screen w-full">
@@ -847,6 +868,7 @@ const NavbarAdmin = ({ children }) => {
               <ThemeSwitcher />
             </div>
             <Button
+              ref={buttonRef}
               severity="secondary"
               onClick={toggleMenuVisibility}
               text
@@ -860,23 +882,28 @@ const NavbarAdmin = ({ children }) => {
               }
             ></Button>
           </div>
-          <Menuk
-            key={key}
-            className={` ${
-              isMenuVisible ? "visible" : "hidden"
-            } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
-            model={role === "admin" ? itemsAdmin : itemsNotAdmin}
-          ></Menuk>
+
+          <div ref={menuContainerRef}>
+            <Menuk
+                key={key}
+                className={` ${
+                    isMenuVisible ? "visible" : "hidden"
+                } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
+                model={role === "admin" ? itemsAdmin : itemsNotAdmin}
+            ></Menuk>
+          </div>
+
         </div>
 
-        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
+        <div
+            className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
       </div>
 
       {/* Modal Detail Profile */}
       <Dialog
-        header={isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"}
+          header={isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"}
         visible={visibleDetailProfile}
         maximizable
         className="md:w-1/2 w-full"

@@ -65,10 +65,7 @@ const PublicFooter = () => {
             <div
                 className="border-t-[1px] flex flex-col  gap-4  border-black dark:border-white mt-12 pt-3 pb-20 md:pb-0 text-center text-sm">
                 <h1 className="flex gap-1 items-center justify-center">
-                    &copy; {new Date().getFullYear()} PRBCare. Made with ❤ by{" "}
-                    <a href="https://github.com/RyanAprs">Ryan</a>
-                    <span>&</span>
-                    <a href="https://github.com/ScrKiddie">Hilmi.</a>
+                     &copy; {new Date().getFullYear()} PRBCare. All rights reserved.
                 </h1>
             </div>
         </footer>

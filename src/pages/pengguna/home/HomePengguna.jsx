@@ -1,12 +1,13 @@
 import img from "../../../assets/home.png";
-import gif from "../../../assets/tutor.gif";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { TabletSmartphone, Bell } from "lucide-react";
 import { Button } from "primereact/button";
 import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import { updateCurrentTokenPerangkatPengguna } from "../../../services/PenggunaService";
 import { Link } from "react-router-dom";
 import { Ripple } from "primereact/ripple";
+import { useInstallPrompt } from "../../../config/context/InstallPromptContext.jsx";
 const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -18,6 +19,7 @@ const firebaseConfig = {
   measurementId: "G-122Y1K7VRS",
 };
 
+
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
 
@@ -25,37 +27,7 @@ const HomePengguna = () => {
   const [permission, setPermission] = useState(
       typeof Notification !== "undefined" ? Notification.permission : "granted"
   );
-  const [isAndroid, setIsAndroid] = useState(false);
-  const [isChromeAndroid, setIsChromeAndroid] = useState(false);
-  const [isFloating, setIsFloating] = useState(localStorage.getItem("floating") === "true");
-
-  useEffect(() => {
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isAndroidDevice = /android/i.test(userAgent);
-
-    const isChrome = /chrome/i.test(userAgent) &&
-        !/edg/i.test(userAgent) &&
-        !/opr/i.test(userAgent) &&
-        !/samsung/i.test(userAgent) &&
-        !/ucbrowser/i.test(userAgent) &&
-        !/brave/i.test(userAgent) &&
-        !/vivaldi/i.test(userAgent) &&
-        !/firefox/i.test(userAgent) &&
-        !/duckduckgo/i.test(userAgent) &&
-        !/puffin/i.test(userAgent) &&
-        !/miuibrowser/i.test(userAgent) &&
-        !/tor/i.test(userAgent) &&
-        !/yabrowser/i.test(userAgent);
-
-    const hasUserAgentData = navigator.userAgentData && navigator.userAgentData.brands && navigator.userAgentData.brands[2] !== undefined;
-    setIsAndroid(isAndroidDevice);
-    setIsChromeAndroid(isChrome && isAndroidDevice && hasUserAgentData);
-  }, []);
-
-
-  useEffect(() => {
-    localStorage.setItem("floating", isFloating);
-  }, [isFloating]);
+  const { installPromptEvent, promptInstall } = useInstallPrompt();
 
   const handleNotificationSetup = async () => {
     if (!("Notification" in window)) {
@@ -95,7 +67,6 @@ const HomePengguna = () => {
     }
   };
 
-
   const handleUpdate = async (currentToken) => {
     try {
       const data = { TokenPerangkat: currentToken };
@@ -108,60 +79,24 @@ const HomePengguna = () => {
     }
   };
 
-  const handleSelanjutnya = () => {
-    setIsFloating(true);
+  if (localStorage.getItem("isLogin") === "true") {
+    handleNotificationSetup();
+    localStorage.removeItem("isLogin");
   }
 
-  useEffect(() => {
-    if (localStorage.getItem("isLogin") === "true") {
-      handleNotificationSetup();
-      localStorage.removeItem("isLogin");
-    }
-  }, []);
-
   return (
-
       <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
-
         <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
           <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
             <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
-              <img src={img} className="md:hidden w-4/5" alt="img"/>
+              <img src={img} className="md:hidden w-4/5" alt="img" />
               <h1 className="md:text-6xl text-3xl font-semibold text-justify md:text-start dark:text-whiteHover">
-                {permission !== "granted" || (isFloating === false && isAndroid === true)
+                {permission !== "granted" || installPromptEvent !== null
                     ? "Selamat Datang, Ikuti Instruksi di Bawah ini Untuk Memulai"
                     : "Anda Telah Bergabung dengan PRBCare"}
                 .
               </h1>
-
-              <div className={`flex flex items-center `}>
-                <div className={`${permission !== "granted" ||
-                isFloating === true || isAndroid !== true || (isAndroid === true && isChromeAndroid !== true) ? "hidden" : ""}`}>
-                  <img
-                      src={gif}
-                      className="rounded-xl mb-5 border"
-                      alt="img"
-                  />
-                  <p
-                      className={`text-lg text-justify w-full md:pr-10 `}
-                  >
-                    Untuk memastikan Anda mendapatkan pengalaman terbaik dengan notifikasi dari aplikasi kami, aktifkan
-                    izin notifikasi mengambang seperti pada contoh di atas. Jika sudah selesai, klik tombol "Selanjutnya"
-                    di
-                    bawah ini.
-                  </p>
-
-                </div>
-
-                <p className={`text-lg text-justify w-full md:pr-10 ${permission === "granted" && (isAndroid === true && isChromeAndroid === false) && isFloating !== true ? "" : "hidden"}`}>
-                  Anda tampaknya menggunakan browser selain Chrome di Android. Untuk pengalaman terbaik, kami sarankan
-                  Anda
-                  menginstall Chrome dari Play Store dengan melakukan klik pada tombol "Install Chrome". Namun
-                jika Anda tetap ingin melanjutkan, klik tombol "Selanjutnya" di bawah ini. Harap
-                  diperhatikan bahwa
-                  notifikasi mungkin tidak berjalan dengan baik atau bahkan tidak tersedia.
-                </p>
-
+              <div className="flex flex-col items-center">
                 <p
                     className={`text-lg text-justify w-full md:pr-10 ${
                         permission === "granted" ? "hidden" : ""
@@ -170,12 +105,24 @@ const HomePengguna = () => {
                   Jangan lupa untuk mengaktifkan permintaan izin untuk notifikasi
                   di browser anda, Jika Anda belum melihat permintaan izin untuk
                   notifikasi, tekan tombol "Aktifkan Notifikasi" lalu pilih
-                  "Allow" atau "Izinkan". Setelah itu anda bisa mendapatkan notifikasi dari kami
+                  "Allow" atau "Izinkan". Setelah tombol berubah menjadi
+                  "Notifikasi Aktif" anda akan mendapatkan notifikasi dari kami
                   mengenai kontrol balik dan pengambilan obat.
                 </p>
                 <p
                     className={`text-lg text-justify w-full md:pr-10 ${
-                        permission !== "granted" || (isFloating === false && isAndroid === true)
+                        permission !== "granted" || installPromptEvent === null
+                            ? "hidden"
+                            : ""
+                    }`}
+                >
+                  Untuk pengalaman terbaik dengan aplikasi PRBCare, install aplikasi sebagai Progressive Web App (PWA). Cukup
+                  klik tombol "Install PRBCare" di bawah ini, lalu pilih
+                  "Install" untuk menambahkan aplikasi ke perangkat Anda.
+                </p>
+                <p
+                    className={`text-lg text-justify w-full md:pr-10 ${
+                        permission !== "granted" || installPromptEvent !== null
                             ? "hidden"
                             : ""
                     }`}
@@ -186,10 +133,9 @@ const HomePengguna = () => {
                   memberikan nomor antrean untuk Anda. Jika Anda membutuhkan
                   bantuan lebih lanjut, jangan ragu untuk menghubungi kami.
                 </p>
-
               </div>
               <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
-                {permission === "granted" && (isFloating === true || isAndroid === false) ? (
+                {permission === "granted" && installPromptEvent === null ? (
                     <>
                       <Link
                           to="/data-puskesmas"
@@ -199,7 +145,7 @@ const HomePengguna = () => {
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Puskesmas
                         </div>
-                        <Ripple/>
+                        <Ripple />
                       </Link>
                       <Link
                           to="/data-apotek"
@@ -209,38 +155,36 @@ const HomePengguna = () => {
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Apotek
                         </div>
-                        <Ripple/>
+                        <Ripple />
                       </Link>
                     </>
                 ) : (
                     <>
                       <Button
                           onClick={handleNotificationSetup}
-                          className={`${permission === "granted" && "hidden"} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                          className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                          disabled={permission === "granted"}
                           label={
-                            <div className="flex gap-2 justify-center items-center text-lg ">
+                            <div className="flex gap-2 justify-center items-center text-lg">
+                              <Bell size={30} />
                               {permission === "granted"
                                   ? "Notifikasi Aktif"
                                   : "Aktifkan Notifikasi"}
                             </div>
                           }
                       />
-                      <Link
-                          to="https://play.google.com/store/apps/details?id=com.android.chrome"
-                          target="_blank"
-                          className={`${permission === "granted" && (isAndroid === true && isChromeAndroid === false) && isFloating !== true ? "" : "hidden"} p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
-                      >
-                        <div className="flex gap-2 justify-center items-center text-lg">
-                          Install Chrome
-                        </div>
-                        <Ripple/>
-                      </Link>
                       <Button
-                          onClick={handleSelanjutnya}
-                          className={`${permission === "granted" && (isFloating === false && isAndroid === true) ? "" : "hidden"} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                          onClick={promptInstall}
+                          className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                          disabled={
+                              permission !== "granted" || installPromptEvent === null
+                          }
                           label={
                             <div className="flex gap-2 justify-center items-center text-lg">
-                              Selanjutnya
+                              <TabletSmartphone size={30} />
+                              {installPromptEvent === null
+                                  ? "PRBCare Terinstall"
+                                  : "Install PRBCare"}
                             </div>
                           }
                       />
