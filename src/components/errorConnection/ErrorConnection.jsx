@@ -15,7 +15,7 @@ const ErrorConnection = ({fetchData}) => {
                     <Button
                         label="Coba Lagi"
                         onClick={fetchData}
-                        className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                        className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen  md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                     />
                 </div>
             </div>

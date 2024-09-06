@@ -222,13 +222,10 @@ const RegisterPengguna = () => {
                     {errors.alamat && (
                         <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Captcha:
-                    </label>
                     <ReCAPTCHA
                         key={recaptchaKey}
                         theme={darkMode.value ? "dark" : "light"}
-                        className="rounded-lg "
+                        className="rounded-lg md:mx-0 mx-auto"
                         ref={recaptchaRef}
                         sitekey={`${VITE_RECAPTCHA_KEY}`}
                         value={datas.tokenRecaptcha}
@@ -241,7 +238,7 @@ const RegisterPengguna = () => {
                     />
 
                     {errors.tokenRecaptcha && (
-                        <span className="text-red-500  -mt-3 text-sm">
+                        <span className="text-red-500  -mt-3 text-sm md:mx-0 mx-auto w-fit">
               {errors.tokenRecaptcha}
             </span>
                     )}

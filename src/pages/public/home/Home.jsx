@@ -81,7 +81,7 @@ const Home = () => {
                     whileInView="visible"
                     transition={{ duration: 0.6, delay: 0.2 }}
                     variants={fadeInUp}
-                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#0c0c0c] md:py-20"
+                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#131313] md:py-20"
                 >
                     <h2 className="text-3xl font-semibold dark:text-whiteHover">Fitur Utama Kami</h2>
                     <div className="flex flex-wrap w-full justify-center gap-7">
@@ -140,7 +140,7 @@ const Home = () => {
                     whileInView="visible"
                     transition={{ duration: 0.6, delay: 0.2 }}
                     variants={fadeInUp}
-                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#0c0c0c] md:py-20 rounded-b-xl"
+                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#131313] md:py-20 rounded-b-xl"
                 >
                     <h2 className="text-3xl font-semibold dark:text-whiteHover text-center">Apa Kata Mereka Tentang PRBCare?</h2>
                     <div className="flex flex-wrap w-full justify-center gap-7">

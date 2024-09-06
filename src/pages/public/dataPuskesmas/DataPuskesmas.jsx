@@ -8,14 +8,17 @@ import img from "../../../assets/data_empty.png";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import {Button} from "primereact/button";
 
 const DataPuskesmas = () => {
     const {dispatch} = useContext(AuthContext);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [login, setLogin] = useState(false);
     const {token} = useContext(AuthContext);
     const navigate = useNavigate();
-    const [isConnectionError, setisConnectionError] = useState(false);
+    const [isConnectionError, setIsConnectionError] = useState(false);
+
     const customSort = (a, b) => {
         if (a.namaPuskesmas < b.namaPuskesmas) return -1;
         if (a.namaPuskesmas > b.namaPuskesmas) return 1;
@@ -29,7 +32,8 @@ const DataPuskesmas = () => {
             const sortedData = response.sort(customSort);
             setData(sortedData);
             setLoading(false);
-            setisConnectionError(false);
+            setLogin(true);
+            setIsConnectionError(false);
         } catch (error) {
             if (error.code === "ERR_NETWORK" ||
                 error.code === "ETIMEDOUT" ||
@@ -40,7 +44,13 @@ const DataPuskesmas = () => {
                 error.code === "EHOSTUNREACH" ||
                 error.code === "ECONNRESET" ||
                 error.code === "EPIPE") {
-                setisConnectionError(true);
+                setIsConnectionError(true);
+            }else if (error.response) {
+                if (error.response.status === 401 || error.response.status === 403) {
+                    dispatch({ type: "LOGOUT" });
+                    setIsConnectionError(false);
+                    setLogin(false);
+                }
             }
             setLoading(false);
         }
@@ -96,6 +106,27 @@ const DataPuskesmas = () => {
     if (isConnectionError) {
         return (
             <ErrorConnection fetchData={fetchData}/>
+        );
+    }
+    if(!login){
+        return (
+            <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
+                <div
+                    className="p-8 w-full h-full flex flex-col items-center justify-center bg-white dark:bg-blackHover rounded-xl">
+                    <div
+                        className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
+                        Login Untuk Akses
+                        <p className="font-medium text-xl">
+                            Lakukan login terlebih dahulu untuk melihat data.
+                        </p>
+                        <Button
+                            label="Login"
+                            onClick={() => navigate("/pengguna/login")}
+                            className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen  md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
     return (

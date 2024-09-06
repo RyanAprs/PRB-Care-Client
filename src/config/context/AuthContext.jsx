@@ -43,20 +43,25 @@ export const AuthContextProvider = ({children}) => {
         const token = Cookies.get("token");
 
         if (token) {
-            const decodedToken = jwtDecode(token);
-            let role = decodedToken.role;
+            try {
+                const decodedToken = jwtDecode(token);
+                let role = decodedToken.role;
 
-            if (role === 'super') {
-                role = 'admin';
-            } else if (role === 'puskesmas') {
-                role = 'nakes';
-            } else if (role === 'apotek') {
-                role = 'apoteker';
+                if (role === 'super') {
+                    role = 'admin';
+                } else if (role === 'puskesmas') {
+                    role = 'nakes';
+                } else if (role === 'apotek') {
+                    role = 'apoteker';
+                }
+
+                dispatch({ type: "LOGIN", payload: { token, role } });
+            } catch (error) {
+                Cookies.remove("token");
+                dispatch({ type: "LOGOUT" });
             }
-
-            dispatch({type: "LOGIN", payload: {token, role}});
         } else {
-            dispatch({type: "LOGOUT"});
+            dispatch({ type: "LOGOUT" });
         }
     }, []);
 

@@ -4,7 +4,7 @@ import img from "../../assets/prbcare.svg";
 
 const PublicFooter = () => {
     return (
-        <footer className="dark:bg-black bg-whiteGrays dark:text-white pt-10  md:pb-3">
+        <footer className="dark:bg-black bg-whiteGrays dark:text-white pt-10  md:pb-1">
             <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="flex flex-col mx-auto items-center">
                     <div className="flex items-center">
@@ -63,7 +63,7 @@ const PublicFooter = () => {
             </div>
 
             <div
-                className="border-t-[1px] flex flex-col  gap-4  border-black dark:border-white mt-12 pt-3 pb-20 md:pb-0 text-center text-sm">
+                className="border-t-[1px] flex flex-col  gap-4  border-black dark:border-white mt-12 pt-1 pb-[68px] md:pb-0 text-center text-sm">
                 <h1 className="flex gap-1 items-center justify-center">
                      &copy; {new Date().getFullYear()} PRBCare. All rights reserved.
                 </h1>

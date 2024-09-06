@@ -1,21 +1,22 @@
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
-import {ProgressSpinner} from "primereact/progressspinner";
-import {useNavigate} from "react-router-dom";
-import {AuthContext} from "../../../config/context/AuthContext";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { AuthContext } from "../../../config/context/AuthContext";
 import img from "../../../assets/data_empty.png";
-import {jsPDF} from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import {getAllApotek} from "../../../services/ApotekService";
+import { getAllApotek } from "../../../services/ApotekService";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import { Button } from "primereact/button";
+import {useNavigate} from "react-router-dom";
 
 const DataApotek = () => {
-    const {dispatch} = useContext(AuthContext);
+    const { token,dispatch } = useContext(AuthContext);
+    const [login, setLogin] = useState(false);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const {token} = useContext(AuthContext);
+    const [isConnectionError, setIsConnectionError] = useState(false);
     const navigate = useNavigate();
-    const [isConnectionError, setisConnectionError] = useState(false);
     const customSort = (a, b) => {
         if (a.namaPuskesmas < b.namaPuskesmas) return -1;
         if (a.namaPuskesmas > b.namaPuskesmas) return 1;
@@ -29,9 +30,11 @@ const DataApotek = () => {
             const sortedData = response.sort(customSort);
             setData(sortedData);
             setLoading(false);
-            setisConnectionError(false);
+            setLogin(true);
+            setIsConnectionError(false);
         } catch (error) {
-            if (error.code === "ERR_NETWORK" ||
+            if (
+                error.code === "ERR_NETWORK" ||
                 error.code === "ETIMEDOUT" ||
                 error.code === "ECONNABORTED" ||
                 error.code === "ENOTFOUND" ||
@@ -39,9 +42,19 @@ const DataApotek = () => {
                 error.code === "EAI_AGAIN" ||
                 error.code === "EHOSTUNREACH" ||
                 error.code === "ECONNRESET" ||
-                error.code === "EPIPE") {
-                setisConnectionError(true);
+                error.code === "EPIPE"
+            ) {
+                setIsConnectionError(true);
+            } else if (error.response) {
+                if (error.response.status === 401 || error.response.status === 403) {
+                    dispatch({ type: "LOGOUT" });
+                    setIsConnectionError(false);
+                    setLogin(false);
+                }
+            } else {
+                console.error("An unexpected error occurred:", error);
             }
+
             setLoading(false);
         }
     };
@@ -49,11 +62,10 @@ const DataApotek = () => {
     useEffect(() => {
         fetchData();
     }, [token, navigate, dispatch]);
-
     const handleDownload = () => {
         const doc = new jsPDF();
 
-        doc.text("Data Aotek", 20, 10);
+        doc.text("Data Apotek", 20, 10);
 
         const tableColumn = columns.map((col) => col.header);
 
@@ -74,34 +86,56 @@ const DataApotek = () => {
             startY: 20,
         });
 
-        doc.save("data-puskesmas.pdf");
+        doc.save("data-apotek.pdf");
     };
 
     const columns = [
-        {field: "namaApotek", header: "Nama Aptek"},
-        {field: "telepon", header: "Telepon"},
-        {field: "alamat", header: "Alamat"},
-        {field: "waktuOperasional", header: "Waktu Operasional"},
+        { field: "namaApotek", header: "Nama Apotek" },
+        { field: "telepon", header: "Telepon" },
+        { field: "alamat", header: "Alamat" },
+        { field: "waktuOperasional", header: "Waktu Operasional" },
     ];
 
-    if (loading)
+    if (loading) {
         return (
             <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
-                <div
-                    className="p-8 w-full min-h-screen flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
-                    <ProgressSpinner/>
+                <div className="p-8 w-full min-h-screen flex items-center justify-center bg-white dark:bg-blackHover rounded-xl">
+                    <ProgressSpinner />
                 </div>
             </div>
         );
+    }
+
+
+
     if (isConnectionError) {
+        return <ErrorConnection fetchData={fetchData} />;
+    }
+    if(!login){
         return (
-            <ErrorConnection fetchData={fetchData}/>
+            <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
+                <div
+                    className="p-8 w-full h-full flex flex-col items-center justify-center bg-white dark:bg-blackHover rounded-xl">
+                    <div
+                        className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
+                        Login Untuk Akses
+                        <p className="font-medium text-xl">
+                            Lakukan login terlebih dahulu untuk melihat data.
+                        </p>
+                        <Button
+                            label="Login"
+                            onClick={() => navigate("/pengguna/login")}
+                            className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen  md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                        />
+                    </div>
+                </div>
+            </div>
         );
     }
     return (
-        <div className=" md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
             <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
-                <div className="flex flex-col p-1 gap-4  min-h-screen max-h-fit">
+            <div className="flex flex-col p-1 gap-4 min-h-screen max-h-fit">
                     {data.length > 0 ? (
                         <div className="row grid grid-cols-1 gap-6">
                             <ReusableTable
@@ -113,7 +147,7 @@ const DataApotek = () => {
                         </div>
                     ) : (
                         <div
-                            className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+                            className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
                             <img src={img} className="md:w-80 w-64" alt="img"/>
                             Belum Ada Data
                             <p className="font-medium text-xl">
