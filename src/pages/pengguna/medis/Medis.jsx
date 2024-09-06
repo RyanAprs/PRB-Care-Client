@@ -5,7 +5,7 @@ import {AuthContext} from "../../../config/context/AuthContext";
 import {ProgressSpinner} from "primereact/progressspinner";
 import img from "../../../assets/data_empty.png";
 import {getAllPasien} from "../../../services/PasienService";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";

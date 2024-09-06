@@ -27,7 +27,7 @@ import {
 } from "../../../services/ApotekService";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";

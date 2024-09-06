@@ -33,7 +33,7 @@ import { getAllPasienAktif } from "../../../services/PasienService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";

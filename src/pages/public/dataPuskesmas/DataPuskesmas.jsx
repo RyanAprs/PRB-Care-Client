@@ -5,7 +5,7 @@ import {ProgressSpinner} from "primereact/progressspinner";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../../../config/context/AuthContext";
 import img from "../../../assets/data_empty.png";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 

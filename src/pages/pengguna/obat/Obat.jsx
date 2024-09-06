@@ -7,7 +7,7 @@ import {getAllPengambilanObat} from "../../../services/PengambilanObatService";
 import img from "../../../assets/data_empty.png";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
 const Obat = () => {

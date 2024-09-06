@@ -27,7 +27,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 

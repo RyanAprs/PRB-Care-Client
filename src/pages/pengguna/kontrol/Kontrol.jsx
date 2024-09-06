@@ -5,7 +5,7 @@ import {getAllKontrolBalik} from "../../../services/KontrolBalikService";
 import {HandleUnauthorizedPengguna} from "../../../utils/HandleUnauthorized";
 import {ProgressSpinner} from "primereact/progressspinner";
 import ReusableTable from "../../../components/rousableTable/RousableTable";
-import jsPDF from "jspdf";
+import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import img from "../../../assets/data_empty.png";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
