@@ -16,7 +16,7 @@ export const loginSchema = z.object({
             "Format password tidak sesuai"
         )
         .regex(/^\S*$/, "Format password tidak sesuai"),
-    tokenRecaptcha: z
+    tokenCaptcha: z
         .string()
         .min(1, "Selesaikan captcha terlebih dahulu"),
 });
@@ -38,7 +38,7 @@ export const loginAdminSchema = z.object({
         .regex(/^\S*$/, "Format password tidak sesuai"),
     selectedRole: z.string().
     refine((val) => ["admin", "puskesmas", "apotek"].includes(val),"Pilih role admin yang sesuai"),
-    tokenRecaptcha: z
+    tokenCaptcha: z
         .string()
         .min(1, "Selesaikan captcha terlebih dahulu"),
 });

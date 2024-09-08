@@ -11,35 +11,26 @@ import { handleLoginError } from "../../utils/ApiErrorHandlers";
 import { loginAdminSchema, loginSchema } from "../../validations/LoginSchema";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Dropdown } from "primereact/dropdown";
-import ReCAPTCHA from "react-google-recaptcha";
+import { Turnstile } from "@marsidev/react-turnstile";
 import useDarkMode from 'use-dark-mode';
-import { Skeleton } from "primereact/skeleton";
 
-const VITE_RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_KEY;
+
+const VITE_TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
+  const ref = useRef()
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
-  const recaptchaRef = useRef(null);
-  const [recaptchaKey, setRecaptchaKey] = useState(0);
-  const [isCaptchaLoading, setCaptchaLoading] = useState(true);
-
-  useEffect(() => {
-    setRecaptchaKey((prevKey) => prevKey + 1);
-    if (recaptchaRef.current) {
-      setCaptchaLoading(true);
-      recaptchaRef.current.reset();
-    }
-
-    const timer = setTimeout(() => {
-      setCaptchaLoading(false);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [darkMode.value]);
-
+  const turnstileLight ={
+    theme: 'light',
+    language: 'id',
+  }
+  const turnstileDark ={
+    theme: 'dark',
+    language: 'id',
+  }
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [tokenRecaptcha, setTokenRecaptcha] = useState("");
+  const [tokenCaptcha, setTokenCaptcha] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
@@ -55,12 +46,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const navigateApotek = "/apotek/beranda";
 
   const uriAdmin = `${import.meta.env.VITE_API_BASE_URI}/api/admin-super/login`;
-  const uriPuskesmas = `${
-      import.meta.env.VITE_API_BASE_URI
-  }/api/admin-puskesmas/login`;
-  const uriApotek = `${
-      import.meta.env.VITE_API_BASE_URI
-  }/api/admin-apotek/login`;
+  const uriPuskesmas = `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas/login`;
+  const uriApotek = `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek/login`;
 
   const [selectedRole, setSelectedRole] = useState("");
   const roles = [
@@ -68,15 +55,18 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
     { name: "Admin Puskesmas", value: "puskesmas" },
     { name: "Admin Apotek", value: "apotek" },
   ];
-
+  useEffect(() => {
+    setTokenCaptcha("");
+    ref.current?.reset();
+  }, [darkMode.value]);
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      loginUser && loginSchema.parse({ username, password, tokenRecaptcha });
+      loginUser && loginSchema.parse({ username, password, tokenCaptcha });
       loginAdmin &&
-      loginAdminSchema.parse({ username, password, selectedRole, tokenRecaptcha });
+      loginAdminSchema.parse({ username, password, selectedRole, tokenCaptcha });
 
       const response = await axios.post(
           selectedRole === "admin"
@@ -86,7 +76,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                   : selectedRole === "apotek"
                       ? uriApotek
                       : API_URI,
-          { username, password, tokenRecaptcha },
+          { username, password, tokenCaptcha },
           {
             headers: {
               "Content-Type": "application/json",
@@ -109,7 +99,6 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                         ? navigateApotek
                         : navigateUser
         );
-
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -119,10 +108,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
         });
         setErrors(newErrors);
       } else {
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset();
-        }
-        setTokenRecaptcha("");
+        setTokenCaptcha("");
+        ref.current?.reset();
         handleLoginError(error, toast);
       }
     } finally {
@@ -131,21 +118,19 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   };
 
   return (
-      <div className="min-h-screen w-full flex justify-center items-center md:p-8">
+      <div className="min-h-screen w-full flex justify-center items-center md:p-8 py-8">
         <Toast
             ref={toast}
             position={window.innerWidth <= 767 ? "top-center" : "top-right"}
         />
-        <div className="flex justify-center items-center w-full md:w-1/2 flex-col gap-6">
+        <div className="flex justify-center items-center w-full md:w-1/2 flex-col gap-4">
           <div className="flex justify-center items-center flex-col w-full">
             <img className="h-auto w-48 mb-2" src={icon} alt="PRB CARE Logo" />
             <h1 className="text-3xl font-semibold">Masuk {title}</h1>
           </div>
 
           <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">
-            <label htmlFor="" className="-mb-3">
-              Username:
-            </label>
+            <label htmlFor="" className="-mb-3">Username:</label>
             <InputText
                 type="text"
                 placeholder="Username"
@@ -158,9 +143,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                   {errors.username}
                 </small>
             )}
-            <label htmlFor="" className="-mb-3">
-              Password:
-            </label>
+
+            <label htmlFor="" className="-mb-3">Password:</label>
             <InputText
                 type="password"
                 placeholder="Password"
@@ -173,11 +157,10 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                   {errors.password}
                 </small>
             )}
+
             {loginAdmin && (
                 <>
-                  <label htmlFor="" className="-mb-3">
-                    Role:
-                  </label>
+                  <label htmlFor="" className="-mb-3">Role:</label>
                   <Dropdown
                       value={selectedRole}
                       onChange={(e) => setSelectedRole(e.value)}
@@ -194,26 +177,30 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 </>
             )}
 
-            {isCaptchaLoading && <Skeleton width="301px" height="75px" />}
 
-            <div className={`${isCaptchaLoading ? "hidden" : "block"}`}>
-              <ReCAPTCHA
-                  key={recaptchaKey}
-                  theme={darkMode.value ? "dark" : "light"}
-                  className="rounded-lg md:mx-0 mx-auto w-fit "
-                  ref={recaptchaRef}
-                  sitekey={`${VITE_RECAPTCHA_KEY}`}
-                  onChange={(value) => setTokenRecaptcha(value ? value : "")}
-              />
-            </div>
+            <Turnstile
+                ref={ref}
+                siteKey={VITE_TURNSTILE_KEY}
+                className={`md:mx-0 mx-auto`}
+                options={ darkMode.value ? turnstileDark : turnstileLight}
+                onSuccess={(token) => setTokenCaptcha(token)}
+                onError={() => {
+                  setTokenCaptcha("");
+                  ref.current?.reset();
+                }}
+                onExpire={() => {
+                  setTokenCaptcha("");
+                  ref.current?.reset();
+                }}/>
 
-            {errors.tokenRecaptcha && (
-                <span className="text-red-500 p-error -mt-3 text-sm mx-auto w-fit">
-              {errors.tokenRecaptcha}
+
+              {errors.tokenCaptcha && (
+                <span className="text-red-500 p-error -mt-3 text-sm md:mx-0 mx-auto w-fit">
+              {errors.tokenCaptcha}
             </span>
             )}
 
-            <div className="flex flex-col w-full gap-4">
+            <div className="flex flex-col w-full gap-3">
               <Button
                   className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
                   type="submit"
@@ -221,7 +208,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
               >
                 {isLoading ? (
                     <ProgressSpinner
-                        style={{ width: "24px", height: "24px" }}
+                        style={{width: "24px", height: "24px"}}
                         strokeWidth="8"
                         animationDuration="1s"
                         color="white"
@@ -230,17 +217,23 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                     <p>Masuk</p>
                 )}
               </Button>
-              {loginUser && (
-                  <div className="flex w-full gap-1 items-center justify-center">
-                    Belum punya akun?
-                    <Link
-                        to="/pengguna/register"
-                        className="text-mainGreen font-semibold"
-                    >
-                      daftar
-                    </Link>
-                  </div>
-              )}
+              <div className="flex flex-col gap-1">
+
+                <div className="flex w-full gap-1 items-center justify-center">
+                  Lupa passsword?
+                  <Link to="mailto:prbcare@gmail.com" className="text-mainGreen font-semibold">
+                    kontak kami
+                  </Link>
+                </div>
+                {loginUser && (
+                    <div className="flex w-full gap-1 items-center justify-center">
+                      Belum punya akun?
+                      <Link to="/pengguna/register" className="text-mainGreen font-semibold">
+                        daftar
+                      </Link>
+                    </div>
+                )}
+              </div>
             </div>
           </form>
         </div>

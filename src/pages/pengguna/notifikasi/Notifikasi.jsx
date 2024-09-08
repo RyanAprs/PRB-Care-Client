@@ -165,14 +165,16 @@ const Notifikasi = () => {
                         </div>
                     ) : (
                         <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
-                        <div
-                            className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
-                            <img src={img} className="md:w-80 w-64" alt="img"/>
-                            Belum Ada Data
-                            <p className="font-medium text-xl">
-                                Data akan muncul di sini ketika tersedia.
-                            </p>
-                        </div>
+                            <div
+                                className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+                                <img src={img} className="w-52" alt="img"/>
+                                <div>
+                                    Belum Ada Data
+                                    <p className="font-medium text-xl">
+                                        Data akan muncul di sini ketika tersedia.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     )}
             </div>

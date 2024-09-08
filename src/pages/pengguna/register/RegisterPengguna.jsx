@@ -1,21 +1,31 @@
-import {useState, useContext, useEffect, useRef} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { useState, useContext, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import icon from "../../../assets/prbcare.svg";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
-import {AddressContext} from "../../../config/context/AdressContext";
-import {InputText} from "primereact/inputtext";
-import {Button} from "primereact/button";
-import {ProgressSpinner} from "primereact/progressspinner";
-import {penggunaRegisterSchema} from "../../../validations/PenggunaSchema";
-import {ZodError} from "zod";
-import {handleApiError} from "../../../utils/ApiErrorHandlers";
-import {Toast} from "primereact/toast";
-import {registerPengguna} from "../../../services/PenggunaService";
-import ReCAPTCHA from "react-google-recaptcha";
+import { AddressContext } from "../../../config/context/AdressContext";
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { penggunaRegisterSchema } from "../../../validations/PenggunaSchema";
+import { ZodError } from "zod";
+import { handleApiError } from "../../../utils/ApiErrorHandlers";
+import { Toast } from "primereact/toast";
+import { registerPengguna } from "../../../services/PenggunaService";
+import { Turnstile } from "@marsidev/react-turnstile";
 import useDarkMode from 'use-dark-mode';
-const VITE_RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_KEY;
+
+const VITE_TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
+
 const RegisterPengguna = () => {
-    const darkMode = useDarkMode(false, {classNameDark: "dark"});
+    const darkMode = useDarkMode(false, { classNameDark: "dark" });
+    const turnstileLight ={
+        theme: 'light',
+        language: 'id',
+    }
+    const turnstileDark ={
+        theme: 'dark',
+        language: 'id',
+    }
     const [datas, setDatas] = useState({
         namaLengkap: "",
         username: "",
@@ -24,18 +34,22 @@ const RegisterPengguna = () => {
         telepon: "",
         teleponKeluarga: "",
         alamat: "",
-        tokenRecaptcha: "",
+        tokenCaptcha: "",
     });
     const [errors, setErrors] = useState({});
     const [isLoading, setLoading] = useState(false);
     const toast = useRef(null);
     const [resetAddress, setResetAddress] = useState(true);
-    const recaptchaRef = useRef(null);
-    const [recaptchaKey, setRecaptchaKey] = useState(0);
-    const {address} = useContext(AddressContext);
+    const turnstileRef = useRef(null);
+    const { address } = useContext(AddressContext);
     useEffect(() => {
-        setRecaptchaKey((prevKey) => prevKey + 1);
+        setDatas((prev) => ({
+            ...prev,
+            tokenCaptcha: "",
+        }));
+        turnstileRef.current?.reset();
     }, [darkMode.value]);
+
     useEffect(() => {
         const formattedAddress = [
             address.detail,
@@ -85,12 +99,12 @@ const RegisterPengguna = () => {
                 });
                 setErrors(newErrors);
             } else {
-                if (recaptchaRef.current) {
-                    recaptchaRef.current.reset();
+                if (turnstileRef.current) {
+                    turnstileRef.current.reset();
                 }
                 setDatas((prev) => ({
                     ...prev,
-                    tokenRecaptcha: "",
+                    tokenCaptcha: "",
                 }));
                 handleApiError(error, toast);
                 setLoading(false);
@@ -104,143 +118,117 @@ const RegisterPengguna = () => {
                 ref={toast}
                 position={window.innerWidth <= 767 ? "top-center" : "top-right"}
             />
-            <div className="flex w-full flex-col gap-6 md:w-1/2 items-center justify-center">
+            <div className="flex w-full flex-col gap-4 md:w-1/2 items-center justify-center">
                 <div className="flex flex-col w-full justify-center items-center">
-                    <img className="h-auto w-48" src={icon} alt=""/>
+                    <img className="h-auto w-48" src={icon} alt="" />
                     <h1 className="text-3xl font-semibold">Daftar Pengguna</h1>
                 </div>
                 <div className="flex flex-col w-full gap-4">
-                    <label htmlFor="" className="-mb-3">
-                        Nama Lengkap:
-                    </label>
+                    <label htmlFor="" className="-mb-3">Nama Lengkap:</label>
                     <InputText
                         type="text"
                         className="p-input text-lg p-4 rounded"
                         placeholder="Nama Lengkap"
                         value={datas.namaLengkap}
-                        onChange={(e) =>
-                            setDatas((prev) => ({
-                                ...prev,
-                                namaLengkap: e.target.value,
-                            }))
-                        }
+                        onChange={(e) => setDatas((prev) => ({ ...prev, namaLengkap: e.target.value }))}
                         required
                     />
                     {errors.namaLengkap && (
-                        <span className="text-red-500  -mt-3 text-sm">
-              {errors.namaLengkap}
-            </span>
+                        <span className="text-red-500 -mt-3 text-sm">
+                            {errors.namaLengkap}
+                        </span>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Nomor Telepon:
-                    </label>
+                    <label htmlFor="" className="-mb-3">Nomor Telepon:</label>
                     <InputText
                         type="text"
                         className="p-input text-lg p-4 rounded"
                         placeholder="Nomor Telepon"
                         value={datas.telepon}
-                        onChange={(e) =>
-                            setDatas((prev) => ({
-                                ...prev,
-                                telepon: e.target.value,
-                            }))
-                        }
+                        onChange={(e) => setDatas((prev) => ({ ...prev, telepon: e.target.value }))}
                         required
                     />
                     {errors.telepon && (
-                        <span className="text-red-500  -mt-3 text-sm">
-              {errors.telepon}
-            </span>
+                        <span className="text-red-500 -mt-3 text-sm">
+                            {errors.telepon}
+                        </span>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Nomor Telepon Keluarga:
-                    </label>
+                    <label htmlFor="" className="-mb-3">Nomor Telepon Keluarga:</label>
                     <InputText
                         type="text"
                         className="p-input text-lg p-4 rounded"
                         placeholder="Nomor Telepon Keluarga"
                         value={datas.teleponKeluarga}
-                        onChange={(e) =>
-                            setDatas((prev) => ({
-                                ...prev,
-                                teleponKeluarga: e.target.value,
-                            }))
-                        }
+                        onChange={(e) => setDatas((prev) => ({ ...prev, teleponKeluarga: e.target.value }))}
                         required
                     />
                     {errors.teleponKeluarga && (
-                        <span className="text-red-500  -mt-3 text-sm ">
-              {errors.teleponKeluarga}
-            </span>
+                        <span className="text-red-500 -mt-3 text-sm">
+                            {errors.teleponKeluarga}
+                        </span>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Username:
-                    </label>
+                    <label htmlFor="" className="-mb-3">Username:</label>
                     <InputText
                         type="text"
                         className="p-input text-lg p-4 rounded"
                         placeholder="Username"
                         value={datas.username}
-                        onChange={(e) =>
-                            setDatas((prev) => ({
-                                ...prev,
-                                username: e.target.value,
-                            }))
-                        }
+                        onChange={(e) => setDatas((prev) => ({ ...prev, username: e.target.value }))}
                         required
                     />
                     {errors.username && (
-                        <span className="text-red-500  -mt-3 text-sm">
-              {errors.username}
-            </span>
+                        <span className="text-red-500 -mt-3 text-sm">
+                            {errors.username}
+                        </span>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Password:
-                    </label>
+                    <label htmlFor="" className="-mb-3">Password:</label>
                     <InputText
                         type="password"
                         className="p-input text-lg p-4 rounded"
                         placeholder="Password"
                         value={datas.password}
-                        onChange={(e) =>
-                            setDatas((prev) => ({
-                                ...prev,
-                                password: e.target.value,
-                            }))
-                        }
+                        onChange={(e) => setDatas((prev) => ({ ...prev, password: e.target.value }))}
                         required
                     />
                     {errors.password && (
-                        <span className="text-red-500  -mt-3 text-sm">
-              {errors.password}
-            </span>
+                        <span className="text-red-500 -mt-3 text-sm">
+                            {errors.password}
+                        </span>
                     )}
-                    <label htmlFor="" className="-mb-3">
-                        Alamat:
-                    </label>
-                    <DynamicAddress reset={resetAddress}/>
+                    <label htmlFor="" className="-mb-3">Alamat:</label>
+                    <DynamicAddress reset={resetAddress} />
                     {errors.alamat && (
-                        <p className="text-red-500  -mt-3 text-sm">{errors.alamat}</p>
+                        <p className="text-red-500 -mt-3 text-sm">{errors.alamat}</p>
                     )}
-                    <ReCAPTCHA
-                        key={recaptchaKey}
-                        theme={darkMode.value ? "dark" : "light"}
-                        className="rounded-lg md:mx-0 mx-auto"
-                        ref={recaptchaRef}
-                        sitekey={`${VITE_RECAPTCHA_KEY}`}
-                        value={datas.tokenRecaptcha}
-                        onChange={(value) => {
+                    <Turnstile
+                        ref={turnstileRef}
+                        siteKey={VITE_TURNSTILE_KEY}
+                        options={ darkMode.value ? turnstileDark : turnstileLight}
+                        onSuccess={(token) => {
                             setDatas((prev) => ({
                                 ...prev,
-                                tokenRecaptcha: value ? value : "",
+                                tokenCaptcha: token,
                             }));
                         }}
+                        onError={() => {
+                            setDatas((prev) => ({
+                                ...prev,
+                                tokenCaptcha: "",
+                            }));
+                            turnstileRef.current?.reset();
+                        }}
+                        onExpire={() => {
+                            setDatas((prev) => ({
+                                ...prev,
+                                tokenCaptcha: "",
+                            }));
+                            turnstileRef.current?.reset();
+                        }}
+                        className="md:mx-0 mx-auto"
                     />
-
-                    {errors.tokenRecaptcha && (
-                        <span className="text-red-500  -mt-3 text-sm md:mx-0 mx-auto w-fit">
-              {errors.tokenRecaptcha}
-            </span>
+                    {errors.tokenCaptcha && (
+                        <span className="text-red-500 -mt-3 text-sm md:mx-0 mx-auto w-fit">
+                            {errors.tokenCaptcha}
+                        </span>
                     )}
                 </div>
 
@@ -253,7 +241,7 @@ const RegisterPengguna = () => {
                     >
                         {isLoading ? (
                             <ProgressSpinner
-                                style={{width: "25px", height: "25px"}}
+                                style={{ width: "25px", height: "25px" }}
                                 strokeWidth="8"
                                 animationDuration="1s"
                                 color="white"
@@ -262,24 +250,24 @@ const RegisterPengguna = () => {
                             <p>Daftar</p>
                         )}
                     </Button>
-                    <p className="text-center">
-            <span className="font-normal">
-              Dengan mengklik daftar, anda menyetujui{" "}
-            </span>
-                        <Link
-                            to="/kebijakan-privasi"
-                            target="_blank"
-                            className="font-semibold text-mainGreen"
-                        >
-                            kebijakan privasi
-                        </Link>
-                        <span className="font-normal"> kami </span>
-                    </p>
-                    <div className="flex w-full gap-1 items-center justify-center">
-                        Sudah punya akun?
-                        <Link to="/pengguna/login" className="text-mainGreen font-semibold">
-                            masuk
-                        </Link>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-center">
+                            <span className="font-normal">Dengan mengklik daftar, anda menyetujui </span>
+                            <Link
+                                to="/kebijakan-privasi"
+                                target="_blank"
+                                className="font-semibold text-mainGreen"
+                            >
+                                kebijakan privasi
+                            </Link>
+                            <span className="font-normal"> kami </span>
+                        </p>
+                        <div className="flex w-full gap-1 items-center justify-center">
+                            Sudah punya akun?
+                            <Link to="/pengguna/login" className="text-mainGreen font-semibold">
+                                masuk
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource/poppins": "^5.0.14",
+    "@marsidev/react-turnstile": "^1.0.2",
     "@vitejs/plugin-react": "^4.3.1",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5",
@@ -24,7 +25,6 @@
     "primereact": "^10.7.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-google-recaptcha": "^3.1.0",
     "react-helmet-async": "^2.0.5",
     "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^6.24.1",

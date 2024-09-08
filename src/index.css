@@ -135,8 +135,6 @@ body,
     min-width: fit-content !important;
 }
 
-iframe {
-    border-radius: 3px;
-    width: 301.8px;
-    height: 75.8px;
+#cf-turnstile > div {
+    height: 64px;
 }
