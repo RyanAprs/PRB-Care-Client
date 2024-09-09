@@ -374,9 +374,9 @@ const NavbarPengguna = () => {
         />
         <div className="flex items-center justify-center font-poppins text-2xl">
           <img src={logo} width={60} height={60} alt="prb-care logo " />
-          <Link to="/" className="font-extrabold text-black dark:text-white">
+          <div className="font-extrabold text-black dark:text-white">
             PRBCare
-          </Link>
+          </div>
         </div>
 
         <div className="flex gap-10 items-center text-xl ">
@@ -469,9 +469,9 @@ const NavbarPengguna = () => {
                 className="p-1 rounded-full cursor-pointer "
                 label={
                   !isMenuVisible ? (
-                    <Settings2 className="text-black dark:text-white" />
+                    <Settings2 strokeWidth={1.5} className="text-black dark:text-white" />
                   ) : (
-                    <GitPullRequestClosed className="text-black dark:text-white" />
+                    <GitPullRequestClosed strokeWidth={1.5} className="text-black dark:text-white" />
                   )
                 }
               ></Button>

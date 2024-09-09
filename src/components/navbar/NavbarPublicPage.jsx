@@ -76,7 +76,7 @@ const NavbarPublicPage = () => {
                   to={"/pengguna/login"}
                   className="p-1 rounded-full cursor-pointer p-ripple mx-auto transition-all flex flex-col items-center justify-center"
                 >
-                  <LogIn className="text-black dark:text-white" />
+                  <LogIn strokeWidth={1.5} className="text-black dark:text-white" />
                   <Ripple />
                 </Link>
               </div>

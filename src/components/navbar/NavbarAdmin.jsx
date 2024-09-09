@@ -800,7 +800,7 @@ const NavbarAdmin = ({ children }) => {
               }}
               text
               className="p-1 rounded-full cursor-pointer md:hidden"
-              label={<AlignJustify className="dark:text-white text-black" />}
+              label={<AlignJustify strokeWidth={1.5} className="dark:text-white text-black" />}
             ></Button>
 
             <Button
@@ -812,9 +812,9 @@ const NavbarAdmin = ({ children }) => {
               className="p-1 rounded-full cursor-pointer hidden md:block"
               label={
                 expanded ? (
-                  <ArrowRight className="dark:text-white text-black" />
+                  <ArrowRight strokeWidth={1.5} className="dark:text-white text-black" />
                 ) : (
-                  <ArrowLeft className="dark:text-white text-black" />
+                  <ArrowLeft strokeWidth={1.5} className="dark:text-white text-black" />
                 )
               }
             ></Button>
@@ -875,9 +875,9 @@ const NavbarAdmin = ({ children }) => {
               className="p-1 ml-2 rounded-full cursor-pointer "
               label={
                 !isMenuVisible ? (
-                  <Settings2 className="dark:text-white text-black" />
+                  <Settings2 strokeWidth={1.5} className="dark:text-white text-black" />
                 ) : (
-                  <GitPullRequestClosed className="dark:text-white text-black" />
+                  <GitPullRequestClosed strokeWidth={1.5} className="dark:text-white text-black" />
                 )
               }
             ></Button>

@@ -14,20 +14,19 @@ import { Dropdown } from "primereact/dropdown";
 import { Turnstile } from "@marsidev/react-turnstile";
 import useDarkMode from 'use-dark-mode';
 
-
 const VITE_TURNSTILE_KEY = import.meta.env.VITE_TURNSTILE_KEY;
 
 const LoginForm = ({ title, API_URI, navigateUser, role }) => {
-  const ref = useRef()
+  const ref = useRef();
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
-  const turnstileLight ={
+  const turnstileLight = {
     theme: 'light',
     language: 'id',
-  }
-  const turnstileDark ={
+  };
+  const turnstileDark = {
     theme: 'dark',
     language: 'id',
-  }
+  };
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [tokenCaptcha, setTokenCaptcha] = useState("");
@@ -49,31 +48,32 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const uriPuskesmas = `${import.meta.env.VITE_API_BASE_URI}/api/admin-puskesmas/login`;
   const uriApotek = `${import.meta.env.VITE_API_BASE_URI}/api/admin-apotek/login`;
 
-  const [selectedRole, setSelectedRole] = useState("");
+  const [selectedRole, setSelectedRole] = useState(localStorage.getItem("selectedRole") || "");
   const roles = [
     { name: "Admin Super", value: "admin" },
     { name: "Admin Puskesmas", value: "puskesmas" },
     { name: "Admin Apotek", value: "apotek" },
   ];
+
   useEffect(() => {
     setTokenCaptcha("");
     ref.current?.reset();
   }, [darkMode.value]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
       loginUser && loginSchema.parse({ username, password, tokenCaptcha });
-      loginAdmin &&
-      loginAdminSchema.parse({ username, password, selectedRole, tokenCaptcha });
+      loginAdmin && loginAdminSchema.parse({ username, password, selectedRole, tokenCaptcha });
 
       const response = await axios.post(
-          selectedRole === "admin"
+          loginAdmin && selectedRole === "admin"
               ? uriAdmin
-              : selectedRole === "puskesmas"
+              : loginAdmin && selectedRole === "puskesmas"
                   ? uriPuskesmas
-                  : selectedRole === "apotek"
+                  : loginAdmin && selectedRole === "apotek"
                       ? uriApotek
                       : API_URI,
           { username, password, tokenCaptcha },
@@ -85,17 +85,21 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
       );
 
       if (response.status === 200) {
+        if (loginAdmin) {
+          localStorage.setItem("selectedRole", selectedRole);
+        }
+
         dispatch({
           type: "LOGIN",
           payload: { token: response.data.token, role: role },
         });
         localStorage.setItem("isLogin", "true");
         navigate(
-            selectedRole === "admin"
+            loginAdmin && selectedRole === "admin"
                 ? navigateAdmin
-                : selectedRole === "puskesmas"
+                : loginAdmin && selectedRole === "puskesmas"
                     ? navigatePuskesmas
-                    : selectedRole === "apotek"
+                    : loginAdmin && selectedRole === "apotek"
                         ? navigateApotek
                         : navigateUser
         );
@@ -177,12 +181,11 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 </>
             )}
 
-
             <Turnstile
                 ref={ref}
                 siteKey={VITE_TURNSTILE_KEY}
-                className={`md:mx-0 mx-auto`}
-                options={ darkMode.value ? turnstileDark : turnstileLight}
+                className="md:mx-0 mx-auto"
+                options={darkMode.value ? turnstileDark : turnstileLight}
                 onSuccess={(token) => setTokenCaptcha(token)}
                 onError={() => {
                   setTokenCaptcha("");
@@ -191,10 +194,10 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 onExpire={() => {
                   setTokenCaptcha("");
                   ref.current?.reset();
-                }}/>
+                }}
+            />
 
-
-              {errors.tokenCaptcha && (
+            {errors.tokenCaptcha && (
                 <span className="text-red-500 p-error -mt-3 text-sm md:mx-0 mx-auto w-fit">
               {errors.tokenCaptcha}
             </span>
@@ -208,7 +211,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
               >
                 {isLoading ? (
                     <ProgressSpinner
-                        style={{width: "24px", height: "24px"}}
+                        style={{ width: "24px", height: "24px" }}
                         strokeWidth="8"
                         animationDuration="1s"
                         color="white"
@@ -218,7 +221,6 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 )}
               </Button>
               <div className="flex flex-col gap-1">
-
                 <div className="flex w-full gap-1 items-center justify-center">
                   Lupa passsword?
                   <Link to="mailto:prbcare@gmail.com" className="text-mainGreen font-semibold">

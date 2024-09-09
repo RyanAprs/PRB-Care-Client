@@ -1,22 +1,20 @@
-import {MoonIcon, Sun} from 'lucide-react';
+import {MoonStar , Sun} from 'lucide-react';
 import useDarkMode from 'use-dark-mode';
-import {Button} from "primereact/button";
+import {Ripple} from 'primereact/ripple';
 
 export const ThemeSwitcher = ({className = ''}) => {
     const darkMode = useDarkMode(false, {classNameDark: "dark"});
     return (
         <div className={`flex justify-center  ${className}`}>
-            <Button
-                rounded
-                text
-                severity="secondary"
+            <button
                 onClick={darkMode.toggle}
-                className="p-1 rounded-full duration-300 ease-in-out "
+                className="p-1 p-ripple rounded-full duration-300 ease-in-out "
             >
                 {darkMode.value ?
-                    <Sun color='white'/>
-                    : <MoonIcon color='black'/>}
-            </Button>
+                    <Sun strokeWidth={1.5} color='white'/>
+                    : <MoonStar  strokeWidth={1.5} color='black'/>}
+                <Ripple />
+            </button>
         </div>
     );
 };

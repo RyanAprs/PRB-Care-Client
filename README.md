@@ -12,9 +12,4 @@ PRB-Care-Client adalah aplikasi frontend yang dirancang untuk menangani proses b
 * CSS Framework: Tailwind CSS
 
 # Preview
-### Beranda Public 
-![PRB-Care-Client Screenshot](https://github.com/user-attachments/assets/aa20333a-5a8b-4d1e-9489-ff4a3fa7d216)
-### Beranda Super Admin 
-![Admin Dashboard Screenshot](https://github.com/user-attachments/assets/9c866446-1047-4f31-bae5-8d054717e1a7)
-### Beranda Pengguna
-![image](https://github.com/user-attachments/assets/88679d88-3d41-4e22-8934-fe0210a6bcde)
+![Untawditled-1](https://github.com/user-attachments/assets/1b25d4d6-51ca-4c45-95d1-a31336312a04)
