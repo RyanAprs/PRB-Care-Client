@@ -1,7 +1,13 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
-import { HomeIcon, Hospital, HousePlus, LogIn } from "lucide-react";
+import {
+  HomeIcon,
+  Hospital,
+  HousePlus,
+  LogIn,
+  NotebookPen,
+} from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Toast } from "primereact/toast";
 import { Ripple } from "primereact/ripple";
@@ -67,6 +73,20 @@ const NavbarPublicPage = () => {
                 Apotek
               </h1>
             </Link>
+            <Link
+              to={"/artikel"}
+              className="mx-auto transition-all flex flex-col items-center justify-center"
+            >
+              <h1
+                className={
+                  location.pathname === "/artikel"
+                    ? "dark:text-lightGreen text-mainGreen"
+                    : ""
+                }
+              >
+                Artikel
+              </h1>
+            </Link>
           </div>
           <div className="relative flex gap-2 md:gap-2 items-center justify-center">
             <ThemeSwitcher />
@@ -76,7 +96,10 @@ const NavbarPublicPage = () => {
                   to={"/pengguna/login"}
                   className="p-1 rounded-full cursor-pointer p-ripple mx-auto transition-all flex flex-col items-center justify-center"
                 >
-                  <LogIn strokeWidth={1.5} className="text-black dark:text-white" />
+                  <LogIn
+                    strokeWidth={1.5}
+                    className="text-black dark:text-white"
+                  />
                   <Ripple />
                 </Link>
               </div>
@@ -123,6 +146,16 @@ const NavbarPublicPage = () => {
             <HousePlus size={25} />
 
             <div className="text-sm">Apotek</div>
+          </Link>
+          <Link
+            to={"/artikel"}
+            className={`flex flex-col items-center justify-center transition-all  ${
+              location.pathname === "/artikel" ? "opacity-100" : "opacity-50"
+            }`}
+          >
+            <NotebookPen size={25} />
+
+            <div className="text-sm">Artikel</div>
           </Link>
         </div>
       </div>
