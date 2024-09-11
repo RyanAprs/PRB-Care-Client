@@ -17,6 +17,7 @@ import {
   GitPullRequestClosed,
   LockKeyhole,
   UserPlus,
+  NotebookPen,
 } from "lucide-react";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -56,9 +57,9 @@ import { puskesmasUpdateCurrentSchema } from "../../validations/PuskesmasSchema"
 import { AddressContext } from "../../config/context/AdressContext";
 import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
-import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
+import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 const NavbarAdmin = ({ children }) => {
-  const [beforeModalLoading,setBeforeModalLoading] = useState(false)
+  const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
   const [visibleLogout, setVisibleLogout] = useState(false);
   const [visibleChangePassword, setVisibleChangePassword] = useState(false);
@@ -202,9 +203,9 @@ const NavbarAdmin = ({ children }) => {
   const buttonRef = useRef(null);
   const toggleMenuVisibility = (event) => {
     event.stopPropagation();
-    setIsMenuVisible(prev => {
+    setIsMenuVisible((prev) => {
       if (!prev) {
-        setKey(prevKey => prevKey + 1);
+        setKey((prevKey) => prevKey + 1);
       }
       return !prev;
     });
@@ -456,22 +457,26 @@ const NavbarAdmin = ({ children }) => {
   const menuContainerRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (menuContainerRef.current && !menuContainerRef.current.contains(event.target) &&
-        buttonRef.current && !buttonRef.current.contains(event.target)) {
+    if (
+      menuContainerRef.current &&
+      !menuContainerRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
       setIsMenuVisible(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
     <div className="flex h-screen w-full">
-      <ModalLoading className={beforeModalLoading?``:`hidden`} />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <Toast
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
@@ -733,6 +738,22 @@ const NavbarAdmin = ({ children }) => {
               >
                 Ambil Obat
               </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3"}`}
+                icon={<NotebookPen />}
+                component={
+                  <Link
+                    to="/puskesmas/data-artikel"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/puskesmas/data-artikel"
+                        ? "bg-lightGreen dark:bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Artikel
+              </MenuItem>
             </>
           ) : (
             <>
@@ -800,7 +821,12 @@ const NavbarAdmin = ({ children }) => {
               }}
               text
               className="p-1 rounded-full cursor-pointer md:hidden"
-              label={<AlignJustify strokeWidth={1.5} className="dark:text-white text-black" />}
+              label={
+                <AlignJustify
+                  strokeWidth={1.5}
+                  className="dark:text-white text-black"
+                />
+              }
             ></Button>
 
             <Button
@@ -812,9 +838,15 @@ const NavbarAdmin = ({ children }) => {
               className="p-1 rounded-full cursor-pointer hidden md:block"
               label={
                 expanded ? (
-                  <ArrowRight strokeWidth={1.5} className="dark:text-white text-black" />
+                  <ArrowRight
+                    strokeWidth={1.5}
+                    className="dark:text-white text-black"
+                  />
                 ) : (
-                  <ArrowLeft strokeWidth={1.5} className="dark:text-white text-black" />
+                  <ArrowLeft
+                    strokeWidth={1.5}
+                    className="dark:text-white text-black"
+                  />
                 )
               }
             ></Button>
@@ -850,6 +882,9 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
                   ? "Ambil Obat"
                   : ""}
+                {location.pathname === "/puskesmas/data-artikel"
+                  ? "Artikel"
+                  : ""}
               </h1>
             )}
             {role === "apoteker" && (
@@ -875,9 +910,15 @@ const NavbarAdmin = ({ children }) => {
               className="p-1 ml-2 rounded-full cursor-pointer "
               label={
                 !isMenuVisible ? (
-                  <Settings2 strokeWidth={1.5} className="dark:text-white text-black" />
+                  <Settings2
+                    strokeWidth={1.5}
+                    className="dark:text-white text-black"
+                  />
                 ) : (
-                  <GitPullRequestClosed strokeWidth={1.5} className="dark:text-white text-black" />
+                  <GitPullRequestClosed
+                    strokeWidth={1.5}
+                    className="dark:text-white text-black"
+                  />
                 )
               }
             ></Button>
@@ -885,25 +926,23 @@ const NavbarAdmin = ({ children }) => {
 
           <div ref={menuContainerRef}>
             <Menuk
-                key={key}
-                className={` ${
-                    isMenuVisible ? "visible" : "hidden"
-                } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
-                model={role === "admin" ? itemsAdmin : itemsNotAdmin}
+              key={key}
+              className={` ${
+                isMenuVisible ? "visible" : "hidden"
+              } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
+              model={role === "admin" ? itemsAdmin : itemsNotAdmin}
             ></Menuk>
           </div>
-
         </div>
 
-        <div
-            className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
+        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
       </div>
 
       {/* Modal Detail Profile */}
       <Dialog
-          header={isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"}
+        header={isApotekUpdate ? "Profile Apotek" : "Profile Puskesmas"}
         visible={visibleDetailProfile}
         maximizable
         className="md:w-1/2 w-full"

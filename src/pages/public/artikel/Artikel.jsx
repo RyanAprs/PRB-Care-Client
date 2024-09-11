@@ -11,7 +11,7 @@ export default function Artikel() {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(3);
   const navigate = useNavigate();
-  const [sortOrder, setSortOrder] = useState(1); // Default to "Terbaru ke Terlama"
+  const [sortOrder, setSortOrder] = useState(1);
   const sortOptions = [
     { label: "Terbaru ke Terlama", value: 1 },
     { label: "Terlama ke Terbaru", value: 2 },
@@ -57,12 +57,9 @@ export default function Artikel() {
         },
       ];
 
-      // Sort the articles based on the selected order
       if (sortOrder === 1) {
-        // Terbaru ke Terlama
         data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
       } else {
-        // Terlama ke Terbaru
         data.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
       }
 
@@ -85,7 +82,7 @@ export default function Artikel() {
             { "border-top-1 surface-border": index !== 0 }
           )}
         >
-          <div className="flex flex-col justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
+          <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
             <div className="flex flex-col align-items-center sm:align-items-start gap-3">
               <div className="md:text-5xl text-2xl font-semibold">
                 {article.judul}
