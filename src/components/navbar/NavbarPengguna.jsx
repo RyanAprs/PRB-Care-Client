@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import logo from "../../assets/prbcare.svg";
 import { Menu } from "primereact/menu";
 import { ProgressSpinner } from "primereact/progressspinner";
-import ModalLoading from '/src/components/modalLoading/ModalLoading.jsx';
+import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import {
   Bell,
   HomeIcon,
@@ -16,7 +16,7 @@ import {
   DoorOpen,
   GitPullRequestClosed,
 } from "lucide-react";
-import { useNotifications  } from "../../config/context/NotificationContext.jsx";
+import { useNotifications } from "../../config/context/NotificationContext.jsx";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
@@ -73,7 +73,7 @@ const NavbarPengguna = () => {
   const [hasNotifications, setHasNotifications] = useState(false);
   const { notifications } = useNotifications();
   const location = useLocation();
-  const [beforeModalLoading,setBeforeModalLoading] = useState(false)
+  const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const openIndexedDB = () => {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open("fcm_notifications", 1);
@@ -116,7 +116,8 @@ const NavbarPengguna = () => {
 
         setHasNotifications(updatedNotifications.some((n) => !n.isRead));
       };
-      request.onerror = (event) => console.error("Error updating notifications:", event.target.error);
+      request.onerror = (event) =>
+        console.error("Error updating notifications:", event.target.error);
     } catch (error) {
       console.error("Failed to open IndexedDB:", error);
     }
@@ -131,10 +132,13 @@ const NavbarPengguna = () => {
 
       request.onsuccess = (event) => {
         const notifications = event.target.result;
-        const hasUnread = notifications.some((notification) => !notification.isRead);
+        const hasUnread = notifications.some(
+          (notification) => !notification.isRead
+        );
         setHasNotifications(hasUnread);
       };
-      request.onerror = (event) => console.error("Error fetching notifications:", event.target.error);
+      request.onerror = (event) =>
+        console.error("Error fetching notifications:", event.target.error);
     } catch (error) {
       console.error("Failed to open IndexedDB:", error);
     }
@@ -265,7 +269,7 @@ const NavbarPengguna = () => {
     } catch (error) {
       HandleUnauthorizedPengguna(error.response, dispatch, navigate);
       handleApiError(error, toast);
-    }finally {
+    } finally {
       setBeforeModalLoading(false);
     }
   };
@@ -311,9 +315,9 @@ const NavbarPengguna = () => {
   const buttonRef = useRef(null);
   const toggleMenuVisibility = (event) => {
     event.stopPropagation();
-    setIsMenuVisible(prev => {
+    setIsMenuVisible((prev) => {
       if (!prev) {
-        setKey(prevKey => prevKey + 1);
+        setKey((prevKey) => prevKey + 1);
       }
       return !prev;
     });
@@ -352,32 +356,39 @@ const NavbarPengguna = () => {
   const menuContainerRef = useRef(null);
 
   const handleClickOutside = (event) => {
-    if (menuContainerRef.current && !menuContainerRef.current.contains(event.target) &&
-        buttonRef.current && !buttonRef.current.contains(event.target)) {
+    if (
+      menuContainerRef.current &&
+      !menuContainerRef.current.contains(event.target) &&
+      buttonRef.current &&
+      !buttonRef.current.contains(event.target)
+    ) {
       setIsMenuVisible(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   return (
     <>
-      <ModalLoading className={beforeModalLoading?``:`hidden`} />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
         <Toast
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
         />
-        <div className="flex items-center justify-center font-poppins text-2xl">
+        <Link
+          to="/"
+          className="flex items-center justify-center font-poppins text-2xl"
+        >
           <img src={logo} width={60} height={60} alt="prb-care logo " />
           <div className="font-extrabold text-black dark:text-white">
             PRBCare
           </div>
-        </div>
+        </Link>
 
         <div className="flex gap-10 items-center text-xl ">
           <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
@@ -462,16 +473,22 @@ const NavbarPengguna = () => {
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <Button
-                  ref={buttonRef}
+                ref={buttonRef}
                 onClick={toggleMenuVisibility}
                 text
                 severity="secondary"
                 className="p-1 rounded-full cursor-pointer "
                 label={
                   !isMenuVisible ? (
-                    <Settings2 strokeWidth={1.5} className="text-black dark:text-white" />
+                    <Settings2
+                      strokeWidth={1.5}
+                      className="text-black dark:text-white"
+                    />
                   ) : (
-                    <GitPullRequestClosed strokeWidth={1.5} className="text-black dark:text-white" />
+                    <GitPullRequestClosed
+                      strokeWidth={1.5}
+                      className="text-black dark:text-white"
+                    />
                   )
                 }
               ></Button>
@@ -480,13 +497,13 @@ const NavbarPengguna = () => {
         </div>
       </header>
       <div ref={menuContainerRef}>
-      <Menu
-        key={key}
-        className={` ${
-          isMenuVisible ? "visible" : "hidden"
-        } absolute  right-0 `}
-        model={items}
-      />
+        <Menu
+          key={key}
+          className={` ${
+            isMenuVisible ? "visible" : "hidden"
+          } absolute  right-0 `}
+          model={items}
+        />
       </div>
       <div
         className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"

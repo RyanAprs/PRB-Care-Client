@@ -13,8 +13,8 @@ import {useNavigate} from "react-router-dom";
 const DataApotek = () => {
     const { token,dispatch } = useContext(AuthContext);
     const [login, setLogin] = useState(false);
-    const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
     const [isConnectionError, setIsConnectionError] = useState(false);
     const navigate = useNavigate();
     const customSort = (a, b) => {

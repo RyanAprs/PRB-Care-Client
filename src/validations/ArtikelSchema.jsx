@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createArtikelSchema = z.object({
+export const artikelSchema = z.object({
   judul: z
     .string()
     .min(3)
@@ -16,9 +16,11 @@ export const createArtikelSchema = z.object({
       (val) => val.trim().length >= 10,
       "Isi artikel minimal 10 karakter"
     ),
-  tanggal: z
-    .number()
-    .int()
-    .positive()
-    .refine((val) => val > 0, "Tanggal Periksa tidak boleh kosong"),
+  ringkasan: z
+    .string()
+    .min(10)
+    .refine(
+      (val) => val.trim().length >= 10,
+      "Ringkasan artikel minimal 10 karakter"
+    ),
 });
