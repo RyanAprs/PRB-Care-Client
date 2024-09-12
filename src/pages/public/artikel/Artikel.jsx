@@ -86,7 +86,7 @@ export default function Artikel() {
 
   const itemTemplate = (data) => {
     return (
-        <div className={`col-12 font-poppins md:mx-14  ${(data.nomor === total - 1 || data.nomor%2 === 0)&& data.nomor !== 0  ? "mb-8" : "mb-16"}`} key={data.id}>
+        <div className={`col-12 font-poppins md:mx-12 ${(data.nomor === total - 1 || data.nomor%2 === 0)&& data.nomor !== 0  ? "mb-8" : "mb-16"}`} key={data.id}>
           <div
               className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border"
           >

@@ -138,3 +138,11 @@ body,
 #cf-turnstile > div {
     height: 64px;
 }
+.ql-editor[contenteditable=false] {
+    background-color: rgba(205, 92, 92, 0) !important;
+    border: 0px;
+    padding: 0px
+}
+.ql-disabled{
+    border: 0px !important;
+}
