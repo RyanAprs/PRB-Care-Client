@@ -10,7 +10,6 @@ import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "primereact/editor";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-import { artikelSchema } from "../../../validations/ArtikelSchema";
 import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
 import {
   handleApiError,
@@ -25,6 +24,7 @@ import {
   updateArtikel,
 } from "../../../services/ArtikelService";
 import { InputTextarea } from "primereact/inputtextarea";
+import { artikelCreateSchema } from "../../../validations/ArtikelSchema";
 
 const DataArtikel = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -100,7 +100,7 @@ const DataArtikel = () => {
   const handleCreate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchema.parse(datas);
+      artikelCreateSchema.parse(datas);
       const response = await createArtikel(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -177,7 +177,7 @@ const DataArtikel = () => {
   const handleUpdate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchema.parse(datas);
+      artikelCreateSchema.parse(datas);
       const response = await updateArtikel(currentId, datas);
       if (response.status === 200) {
         toast.current.show({

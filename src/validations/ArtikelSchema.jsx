@@ -1,54 +1,33 @@
 import { z } from "zod";
 
-export const artikelSchema = z.object({
+export const artikelCreateSchemaSuperAdmin = z.object({
   judul: z
     .string()
-    .min(3)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Judul artikel minimal 3 karakter"
-    ),
-  isi: z
-    .string()
-    .min(10)
-    .refine(
-      (val) => val.trim().length >= 10,
-      "Isi artikel minimal 10 karakter"
-    ),
+    .min(1, "Judul artikel tidak boleh kosong")
+    .max(255, "Judul artikel maksimal 255 karakter")
+    .refine((val) => val.trim().length > 0, "Judul tidak boleh kosong"),
   ringkasan: z
     .string()
-    .min(10)
-    .refine(
-      (val) => val.trim().length >= 10,
-      "Ringkasan artikel minimal 10 karakter"
-    ),
-});
-
-export const artikelSchemaSuperAdmin = z.object({
+    .min(1, "Ringkasan artikel tidak boleh kosong")
+    .max(1000, "Ringkasan artikel maksimal 1000 karakter")
+    .refine((val) => val.trim().length > 0, "Ringkasan tidak boleh kosong"),
+  isi: z.string().min(1, "Isi artikel tidak boleh kosong"),
   idAdminPuskesmas: z
     .number()
     .int()
-    .positive()
-    .refine((val) => val > 0, "Admin Puskesmas tidak boleh kosong"),
+    .positive("Admin Puskesmas tidak boleh kosong"),
+});
+
+export const artikelCreateSchema = z.object({
   judul: z
     .string()
-    .min(3)
-    .refine(
-      (val) => val.trim().length >= 3,
-      "Judul artikel minimal 3 karakter"
-    ),
-  isi: z
-    .string()
-    .min(10)
-    .refine(
-      (val) => val.trim().length >= 10,
-      "Isi artikel minimal 10 karakter"
-    ),
+    .min(1, "Judul artikel tidak boleh kosong")
+    .max(255, "Judul artikel maksimal 255 karakter")
+    .refine((val) => val.trim().length > 0, "Judul tidak boleh kosong"),
   ringkasan: z
     .string()
-    .min(10)
-    .refine(
-      (val) => val.trim().length >= 10,
-      "Ringkasan artikel minimal 10 karakter"
-    ),
+    .min(1, "Ringkasan artikel tidak boleh kosong")
+    .max(1000, "Ringkasan artikel maksimal 1000 karakter")
+    .refine((val) => val.trim().length > 0, "Ringkasan tidak boleh kosong"),
+  isi: z.string().min(1, "Isi artikel tidak boleh kosong"),
 });

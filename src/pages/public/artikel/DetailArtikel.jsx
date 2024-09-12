@@ -25,15 +25,15 @@ const DetailArtikel = () => {
       setIsConnectionError(false);
     } catch (error) {
       if (
-          error.code === "ERR_NETWORK" ||
-          error.code === "ETIMEDOUT" ||
-          error.code === "ECONNABORTED" ||
-          error.code === "ENOTFOUND" ||
-          error.code === "ECONNREFUSED" ||
-          error.code === "EAI_AGAIN" ||
-          error.code === "EHOSTUNREACH" ||
-          error.code === "ECONNRESET" ||
-          error.code === "EPIPE"
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
       ) {
         setIsConnectionError(true);
       } else if (error.response) {
@@ -57,11 +57,11 @@ const DetailArtikel = () => {
 
   if (loading) {
     return (
-        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
-          <div className="p-8 w-full min-h-screen flex items-center justify-center bg-white dark:bg-blackHover rounded-xl">
-            <ProgressSpinner />
-          </div>
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
+        <div className="p-8 w-full min-h-screen flex items-center justify-center bg-white dark:bg-blackHover rounded-xl">
+          <ProgressSpinner />
         </div>
+      </div>
     );
   }
 
@@ -76,38 +76,38 @@ const DetailArtikel = () => {
   const tanggal = convertUnixToHuman(data.tanggalPublikasi);
 
   const editorModules = {
-    toolbar: false
+    toolbar: false,
   };
 
   return (
-      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
-        <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-8 md:p-20">
-          <div className="flex flex-col items-start justify-center gap-4 md:gap-8">
-            <div className="flex flex-col gap-2 md:gap-4">
-              <div className="md:text-5xl text-4xl text-justify font-semibold">
-                {data.judul}
-              </div>
-              <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-8 md:p-20">
+        <div className="flex flex-col items-start justify-center gap-4 md:gap-8">
+          <div className="flex flex-col gap-2 md:gap-4">
+            <div className="md:text-5xl text-4xl text-justify font-semibold">
+              {data.judul}
+            </div>
+            <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
               <span className="text-xl">
                 {data.adminPuskesmas.namaPuskesmas}
               </span>
-                <span className="md:block hidden">-</span>
-                <span className="text-xl text-justify">{tanggal}</span>
-              </div>
+              <span className="md:block hidden">-</span>
+              <span className="text-xl text-justify">{tanggal}</span>
             </div>
-            <div className="w-full ">
-              <Editor
-                  value={data.isi}
-                  readOnly={true}
-                  style={{ height: 'auto' }}
-                  modules={editorModules}
-                  headerTemplate={<></>}
-                  className=" rounded-lg"
-              />
-            </div>
+          </div>
+          <div className="w-full ">
+            <Editor
+              value={data.isi}
+              readOnly={true}
+              style={{ height: "auto" }}
+              modules={editorModules}
+              headerTemplate={<></>}
+              className="rounded-lg "
+            />
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

@@ -10,7 +10,7 @@ import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "primereact/editor";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-import { artikelSchemaSuperAdmin } from "../../../validations/ArtikelSchema";
+import { artikelCreateSchemaSuperAdmin } from "../../../validations/ArtikelSchema";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import {
   handleApiError,
@@ -127,7 +127,7 @@ const DataArtikel = () => {
   const handleCreate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchemaSuperAdmin.parse(datas);
+      artikelCreateSchemaSuperAdmin.parse(datas);
       const response = await createArtikel(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -205,7 +205,7 @@ const DataArtikel = () => {
   const handleUpdate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchemaSuperAdmin.parse(datas);
+      artikelCreateSchemaSuperAdmin.parse(datas);
       const response = await updateArtikel(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
