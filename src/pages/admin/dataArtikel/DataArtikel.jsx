@@ -10,8 +10,8 @@ import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import { useNavigate } from "react-router-dom";
 import { Editor } from "primereact/editor";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
-import { artikelSchema } from "../../../validations/ArtikelSchema";
-import { HandleUnauthorizedAdminPuskesmas } from "../../../utils/HandleUnauthorized";
+import { artikelSchemaSuperAdmin } from "../../../validations/ArtikelSchema";
+import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import {
   handleApiError,
   handleDeleteError,
@@ -25,6 +25,8 @@ import {
   updateArtikel,
 } from "../../../services/ArtikelService";
 import { InputTextarea } from "primereact/inputtextarea";
+import { getAllPuskesmas } from "../../../services/PuskesmasService";
+import { Dropdown } from "primereact/dropdown";
 
 const DataArtikel = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -34,6 +36,7 @@ const DataArtikel = () => {
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
   const [datas, setDatas] = useState({
+    idAdminPuskesmas: "",
     judul: "",
     isi: "",
     ringkasan: "",
@@ -47,6 +50,7 @@ const DataArtikel = () => {
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setButtonLoading] = useState(null);
+  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
@@ -77,7 +81,7 @@ const DataArtikel = () => {
       ) {
         setisConnectionError(true);
       }
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       setLoading(false);
     }
   };
@@ -86,21 +90,44 @@ const DataArtikel = () => {
     fetchData();
   }, [token, navigate, dispatch]);
 
-  const handleModalCreate = () => {
+  const handleModalCreate = async () => {
     setErrors({});
     setDatas({
+      idAdminPuskesmas: 0,
       judul: "",
       isi: "",
       ringkasan: "",
     });
     setVisible(true);
     setIsEditMode(false);
+    try {
+      const responsePuskesmas = await getAllPuskesmas();
+      setAdminPuskesmas(responsePuskesmas);
+      setLoading(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+        setVisible(false);
+      }
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
   };
 
   const handleCreate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchema.parse(datas);
+      artikelSchemaSuperAdmin.parse(datas);
       const response = await createArtikel(datas);
       if (response.status === 201) {
         toast.current.show({
@@ -132,7 +159,7 @@ const DataArtikel = () => {
           ) {
             setisConnectionError(true);
           }
-          HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+          HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
           setLoading(false);
         }
       }
@@ -146,7 +173,7 @@ const DataArtikel = () => {
         setErrors(newErrors);
       } else {
         setVisible(false);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -159,6 +186,7 @@ const DataArtikel = () => {
       const dataResponse = await getArtikelById(data.id);
       if (dataResponse) {
         setDatas({
+          idAdminPuskesmas: dataResponse.adminPuskesmas.id,
           judul: dataResponse.judul,
           isi: dataResponse.isi,
           ringkasan: dataResponse.ringkasan,
@@ -168,7 +196,7 @@ const DataArtikel = () => {
         setVisible(true);
       }
     } catch (error) {
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
     }
     setBeforeModalLoading(false);
@@ -177,7 +205,7 @@ const DataArtikel = () => {
   const handleUpdate = async () => {
     try {
       setButtonLoading(true);
-      artikelSchema.parse(datas);
+      artikelSchemaSuperAdmin.parse(datas);
       const response = await updateArtikel(currentId, datas);
       if (response.status === 200) {
         toast.current.show({
@@ -209,7 +237,7 @@ const DataArtikel = () => {
           ) {
             setisConnectionError(true);
           }
-          HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+          HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
           setLoading(false);
         }
       }
@@ -223,7 +251,7 @@ const DataArtikel = () => {
         setErrors(newErrors);
       } else {
         setVisible(false);
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
         handleApiError(error, toast);
       }
     }
@@ -269,12 +297,12 @@ const DataArtikel = () => {
           ) {
             setisConnectionError(true);
           }
-          HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+          HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
           setLoading(false);
         }
       }
     } catch (error) {
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
       setButtonLoading(false);
@@ -355,6 +383,25 @@ const DataArtikel = () => {
     { header: "Ringkasan", field: "ringkasan" },
   ];
 
+  const itemTemplatePuskesmas = (option) => {
+    return (
+      <div>
+        {option.namaPuskesmas} - {option.telepon}
+      </div>
+    );
+  };
+
+  const valueTemplatePuskesmas = (option) => {
+    if (option) {
+      return (
+        <div>
+          {option.namaPuskesmas} - {option.telepon}
+        </div>
+      );
+    }
+    return <span>Pilih Puskesmas</span>;
+  };
+
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
       <Toast
@@ -382,6 +429,43 @@ const DataArtikel = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
+          {!isEditMode && (
+            <>
+              <label htmlFor="" className="-mb-3">
+                Pilih puskesmas:
+              </label>
+
+              <Dropdown
+                value={
+                  adminPuskesmas && adminPuskesmas.length > 0
+                    ? adminPuskesmas.find(
+                        (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
+                      ) || null
+                    : null
+                }
+                filter
+                options={adminPuskesmas || []}
+                optionLabel="namaPuskesmas"
+                itemTemplate={itemTemplatePuskesmas}
+                valueTemplate={valueTemplatePuskesmas}
+                placeholder="Pilih Puskesmas"
+                className="p-2 rounded"
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    idAdminPuskesmas: e.value.id,
+                  }))
+                }
+              />
+
+              {errors.idAdminPuskesmas && (
+                <small className="p-error -mt-3 text-sm">
+                  {errors.idAdminPuskesmas}
+                </small>
+              )}
+            </>
+          )}
+
           <label htmlFor="" className="-mb-3">
             Judul Artikel:
           </label>

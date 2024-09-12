@@ -671,6 +671,22 @@ const NavbarAdmin = ({ children }) => {
               >
                 Ambil Obat
               </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3"}`}
+                icon={<NotebookPen />}
+                component={
+                  <Link
+                    to="/admin/data-artikel"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/admin/data-artikel"
+                        ? "bg-lightGreen dark:bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Artikel
+              </MenuItem>
             </>
           ) : role === "nakes" ? (
             <>
@@ -867,6 +883,7 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/admin/data-pengambilan-obat"
                   ? "Ambil Obat"
                   : ""}
+                {location.pathname === "/admin/data-artikel" ? "Artikel" : ""}
               </h1>
             )}
 
