@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { DataView } from "primereact/dataview";
 import { Button } from "primereact/button";
-import { classNames } from "primereact/utils";
 import { useNavigate } from "react-router-dom";
 import img from "../../../assets/data_empty.png";
 import { Dropdown } from "primereact/dropdown";
@@ -9,6 +8,8 @@ import { getAllArtikel } from "../../../services/ArtikelService";
 import { AuthContext } from "../../../config/context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import { InputText } from "primereact/inputtext";
+import { Search } from "lucide-react";
 
 export default function Artikel() {
   const { token, dispatch } = useContext(AuthContext);
@@ -20,7 +21,9 @@ export default function Artikel() {
   const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isConnectionError, setIsConnectionError] = useState(false);
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
   const sortOptions = [
     { label: "Terbaru ke Terlama", value: 1 },
     { label: "Terlama ke Terbaru", value: -1 },
@@ -32,7 +35,7 @@ export default function Artikel() {
       const response = await getAllArtikel();
       const transformedData = response.map((item, index) => ({
         ...item,
-        nomor: index
+        nomor: index,
       }));
       setData(transformedData);
       setTotal(transformedData.length);
@@ -41,15 +44,15 @@ export default function Artikel() {
       setIsConnectionError(false);
     } catch (error) {
       if (
-          error.code === "ERR_NETWORK" ||
-          error.code === "ETIMEDOUT" ||
-          error.code === "ECONNABORTED" ||
-          error.code === "ENOTFOUND" ||
-          error.code === "ECONNREFUSED" ||
-          error.code === "EAI_AGAIN" ||
-          error.code === "EHOSTUNREACH" ||
-          error.code === "ECONNRESET" ||
-          error.code === "EPIPE"
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
       ) {
         setIsConnectionError(true);
       } else if (error.response) {
@@ -66,13 +69,16 @@ export default function Artikel() {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, [token, dispatch]);
 
   const sortData = () => {
-    const sortedData = [...data].sort((a, b) => {
+    const filteredData = data.filter((item) =>
+      item.judul.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const sortedData = [...filteredData].sort((a, b) => {
       const dateA = new Date(a.tanggalPublikasi);
       const dateB = new Date(b.tanggalPublikasi);
       return sortOrder === 1 || sortOrder === 0 ? dateB - dateA : dateA - dateB;
@@ -80,42 +86,65 @@ export default function Artikel() {
 
     return sortedData.map((item, index) => ({
       ...item,
-      nomor: index
+      nomor: index,
     }));
   };
 
   const itemTemplate = (data) => {
     return (
-        <div className={`col-12 font-poppins md:mx-12 ${(data.nomor === total - 1 || data.nomor%2 === 0)&& data.nomor !== 0  ? "mb-8" : "mb-16"}`} key={data.id}>
-          <div
-              className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border"
-          >
-            <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
-              <div className="flex flex-col align-items-center sm:align-items-start gap-3">
-                <div className="md:text-5xl text-4xl text-justify  font-semibold">
-                  {data.judul}
-                </div>
-                <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-              <span className="text-xl">
-                {data.adminPuskesmas.namaPuskesmas}
-              </span>
-                  <span className={`md:block hidden`}>-</span>
-                  <span className="text-xl text-justify ">{data.tanggalPublikasi}</span>
-                </div>
-                <p className="mt-2 text-xl text-justify ">{data.ringkasan}</p>
+      <div
+        className={`col-12 font-poppins md:mx-12 ${
+          (data.nomor === total - 1 || data.nomor % 2 === 0) && data.nomor !== 0
+            ? "mb-8"
+            : "mb-16"
+        }`}
+        key={data.id}
+        style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
+      >
+        <div className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border">
+          <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
+            <div className="flex flex-col align-items-center sm:align-items-start gap-3">
+              <div
+                className="md:text-5xl text-4xl text-justify font-semibold"
+                style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
+              >
+                {data.judul}
               </div>
-              <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
-                <Button
-                    label="Baca Selengkapnya"
-                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-fit w-full flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-                    onClick={() => handleReadMore(data.id)}
-                ></Button>
+              <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
+                <span className="text-xl">
+                  {data.adminPuskesmas.namaPuskesmas}
+                </span>
+                <span className={`md:block hidden`}>-</span>
+                <span className="text-xl text-justify ">
+                  {data.tanggalPublikasi}
+                </span>
               </div>
+              <p
+                className="mt-2 text-xl text-justify"
+                style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
+              >
+                {data.ringkasan}
+              </p>
             </div>
-            <div className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center  ${(data.nomor === total - 1 || data.nomor%2 === 0) && data.nomor !== 0 ? "hidden" : ""}`}></div>
+            <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
+              <Button
+                label="Baca Selengkapnya"
+                className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-fit w-full flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                onClick={() => handleReadMore(data.id)}
+              ></Button>
+            </div>
           </div>
+          <div
+            className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center ${
+              (data.nomor === total - 1 || data.nomor % 2 === 0) &&
+              data.nomor !== 0
+                ? "hidden"
+                : ""
+            }`}
+          ></div>
         </div>
-    )
+      </div>
+    );
   };
 
   const handleReadMore = (id) => {
@@ -162,11 +191,23 @@ export default function Artikel() {
   }
 
   return (
-    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit w-full md:max-w-screen ">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
         {data.length > 0 ? (
-          <div className="flex flex-col gap-4 overflow-y-auto h-full p-8">
-            <div className="flex md:justify-end justify-center mb-4 gap-2">
+          <div className="flex flex-col md:gap-8 gap-4 h-full p-8">
+            <div className="flex flex-col md:flex-row md:justify-end  items-center justify-center gap-4">
+              <div className="p-inputgroup md:w-1/4 w-full">
+                <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
+                  <Search size={16} />
+                </span>
+                <InputText
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari artikel..."
+                  className="p-inputtext-sm p-2"
+                />
+              </div>
+
               <Dropdown
                 value={sortOrder}
                 options={sortOptions}
@@ -187,13 +228,8 @@ export default function Artikel() {
         ) : (
           <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
             <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
-              <img src={img} className="w-52" alt="img" />
-              <div>
-                Belum Ada Data
-                <p className="font-medium text-xl">
-                  Data akan muncul di sini ketika tersedia.
-                </p>
-              </div>
+              <img src={img} alt="No Data" className="w-96" />
+              <span>Tidak Ada Data</span>
             </div>
           </div>
         )}
