@@ -16,10 +16,11 @@ export default function Artikel() {
   const [first, setFirst] = useState(0);
   const [rows, setRows] = useState(3);
   const navigate = useNavigate();
-  const [sortOrder, setSortOrder] = useState(1);
+  const [sortOrder, setSortOrder] = useState(0);
   const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isConnectionError, setIsConnectionError] = useState(false);
+  const [total, setTotal] = useState(0)
   const sortOptions = [
     { label: "Terbaru ke Terlama", value: 1 },
     { label: "Terlama ke Terbaru", value: -1 },
@@ -29,21 +30,26 @@ export default function Artikel() {
     try {
       setLoading(true);
       const response = await getAllArtikel();
-      setData(response);
+      const transformedData = response.map((item, index) => ({
+        ...item,
+        nomor: index
+      }));
+      setData(transformedData);
+      setTotal(transformedData.length);
       setLoading(false);
       setLogin(true);
       setIsConnectionError(false);
     } catch (error) {
       if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
+          error.code === "ERR_NETWORK" ||
+          error.code === "ETIMEDOUT" ||
+          error.code === "ECONNABORTED" ||
+          error.code === "ENOTFOUND" ||
+          error.code === "ECONNREFUSED" ||
+          error.code === "EAI_AGAIN" ||
+          error.code === "EHOSTUNREACH" ||
+          error.code === "ECONNRESET" ||
+          error.code === "EPIPE"
       ) {
         setIsConnectionError(true);
       } else if (error.response) {
@@ -60,54 +66,56 @@ export default function Artikel() {
     }
   };
 
+
   useEffect(() => {
     fetchData();
   }, [token, dispatch]);
 
   const sortData = () => {
-    return [...data].sort((a, b) => {
+    const sortedData = [...data].sort((a, b) => {
       const dateA = new Date(a.tanggalPublikasi);
       const dateB = new Date(b.tanggalPublikasi);
-      return sortOrder === 1 ? dateB - dateA : dateA - dateB;
+      return sortOrder === 1 || sortOrder === 0 ? dateB - dateA : dateA - dateB;
     });
+
+    return sortedData.map((item, index) => ({
+      ...item,
+      nomor: index
+    }));
   };
 
-  const itemTemplate = (data, index) => {
+  const itemTemplate = (data) => {
     return (
-      <div className="col-12" key={data.id}>
-        <div
-          className={classNames(
-            "flex flex-col md:p-18 p-10 gap-4 items-center justify-center",
-            { "border-top-1 surface-border": index !== 0 }
-          )}
-        >
-          <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
-            <div className="flex flex-col align-items-center sm:align-items-start gap-3">
-              <div className="md:text-5xl text-2xl font-semibold">
-                {data.judul}
+        <div className={`col-12 font-poppins md:mx-14  ${(data.nomor === total - 1 || data.nomor%2 === 0)&& data.nomor !== 0  ? "mb-8" : "mb-16"}`} key={data.id}>
+          <div
+              className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border"
+          >
+            <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
+              <div className="flex flex-col align-items-center sm:align-items-start gap-3">
+                <div className="md:text-5xl text-4xl text-justify  font-semibold">
+                  {data.judul}
+                </div>
+                <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
+              <span className="text-xl">
+                {data.adminPuskesmas.namaPuskesmas}
+              </span>
+                  <span className={`md:block hidden`}>-</span>
+                  <span className="text-xl text-justify ">{data.tanggalPublikasi}</span>
+                </div>
+                <p className="mt-2 text-xl text-justify ">{data.ringkasan}</p>
               </div>
-              <div className="flex gap-2 justify-start items-center">
-                <span className="text-xl">
-                  {data.adminPuskesmas.namaPuskesmas}
-                </span>
-                <span>-</span>
-                <span className="text-xl">{data.tanggalPublikasi}</span>
+              <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
+                <Button
+                    label="Baca Selengkapnya"
+                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-fit w-full flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                    onClick={() => handleReadMore(data.id)}
+                ></Button>
               </div>
-              <p className="mt-2 md:text-2xl text-xl">{data.ringkasan}</p>
             </div>
-            <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
-              <Button
-                label="Baca Selengkapnya"
-                icon="pi pi-arrow-right"
-                className="p-4 md:w-1/6 w-full bg-lightGreen2"
-                onClick={() => handleReadMore(data.id)}
-              ></Button>
-            </div>
+            <div className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center  ${(data.nomor === total - 1 || data.nomor%2 === 0) && data.nomor !== 0 ? "hidden" : ""}`}></div>
           </div>
-          <div className="w-20 h-0.5 bg-lightGreen2 flex items-center justify-center"></div>
         </div>
-      </div>
-    );
+    )
   };
 
   const handleReadMore = (id) => {
@@ -163,7 +171,7 @@ export default function Artikel() {
                 value={sortOrder}
                 options={sortOptions}
                 onChange={(e) => setSortOrder(e.value)}
-                placeholder="Pilih Urutan"
+                placeholder="Pilih dan Urutkan"
               />
             </div>
             <DataView

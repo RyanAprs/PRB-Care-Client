@@ -15,12 +15,7 @@ const Home = () => {
 
     return (
         <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
-            <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                variants={fadeInUp}
+            <div
                 className="flex flex-col max-h-fit w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center"
             >
                 <div className="p-8 flex md:justify-center justify-start items-center  md:min-h-screen max-h-fit">
@@ -158,7 +153,7 @@ const Home = () => {
                         </div>
                     </div>
                 </motion.div>
-            </motion.div>
+            </div>
         </div>
     );
 };

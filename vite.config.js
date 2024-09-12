@@ -25,4 +25,5 @@ export default defineConfig({
     // Make environment variables available to the client
     "process.env": process.env,
   },
+  logLevel: 'info', // or 'silent'
 });

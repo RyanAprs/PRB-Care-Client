@@ -152,7 +152,7 @@ const Notifikasi = () => {
                                     value={sortOrder}
                                     options={sortOptions}
                                     onChange={(e) => setSortOrder(e.value)}
-                                    placeholder="Pilih dan Urutan"
+                                    placeholder="Pilih dan Urutkan"
                                 />
                             </div>
                             <DataView

@@ -79,11 +79,15 @@ const DetailArtikel = () => {
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-8 md:p-20">
         <div className="flex flex-col items-start justify-center gap-4 md:gap-8">
           <div className="flex flex-col gap-2 md:gap-4">
-            <h1 className="md:text-6xl text-3xl font-semibold">{data.judul}</h1>
-            <div className="flex gap-2 text-lg md:text-xl">
-              <p>{data.adminPuskesmas.namaPuskesmas}</p>
-              <p>-</p>
-              <p>{tanggal}</p>
+            <div className="md:text-5xl text-4xl text-justify  font-semibold">
+              {data.judul}
+            </div>
+            <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
+              <span className="text-xl">
+                {data.adminPuskesmas.namaPuskesmas}
+              </span>
+              <span className={`md:block hidden`}>-</span>
+              <span className="text-xl text-justify ">{tanggal}</span>
             </div>
           </div>
           <p className="text-lg md:text-xl">{data.isi}</p>
