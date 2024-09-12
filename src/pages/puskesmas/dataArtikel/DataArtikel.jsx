@@ -20,7 +20,7 @@ import { ZodError } from "zod";
 import {
   createArtikel,
   deleteArtikel,
-  getAllArtikel,
+  getAllArtikelByAdminPuskesmas,
   getArtikelById,
   updateArtikel,
 } from "../../../services/ArtikelService";
@@ -28,7 +28,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 
 const DataArtikel = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
-  const { dispatch, token } = useContext(AuthContext);
+  const { dispatch, token, id } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -58,7 +58,7 @@ const DataArtikel = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await getAllArtikel();
+      const response = await getAllArtikelByAdminPuskesmas(id);
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
@@ -113,7 +113,7 @@ const DataArtikel = () => {
         setButtonLoading(false);
         try {
           setLoading(true);
-          const response = await getAllArtikel();
+          const response = await getAllArtikelByAdminPuskesmas(id);
           const sortedData = response.sort(customSort);
           setData(sortedData);
           setLoading(false);
@@ -190,7 +190,7 @@ const DataArtikel = () => {
         setButtonLoading(false);
         try {
           setLoading(true);
-          const response = await getAllArtikel();
+          const response = await getAllArtikelByAdminPuskesmas(id);
           const sortedData = response.sort(customSort);
           setData(sortedData);
           setLoading(false);
@@ -250,7 +250,7 @@ const DataArtikel = () => {
         });
         try {
           setLoading(true);
-          const response = await getAllArtikel();
+          const response = await getAllArtikelByAdminPuskesmas(id);
           const sortedData = response.sort(customSort);
           setData(sortedData);
           setLoading(false);

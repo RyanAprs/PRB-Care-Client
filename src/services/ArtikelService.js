@@ -32,6 +32,24 @@ export const getAllArtikel = async () => {
   return formattedData;
 };
 
+export const getAllArtikelByAdminPuskesmas = async (idAdminPuskesmas) => {
+  const response = await axios.get(`${API_BASE_URI}/api/artikel`, {
+    params: { idAdminPuskesmas },
+    ...getRequestHeaders(),
+  });
+
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
+  const formattedData = response.data.data.map((item) => ({
+    ...item,
+    tanggalPublikasi: convertUnixToHuman(item.tanggalPublikasi),
+  }));
+
+  return formattedData;
+};
+
 export const getArtikelById = async (id) => {
   try {
     const response = await axios.get(

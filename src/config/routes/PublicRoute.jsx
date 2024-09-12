@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import NotFound from "../../pages/NotFound";
 import { AuthContext } from "../context/AuthContext";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -12,6 +12,16 @@ import DataPuskesmas from "../../pages/public/dataPuskesmas/DataPuskesmas";
 import DataApotek from "../../pages/public/dataApotek/DataApotek";
 import Artikel from "../../pages/public/artikel/Artikel";
 import DetailArtikel from "../../pages/public/artikel/DetailArtikel";
+
+const PrivateRoute = ({ children, role }) => {
+  const { token } = useContext(AuthContext);
+
+  if (!token) {
+    return <Navigate to="/page/not-found" />;
+  }
+
+  return children;
+};
 
 const PublicRoute = () => {
   const { isLoading } = useContext(AuthContext);
@@ -70,9 +80,11 @@ const PublicRoute = () => {
         path="/artikel/:id"
         element={
           <>
-            <NavbarPublicPage />
-            <DetailArtikel />
-            <PublicFooter />
+            <PrivateRoute>
+              <NavbarPublicPage />
+              <DetailArtikel />
+              <PublicFooter />
+            </PrivateRoute>
           </>
         }
       />
