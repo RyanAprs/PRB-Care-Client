@@ -4,7 +4,6 @@ export const artikelSchema = z.object({
   judul: z
     .string()
     .min(3)
-    .max(50)
     .refine(
       (val) => val.trim().length >= 3,
       "Judul artikel minimal 3 karakter"
@@ -34,7 +33,6 @@ export const artikelSchemaSuperAdmin = z.object({
   judul: z
     .string()
     .min(3)
-    .max(50)
     .refine(
       (val) => val.trim().length >= 3,
       "Judul artikel minimal 3 karakter"
