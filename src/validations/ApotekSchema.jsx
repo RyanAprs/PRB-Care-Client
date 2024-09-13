@@ -26,7 +26,16 @@ export const apotekSchema = z.object({
         .min(10, "Nomor telepon harus lebih dari 10 huruf")
         .max(16, "Nomor telepon harus kurang dari 16 huruf")
         .regex(/^\S*$/, "Nomor telepon tidak boleh mengandung spasi"),
-    alamat: z.string().nonempty("Alamat tidak boleh kosong"),
+    alamat: z.string().max(1000, "Alamat terlalu panjang").nonempty("Alamat tidak boleh kosong"),
+    waktuOperasional: z
+        .string(
+        )
+        .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
+        .refine(
+            (val) => val.trim().length >= 3,
+            "Waktu Operasional tidak boleh kosong"
+        ),
 });
 
 const isPhoneNumber = (str) => {
@@ -54,6 +63,7 @@ export const apotekCreateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -72,6 +82,7 @@ export const apotekCreateSchema = z.object({
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"
@@ -92,6 +103,7 @@ export const apotekUpdateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -109,6 +121,7 @@ export const apotekUpdateSchema = z.object({
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"
@@ -129,10 +142,12 @@ export const apotekUpdateCurrentSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"

@@ -82,15 +82,15 @@ const Footer = () => {
                     <h2 className="text-xl font-bold mb-4 text-center">Kontak Kami</h2>
 
                     <p className="text-sm mb-2 ">
-                        <Link to="mailto:prbcare@gmail.com" className={`flex`}>
-                            <Mail/> <h1 className="ml-2">prbcare@gmail.com</h1>
+                        <Link to="mailto:prbcaree@gmail.com" className={`flex`}>
+                            <Mail/> <h1 className="ml-2">prbcaree@gmail.com</h1>
                         </Link>
                     </p>
                 </div>
             </div>
 
             <div
-                className="mx-4 border-t-[1px] flex flex-col  gap-4  border-black dark:border-white mt-12 pt-1 pb-[68px] md:pb-0 text-center text-sm">
+                className="mx-4 border-t-[1px] flex flex-col  gap-4  border-[#495057] dark:border-white mt-12 pt-1 pb-[68px] md:pb-0 text-center text-sm">
                 <h1 className="flex gap-1 items-center justify-center">
                     &copy; {new Date().getFullYear()} PRBCare. All rights reserved.
                 </h1>

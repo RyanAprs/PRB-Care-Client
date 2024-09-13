@@ -6,7 +6,7 @@ import {
   Stethoscope,
   User2Icon,
   UserPlus,
-  HousePlus,
+  HousePlus, ScrollText,
 } from "lucide-react";
 import { Card } from "primereact/card";
 import { Toast } from "primereact/toast";
@@ -82,6 +82,12 @@ const DashboardAdmin = () => {
       desc: "Kelola data ambil obat",
       route: "/admin/data-pengambilan-obat",
     },
+    {
+      icon: <ScrollText size={54} strokeWidth={1.2}/>,
+      title: "Artikel",
+      desc: "Kelola artikel kesehatan",
+      route: "/admin/data-artikel",
+    },
   ];
 
   const handleCardClick = (route) => {
@@ -102,23 +108,24 @@ const DashboardAdmin = () => {
             key={index}
           >
             <Ripple
-              pt={
-                darkMode.value
-                  ? ""
-                  : {
-                      root: {
-                        style: { background: "rgba(64, 145, 108, 0.3)" },
-                      },
-                    }
-              }
+                pt={
+                  darkMode.value
+                      ? {
+                        root: {
+                          style: { background: "rgb(86, 181, 136, 0.3)" },
+                        }
+                      }
+                      : {
+                        root: {
+                          style: { background: "rgba(64, 145, 108, 0.3)" },
+                        },
+                      }
+                }
             />
             <Card
               key={index}
               className="min-w-10  flex flex-col items-center justify-center cursor-pointer "
-              style={{
-                fontFamily: "Poppins, sans-serif",
-                color: "var(--surface-900) !important",
-              }}
+              style={{fontFamily: "Poppins"}}
             >
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-xl font-semibold mb-4">{item.title}</div>

@@ -17,7 +17,7 @@ import {
   GitPullRequestClosed,
   LockKeyhole,
   UserPlus,
-  NotebookPen,
+  ScrollText,
 } from "lucide-react";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -58,6 +58,7 @@ import { AddressContext } from "../../config/context/AdressContext";
 import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
+import img from "/src/assets/sun-tornado.svg"
 const NavbarAdmin = ({ children }) => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
@@ -484,21 +485,20 @@ const NavbarAdmin = ({ children }) => {
 
       <Sidebar
         className="md:w-1/4 md:block  text-white border-r-white "
-        backgroundColor={darkMode.value ? "#276f4c" : "#40916C"}
+        backgroundColor={``}
         collapsed={toggle ? false : expanded}
         breakPoint={"md"}
         toggled={toggle}
         onBackdropClick={handleSidebarToggle}
+        image={`${img}`}
       >
         <Menu
           menuItemStyles={{
             button: {
-              ["&:hover"]: darkMode.value
-                ? {
-                    backgroundColor: "#40916C",
-                    color: "white",
-                  }
-                : { backgroundColor: "#56A17E", color: "white" },
+              ["&:hover"]: {
+                backgroundColor: "#40916C",
+                color: "white",
+              }
             },
             span: {
               marginRight: "0px",
@@ -550,7 +550,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/beranda"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/beranda"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -566,7 +566,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-puskesmas"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-puskesmas"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -582,7 +582,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-apotek"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-apotek"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -598,7 +598,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-pengguna"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-pengguna"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -614,7 +614,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-pasien"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-pasien"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -631,7 +631,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-kontrol-balik"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-kontrol-balik"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -647,7 +647,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-obat"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-obat"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -663,7 +663,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/admin/data-pengambilan-obat"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-pengambilan-obat"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -673,13 +673,13 @@ const NavbarAdmin = ({ children }) => {
               </MenuItem>
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3"}`}
-                icon={<NotebookPen />}
+                icon={<ScrollText />}
                 component={
                   <Link
                     to="/admin/data-artikel"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/admin/data-artikel"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -698,7 +698,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/puskesmas/beranda"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/puskesmas/beranda"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -714,7 +714,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/puskesmas/data-pasien"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/puskesmas/data-pasien"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -730,7 +730,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/puskesmas/data-kontrol-balik"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/puskesmas/data-kontrol-balik"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -746,7 +746,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/puskesmas/data-pengambilan-obat"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/puskesmas/data-pengambilan-obat"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -756,13 +756,13 @@ const NavbarAdmin = ({ children }) => {
               </MenuItem>
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3"}`}
-                icon={<NotebookPen />}
+                icon={<ScrollText />}
                 component={
                   <Link
                     to="/puskesmas/data-artikel"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/puskesmas/data-artikel"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -781,7 +781,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/apotek/beranda"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/apotek/beranda"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -797,7 +797,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/apotek/data-obat"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/apotek/data-obat"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>
@@ -813,7 +813,7 @@ const NavbarAdmin = ({ children }) => {
                     to="/apotek/data-pengambilan-obat"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
                       location.pathname === "/apotek/data-pengambilan-obat"
-                        ? "bg-lightGreen dark:bg-mainGreen"
+                        ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
                   ></Link>

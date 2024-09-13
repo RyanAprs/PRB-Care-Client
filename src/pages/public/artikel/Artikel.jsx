@@ -21,7 +21,6 @@ export default function Artikel() {
   const [login, setLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [isConnectionError, setIsConnectionError] = useState(false);
-  const [total, setTotal] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
 
   const sortOptions = [
@@ -38,7 +37,6 @@ export default function Artikel() {
         nomor: index,
       }));
       setData(transformedData);
-      setTotal(transformedData.length);
       setLoading(false);
       setLogin(true);
       setIsConnectionError(false);
@@ -93,35 +91,29 @@ export default function Artikel() {
   const itemTemplate = (data) => {
     return (
       <div
-        className={`col-12 font-poppins md:mx-12 ${
-          (data.nomor === total - 1 || data.nomor % 2 === 0) && data.nomor !== 0
-            ? "mb-8"
-            : "mb-16"
-        }`}
+        className={`col-12 font-poppins mx-4 mb-16`}
         key={data.id}
-        style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
+
       >
         <div className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border">
           <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
             <div className="flex flex-col align-items-center sm:align-items-start gap-3">
               <div
-                className="md:text-5xl text-4xl text-justify font-semibold"
-                style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
+                className="md:text-6xl text-4xl  text-justify font-semibold"
               >
                 {data.judul}
               </div>
               <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-                <span className="text-xl">
+                <span className="text-lg">
                   {data.adminPuskesmas.namaPuskesmas}
                 </span>
                 <span className={`md:block hidden`}>-</span>
-                <span className="text-xl text-justify ">
+                <span className="text-lg text-justify ">
                   {data.tanggalPublikasi}
                 </span>
               </div>
               <p
                 className="mt-2 text-xl text-justify"
-                style={{ maxWidth: "100%", overflowWrap: "break-word" }} // added styles
               >
                 {data.ringkasan}
               </p>
@@ -135,12 +127,7 @@ export default function Artikel() {
             </div>
           </div>
           <div
-            className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center ${
-              (data.nomor === total - 1 || data.nomor % 2 === 0) &&
-              data.nomor !== 0
-                ? "hidden"
-                : ""
-            }`}
+            className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center`}
           ></div>
         </div>
       </div>
@@ -194,44 +181,51 @@ export default function Artikel() {
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit w-full md:max-w-screen ">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
         {data.length > 0 ? (
-          <div className="flex flex-col md:gap-8 gap-4 h-full p-8">
-            <div className="flex flex-col md:flex-row md:justify-end  items-center justify-center gap-4">
+          <div className="flex flex-col  gap-4 h-full p-7">
+            <div className="flex flex-col md:flex-row md:justify-between p-4  items-center justify-center gap-4">
               <div className="p-inputgroup md:w-1/4 w-full">
                 <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
-                  <Search size={16} />
+                  <Search size={16}/>
                 </span>
                 <InputText
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari artikel..."
-                  className="p-inputtext-sm p-2"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="p-inputtext-sm p-2"
                 />
               </div>
 
               <Dropdown
-                value={sortOrder}
-                options={sortOptions}
-                onChange={(e) => setSortOrder(e.value)}
-                placeholder="Pilih dan Urutkan"
+                  value={sortOrder}
+                  options={sortOptions}
+                  onChange={(e) => setSortOrder(e.value)}
+                  placeholder="Pilih dan Urutkan"
               />
             </div>
             <DataView
-              value={sortData()}
-              itemTemplate={itemTemplate}
-              paginator
-              rows={rows}
-              first={first}
-              onPage={onPageChange}
-              totalRecords={data.length}
+                value={sortData()}
+                itemTemplate={itemTemplate}
+                paginator={data.length > 2}
+                rows={rows}
+                first={first}
+                onPage={onPageChange}
+                emptyMessage={<div className="text-center text-gray-500 dark:text-gray-400">
+                  Tidak ada data
+                </div>}
+                totalRecords={data.length}
             />
           </div>
         ) : (
-          <div className="flex flex-col p-1 gap-4 overflow-y-auto h-full">
-            <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
-              <img src={img} alt="No Data" className="w-96" />
-              <span>Tidak Ada Data</span>
+            <div
+                className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+              <img src={img} className="w-52" alt="img"/>
+              <div>
+                Belum Ada Data
+                <p className="font-medium text-xl">
+                  Data akan muncul di sini ketika tersedia.
+                </p>
+              </div>
             </div>
-          </div>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import {ShoppingCart, Stethoscope, UserPlus} from "lucide-react";
+import {ShoppingCart, Stethoscope, UserPlus,ScrollText} from "lucide-react";
 import {Card} from "primereact/card";
 import {useEffect, useRef, useState} from "react";
 import {Toast} from "primereact/toast";
@@ -50,6 +50,12 @@ const DashboardPuskesmas = () => {
             desc: "Kelola data ambil obat",
             route: "/puskesmas/data-pengambilan-obat",
         },
+        {
+            icon: <ScrollText size={54} strokeWidth={1.2}/>,
+            title: "Artikel",
+            desc: "Kelola artikel kesehatan",
+            route: "/puskesmas/data-artikel",
+        },
     ];
 
     const handleCardClick = (route) => {
@@ -67,14 +73,24 @@ const DashboardPuskesmas = () => {
                     <div onClick={() => handleCardClick(item.route)}
                          className="  shadow-md rounded-xl w-full h-full p-ripple">
                         <Ripple
-                            pt={darkMode.value ? "" : {
-                                root: {style: {background: 'rgba(64, 145, 108, 0.3)'}}
-                            }}
+                            pt={
+                                darkMode.value
+                                    ? {
+                                        root: {
+                                            style: { background: "rgb(86, 181, 136, 0.3)" },
+                                        }
+                                    }
+                                    : {
+                                        root: {
+                                            style: { background: "rgba(64, 145, 108, 0.3)" },
+                                        },
+                                    }
+                            }
                         />
                         <Card
                             key={index}
                             className="min-w-10  flex flex-col items-center justify-center cursor-pointer "
-                            style={{fontFamily: "Poppins, sans-serif", color: "var(--surface-900) !important"}}
+                            style={{fontFamily: "Poppins"}}
 
                         >
                             <div className="flex flex-col items-center justify-center h-full">

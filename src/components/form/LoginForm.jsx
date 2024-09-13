@@ -223,7 +223,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
               <div className="flex flex-col gap-1">
                 <div className="flex w-full gap-1 items-center justify-center">
                   Lupa passsword?
-                  <Link to="mailto:prbcare@gmail.com" className="text-mainGreen font-semibold">
+                  <Link to="mailto:prbcaree@gmail.com" className="text-mainGreen font-semibold">
                     kontak kami
                   </Link>
                 </div>

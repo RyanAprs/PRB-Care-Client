@@ -11,5 +11,5 @@ PRB-Care-Client adalah aplikasi frontend yang dirancang untuk menangani proses b
 * HTTP Client: Axios
 * CSS Framework: Tailwind CSS
 
-# Preview
-![Untawditled-1](https://github.com/user-attachments/assets/1b25d4d6-51ca-4c45-95d1-a31336312a04)
+## Preview
+![image](https://github.com/user-attachments/assets/20a0fb3b-6420-4185-afd8-21bc5f8c9ebe)

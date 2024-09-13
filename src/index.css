@@ -141,8 +141,33 @@ body,
   background-color: rgba(205, 92, 92, 0) !important;
   border: 0px;
   padding: 0px;
-  font-size: 22px;
+  font-size: 1.25rem;
 }
 .ql-disabled {
   border: 0px !important;
+}
+
+.text-justify {
+  text-align: justify;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.text-black{
+  color: #495057;
+}
+
+
+body.light-mode {
+  background-color: #fff;
+  color: #495057;
+  transition: background-color 0.3s ease;
+}
+
+body.dark {
+  background-color: #1a1919;
+  color: white;
+}
+.ql-editor {
+  font-family: 'Poppins';
 }

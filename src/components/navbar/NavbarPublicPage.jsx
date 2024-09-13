@@ -6,15 +6,19 @@ import {
   Hospital,
   HousePlus,
   LogIn,
-  NotebookPen,
+  ScrollText,
 } from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Toast } from "primereact/toast";
-import { Ripple } from "primereact/ripple";
-
+import { Button } from "primereact/button";
+import { useNavigate } from 'react-router-dom';
 const NavbarPublicPage = () => {
   const toast = useRef(null);
+  const navigate = useNavigate();
 
+  const handleClick = () => {
+    navigate('/pengguna/login');
+  };
   return (
     <>
       <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
@@ -92,16 +96,12 @@ const NavbarPublicPage = () => {
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2">
-                <Link
-                  to={"/pengguna/login"}
-                  className="p-1 rounded-full cursor-pointer p-ripple mx-auto transition-all flex flex-col items-center justify-center"
-                >
-                  <LogIn
-                    strokeWidth={1.5}
-                    className="text-black dark:text-white"
-                  />
-                  <Ripple />
-                </Link>
+                <Button
+                    text
+                    className="p-1 rounded-full cursor-pointer text-black dark:text-white"
+                    severity={`secondary`}
+                    onClick={handleClick}
+                ><LogIn strokeWidth={1.5} /></Button>
               </div>
             </div>
           </div>
@@ -153,7 +153,7 @@ const NavbarPublicPage = () => {
               location.pathname === "/artikel" ? "opacity-100" : "opacity-50"
             }`}
           >
-            <NotebookPen size={25} />
+            <ScrollText size={25} />
 
             <div className="text-sm">Artikel</div>
           </Link>

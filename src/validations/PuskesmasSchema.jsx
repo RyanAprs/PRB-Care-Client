@@ -28,6 +28,7 @@ export const puskesmasCreateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -46,6 +47,7 @@ export const puskesmasCreateSchema = z.object({
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"
@@ -69,6 +71,7 @@ export const puskesmasUpdateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -86,6 +89,7 @@ export const puskesmasUpdateSchema = z.object({
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"
@@ -109,10 +113,12 @@ export const puskesmasUpdateCurrentSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     waktuOperasional: z
         .string()
         .min(3)
+        .max(1000, "Waktu operasional terlalu panjang")
         .refine(
             (val) => val.trim().length >= 3,
             "Waktu Operasional tidak boleh kosong"

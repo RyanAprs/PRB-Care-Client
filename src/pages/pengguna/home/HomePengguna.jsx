@@ -8,6 +8,7 @@ import { updateCurrentTokenPerangkatPengguna } from "../../../services/PenggunaS
 import { Link } from "react-router-dom";
 import { Ripple } from "primereact/ripple";
 import { useInstallPrompt } from "../../../config/context/InstallPromptContext.jsx";
+import useDarkMode from "use-dark-mode";
 const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -28,7 +29,7 @@ const HomePengguna = () => {
       typeof Notification !== "undefined" ? Notification.permission : "granted"
   );
   const { installPromptEvent, promptInstall } = useInstallPrompt();
-
+  const darkMode = useDarkMode(false, { classNameDark: "dark" });
   const handleNotificationSetup = async () => {
     if (!("Notification" in window)) {
       console.log("This browser does not support notifications.");
@@ -90,11 +91,10 @@ const HomePengguna = () => {
           <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
             <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
               <img src={img} className="md:hidden w-4/5" alt="img" />
-              <h1 className="md:text-6xl text-3xl font-semibold text-justify md:text-start dark:text-whiteHover">
+              <h1 className="md:text-6xl text-4xl  font-semibold text-justify dark:text-whiteHover">
                 {permission !== "granted" || installPromptEvent !== null
-                    ? "Selamat Datang, Ikuti Instruksi di Bawah ini Untuk Memulai"
+                    ? "Selamat Datang Ikuti Instruksi di Bawah Ini untuk Memulai"
                     : "Anda Telah Bergabung dengan PRBCare"}
-                .
               </h1>
               <div className="flex flex-col items-center">
                 <p
@@ -105,9 +105,7 @@ const HomePengguna = () => {
                   Jangan lupa untuk mengaktifkan permintaan izin untuk notifikasi
                   di browser anda, Jika Anda belum melihat permintaan izin untuk
                   notifikasi, tekan tombol "Aktifkan Notifikasi" lalu pilih
-                  "Allow" atau "Izinkan". Setelah tombol berubah menjadi
-                  "Notifikasi Aktif" anda akan mendapatkan notifikasi dari kami
-                  mengenai kontrol balik dan pengambilan obat.
+                  "Allow" atau "Izinkan".
                 </p>
                 <p
                     className={`text-lg text-justify w-full md:pr-10 ${
@@ -127,8 +125,8 @@ const HomePengguna = () => {
                             : ""
                     }`}
                 >
-                  Terima kasih telah bergabung dengan PRBCare! Untuk memulai,
-                  silakan cari puskesmas terdekat dari lokasi Anda. Hubungi
+                  Terima kasih telah bergabung dengan PRBCare! Untuk memulai, silahkan
+                  cari puskesmas terdaftar PRBCare terdekat dengan lokasi Anda. Hubungi
                   puskesmas melalui nomor yang tertera, dan pihak puskesmas akan
                   memberikan nomor antrean untuk Anda. Jika Anda membutuhkan
                   bantuan lebih lanjut, jangan ragu untuk menghubungi kami.
@@ -136,55 +134,56 @@ const HomePengguna = () => {
               </div>
               <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
                 {permission === "granted" && installPromptEvent === null ? (
-                    <>
+                    <div className={`flex md:flex-row flex-col gap-2  md:w-auto w-full`}>
                       <Link
                           to="/data-puskesmas"
                           target="_blank"
-                          className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                          className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                       >
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Puskesmas
                         </div>
-                        <Ripple />
+                        <Ripple/>
                       </Link>
                       <Link
                           to="/data-apotek"
                           target="_blank"
-                          className="p-ripple bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                          className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                       >
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Apotek
                         </div>
-                        <Ripple />
+                        <Ripple/>
                       </Link>
-                    </>
+                      <Link
+                          to="/artikel"
+                          target="_blank"
+                          className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                      >
+                        <div className="flex gap-2 justify-center items-center text-lg ">
+                          Artikel Kesehatan
+                        </div>
+                        <Ripple/>
+                      </Link>
+                    </div>
+
                 ) : (
                     <>
                       <Button
                           onClick={handleNotificationSetup}
-                          className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-                          disabled={permission === "granted"}
+                          className={`${permission === "granted" ? "hidden" : ""} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                           label={
                             <div className="flex gap-2 justify-center items-center text-lg">
-                              <Bell size={30} />
-                              {permission === "granted"
-                                  ? "Notifikasi Aktif"
-                                  : "Aktifkan Notifikasi"}
+                              Aktifkan Notifikasi
                             </div>
                           }
                       />
                       <Button
                           onClick={promptInstall}
-                          className="bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-                          disabled={
-                              permission !== "granted" || installPromptEvent === null
-                          }
+                          className={`${permission !== "granted" || installPromptEvent === null ? "hidden" : ""} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                           label={
                             <div className="flex gap-2 justify-center items-center text-lg">
-                              <TabletSmartphone size={30} />
-                              {installPromptEvent === null
-                                  ? "PRBCare Terinstall"
-                                  : "Install PRBCare"}
+                              Install PRBCare
                             </div>
                           }
                       />

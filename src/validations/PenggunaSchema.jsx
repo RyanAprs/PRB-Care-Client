@@ -30,6 +30,7 @@ export const penggunaCreateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -66,6 +67,7 @@ export const penggunaUpdateSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -101,6 +103,7 @@ export const penggunaRegisterSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
     username: z
         .string()
@@ -140,6 +143,7 @@ export const penggunaUpdateCurrentSchema = z.object({
     alamat: z
         .string()
         .min(3)
+        .max(1000, "Alamat terlalu panjang")
         .refine((val) => val.trim().length >= 3, "Alamat minimal 3 karakter"),
 });
 

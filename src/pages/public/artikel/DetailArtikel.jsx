@@ -15,7 +15,9 @@ const DetailArtikel = () => {
   const [isConnectionError, setIsConnectionError] = useState(false);
   const [data, setData] = useState({});
   const [isNotfound, setIsNotFound] = useState(false);
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -80,29 +82,29 @@ const DetailArtikel = () => {
   };
 
   return (
-    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
-      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-8 md:p-20">
-        <div className="flex flex-col items-start justify-center gap-4 md:gap-8">
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-10">
+        <div className="flex flex-col items-start justify-center gap-4">
           <div className="flex flex-col gap-2 md:gap-4">
-            <div className="md:text-5xl text-4xl text-justify font-semibold">
+            <div className="md:text-6xl text-4xl text-justify font-semibold">
               {data.judul}
             </div>
             <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-              <span className="text-xl">
+              <span className="text-lg">
                 {data.adminPuskesmas.namaPuskesmas}
               </span>
               <span className="md:block hidden">-</span>
-              <span className="text-xl text-justify">{tanggal}</span>
+              <span className="text-lg text-justify">{tanggal}</span>
             </div>
           </div>
-          <div className="w-full ">
+          <div className="w-full">
             <Editor
+                className={`text-black dark:text-white`}
               value={data.isi}
               readOnly={true}
               style={{ height: "auto" }}
               modules={editorModules}
               headerTemplate={<></>}
-              className="rounded-lg "
             />
           </div>
         </div>

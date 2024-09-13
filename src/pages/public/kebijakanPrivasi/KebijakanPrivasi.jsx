@@ -21,7 +21,7 @@ const KebijakanPrivasi = () => {
                 </p>
                 <ul className="list-disc list-inside mb-4">
                     <li>
-                        Informasi identitas seperti nama, alamat email, dan nomor telepon.
+                        Informasi identitas seperti nama dan nomor telepon.
                     </li>
                     <li>
                         Data kesehatan yang terkait dengan layanan yang kami sediakan.
