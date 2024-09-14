@@ -263,18 +263,28 @@ export default function ReusableTable({
         </a>
       );
     }
-  if (field === "ringkasan") {
-      return <div className="w-full max-h-36 overflow-x-auto break-words whitespace-normal">
+    if (
+      field === "ringkasan" ||
+      field === "alamat" ||
+      field === "keluhan" ||
+      field === "hasilLab" ||
+      field === "hasilEkg" ||
+      field === "hasilDiagnosa" ||
+      field === "waktuOperasional"
+    ) {
+      return (
+        <div className="max-w-96 max-h-36 overflow-x-auto break-words whitespace-normal">
           {valueString}
-      </div>
-  }
+        </div>
+      );
+    }
 
-      return <span>{valueString}</span>;
+    return <span>{valueString}</span>;
   };
 
-    return (
-        <div className="p-4 w-full ">
-        <div className="card p-6 w-full flex flex-col gap-4">
+  return (
+    <div className="p-4 w-full ">
+      <div className="card p-6 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-center md:mb-4">
           <div className="p-inputgroup md:w-1/2">
             <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
