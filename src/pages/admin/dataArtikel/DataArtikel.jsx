@@ -311,56 +311,84 @@ const DataArtikel = () => {
 
   const renderHeader = () => {
     return (
-        <span className="ql-formats">
-          <select className="ql-header" aria-label="Heading">
-        <option value="1">Heading 1</option>
-        <option value="2">Heading 2</option>
-        <option value="3">Heading 3</option>
-        <option value="4">Heading 4</option>
-        <option value="5">Heading 5</option>
-        <option value="6">Heading 6</option>
-        <option value="">Normal</option>
-      </select>
+      <span className="ql-formats">
+        <select className="ql-header" aria-label="Heading">
+          <option value="1">Heading 1</option>
+          <option value="2">Heading 2</option>
+          <option value="3">Heading 3</option>
+          <option value="4">Heading 4</option>
+          <option value="5">Heading 5</option>
+          <option value="6">Heading 6</option>
+          <option value="">Normal</option>
+        </select>
 
-      <select className="ql-size" aria-label="Font Size">
-        <option value="small">Small</option>
-        <option value="">Normal</option>
-        <option value="large">Large</option>
-        <option value="huge">Huge</option>
-      </select>
+        <select className="ql-size" aria-label="Font Size">
+          <option value="small">Small</option>
+          <option value="">Normal</option>
+          <option value="large">Large</option>
+          <option value="huge">Huge</option>
+        </select>
 
-          <button className="ql-bold" aria-label="Bold"></button>
-      <button className="ql-italic" aria-label="Italic"></button>
-      <button className="ql-underline" aria-label="Underline"></button>
-      <button className="ql-strike" aria-label="Strike-through"></button>
+        <button className="ql-bold" aria-label="Bold"></button>
+        <button className="ql-italic" aria-label="Italic"></button>
+        <button className="ql-underline" aria-label="Underline"></button>
+        <button className="ql-strike" aria-label="Strike-through"></button>
 
-          <button className="ql-blockquote" aria-label="Blockquote"></button>
-      <button className="ql-code-block" aria-label="Code Block"></button>
+        <button className="ql-blockquote" aria-label="Blockquote"></button>
+        <button className="ql-code-block" aria-label="Code Block"></button>
 
-          <button className="ql-list" value="ordered" aria-label="Ordered List"></button>
-      <button className="ql-list" value="bullet" aria-label="Bullet List"></button>
-      <button className="ql-indent" value="+1" aria-label="Indent"></button>
-      <button className="ql-indent" value="-1" aria-label="Outdent"></button>
-      <button className="ql-align" value="" aria-label="Left Align"></button>
-      <button className="ql-align" value="center" aria-label="Center Align"></button>
-      <button className="ql-align" value="right" aria-label="Right Align"></button>
-      <button className="ql-align" value="justify" aria-label="Justify"></button>
+        <button
+          className="ql-list"
+          value="ordered"
+          aria-label="Ordered List"
+        ></button>
+        <button
+          className="ql-list"
+          value="bullet"
+          aria-label="Bullet List"
+        ></button>
+        <button className="ql-indent" value="+1" aria-label="Indent"></button>
+        <button className="ql-indent" value="-1" aria-label="Outdent"></button>
+        <button className="ql-align" value="" aria-label="Left Align"></button>
+        <button
+          className="ql-align"
+          value="center"
+          aria-label="Center Align"
+        ></button>
+        <button
+          className="ql-align"
+          value="right"
+          aria-label="Right Align"
+        ></button>
+        <button
+          className="ql-align"
+          value="justify"
+          aria-label="Justify"
+        ></button>
 
-          <button className="ql-link" aria-label="Link"></button>
+        <button className="ql-link" aria-label="Link"></button>
 
-          <select className="ql-color" aria-label="Text Color"></select>
-      <select className="ql-background" aria-label="Background Color">
+        <select className="ql-color" aria-label="Text Color"></select>
+        <select
+          className="ql-background"
+          aria-label="Background Color"
+        ></select>
 
-      </select>
+        <button
+          className="ql-script"
+          value="sub"
+          aria-label="Subscript"
+        ></button>
+        <button
+          className="ql-script"
+          value="super"
+          aria-label="Superscript"
+        ></button>
 
-          <button className="ql-script" value="sub" aria-label="Subscript"></button>
-      <button className="ql-script" value="super" aria-label="Superscript"></button>
-
-          <button className="ql-clean" aria-label="Clear Formatting"></button>
-    </span>
+        <button className="ql-clean" aria-label="Clear Formatting"></button>
+      </span>
     );
   };
-
 
   const header = renderHeader();
 
@@ -432,6 +460,7 @@ const DataArtikel = () => {
           if (!visible) return;
           setVisible(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           {!isEditMode && (
@@ -554,6 +583,7 @@ const DataArtikel = () => {
           if (!visibleDelete) return;
           setVisibleDelete(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">

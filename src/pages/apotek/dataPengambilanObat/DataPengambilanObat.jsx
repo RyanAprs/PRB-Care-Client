@@ -222,6 +222,7 @@ const DataPengambilanObat = () => {
           if (!visibleDone) return;
           setVisibleDone(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">

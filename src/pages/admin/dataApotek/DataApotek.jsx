@@ -423,6 +423,7 @@ const DataApotek = () => {
           if (!visible) return;
           setVisible(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -557,6 +558,7 @@ const DataApotek = () => {
           if (!visibleDelete) return;
           setVisibleDelete(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">

@@ -614,6 +614,7 @@ const DataPengambilanObat = () => {
           if (!visible) return;
           setVisible(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -732,6 +733,7 @@ const DataPengambilanObat = () => {
           if (!visibleDelete) return;
           setVisibleDelete(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -772,6 +774,7 @@ const DataPengambilanObat = () => {
           if (!visibleDone) return;
           setVisibleDone(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -812,6 +815,7 @@ const DataPengambilanObat = () => {
           if (!visibleCancelled) return;
           setVisibleCancelled(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">

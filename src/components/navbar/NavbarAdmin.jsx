@@ -58,7 +58,7 @@ import { AddressContext } from "../../config/context/AdressContext";
 import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
-import img from "/src/assets/sun-tornado.svg"
+import img from "/src/assets/sun-tornado.svg";
 const NavbarAdmin = ({ children }) => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
@@ -498,7 +498,7 @@ const NavbarAdmin = ({ children }) => {
               ["&:hover"]: {
                 backgroundColor: "#40916C",
                 color: "white",
-              }
+              },
             },
             span: {
               marginRight: "0px",
@@ -967,6 +967,7 @@ const NavbarAdmin = ({ children }) => {
           if (!visibleDetailProfile) return;
           setVisibleDetailProfile(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -1040,6 +1041,7 @@ const NavbarAdmin = ({ children }) => {
           setVisibleUpdateProfile(false);
           handleDetailProfileModal();
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -1146,6 +1148,7 @@ const NavbarAdmin = ({ children }) => {
           if (!visibleChangePassword) return;
           setVisibleChangePassword(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -1237,6 +1240,7 @@ const NavbarAdmin = ({ children }) => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">Apakah anda yakin ingin logout?</div>

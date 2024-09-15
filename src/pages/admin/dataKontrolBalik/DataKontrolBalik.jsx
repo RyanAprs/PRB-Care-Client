@@ -656,6 +656,7 @@ const DataKontrolBalik = () => {
                 idPasien: selectedPasien.id,
               }));
             }}
+            blockScroll={true}
           />
 
           {errors.idPasien && (
@@ -884,6 +885,7 @@ const DataKontrolBalik = () => {
           if (!visibleDelete) return;
           setVisibleDelete(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -924,6 +926,7 @@ const DataKontrolBalik = () => {
           if (!visibleDone) return;
           setVisibleDone(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -964,6 +967,7 @@ const DataKontrolBalik = () => {
           if (!visibleCancelled) return;
           setVisibleCancelled(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">

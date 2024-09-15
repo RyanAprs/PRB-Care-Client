@@ -602,6 +602,7 @@ const DataKontrolBalik = () => {
           if (!visible) return;
           setVisible(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           {isEditMode && (
@@ -878,6 +879,7 @@ const DataKontrolBalik = () => {
           if (!visibleDelete) return;
           setVisibleDelete(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -918,6 +920,7 @@ const DataKontrolBalik = () => {
           if (!visibleDone) return;
           setVisibleDone(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -958,6 +961,7 @@ const DataKontrolBalik = () => {
           if (!visibleCancelled) return;
           setVisibleCancelled(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
