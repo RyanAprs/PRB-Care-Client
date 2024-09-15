@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from "react";
+import {useState, useEffect, useContext, useRef} from "react";
 import {AddressContext} from "../../config/context/AdressContext";
 import {InputText} from "primereact/inputtext";
 import {Dropdown} from "primereact/dropdown";
@@ -10,7 +10,8 @@ const DynamicAddress = ({reset, prevAddress}) => {
     const [regencies, setRegencies] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [villages, setVillages] = useState([]);
-
+    const [currentWidth, setCurrentWidth] = useState();
+    const ref = useRef();
     const {address, setAddress} = useContext(AddressContext);
 
     useEffect(() => {
@@ -120,7 +121,10 @@ const DynamicAddress = ({reset, prevAddress}) => {
             [name]: value,
         }));
     };
-
+    useEffect(() => {
+        const element = ref.current.getElement();
+        setCurrentWidth(element.clientWidth);
+    }, [ref]);
     return (
         <div className="flex flex-col gap-2 items-center justify-center">
             <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
@@ -135,6 +139,14 @@ const DynamicAddress = ({reset, prevAddress}) => {
                     filter
                     className="w-full p-2 text-sm"
                     required
+                    ref={ref}
+                    pt={{
+                        panel: {
+                            style: {
+                                ...(currentWidth ? { width: currentWidth } : {})
+                            }
+                        }
+                    }}
                 />
                 {address.provinsiId && (
                     <Dropdown
@@ -148,6 +160,14 @@ const DynamicAddress = ({reset, prevAddress}) => {
                         filter
                         className="w-full p-2 text-sm "
                         required
+                        ref={ref}
+                        pt={{
+                            panel: {
+                                style: {
+                                    ...(currentWidth ? { width: currentWidth } : {})
+                                }
+                            }
+                        }}
                     />
                 )}
                 {address.kabupatenId && (
@@ -162,6 +182,14 @@ const DynamicAddress = ({reset, prevAddress}) => {
                         filter
                         className="w-full p-2 text-sm"
                         required
+                        ref={ref}
+                        pt={{
+                            panel: {
+                                style: {
+                                    ...(currentWidth ? { width: currentWidth } : {})
+                                }
+                            }
+                        }}
                     />
                 )}
                 {address.kecamatanId && (
@@ -176,6 +204,15 @@ const DynamicAddress = ({reset, prevAddress}) => {
                         filter
                         className="w-full p-2 text-sm "
                         required
+                        ref={ref}
+                        pt={{
+                            panel: {
+                                style: {
+                                    ...(currentWidth ? { width: currentWidth } : {})
+                                }
+                            }
+                        }}
+
                     />
                 )}
                 {address.desaId && (
