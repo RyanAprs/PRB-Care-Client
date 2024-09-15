@@ -584,6 +584,7 @@ const NavbarPengguna = () => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col gap-8">
           <div className="text-xl">
@@ -615,6 +616,7 @@ const NavbarPengguna = () => {
           if (!visibleDetailProfile) return;
           setVisibleDetailProfile(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -674,6 +676,7 @@ const NavbarPengguna = () => {
           setVisibleUpdateProfile(false);
           handleDetailProfileModal();
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
@@ -774,6 +777,7 @@ const NavbarPengguna = () => {
           if (!visibleChangePassword) return;
           setVisibleChangePassword(false);
         }}
+        blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
