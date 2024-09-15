@@ -112,6 +112,7 @@ body,
 
 .p-dialog {
   z-index: 1000 !important;
+  border: 0
 }
 
 .p-dialog-mask {
