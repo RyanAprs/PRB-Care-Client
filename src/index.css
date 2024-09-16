@@ -172,3 +172,9 @@ body.dark {
 .ql-editor {
   font-family: 'Poppins';
 }
+
+body{
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}

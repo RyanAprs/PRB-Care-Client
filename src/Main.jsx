@@ -13,30 +13,32 @@ function Main() {
   return (
     <HelmetProvider context={helmetContext}>
       <PrimeReactProvider
-        autoZIndex={false}
-        zIndex={{
-          modal: 1100,
-          overlay: 1000,
-          menu: 1000,
-          tooltip: 1100,
-          toast: 2000,
-        }}
-        value={{
-          ripple: true,
-          pt: {
-            button: {
-              root: {
-                className:
-                  "outline-none border-0 focus:border-0 focus:outline-none focus:ring-0 box-shadow-none",
-              },
+        value={
+          {
+            autoZIndex:false,
+            zIndex:{
+            modal: 1100,
+            overlay: 1000,
+            menu: 1000,
+            tooltip: 1100,
+            toast: 2000,
             },
-            toast: {
-              root: {
-                className: "m-0",
+              ripple: true,
+              pt: {
+                button: {
+                  root: {
+                    className:
+                      "outline-none border-0 focus:border-0 focus:outline-none focus:ring-0 box-shadow-none",
+                  },
+                },
+                toast: {
+                  root: {
+                    className: "m-0",
+                  },
+                },
               },
-            },
-          },
-        }}
+        }
+      }
       >
         <main className="font-poppins">
           <AddressProvider>
