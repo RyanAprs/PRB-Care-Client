@@ -73,6 +73,7 @@ const Footer = () => {
                     <Link
                         className=""
                         to="/kebijakan-privasi"
+                        target="_blank"
                     >
                         Kebijakan Privasi
                     </Link>

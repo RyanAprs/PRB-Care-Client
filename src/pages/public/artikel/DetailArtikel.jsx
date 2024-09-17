@@ -22,7 +22,6 @@ const DetailArtikel = () => {
   const [quillLoaded, setQuillLoaded] = useState(false);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     preloadQuill().then(() => setQuillLoaded(true));
   }, []);
 

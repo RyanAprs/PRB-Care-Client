@@ -42,6 +42,7 @@ const PublicFooter = () => {
                     <Link
                         className=""
                         to="/data-apotek"
+                        target="_blank"
                     >
                         Apotek Terdaftar
                     </Link>

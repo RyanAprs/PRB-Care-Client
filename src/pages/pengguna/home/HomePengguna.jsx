@@ -1,6 +1,5 @@
 import img from "../../../assets/home.png";
 import { useState } from "react";
-import { TabletSmartphone, Bell } from "lucide-react";
 import { Button } from "primereact/button";
 import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
@@ -9,6 +8,8 @@ import { Link } from "react-router-dom";
 import { Ripple } from "primereact/ripple";
 import { useInstallPrompt } from "../../../config/context/InstallPromptContext.jsx";
 import useDarkMode from "use-dark-mode";
+import { motion } from "framer-motion";
+
 const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -20,9 +21,13 @@ const firebaseConfig = {
   measurementId: "G-122Y1K7VRS",
 };
 
-
 const firebaseApp = initializeApp(firebaseConfig);
 const messaging = getMessaging(firebaseApp);
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
 const HomePengguna = () => {
   const [permission, setPermission] = useState(
@@ -30,6 +35,7 @@ const HomePengguna = () => {
   );
   const { installPromptEvent, promptInstall } = useInstallPrompt();
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
+
   const handleNotificationSetup = async () => {
     if (!("Notification" in window)) {
       console.log("This browser does not support notifications.");
@@ -87,11 +93,19 @@ const HomePengguna = () => {
 
   return (
       <div className="flex md:p-4 p-2 md:flex-row flex-col items-center md:justify-center min-h-fit h-full dark:bg-black bg-whiteGrays dark:text-white gap-4">
-        <div className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center">
-          <div className="p-8 flex  md:justify-center justify-start items-center gap-7">
-            <div className="flex flex-col justify-start items-center gap-7 md:w-1/2">
+        <div
+            className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center"
+        >
+          <div className="p-8 flex md:justify-center justify-start items-center gap-7">
+            <motion.div
+                initial="hidden"
+                whileInView="visible"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                variants={fadeInUp}
+                className="flex flex-col justify-start items-center gap-7 md:w-1/2"
+            >
               <img src={img} className="md:hidden w-4/5" alt="img" />
-              <h1 className="md:text-6xl text-4xl  font-semibold text-justify dark:text-whiteHover">
+              <h1 className="md:text-6xl text-4xl font-semibold text-justify dark:text-whiteHover">
                 {permission !== "granted" || installPromptEvent !== null
                     ? "Selamat Datang Ikuti Instruksi di Bawah Ini untuk Memulai"
                     : "Anda Telah Bergabung dengan PRBCare"}
@@ -134,44 +148,40 @@ const HomePengguna = () => {
               </div>
               <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
                 {permission === "granted" && installPromptEvent === null ? (
-                    <div className={`flex md:flex-row flex-col gap-2  md:w-auto w-full`}>
+                    <div className="flex md:flex-row flex-col gap-2 md:w-auto w-full">
                       <Link
                           to="/data-puskesmas"
-                          target="_blank"
                           className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                       >
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Puskesmas
                         </div>
-                        <Ripple/>
+                        <Ripple />
                       </Link>
                       <Link
                           to="/data-apotek"
-                          target="_blank"
                           className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                       >
                         <div className="flex gap-2 justify-center items-center text-lg">
                           Cari Apotek
                         </div>
-                        <Ripple/>
+                        <Ripple />
                       </Link>
                       <Link
                           to="/artikel"
-                          target="_blank"
                           className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                       >
                         <div className="flex gap-2 justify-center items-center text-lg ">
                           Artikel Kesehatan
                         </div>
-                        <Ripple/>
+                        <Ripple />
                       </Link>
                     </div>
-
                 ) : (
                     <>
                       <Button
                           onClick={handleNotificationSetup}
-                          className={`${permission === "granted" ? "hidden" : ""} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                          className={`${permission === "granted" ? "hidden" : ""} bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                           label={
                             <div className="flex gap-2 justify-center items-center text-lg">
                               Aktifkan Notifikasi
@@ -180,7 +190,7 @@ const HomePengguna = () => {
                       />
                       <Button
                           onClick={promptInstall}
-                          className={`${permission !== "granted" || installPromptEvent === null ? "hidden" : ""} bg-mainGreen  dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                          className={`${permission !== "granted" || installPromptEvent === null ? "hidden" : ""} bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                           label={
                             <div className="flex gap-2 justify-center items-center text-lg">
                               Install PRBCare
@@ -190,11 +200,15 @@ const HomePengguna = () => {
                     </>
                 )}
               </div>
-            </div>
-            <img
+            </motion.div>
+            <motion.img
                 src={img}
                 className="md:w-1/3 min-[1980px]:w-1/4 md:block hidden"
                 alt="img"
+                initial="hidden"
+                whileInView="visible"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                variants={fadeInUp}
             />
           </div>
         </div>
