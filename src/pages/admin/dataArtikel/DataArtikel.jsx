@@ -27,6 +27,12 @@ import {
 import { InputTextarea } from "primereact/inputtextarea";
 import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { Dropdown } from "primereact/dropdown";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { FileUpload } from "primereact/fileupload";
+import { getCroppedImg } from "../../../utils/GetCroppedImage";
+
+const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
 const DataArtikel = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -40,6 +46,7 @@ const DataArtikel = () => {
     judul: "",
     isi: "",
     ringkasan: "",
+    banner: "",
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
@@ -51,6 +58,18 @@ const DataArtikel = () => {
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setButtonLoading] = useState(null);
   const [adminPuskesmas, setAdminPuskesmas] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [visibleCroppedImage, setVisibleCroppedImage] = useState(false);
+  const [crop, setCrop] = useState({
+    unit: "px",
+    width: 1200,
+    height: 630,
+    x: 0,
+    y: 0,
+    aspect: 16 / 9,
+  });
+  const [croppedImagePreview, setCroppedImagePreview] = useState(null);
+  const imageRef = useRef(null);
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
@@ -92,11 +111,13 @@ const DataArtikel = () => {
 
   const handleModalCreate = async () => {
     setErrors({});
+    setCroppedImagePreview(null);
     setDatas({
       idAdminPuskesmas: 0,
       judul: "",
       isi: "",
       ringkasan: "",
+      banner: "",
     });
     setVisible(true);
     setIsEditMode(false);
@@ -128,7 +149,16 @@ const DataArtikel = () => {
     try {
       setButtonLoading(true);
       artikelCreateSchemaSuperAdmin.parse(datas);
-      const response = await createArtikel(datas);
+
+      const formData = new FormData();
+      formData.append("judul", datas.judul);
+      formData.append("isi", datas.isi);
+      formData.append("ringkasan", datas.ringkasan);
+      formData.append("idAdminPuskesmas", datas.idAdminPuskesmas);
+      if (datas.banner instanceof Blob) {
+        formData.append("banner", datas.banner);
+      }
+      const response = await createArtikel(formData);
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
@@ -181,6 +211,7 @@ const DataArtikel = () => {
 
   const handleModalUpdate = async (data) => {
     setBeforeModalLoading(true);
+    setCroppedImagePreview(null);
     setErrors({});
     try {
       const dataResponse = await getArtikelById(data.id);
@@ -190,6 +221,7 @@ const DataArtikel = () => {
           judul: dataResponse.judul,
           isi: dataResponse.isi,
           ringkasan: dataResponse.ringkasan,
+          banner: dataResponse.banner,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -262,6 +294,30 @@ const DataArtikel = () => {
     setCurrentName(data.judul);
     setVisibleDelete(true);
     setBeforeModalLoading(false);
+  };
+
+  const handleImageSelect = (e) => {
+    setSelectedImage(e.files[0]);
+    setVisibleCroppedImage(true);
+  };
+
+  const handleCropComplete = async () => {
+    if (imageRef.current && crop.width && crop.height) {
+      const croppedImgBlob = await getCroppedImg(imageRef.current, crop);
+      const file = new File([croppedImgBlob], "banner.webp", {
+        type: "image/webp",
+      });
+
+      setDatas((prev) => ({
+        ...prev,
+        banner: file,
+      }));
+
+      const previewUrl = URL.createObjectURL(croppedImgBlob);
+      setCroppedImagePreview(previewUrl);
+
+      setVisibleCroppedImage(false);
+    }
   };
 
   const handleDelete = async () => {
@@ -436,6 +492,11 @@ const DataArtikel = () => {
     return <span>Pilih Puskesmas</span>;
   };
 
+  const handleModalCroppedImageClosed = () => {
+    setVisibleCroppedImage(false);
+    setSelectedImage(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
       <Toast
@@ -520,6 +581,39 @@ const DataArtikel = () => {
           {errors.judul && (
             <small className="p-error -mt-3 text-sm">{errors.judul}</small>
           )}
+
+          <label htmlFor="" className="-mb-3">
+            Pilih Banner Artikel:
+          </label>
+
+          <FileUpload
+            mode="basic"
+            name="demo[]"
+            accept="image/*"
+            auto
+            chooseLabel="Pilih"
+            onSelect={handleImageSelect}
+          />
+
+          {croppedImagePreview && (
+            <div className="">
+              <img
+                src={croppedImagePreview}
+                alt="Cropped Preview"
+                className="w-full h-auto"
+              />
+            </div>
+          )}
+
+          {!croppedImagePreview && datas.banner && (
+            <div className="">
+              <img
+                src={`${baseUrl}${datas.banner}`}
+                alt="Cropped Preview"
+                className="w-full h-auto"
+              />
+            </div>
+          )}
           <label htmlFor="" className="-mb-3">
             Ringkasan Artikel:
           </label>
@@ -574,6 +668,49 @@ const DataArtikel = () => {
             )}
           </Button>
         </div>
+      </Dialog>
+
+      <Dialog
+        header="Preview banner"
+        visible={visibleCroppedImage}
+        onHide={handleModalCroppedImageClosed}
+        style={{ width: "50vw", maxWidth: "900px" }}
+        modal
+      >
+        {selectedImage && (
+          <div className="realtive w-[100%] h-[100%] ">
+            <ReactCrop
+              crop={crop}
+              onChange={(newCrop) => setCrop(newCrop)}
+              aspect={16 / 9}
+              keepSelection
+              locked={false}
+            >
+              <img
+                ref={imageRef}
+                src={URL.createObjectURL(selectedImage)}
+                alt="Crop Preview"
+                className="w-full h-full object-cover"
+              />
+            </ReactCrop>
+          </div>
+        )}
+        <Button
+          disabled={isButtonLoading}
+          className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+          onClick={handleCropComplete}
+        >
+          {isButtonLoading ? (
+            <ProgressSpinner
+              style={{ width: "24px", height: "24px" }}
+              strokeWidth="8"
+              animationDuration="1s"
+              color="white"
+            />
+          ) : (
+            <p>Crop</p>
+          )}
+        </Button>
       </Dialog>
 
       <Dialog

@@ -9,8 +9,10 @@ import { convertUnixToHuman } from "../../../utils/DateConverter";
 import { Editor } from "primereact/editor";
 
 const preloadQuill = () => {
-  return import('quill')
+  return import("quill");
 };
+
+const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
 const DetailArtikel = () => {
   const { id } = useParams();
@@ -34,15 +36,15 @@ const DetailArtikel = () => {
       setIsConnectionError(false);
     } catch (error) {
       if (
-          error.code === "ERR_NETWORK" ||
-          error.code === "ETIMEDOUT" ||
-          error.code === "ECONNABORTED" ||
-          error.code === "ENOTFOUND" ||
-          error.code === "ECONNREFUSED" ||
-          error.code === "EAI_AGAIN" ||
-          error.code === "EHOSTUNREACH" ||
-          error.code === "ECONNRESET" ||
-          error.code === "EPIPE"
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
       ) {
         setIsConnectionError(true);
       } else if (error.response) {
@@ -66,11 +68,11 @@ const DetailArtikel = () => {
 
   if (loading || !quillLoaded) {
     return (
-        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
-          <div className="p-8 w-full min-h-screen flex items-center justify-center bg-white dark:bg-blackHover rounded-xl">
-            <ProgressSpinner />
-          </div>
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen flex justify-center items-center">
+        <div className="p-8 w-full min-h-screen flex items-center justify-center bg-white dark:bg-blackHover rounded-xl">
+          <ProgressSpinner />
         </div>
+      </div>
     );
   }
 
@@ -89,34 +91,43 @@ const DetailArtikel = () => {
   };
 
   return (
-      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
-        <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-10">
-          <div className="flex flex-col items-start justify-center gap-4">
-            <div className="flex flex-col gap-2 md:gap-4">
-              <div className="md:text-6xl text-4xl text-justify font-semibold">
-                {data.judul}
+    <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
+      <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-4 md:p-10 md:px-20">
+        <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-8 gap-4">
+          <div className="flex flex-col gap-2 md:gap-4">
+            {data.banner && (
+              <div className=" w-full h-80 flex justify-center items-center">
+                <img
+                  src={`${baseUrl}${data.banner}`}
+                  alt={data.judul}
+                  className="object-cover w-full h-full"
+                />
               </div>
-              <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-              <span className="text-lg">
+            )}
+            <div className="md:text-6xl text-4xl md:text-justify font-semibold">
+              {data.judul}
+            </div>
+            <div className="flex md:gap-2 gap-1 justify-start md:items-center items-start">
+              <span className="text-md">
                 {data.adminPuskesmas.namaPuskesmas}
               </span>
-                <span className="md:block hidden">-</span>
-                <span className="text-lg text-justify">{tanggal}</span>
-              </div>
+              <span>-</span>
+              <span className="text-md text-justify">{tanggal}</span>
             </div>
-            <div className="w-full">
-              <Editor
-                  className={`text-black dark:text-white`}
-                  value={data.isi}
-                  readOnly={true}
-                  style={{ height: "auto" }}
-                  modules={editorModules}
-                  headerTemplate={<></>}
-              />
-            </div>
+          </div>
+          <div className="w-full">
+            <Editor
+              className={`text-black dark:text-white`}
+              value={data.isi}
+              readOnly={true}
+              style={{ height: "auto" }}
+              modules={editorModules}
+              headerTemplate={<></>}
+            />
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

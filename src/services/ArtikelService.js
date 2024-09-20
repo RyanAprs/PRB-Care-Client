@@ -15,6 +15,16 @@ const getRequestHeaders = () => {
   };
 };
 
+const getRequestHeadersCreateAndUpdateArtikel = () => {
+  const token = getToken();
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  };
+};
+
 export const getAllArtikel = async () => {
   const response = await axios.get(
     `${API_BASE_URI}/api/artikel`,
@@ -67,7 +77,7 @@ export const createArtikel = async (datas) => {
   const response = await axios.post(
     `${API_BASE_URI}/api/artikel`,
     datas,
-    getRequestHeaders()
+    getRequestHeadersCreateAndUpdateArtikel()
   );
   return response;
 };
@@ -76,7 +86,7 @@ export const updateArtikel = async (id, datas) => {
   const response = await axios.patch(
     `${API_BASE_URI}/api/artikel/${id}`,
     datas,
-    getRequestHeaders()
+    getRequestHeadersCreateAndUpdateArtikel()
   );
   return response;
 };

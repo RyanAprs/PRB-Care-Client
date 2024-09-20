@@ -23,8 +23,12 @@ import {
   getArtikelById,
   updateArtikel,
 } from "../../../services/ArtikelService";
-import { InputTextarea } from "primereact/inputtextarea";
 import { artikelCreateSchema } from "../../../validations/ArtikelSchema";
+import { FileUpload } from "primereact/fileupload";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
+import { InputTextarea } from "primereact/inputtextarea";
+import { getCroppedImg } from "../../../utils/GetCroppedImage";
 
 const DataArtikel = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -37,6 +41,7 @@ const DataArtikel = () => {
     judul: "",
     isi: "",
     ringkasan: "",
+    banner: "",
   });
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState("");
@@ -47,6 +52,21 @@ const DataArtikel = () => {
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setButtonLoading] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [visibleCroppedImage, setVisibleCroppedImage] = useState(false);
+  const [crop, setCrop] = useState({
+    unit: "px",
+    width: 1200,
+    height: 630,
+    x: 0,
+    y: 0,
+    aspect: 16 / 9,
+  });
+  const [croppedImagePreview, setCroppedImagePreview] = useState(null);
+  const imageRef = useRef(null);
+
+  const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
+
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
@@ -59,6 +79,8 @@ const DataArtikel = () => {
     try {
       setLoading(true);
       const response = await getAllArtikelByAdminPuskesmas(id);
+      console.log(response);
+
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
@@ -88,10 +110,12 @@ const DataArtikel = () => {
 
   const handleModalCreate = () => {
     setErrors({});
+    setCroppedImagePreview(null);
     setDatas({
       judul: "",
       isi: "",
       ringkasan: "",
+      banner: "",
     });
     setVisible(true);
     setIsEditMode(false);
@@ -101,7 +125,15 @@ const DataArtikel = () => {
     try {
       setButtonLoading(true);
       artikelCreateSchema.parse(datas);
-      const response = await createArtikel(datas);
+      const formData = new FormData();
+      formData.append("judul", datas.judul);
+      formData.append("isi", datas.isi);
+      formData.append("ringkasan", datas.ringkasan);
+      if (datas.banner instanceof Blob) {
+        formData.append("banner", datas.banner);
+      }
+      const response = await createArtikel(formData);
+
       if (response.status === 201) {
         toast.current.show({
           severity: "success",
@@ -111,6 +143,7 @@ const DataArtikel = () => {
         });
         setVisible(false);
         setButtonLoading(false);
+
         try {
           setLoading(true);
           const response = await getAllArtikelByAdminPuskesmas(id);
@@ -119,6 +152,7 @@ const DataArtikel = () => {
           setLoading(false);
           setisConnectionError(false);
         } catch (error) {
+          // Penanganan kesalahan koneksi
           if (
             error.code === "ERR_NETWORK" ||
             error.code === "ETIMEDOUT" ||
@@ -154,6 +188,7 @@ const DataArtikel = () => {
 
   const handleModalUpdate = async (data) => {
     setBeforeModalLoading(true);
+    setCroppedImagePreview(null);
     setErrors({});
     try {
       const dataResponse = await getArtikelById(data.id);
@@ -162,6 +197,7 @@ const DataArtikel = () => {
           judul: dataResponse.judul,
           isi: dataResponse.isi,
           ringkasan: dataResponse.ringkasan,
+          banner: dataResponse.banner,
         });
         setCurrentId(data.id);
         setIsEditMode(true);
@@ -281,6 +317,30 @@ const DataArtikel = () => {
     }
   };
 
+  const handleImageSelect = (e) => {
+    setSelectedImage(e.files[0]);
+    setVisibleCroppedImage(true);
+  };
+
+  const handleCropComplete = async () => {
+    if (imageRef.current && crop.width && crop.height) {
+      const croppedImgBlob = await getCroppedImg(imageRef.current, crop);
+      const file = new File([croppedImgBlob], "banner.webp", {
+        type: "image/webp",
+      });
+
+      setDatas((prev) => ({
+        ...prev,
+        banner: file,
+      }));
+
+      const previewUrl = URL.createObjectURL(croppedImgBlob);
+      setCroppedImagePreview(previewUrl);
+
+      setVisibleCroppedImage(false);
+    }
+  };
+
   const renderHeader = () => {
     return (
       <span className="ql-formats">
@@ -366,7 +426,7 @@ const DataArtikel = () => {
 
   if (loading)
     return (
-      <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+      <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
         <Toast
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
@@ -435,6 +495,7 @@ const DataArtikel = () => {
           {errors.judul && (
             <small className="p-error -mt-3 text-sm">{errors.judul}</small>
           )}
+
           <label htmlFor="" className="-mb-3">
             Ringkasan Artikel:
           </label>
@@ -454,6 +515,39 @@ const DataArtikel = () => {
 
           {errors.ringkasan && (
             <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
+          )}
+
+          <label htmlFor="" className="-mb-3">
+            Pilih Banner Artikel:
+          </label>
+
+          <FileUpload
+            mode="basic"
+            name="demo[]"
+            accept="image/*"
+            auto
+            chooseLabel="Pilih"
+            onSelect={handleImageSelect}
+          />
+
+          {croppedImagePreview && (
+            <div className="">
+              <img
+                src={croppedImagePreview}
+                alt="Cropped Preview"
+                className="w-full h-auto"
+              />
+            </div>
+          )}
+
+          {!croppedImagePreview && datas.banner && (
+            <div className="">
+              <img
+                src={`${baseUrl}${datas.banner}`}
+                alt="Cropped Preview"
+                className="w-full h-auto"
+              />
+            </div>
           )}
 
           <Editor
@@ -490,7 +584,49 @@ const DataArtikel = () => {
           </Button>
         </div>
       </Dialog>
-
+      <Dialog
+        header="Preview banner"
+        visible={visibleCroppedImage}
+        onHide={() => setVisibleCroppedImage(false)}
+        style={{ width: "50vw", maxWidth: "900px" }}
+        modal
+      >
+        {selectedImage && (
+          <div className="realtive w-[100%] h-[100%] ">
+            <ReactCrop
+              crop={crop}
+              onChange={(newCrop) => setCrop(newCrop)}
+              aspect={16 / 9}
+              keepSelection
+              locked={false}
+            >
+              <img
+                ref={imageRef}
+                src={URL.createObjectURL(selectedImage)}
+                alt="Crop Preview"
+                className="w-full h-full object-cover"
+              />
+            </ReactCrop>
+          </div>
+        )}
+        <Button
+          disabled={isButtonLoading}
+          className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+          onClick={handleCropComplete}
+        >
+          {isButtonLoading ? (
+            <ProgressSpinner
+              style={{ width: "24px", height: "24px" }}
+              strokeWidth="8"
+              animationDuration="1s"
+              color="white"
+            />
+          ) : (
+            <p>Crop</p>
+          )}
+        </Button>
+      </Dialog>
+      ;
       <Dialog
         header="Hapus Data Artikel"
         visible={visibleDelete}

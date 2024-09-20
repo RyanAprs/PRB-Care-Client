@@ -11,6 +11,8 @@ import ErrorConnection from "../../../components/errorConnection/ErrorConnection
 import { InputText } from "primereact/inputtext";
 import { Search } from "lucide-react";
 
+const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
+
 export default function Artikel() {
   const { token, dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
@@ -32,6 +34,8 @@ export default function Artikel() {
     try {
       setLoading(true);
       const response = await getAllArtikel();
+      console.log(response);
+
       const transformedData = response.map((item, index) => ({
         ...item,
         nomor: index,
@@ -90,34 +94,36 @@ export default function Artikel() {
 
   const itemTemplate = (data) => {
     return (
-      <div
-        className={`col-12 font-poppins mx-4 mb-16`}
-        key={data.id}
-
-      >
+      <div className={`col-12 font-poppins mx-4 mb-16`} key={data.id}>
         <div className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border">
-          <div className="flex flex-col w-full justify-content-between align-items-center xl:align-items-start flex-1 md:gap-8 gap-4">
-            <div className="flex flex-col align-items-center sm:align-items-start gap-3">
-              <div
-                className="md:text-6xl text-4xl  text-justify font-semibold"
-              >
+          <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-8 gap-4">
+            <div className="flex flex-col gap-2 md:gap-4">
+              {data.banner && (
+                <div className=" w-full h-80 flex justify-center items-center">
+                  <img
+                    src={`${baseUrl}${data.banner}`}
+                    alt={data.judul}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              )}
+              <div className="md:text-6xl text-4xl md:text-justify font-semibold">
                 {data.judul}
               </div>
-              <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-                <span className="text-lg">
+              <div className="flex md:flex-row f md:gap-2 gap-1 justify-start md:items-center items-start">
+                <span className="md:text-lg text-md">
                   {data.adminPuskesmas.namaPuskesmas}
                 </span>
-                <span className={`md:block hidden`}>-</span>
-                <span className="text-lg text-justify ">
+                <span>-</span>
+                <span className="md:text-lg text-md text-justify ">
                   {data.tanggalPublikasi}
                 </span>
               </div>
-              <p
-                className="mt-2 text-xl text-justify"
-              >
-                {data.ringkasan}
-              </p>
+              {!data.banner && (
+                <p className="mt-2 text-xl text-justify">{data.ringkasan}</p>
+              )}
             </div>
+
             <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
               <Button
                 label="Baca Selengkapnya"
@@ -181,51 +187,52 @@ export default function Artikel() {
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit w-full md:max-w-screen ">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
         {data.length > 0 ? (
-          <div className="flex flex-col  gap-4 h-full p-7">
+          <div className="flex flex-col  gap-4 h-full p-7 md:px-20 px-0">
             <div className="flex flex-col md:flex-row md:justify-between p-4  items-center justify-center gap-4">
               <div className="p-inputgroup md:w-1/4 w-full">
                 <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
-                  <Search size={16}/>
+                  <Search size={16} />
                 </span>
                 <InputText
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search..."
-                    className="p-inputtext-sm p-2"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="p-inputtext-sm p-2"
                 />
               </div>
 
               <Dropdown
-                  value={sortOrder}
-                  options={sortOptions}
-                  onChange={(e) => setSortOrder(e.value)}
-                  placeholder="Pilih dan Urutkan"
+                value={sortOrder}
+                options={sortOptions}
+                onChange={(e) => setSortOrder(e.value)}
+                placeholder="Pilih dan Urutkan"
               />
             </div>
             <DataView
-                value={sortData()}
-                itemTemplate={itemTemplate}
-                paginator={data.length > 2}
-                rows={rows}
-                first={first}
-                onPage={onPageChange}
-                emptyMessage={<div className="text-center text-gray-500 dark:text-gray-400">
+              value={sortData()}
+              itemTemplate={itemTemplate}
+              paginator={data.length > 2}
+              rows={rows}
+              first={first}
+              onPage={onPageChange}
+              emptyMessage={
+                <div className="text-center text-gray-500 dark:text-gray-400">
                   Tidak ada data
-                </div>}
-                totalRecords={data.length}
+                </div>
+              }
+              totalRecords={data.length}
             />
           </div>
         ) : (
-            <div
-                className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
-              <img src={img} className="w-52" alt="img"/>
-              <div>
-                Belum Ada Data
-                <p className="font-medium text-xl">
-                  Data akan muncul di sini ketika tersedia.
-                </p>
-              </div>
+          <div className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
+            <img src={img} className="w-52" alt="img" />
+            <div>
+              Belum Ada Data
+              <p className="font-medium text-xl">
+                Data akan muncul di sini ketika tersedia.
+              </p>
             </div>
+          </div>
         )}
       </div>
     </div>
