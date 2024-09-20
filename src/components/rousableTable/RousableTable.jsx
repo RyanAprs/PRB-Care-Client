@@ -15,6 +15,8 @@ import {
   FileText,
 } from "lucide-react";
 
+const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
+
 export default function ReusableTable({
   data,
   columns,
@@ -262,6 +264,21 @@ export default function ReusableTable({
           {valueString}
         </a>
       );
+    }
+    if (field.includes("banner")) {
+      if (valueString) {
+        return (
+          <img
+            src={`${baseUrl}${valueString}`}
+            alt="banner artikel"
+            className="w-52 h-full"
+          />
+        );
+      } else {
+        return (
+          <p className="flex justify-center items-center">Tidak ada gambar</p>
+        );
+      }
     }
     if (
       field === "ringkasan" ||

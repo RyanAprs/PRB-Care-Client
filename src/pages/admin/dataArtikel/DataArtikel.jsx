@@ -414,6 +414,7 @@ const DataArtikel = () => {
     { header: "Penulis", field: "adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Publikasi", field: "tanggalPublikasi" },
     { header: "Ringkasan", field: "ringkasan" },
+    { header: "Banner", field: "banner" },
   ];
 
   const itemTemplatePuskesmas = (option) => {

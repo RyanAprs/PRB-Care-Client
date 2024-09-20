@@ -385,6 +385,7 @@ const DataArtikel = () => {
     { header: "Judul", field: "judul" },
     { header: "Tanggal Publikasi", field: "tanggalPublikasi" },
     { header: "Ringkasan", field: "ringkasan" },
+    { header: "Banner", field: "banner" },
   ];
 
   return (
