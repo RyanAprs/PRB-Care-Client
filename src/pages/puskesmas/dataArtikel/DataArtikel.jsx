@@ -56,8 +56,8 @@ const DataArtikel = () => {
   const [visibleCroppedImage, setVisibleCroppedImage] = useState(false);
   const [crop, setCrop] = useState({
     unit: "px",
-    width: 1200,
-    height: 630,
+    width: 600,
+    height: 315,
     x: 0,
     y: 0,
     aspect: 16 / 9,
@@ -79,8 +79,6 @@ const DataArtikel = () => {
     try {
       setLoading(true);
       const response = await getAllArtikelByAdminPuskesmas(id);
-      console.log(response);
-
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
@@ -152,7 +150,6 @@ const DataArtikel = () => {
           setLoading(false);
           setisConnectionError(false);
         } catch (error) {
-          // Penanganan kesalahan koneksi
           if (
             error.code === "ERR_NETWORK" ||
             error.code === "ETIMEDOUT" ||
@@ -318,15 +315,38 @@ const DataArtikel = () => {
   };
 
   const handleImageSelect = (e) => {
-    setSelectedImage(e.files[0]);
+    const file = e.files[0];
+
+    const validFormats = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
+    if (!validFormats.includes(file.type)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Gagal",
+        detail: "Format gambar tidak valid",
+        life: 3000,
+      });
+      return;
+    }
+
+    if (file.size > 500 * 1024) {
+      toast.current.show({
+        severity: "error",
+        summary: "Gagal",
+        detail: "Ukuran gambar terlalu besar",
+        life: 3000,
+      });
+      return;
+    }
+
+    setSelectedImage(file);
     setVisibleCroppedImage(true);
   };
 
   const handleCropComplete = async () => {
     if (imageRef.current && crop.width && crop.height) {
       const croppedImgBlob = await getCroppedImg(imageRef.current, crop);
-      const file = new File([croppedImgBlob], "banner.webp", {
-        type: "image/webp",
+      const file = new File([croppedImgBlob], "banner.jpg", {
+        type: "image/jpeg",
       });
 
       setDatas((prev) => ({
@@ -447,6 +467,11 @@ const DataArtikel = () => {
     { header: "Ringkasan", field: "ringkasan" },
     { header: "Banner", field: "banner" },
   ];
+
+  const handleModalCroppedImageClosed = () => {
+    setVisibleCroppedImage(false);
+    setSelectedImage(null);
+  };
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
@@ -587,27 +612,25 @@ const DataArtikel = () => {
       <Dialog
         header="Preview banner"
         visible={visibleCroppedImage}
-        onHide={() => setVisibleCroppedImage(false)}
-        style={{ width: "50vw", maxWidth: "900px" }}
+        onHide={handleModalCroppedImageClosed}
         modal
+        className="md:w-1/2 w-full "
       >
         {selectedImage && (
-          <div className="realtive w-[100%] h-[100%] ">
-            <ReactCrop
-              crop={crop}
-              onChange={(newCrop) => setCrop(newCrop)}
-              aspect={16 / 9}
-              keepSelection
-              locked={false}
-            >
-              <img
-                ref={imageRef}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Crop Preview"
-                className="w-full h-full object-cover"
-              />
-            </ReactCrop>
-          </div>
+          <ReactCrop
+            crop={crop}
+            onChange={(newCrop) => setCrop(newCrop)}
+            aspect={16 / 9}
+            keepSelection
+            locked={false}
+          >
+            <img
+              ref={imageRef}
+              src={URL.createObjectURL(selectedImage)}
+              alt="Crop Preview"
+              className="w-full h-full"
+            />
+          </ReactCrop>
         )}
         <Button
           disabled={isButtonLoading}
