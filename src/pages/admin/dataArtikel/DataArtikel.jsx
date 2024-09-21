@@ -27,10 +27,8 @@ import {
 import { InputTextarea } from "primereact/inputtextarea";
 import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { Dropdown } from "primereact/dropdown";
-import ReactCrop from "react-image-crop";
-import "react-image-crop/dist/ReactCrop.css";
-import { FileUpload } from "primereact/fileupload";
-import { getCroppedImg } from "../../../utils/GetCroppedImage";
+import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
@@ -56,20 +54,14 @@ const DataArtikel = () => {
   const title = "Artikel";
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
-  const [isButtonLoading, setButtonLoading] = useState(null);
+  const [isButtonLoading, setIsButtonLoading] = useState(null);
   const [adminPuskesmas, setAdminPuskesmas] = useState([]);
+  const [visibleCropImage, setVisibleCropImage] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
-  const [visibleCroppedImage, setVisibleCroppedImage] = useState(false);
-  const [crop, setCrop] = useState({
-    unit: "px",
-    width: 600,
-    height: 315,
-    x: 0,
-    y: 0,
-    aspect: 16 / 9,
-  });
-  const [croppedImagePreview, setCroppedImagePreview] = useState(null);
+  const [croppedImage, setCroppedImage] = useState(null);
   const imageRef = useRef(null);
+  const cropperRef = useRef(null);
+
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
     if (a.status > b.status) return 1;
@@ -111,7 +103,12 @@ const DataArtikel = () => {
 
   const handleModalCreate = async () => {
     setErrors({});
-    setCroppedImagePreview(null);
+    setCroppedImage(null);
+    setSelectedImage(null);
+    if (cropperRef.current) {
+      cropperRef.current.destroy();
+      cropperRef.current = null;
+    }
     setDatas({
       idAdminPuskesmas: 0,
       judul: "",
@@ -147,7 +144,7 @@ const DataArtikel = () => {
 
   const handleCreate = async () => {
     try {
-      setButtonLoading(true);
+      setIsButtonLoading(true);
       artikelCreateSchemaSuperAdmin.parse(datas);
 
       const formData = new FormData();
@@ -167,7 +164,7 @@ const DataArtikel = () => {
           life: 3000,
         });
         setVisible(false);
-        setButtonLoading(false);
+        setIsButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllArtikel();
@@ -194,7 +191,7 @@ const DataArtikel = () => {
         }
       }
     } catch (error) {
-      setButtonLoading(false);
+      setIsButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -211,8 +208,13 @@ const DataArtikel = () => {
 
   const handleModalUpdate = async (data) => {
     setBeforeModalLoading(true);
-    setCroppedImagePreview(null);
     setErrors({});
+    setCroppedImage(null);
+    setSelectedImage(null);
+    if (cropperRef.current) {
+      cropperRef.current.destroy();
+      cropperRef.current = null;
+    }
     try {
       const dataResponse = await getArtikelById(data.id);
       if (dataResponse) {
@@ -236,7 +238,7 @@ const DataArtikel = () => {
 
   const handleUpdate = async () => {
     try {
-      setButtonLoading(true);
+      setIsButtonLoading(true);
       artikelCreateSchemaSuperAdmin.parse(datas);
       const response = await updateArtikel(currentId, datas);
       if (response.status === 200) {
@@ -247,7 +249,7 @@ const DataArtikel = () => {
           life: 3000,
         });
         setVisible(false);
-        setButtonLoading(false);
+        setIsButtonLoading(false);
         try {
           setLoading(true);
           const response = await getAllArtikel();
@@ -274,7 +276,7 @@ const DataArtikel = () => {
         }
       }
     } catch (error) {
-      setButtonLoading(false);
+      setIsButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
         error.errors.forEach((e) => {
@@ -298,7 +300,7 @@ const DataArtikel = () => {
 
   const handleDelete = async () => {
     try {
-      setButtonLoading(true);
+      setIsButtonLoading(true);
       const response = await deleteArtikel(currentId);
       if (response.status === 200) {
         setVisibleDelete(false);
@@ -337,54 +339,7 @@ const DataArtikel = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
-      setButtonLoading(false);
-    }
-  };
-
-  const handleImageSelect = (e) => {
-    const file = e.files[0];
-
-    const validFormats = ["image/jpeg", "image/png", "image/webp", "image/jpg"];
-    if (!validFormats.includes(file.type)) {
-      toast.current.show({
-        severity: "error",
-        summary: "Gagal",
-        detail: "Format gambar tidak valid",
-        life: 3000,
-      });
-      return;
-    }
-
-    if (file.size > 500 * 1024) {
-      toast.current.show({
-        severity: "error",
-        summary: "Gagal",
-        detail: "Ukuran gambar terlalu besar",
-        life: 3000,
-      });
-      return;
-    }
-
-    setSelectedImage(file);
-    setVisibleCroppedImage(true);
-  };
-
-  const handleCropComplete = async () => {
-    if (imageRef.current && crop.width && crop.height) {
-      const croppedImgBlob = await getCroppedImg(imageRef.current, crop);
-      const file = new File([croppedImgBlob], "banner.jpg", {
-        type: "image/jpeg",
-      });
-
-      setDatas((prev) => ({
-        ...prev,
-        banner: file,
-      }));
-
-      const previewUrl = URL.createObjectURL(croppedImgBlob);
-      setCroppedImagePreview(previewUrl);
-
-      setVisibleCroppedImage(false);
+      setIsButtonLoading(false);
     }
   };
 
@@ -469,6 +424,105 @@ const DataArtikel = () => {
     );
   };
 
+  useEffect(() => {
+    if (selectedImage && imageRef.current) {
+      if (!cropperRef.current) {
+        cropperRef.current = new Cropper(imageRef.current, {
+          aspectRatio: 1200 / 630,
+          viewMode: 1,
+          autoCropArea: 1,
+          movable: true,
+          zoomable: true,
+          scalable: false,
+          cropBoxMovable: true,
+          cropBoxResizable: true,
+          guides: true,
+          highlight: true,
+          background: true,
+        });
+      }
+    }
+  }, [selectedImage]);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+
+    const validFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    if (!validFormats.includes(file.type)) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Format gambar tidak valid",
+      });
+      setSelectedImage(null);
+      return;
+    }
+
+    if (file.size > 500 * 1024) {
+      toast.current.show({
+        severity: "error",
+        summary: "Error",
+        detail:
+          "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
+      });
+      setSelectedImage(null);
+
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setVisibleCropImage(true);
+
+      if (cropperRef.current) {
+        cropperRef.current.reset();
+        cropperRef.current.setAspectRatio(1200 / 630);
+      }
+      setSelectedImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleCrop = async () => {
+    if (cropperRef.current) {
+      const canvas = cropperRef.current.getCroppedCanvas({
+        width: 1200,
+        height: 630,
+      });
+
+      canvas.toBlob(
+        async (blob) => {
+          if (blob) {
+            const file = new File([blob], "banner.jpg", {
+              type: "image/jpeg",
+            });
+
+            setDatas((prev) => ({
+              ...prev,
+              banner: file,
+            }));
+
+            const previewUrl = URL.createObjectURL(blob);
+            setCroppedImage(previewUrl);
+          }
+        },
+        "image/jpeg",
+        1
+      );
+    }
+
+    setVisibleCropImage(false);
+  };
+
+  const handleCloseCropModal = () => {
+    setVisibleCropImage(false);
+
+    if (cropperRef.current) {
+      cropperRef.current.destroy();
+      cropperRef.current = null;
+    }
+  };
+
   const header = renderHeader();
 
   if (loading)
@@ -513,11 +567,6 @@ const DataArtikel = () => {
       );
     }
     return <span>Pilih Puskesmas</span>;
-  };
-
-  const handleModalCroppedImageClosed = () => {
-    setVisibleCroppedImage(false);
-    setSelectedImage(null);
   };
 
   return (
@@ -609,34 +658,33 @@ const DataArtikel = () => {
             Pilih Banner Artikel:
           </label>
 
-          <FileUpload
-            mode="basic"
-            name="demo[]"
-            accept="image/*"
-            auto
-            chooseLabel="Pilih"
-            onSelect={handleImageSelect}
-          />
+          <div className="flex flex-col gap-4">
+            <input
+              type="file"
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              onChange={handleImageChange}
+            />
 
-          {croppedImagePreview && (
-            <div className="">
-              <img
-                src={croppedImagePreview}
-                alt="Cropped Preview"
-                className="w-full h-auto"
-              />
-            </div>
-          )}
-
-          {!croppedImagePreview && datas.banner && (
-            <div className="">
+            {!selectedImage && datas.banner && (
               <img
                 src={`${baseUrl}${datas.banner}`}
-                alt="Cropped Preview"
-                className="w-full h-auto"
+                alt="Banner"
+                style={{ maxWidth: "100%" }}
               />
-            </div>
-          )}
+            )}
+
+            {croppedImage && (
+              <div>
+                <h3>Hasil Cropping:</h3>
+                <img
+                  src={croppedImage}
+                  alt="Cropped"
+                  style={{ maxWidth: "100%" }}
+                />
+              </div>
+            )}
+          </div>
+
           <label htmlFor="" className="-mb-3">
             Ringkasan Artikel:
           </label>
@@ -694,44 +742,52 @@ const DataArtikel = () => {
       </Dialog>
 
       <Dialog
-        header="Preview banner"
-        visible={visibleCroppedImage}
-        onHide={handleModalCroppedImageClosed}
-        modal
+        header="Preview Gambar"
+        visible={visibleCropImage}
         className="md:w-1/2 w-full "
+        onHide={handleCloseCropModal}
+        blockScroll={true}
+        onShow={() => {
+          if (
+            selectedImage &&
+            imageRef.current &&
+            cropperRef.current === null
+          ) {
+            cropperRef.current = new Cropper(imageRef.current, {
+              aspectRatio: 1200 / 630,
+              viewMode: 1,
+              autoCropArea: 1,
+              movable: true,
+              zoomable: true,
+              scalable: false,
+              cropBoxMovable: true,
+              cropBoxResizable: true,
+              guides: true,
+              highlight: true,
+              background: true,
+            });
+          }
+        }}
       >
-        {selectedImage && (
-          <ReactCrop
-            crop={crop}
-            onChange={(newCrop) => setCrop(newCrop)}
-            aspect={16 / 9}
-            keepSelection
-            locked={false}
-          >
-            <img
-              ref={imageRef}
-              src={URL.createObjectURL(selectedImage)}
-              alt="Crop Preview"
-              className="w-full h-full"
+        <div className="flex flex-col gap-8">
+          <div>
+            {selectedImage && (
+              <img
+                ref={imageRef}
+                src={selectedImage}
+                alt="Selected"
+                style={{ maxWidth: "100%" }}
+              />
+            )}
+          </div>
+          <div className="flex gap-4 items-end justify-end">
+            <Button
+              label="Crop"
+              onClick={handleCrop}
+              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
             />
-          </ReactCrop>
-        )}
-        <Button
-          disabled={isButtonLoading}
-          className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
-          onClick={handleCropComplete}
-        >
-          {isButtonLoading ? (
-            <ProgressSpinner
-              style={{ width: "24px", height: "24px" }}
-              strokeWidth="8"
-              animationDuration="1s"
-              color="white"
-            />
-          ) : (
-            <p>Crop</p>
-          )}
-        </Button>
+          </div>
+        </div>
       </Dialog>
 
       <Dialog
