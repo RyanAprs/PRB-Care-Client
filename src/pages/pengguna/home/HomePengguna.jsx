@@ -96,13 +96,13 @@ const HomePengguna = () => {
         <div
             className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center"
         >
-          <div className="p-8 flex md:justify-center justify-start items-center gap-7">
+          <div className="md:p-8 p-6 flex md:justify-center justify-start items-center gap-7">
             <motion.div
                 initial="hidden"
                 whileInView="visible"
                 transition={{ duration: 0.6, delay: 0.2 }}
                 variants={fadeInUp}
-                className="flex flex-col justify-start items-center gap-7 md:w-1/2"
+                className="flex flex-col justify-start items-center gap-4 md:w-1/2"
             >
               <img src={img} className="md:hidden w-4/5" alt="img" />
               <h1 className="md:text-6xl text-4xl font-semibold text-justify dark:text-whiteHover">

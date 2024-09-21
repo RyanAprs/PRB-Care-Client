@@ -287,7 +287,8 @@ export default function ReusableTable({
       field === "hasilLab" ||
       field === "hasilEkg" ||
       field === "hasilDiagnosa" ||
-      field === "waktuOperasional"
+      field === "waktuOperasional" ||
+        field === "judul"
     ) {
       return (
         <div className="max-w-96 max-h-36 overflow-x-auto break-words whitespace-normal">
@@ -300,8 +301,8 @@ export default function ReusableTable({
   };
 
   return (
-    <div className="p-4 w-full ">
-      <div className="card p-6 w-full flex flex-col gap-4">
+    <div className="md:p-4 w-full ">
+      <div className="card md:p-6 p-5 w-full flex flex-col gap-4">
         <div className="flex flex-col md:flex-row md:gap-0 gap-4 w-full justify-between items-center md:mb-4">
           <div className="p-inputgroup md:w-1/2">
             <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">

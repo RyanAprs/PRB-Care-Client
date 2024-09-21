@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DataView } from "primereact/dataview";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
@@ -95,38 +95,45 @@ export default function Artikel() {
     return (
       <div className={`col-12 font-poppins mx-4 mb-16`} key={data.id}>
         <div className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border">
-          <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-8 gap-4">
+          <div className="flex flex-col w-full justify-content-center align-items-center flex-1 gap-4 px-2">
             <div className="flex flex-col gap-2 md:gap-4">
-              {data.banner && (
-                <div className=" w-full h-80 flex justify-center items-center">
-                  <img
-                    src={`${baseUrl}${data.banner}`}
-                    alt={data.judul}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-              )}
-              <div className="md:text-6xl text-4xl md:text-justify font-semibold">
+
+              <div className="md:text-6xl text-4xl font-semibold">
                 {data.judul}
               </div>
-              <div className="flex md:flex-row f md:gap-2 gap-1 justify-start md:items-center items-start">
-                <span className="md:text-lg text-md">
+              <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
+                <span className="text-lg">
                   {data.adminPuskesmas.namaPuskesmas}
                 </span>
-                <span>-</span>
-                <span className="md:text-lg text-md text-justify ">
+                <span className={`md:block hidden`}>-</span>
+                <span className="text-lg text-justify ">
                   {data.tanggalPublikasi}
                 </span>
               </div>
-              {!data.banner && (
-                <p className="mt-2 text-xl text-justify">{data.ringkasan}</p>
+              {data.banner && (
+                  <div className=" w-full md:h-80 h-fit  flex justify-center items-center">
+                    <img
+                        src={`${baseUrl}${data.banner}`}
+                        alt={data.judul}
+                        className="object-cover w-full h-full"
+                    />
+                  </div>
               )}
+              <p className="text-xl text-justify" style={{
+                display: '-webkit-box',
+                WebkitLineClamp: 4,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }}>
+                {data.ringkasan}
+              </p>
             </div>
 
             <div className="flex sm:flex-col align-items-center sm:align-items-end gap-3 sm:gap-2">
               <Button
-                label="Baca Selengkapnya"
-                className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-fit w-full flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                  label="Baca Selengkapnya"
+                  className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-fit w-full flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                 onClick={() => handleReadMore(data.id)}
               ></Button>
             </div>
@@ -186,8 +193,8 @@ export default function Artikel() {
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit w-full md:max-w-screen ">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
         {data.length > 0 ? (
-          <div className="flex flex-col  gap-4 h-full p-7 md:px-20 px-0">
-            <div className="flex flex-col md:flex-row md:justify-between p-4  items-center justify-center gap-4">
+          <div className="flex flex-col  h-full md:py-5 md:px-40">
+            <div className="flex flex-col md:flex-row md:justify-between p-6 pb-4  items-center justify-center gap-4">
               <div className="p-inputgroup md:w-1/4 w-full">
                 <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
                   <Search size={16} />
