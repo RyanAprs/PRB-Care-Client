@@ -29,10 +29,11 @@ import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { Dropdown } from "primereact/dropdown";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
-import Quill from 'quill';
-import BlotFormatter from 'quill-blot-formatter';
+import Quill from "quill";
+import BlotFormatter from "quill-blot-formatter";
 import { useCallback } from "react";
 import { debounce } from "lodash";
+import { Plus } from "lucide-react";
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
 const DataArtikel = () => {
@@ -65,32 +66,27 @@ const DataArtikel = () => {
   const imageRef = useRef(null);
   const cropperRef = useRef(null);
 
-
   const handleTextChange = useCallback(
-      debounce((htmlValue) => {
-        setDatas((prev) => ({
-          ...prev,
-          isi: htmlValue,
-        }));
-      },500),
-      []
+    debounce((htmlValue) => {
+      setDatas((prev) => ({
+        ...prev,
+        isi: htmlValue,
+      }));
+    }, 500),
+    []
   );
 
-  const ImageFormatAttributesList = [
-    'height',
-    'width',
-    'style'
-  ];
+  const ImageFormatAttributesList = ["height", "width", "style"];
   const allowedStyles = {
-    display: ['inline'],
-    float: ['left', 'right'],
-    margin: []
+    display: ["inline"],
+    float: ["left", "right"],
+    margin: [],
   };
-  const BaseImageFormat = Quill.import('formats/image');
+  const BaseImageFormat = Quill.import("formats/image");
   class ImageFormat extends BaseImageFormat {
     static formats(domNode) {
       const formats = {};
-      ImageFormatAttributesList.forEach(attribute => {
+      ImageFormatAttributesList.forEach((attribute) => {
         if (domNode.hasAttribute(attribute)) {
           formats[attribute] = domNode.getAttribute(attribute);
         }
@@ -99,18 +95,27 @@ const DataArtikel = () => {
     }
     format(name, value) {
       if (ImageFormatAttributesList.includes(name)) {
-        if (name === 'style' && value) {
-          const styleEntries = value.split(';').map(entry => entry.trim()).filter(Boolean);
+        if (name === "style" && value) {
+          const styleEntries = value
+            .split(";")
+            .map((entry) => entry.trim())
+            .filter(Boolean);
           const newStyles = {};
 
-          styleEntries.forEach(entry => {
-            const [key, val] = entry.split(':').map(item => item.trim());
-            if (allowedStyles[key] && (allowedStyles[key].length === 0 || allowedStyles[key].includes(val))) {
+          styleEntries.forEach((entry) => {
+            const [key, val] = entry.split(":").map((item) => item.trim());
+            if (
+              allowedStyles[key] &&
+              (allowedStyles[key].length === 0 ||
+                allowedStyles[key].includes(val))
+            ) {
               newStyles[key] = val;
             }
           });
-          const styleString = Object.entries(newStyles).map(([key, val]) => `${key}: ${val}`).join('; ');
-          this.domNode.setAttribute('style', styleString);
+          const styleString = Object.entries(newStyles)
+            .map(([key, val]) => `${key}: ${val}`)
+            .join("; ");
+          this.domNode.setAttribute("style", styleString);
         } else if (value) {
           this.domNode.setAttribute(name, value);
         } else {
@@ -122,7 +127,7 @@ const DataArtikel = () => {
     }
   }
   Quill.register(ImageFormat, true);
-  Quill.register('modules/blotFormatter', BlotFormatter);
+  Quill.register("modules/blotFormatter", BlotFormatter);
 
   const customSort = (a, b) => {
     if (a.status < b.status) return -1;
@@ -281,12 +286,12 @@ const DataArtikel = () => {
       const dataResponse = await getArtikelById(data.id);
       if (dataResponse.isi) {
         const parser = new DOMParser();
-        const doc = parser.parseFromString(dataResponse.isi, 'text/html');
+        const doc = parser.parseFromString(dataResponse.isi, "text/html");
 
-        doc.querySelectorAll('img').forEach(img => {
-          if (!img.src.startsWith('data:') && !img.src.startsWith(baseUrl)) {
-            const imageName = img.src.split('/').pop();
-            img.src = baseUrl+imageName;
+        doc.querySelectorAll("img").forEach((img) => {
+          if (!img.src.startsWith("data:") && !img.src.startsWith(baseUrl)) {
+            const imageName = img.src.split("/").pop();
+            img.src = baseUrl + imageName;
           }
         });
 
@@ -316,11 +321,11 @@ const DataArtikel = () => {
       setIsButtonLoading(true);
       artikelCreateSchemaSuperAdmin.parse(datas);
       const parser = new DOMParser();
-      const doc = parser.parseFromString(datas.isi, 'text/html');
+      const doc = parser.parseFromString(datas.isi, "text/html");
 
-      doc.querySelectorAll('img').forEach(img => {
-        if (!img.src.startsWith('data:')) {
-          const imageName = img.src.split('/').pop();
+      doc.querySelectorAll("img").forEach((img) => {
+        if (!img.src.startsWith("data:")) {
+          const imageName = img.src.split("/").pop();
           img.src = imageName;
         }
       });
@@ -432,7 +437,7 @@ const DataArtikel = () => {
 
   const renderHeader = () => {
     return (
-        <span className="ql-formats">
+      <span className="ql-formats">
         <select className="ql-header" aria-label="Heading">
           <option value="1">Heading 1</option>
           <option value="2">Heading 2</option>
@@ -459,51 +464,51 @@ const DataArtikel = () => {
         <button className="ql-code-block" aria-label="Code Block"></button>
 
         <button
-            className="ql-list"
-            value="ordered"
-            aria-label="Ordered List"
+          className="ql-list"
+          value="ordered"
+          aria-label="Ordered List"
         ></button>
         <button
-            className="ql-list"
-            value="bullet"
-            aria-label="Bullet List"
+          className="ql-list"
+          value="bullet"
+          aria-label="Bullet List"
         ></button>
         <button className="ql-indent" value="+1" aria-label="Indent"></button>
         <button className="ql-indent" value="-1" aria-label="Outdent"></button>
         <button className="ql-align" value="" aria-label="Left Align"></button>
         <button
-            className="ql-align"
-            value="center"
-            aria-label="Center Align"
+          className="ql-align"
+          value="center"
+          aria-label="Center Align"
         ></button>
         <button
-            className="ql-align"
-            value="right"
-            aria-label="Right Align"
+          className="ql-align"
+          value="right"
+          aria-label="Right Align"
         ></button>
         <button
-            className="ql-align"
-            value="justify"
-            aria-label="Justify"
+          className="ql-align"
+          value="justify"
+          aria-label="Justify"
         ></button>
 
         <button className="ql-link" aria-label="Link"></button>
-  <button className="ql-image" aria-label="Insert Image"></button>
+        <button className="ql-image" aria-label="Insert Image"></button>
         <select className="ql-color" aria-label="Text Color"></select>
         <select
-            className="ql-background"
-            aria-label="Background Color"
+          className="ql-background"
+          aria-label="Background Color"
         ></select>
 
         <button
-            className="ql-script"
-            value="sub"
-            aria-label="Subscript"
+          className="ql-script"
+          value="sub"
+          aria-label="Subscript"
         ></button>
         <button
-            className="ql-script"
-            value="super"
-            aria-label="Superscript"
+          className="ql-script"
+          value="super"
+          aria-label="Superscript"
         ></button>
 
         <button className="ql-clean" aria-label="Clear Formatting"></button>
@@ -550,7 +555,7 @@ const DataArtikel = () => {
         severity: "error",
         summary: "Error",
         detail:
-            "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
+          "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
       });
       setSelectedImage(null);
       return;
@@ -577,23 +582,23 @@ const DataArtikel = () => {
       });
 
       canvas.toBlob(
-          async (blob) => {
-            if (blob) {
-              const file = new File([blob], "banner.jpg", {
-                type: "image/jpeg",
-              });
+        async (blob) => {
+          if (blob) {
+            const file = new File([blob], "banner.jpg", {
+              type: "image/jpeg",
+            });
 
-              setDatas((prev) => ({
-                ...prev,
-                banner: file,
-              }));
+            setDatas((prev) => ({
+              ...prev,
+              banner: file,
+            }));
 
-              const previewUrl = URL.createObjectURL(blob);
-              setCroppedImage(previewUrl);
-            }
-          },
-          "image/jpeg",
-          1
+            const previewUrl = URL.createObjectURL(blob);
+            setCroppedImage(previewUrl);
+          }
+        },
+        "image/jpeg",
+        1
       );
     }
 
@@ -613,14 +618,14 @@ const DataArtikel = () => {
 
   if (loading)
     return (
-        <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
-          <Toast
-              ref={toast}
-              position={window.innerWidth <= 767 ? "top-center" : "top-right"}
-          />
-          <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
-            <ProgressSpinner/>
-          </div>
+      <div className="min-h-screen flex flex-col gap-4 p-4 z-10 ">
+        <Toast
+          ref={toast}
+          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+        />
+        <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
+          <ProgressSpinner />
+        </div>
       </div>
     );
 
@@ -746,10 +751,18 @@ const DataArtikel = () => {
 
           <div className="flex flex-col gap-4">
             <input
+              id="file-upload"
               type="file"
               accept="image/png, image/jpeg, image/jpg"
               onChange={handleImageChange}
+              className="hidden"
             />
+            <label
+              htmlFor="file-upload"
+              className="cursor-pointer flex items-center w-28 justify-center px-4 py-2 bg-mainGreen text-white rounded-lg hover:bg-darkGreen transition-all"
+            >
+              <Plus size={32} />
+            </label>
 
             {!croppedImage && datas.banner && isEditMode && (
               <img
@@ -799,8 +812,7 @@ const DataArtikel = () => {
             onTextChange={(e) => handleTextChange(e.htmlValue)}
             className={`h-full`}
             modules={{
-              blotFormatter: {
-              }
+              blotFormatter: {},
             }}
           />
 
