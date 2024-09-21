@@ -98,9 +98,11 @@ const DetailArtikel = () => {
             {data.judul}
           </div>
           <div className="flex md:gap-2 gap-1 justify-start md:items-center items-start">
-            <span className="text-md">{data.adminPuskesmas.namaPuskesmas}</span>
+            <span className="md:text-xl text-lg">
+              {data.adminPuskesmas.namaPuskesmas}
+            </span>
             <span>-</span>
-            <span className="text-md text-justify">{tanggal}</span>
+            <span className="md:text-xl text-lg text-justify">{tanggal}</span>
           </div>
           <div className="flex flex-col gap-2 md:gap-4">
             {data.banner && (
