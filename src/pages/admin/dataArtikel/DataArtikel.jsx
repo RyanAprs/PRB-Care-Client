@@ -455,6 +455,7 @@ const DataArtikel = () => {
         detail: "Format gambar tidak valid",
       });
       setSelectedImage(null);
+      setCroppedImage(null);
       return;
     }
 
@@ -466,17 +467,17 @@ const DataArtikel = () => {
           "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
       });
       setSelectedImage(null);
-
+      setCroppedImage(null);
       return;
     }
 
     const reader = new FileReader();
     reader.onload = () => {
       setVisibleCropImage(true);
-
+      setCroppedImage(null);
       if (cropperRef.current) {
-        cropperRef.current.reset();
-        cropperRef.current.setAspectRatio(1200 / 630);
+        cropperRef.current.destroy();
+        cropperRef.current = null;
       }
       setSelectedImage(reader.result);
     };
@@ -661,11 +662,11 @@ const DataArtikel = () => {
           <div className="flex flex-col gap-4">
             <input
               type="file"
-              accept="image/png, image/jpeg, image/jpg, image/webp"
+              accept="image/png, image/jpeg, image/jpg"
               onChange={handleImageChange}
             />
 
-            {!selectedImage && datas.banner && (
+            {!selectedImage && datas.banner && isEditMode && (
               <img
                 src={`${baseUrl}${datas.banner}`}
                 alt="Banner"
@@ -784,7 +785,7 @@ const DataArtikel = () => {
             <Button
               label="Crop"
               onClick={handleCrop}
-              className="p-button-text text-mainGreen dark:text-extraLightGreen hover:text-mainDarkGreen dark:hover:text-lightGreen rounded-xl transition-all"
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
             />
           </div>
         </div>
