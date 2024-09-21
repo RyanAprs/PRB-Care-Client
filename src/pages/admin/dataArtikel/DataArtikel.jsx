@@ -455,7 +455,6 @@ const DataArtikel = () => {
         detail: "Format gambar tidak valid",
       });
       setSelectedImage(null);
-      setCroppedImage(null);
       return;
     }
 
@@ -467,7 +466,6 @@ const DataArtikel = () => {
           "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
       });
       setSelectedImage(null);
-      setCroppedImage(null);
       return;
     }
 
@@ -666,7 +664,7 @@ const DataArtikel = () => {
               onChange={handleImageChange}
             />
 
-            {!selectedImage && datas.banner && isEditMode && (
+            {!croppedImage && datas.banner && isEditMode && (
               <img
                 src={`${baseUrl}${datas.banner}`}
                 alt="Banner"
