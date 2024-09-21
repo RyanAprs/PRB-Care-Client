@@ -121,6 +121,7 @@ const DataArtikel = () => {
   const [croppedImage, setCroppedImage] = useState(null);
   const imageRef = useRef(null);
   const cropperRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
@@ -432,7 +433,7 @@ const DataArtikel = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    const validFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+    const validFormats = ["image/png", "image/jpeg", "image/jpg"];
     if (!validFormats.includes(file.type)) {
       toast.current.show({
         severity: "error",
@@ -500,10 +501,16 @@ const DataArtikel = () => {
 
   const handleCloseCropModal = () => {
     setVisibleCropImage(false);
+    setSelectedImage(null);
+    setCroppedImage(null);
 
     if (cropperRef.current) {
       cropperRef.current.destroy();
       cropperRef.current = null;
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
     }
   };
 
@@ -690,6 +697,7 @@ const DataArtikel = () => {
           <div className="flex flex-col gap-4">
             <input
               id="file-upload"
+              ref={fileInputRef}
               type="file"
               accept="image/png, image/jpeg, image/jpg"
               onChange={handleImageChange}

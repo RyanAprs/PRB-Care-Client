@@ -65,6 +65,7 @@ const DataArtikel = () => {
   const [croppedImage, setCroppedImage] = useState(null);
   const imageRef = useRef(null);
   const cropperRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const handleTextChange = useCallback(
     debounce((htmlValue) => {
@@ -607,10 +608,16 @@ const DataArtikel = () => {
 
   const handleCloseCropModal = () => {
     setVisibleCropImage(false);
+    setSelectedImage(null);
+    setCroppedImage(null);
 
     if (cropperRef.current) {
       cropperRef.current.destroy();
       cropperRef.current = null;
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null;
     }
   };
 
@@ -751,6 +758,7 @@ const DataArtikel = () => {
 
           <div className="flex flex-col gap-4">
             <input
+              ref={fileInputRef}
               id="file-upload"
               type="file"
               accept="image/png, image/jpeg, image/jpg"
