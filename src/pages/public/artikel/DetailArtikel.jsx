@@ -7,10 +7,57 @@ import ErrorConnection from "../../../components/errorConnection/ErrorConnection
 import NotFound from "../../NotFound";
 import { convertUnixToHuman } from "../../../utils/DateConverter";
 import { Editor } from "primereact/editor";
+import Quill from "quill";
 
 const preloadQuill = () => {
   return import("quill");
 };
+const ImageFormatAttributesList = [
+  'height',
+  'width',
+  'style'
+];
+const allowedStyles = {
+  display: ['inline'],
+  float: ['left', 'right'],
+  margin: []
+};
+const BaseImageFormat = Quill.import('formats/image');
+class ImageFormat extends BaseImageFormat {
+  static formats(domNode) {
+    const formats = {};
+    ImageFormatAttributesList.forEach(attribute => {
+      if (domNode.hasAttribute(attribute)) {
+        formats[attribute] = domNode.getAttribute(attribute);
+      }
+    });
+    return formats;
+  }
+  format(name, value) {
+    if (ImageFormatAttributesList.includes(name)) {
+      if (name === 'style' && value) {
+        const styleEntries = value.split(';').map(entry => entry.trim()).filter(Boolean);
+        const newStyles = {};
+
+        styleEntries.forEach(entry => {
+          const [key, val] = entry.split(':').map(item => item.trim());
+          if (allowedStyles[key] && (allowedStyles[key].length === 0 || allowedStyles[key].includes(val))) {
+            newStyles[key] = val;
+          }
+        });
+        const styleString = Object.entries(newStyles).map(([key, val]) => `${key}: ${val}`).join('; ');
+        this.domNode.setAttribute('style', styleString);
+      } else if (value) {
+        this.domNode.setAttribute(name, value);
+      } else {
+        this.domNode.removeAttribute(name);
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+}
+Quill.register(ImageFormat, true);
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
@@ -31,6 +78,19 @@ const DetailArtikel = () => {
     try {
       setLoading(true);
       const response = await getArtikelById(id);
+      if (response.isi) {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response.isi, 'text/html');
+
+        doc.querySelectorAll('img').forEach(img => {
+          if (!img.src.startsWith('data:') && !img.src.startsWith(baseUrl)) {
+            const imageName = img.src.split('/').pop();
+            img.src = baseUrl+imageName;
+          }
+        });
+
+        response.isi = doc.body.innerHTML;
+      }
       setData(response);
       setLoading(false);
       setIsConnectionError(false);
