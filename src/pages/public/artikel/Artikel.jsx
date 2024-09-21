@@ -34,7 +34,6 @@ export default function Artikel() {
     try {
       setLoading(true);
       const response = await getAllArtikel();
-      console.log(response);
 
       const transformedData = response.map((item, index) => ({
         ...item,
@@ -211,7 +210,7 @@ export default function Artikel() {
             <DataView
               value={sortData()}
               itemTemplate={itemTemplate}
-              paginator={data.length > 2}
+              paginator={sortData().length > rows}
               rows={rows}
               first={first}
               onPage={onPageChange}
@@ -220,7 +219,7 @@ export default function Artikel() {
                   Tidak ada data
                 </div>
               }
-              totalRecords={data.length}
+              totalRecords={sortData().length}
             />
           </div>
         ) : (
