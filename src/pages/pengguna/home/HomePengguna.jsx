@@ -102,7 +102,7 @@ const HomePengguna = () => {
                 whileInView="visible"
                 transition={{ duration: 0.6, delay: 0.2 }}
                 variants={fadeInUp}
-                className="flex flex-col justify-start items-center gap-4 md:w-1/2"
+                className="flex flex-col justify-start items-center gap-4 md:w-1/2 md:mr-10"
             >
               <img src={img} className="md:hidden w-4/5" alt="img" />
               <h1 className="md:text-6xl text-4xl font-semibold text-justify dark:text-whiteHover">
@@ -112,7 +112,7 @@ const HomePengguna = () => {
               </h1>
               <div className="flex flex-col items-center">
                 <p
-                    className={`text-lg text-justify w-full md:pr-10 ${
+                    className={`text-lg text-justify w-full  ${
                         permission === "granted" ? "hidden" : ""
                     }`}
                 >
@@ -122,7 +122,7 @@ const HomePengguna = () => {
                   "Allow" atau "Izinkan".
                 </p>
                 <p
-                    className={`text-lg text-justify w-full md:pr-10 ${
+                    className={`text-lg text-justify w-full  ${
                         permission !== "granted" || installPromptEvent === null
                             ? "hidden"
                             : ""
@@ -133,7 +133,7 @@ const HomePengguna = () => {
                   "Install" untuk menambahkan aplikasi ke perangkat Anda.
                 </p>
                 <p
-                    className={`text-lg text-justify w-full md:pr-10 ${
+                    className={`text-lg text-justify w-full  ${
                         permission !== "granted" || installPromptEvent !== null
                             ? "hidden"
                             : ""
@@ -203,7 +203,7 @@ const HomePengguna = () => {
             </motion.div>
             <motion.img
                 src={img}
-                className="md:w-1/3 min-[1980px]:w-1/4 md:block hidden"
+                className="md:w-1/4 min-[1980px]:w-1/4 md:block hidden"
                 alt="img"
                 initial="hidden"
                 whileInView="visible"

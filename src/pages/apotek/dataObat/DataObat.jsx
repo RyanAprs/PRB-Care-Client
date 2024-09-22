@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
@@ -366,7 +366,7 @@ const DataObat = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama obat:
+            Nama Obat:
           </label>
 
           <InputText
@@ -385,7 +385,7 @@ const DataObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.namaObat}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Jumlah obat:
+            Jumlah Obat:
           </label>
 
           <InputText

@@ -1152,7 +1152,7 @@ const NavbarAdmin = ({ children }) => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Password lama:
+            Password Lama:
           </label>
 
           <InputText
@@ -1173,7 +1173,7 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Password baru:
+            Password Baru:
           </label>
           <InputText
             type="password"
@@ -1193,7 +1193,7 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Konfirmasi password:
+            Konfirmasi Password:
           </label>
           <InputText
             type="password"
