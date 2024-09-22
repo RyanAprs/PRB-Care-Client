@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getArtikelById } from "../../../services/ArtikelService";
 import { AuthContext } from "../../../config/context/AuthContext";
@@ -12,21 +12,17 @@ import Quill from "quill";
 const preloadQuill = () => {
   return import("quill");
 };
-const ImageFormatAttributesList = [
-  'height',
-  'width',
-  'style'
-];
+const ImageFormatAttributesList = ["height", "width", "style"];
 const allowedStyles = {
-  display: ['inline'],
-  float: ['left', 'right'],
-  margin: []
+  display: ["inline"],
+  float: ["left", "right"],
+  margin: [],
 };
-const BaseImageFormat = Quill.import('formats/image');
+const BaseImageFormat = Quill.import("formats/image");
 class ImageFormat extends BaseImageFormat {
   static formats(domNode) {
     const formats = {};
-    ImageFormatAttributesList.forEach(attribute => {
+    ImageFormatAttributesList.forEach((attribute) => {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute);
       }
@@ -35,18 +31,27 @@ class ImageFormat extends BaseImageFormat {
   }
   format(name, value) {
     if (ImageFormatAttributesList.includes(name)) {
-      if (name === 'style' && value) {
-        const styleEntries = value.split(';').map(entry => entry.trim()).filter(Boolean);
+      if (name === "style" && value) {
+        const styleEntries = value
+          .split(";")
+          .map((entry) => entry.trim())
+          .filter(Boolean);
         const newStyles = {};
 
-        styleEntries.forEach(entry => {
-          const [key, val] = entry.split(':').map(item => item.trim());
-          if (allowedStyles[key] && (allowedStyles[key].length === 0 || allowedStyles[key].includes(val))) {
+        styleEntries.forEach((entry) => {
+          const [key, val] = entry.split(":").map((item) => item.trim());
+          if (
+            allowedStyles[key] &&
+            (allowedStyles[key].length === 0 ||
+              allowedStyles[key].includes(val))
+          ) {
             newStyles[key] = val;
           }
         });
-        const styleString = Object.entries(newStyles).map(([key, val]) => `${key}: ${val}`).join('; ');
-        this.domNode.setAttribute('style', styleString);
+        const styleString = Object.entries(newStyles)
+          .map(([key, val]) => `${key}: ${val}`)
+          .join("; ");
+        this.domNode.setAttribute("style", styleString);
       } else if (value) {
         this.domNode.setAttribute(name, value);
       } else {
@@ -80,12 +85,12 @@ const DetailArtikel = () => {
       const response = await getArtikelById(id);
       if (response.isi) {
         const parser = new DOMParser();
-        const doc = parser.parseFromString(response.isi, 'text/html');
+        const doc = parser.parseFromString(response.isi, "text/html");
 
-        doc.querySelectorAll('img').forEach(img => {
-          if (!img.src.startsWith('data:') && !img.src.startsWith(baseUrl)) {
-            const imageName = img.src.split('/').pop();
-            img.src = baseUrl+imageName;
+        doc.querySelectorAll("img").forEach((img) => {
+          if (!img.src.startsWith("data:") && !img.src.startsWith(baseUrl)) {
+            const imageName = img.src.split("/").pop();
+            img.src = baseUrl + imageName;
           }
         });
 
@@ -111,7 +116,11 @@ const DetailArtikel = () => {
         if (error.response.status === 401 || error.response.status === 403) {
           dispatch({ type: "LOGOUT" });
           setIsConnectionError(false);
-        } else if (error.response.status === 404) {
+        } else if (
+          error.response.status === 404 ||
+          error.response.status === 500 ||
+          error.response.status === 400
+        ) {
           setIsNotFound(true);
         }
       } else {
@@ -154,46 +163,41 @@ const DetailArtikel = () => {
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-6 md:p-10 md:px-48">
         <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-2 gap-2">
-
           <div className="md:text-6xl text-4xl  font-semibold">
             {data.judul}
           </div>
           <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
-                <span className="text-lg">
-                  {data.adminPuskesmas.namaPuskesmas}
-                </span>
+            <span className="text-lg">{data.adminPuskesmas.namaPuskesmas}</span>
             <span className={`md:block hidden`}>-</span>
-            <span className="text-lg text-justify ">
-                  {tanggal}
-                </span>
-
+            <span className="text-lg text-justify ">{tanggal}</span>
           </div>
-          <div className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}></div>
+          <div
+            className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}
+          ></div>
 
           {data.banner && (
-              <div className="flex flex-col gap-2 md:gap-2">
-
-                <div className=" w-full h-full flex justify-center items-center">
-                  <img
-                      src={`${baseUrl}${data.banner}`}
-                      alt={data.judul}
-                      className="object-covew-full h-full"
-                  />
-                </div>
-                <div className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}></div>
-
+            <div className="flex flex-col gap-2 md:gap-2">
+              <div className=" w-full h-full flex justify-center items-center">
+                <img
+                  src={`${baseUrl}${data.banner}`}
+                  alt={data.judul}
+                  className="object-covew-full h-full"
+                />
               </div>
-
+              <div
+                className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}
+              ></div>
+            </div>
           )}
 
           <div className="w-full ">
             <Editor
-                className={`text-black dark:text-white`}
-                value={data.isi}
-                readOnly={true}
-                style={{height: "auto"}}
-                modules={editorModules}
-                headerTemplate={<></>}
+              className={`text-black dark:text-white`}
+              value={data.isi}
+              readOnly={true}
+              style={{ height: "auto" }}
+              modules={editorModules}
+              headerTemplate={<></>}
             />
           </div>
         </div>
