@@ -33,7 +33,8 @@ import Quill from "quill";
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { useCallback } from "react";
 import { debounce } from "lodash";
-import { Plus } from "lucide-react";
+import { ImageUp } from "lucide-react";
+import {Ripple} from "primereact/ripple";
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
 const DataArtikel = () => {
@@ -322,9 +323,9 @@ const DataArtikel = () => {
     try {
       setIsButtonLoading(true);
       artikelCreateSchemaSuperAdmin.parse(datas);
-
+      const clonedData = structuredClone(datas);
       const parser = new DOMParser();
-      const doc = parser.parseFromString(datas.isi, "text/html");
+      const doc = parser.parseFromString(clonedData.isi, "text/html");
 
       doc.querySelectorAll("img").forEach((img) => {
         if (!img.src.startsWith("data:")) {
@@ -333,9 +334,9 @@ const DataArtikel = () => {
         }
       });
 
-      datas.isi = doc.body.innerHTML;
+      clonedData.isi = doc.body.innerHTML;
 
-      const response = await updateArtikel(currentId, datas);
+      const response = await updateArtikel(currentId, clonedData);
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -345,6 +346,7 @@ const DataArtikel = () => {
         });
         setVisible(false);
         setIsButtonLoading(false);
+
         try {
           setLoading(true);
           const response = await getAllArtikel();
@@ -354,15 +356,15 @@ const DataArtikel = () => {
           setisConnectionError(false);
         } catch (error) {
           if (
-            error.code === "ERR_NETWORK" ||
-            error.code === "ETIMEDOUT" ||
-            error.code === "ECONNABORTED" ||
-            error.code === "ENOTFOUND" ||
-            error.code === "ECONNREFUSED" ||
-            error.code === "EAI_AGAIN" ||
-            error.code === "EHOSTUNREACH" ||
-            error.code === "ECONNRESET" ||
-            error.code === "EPIPE"
+              error.code === "ERR_NETWORK" ||
+              error.code === "ETIMEDOUT" ||
+              error.code === "ECONNABORTED" ||
+              error.code === "ENOTFOUND" ||
+              error.code === "ECONNREFUSED" ||
+              error.code === "EAI_AGAIN" ||
+              error.code === "EHOSTUNREACH" ||
+              error.code === "ECONNRESET" ||
+              error.code === "EPIPE"
           ) {
             setisConnectionError(true);
           }
@@ -370,7 +372,7 @@ const DataArtikel = () => {
           setLoading(false);
         }
       }
-    } catch (error) {
+    }catch (error) {
       setIsButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
@@ -771,29 +773,31 @@ const DataArtikel = () => {
               className="hidden"
             />
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer flex items-center w-28 justify-center px-4 py-2 bg-mainGreen text-white rounded-lg hover:bg-darkGreen transition-all"
+                htmlFor="file-upload"
+                className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
             >
-              <Plus size={32} />
+              <Ripple/>
+              <ImageUp/>
             </label>
 
             {!croppedImage && datas.banner && isEditMode && (
-              <img
-                src={`${baseUrl}${datas.banner}`}
-                alt="Banner"
-                style={{ maxWidth: "100%" }}
-              />
+                <div>
+                  <img
+                      src={`${baseUrl}${datas.banner}`}
+                      alt="Banner"
+                      className={`w-full rounded border dark:border-[#2d2d2d]`}
+                  />
+                </div>
             )}
 
             {croppedImage && (
-              <div>
-                <h3>Hasil Cropping:</h3>
-                <img
-                  src={croppedImage}
-                  alt="Cropped"
-                  style={{ maxWidth: "100%" }}
-                />
-              </div>
+                <div>
+                  <img
+                      src={croppedImage}
+                      alt="Cropped"
+                      className={`w-full rounded border dark:border-[#2d2d2d]`}
+                  />
+                </div>
             )}
           </div>
 
@@ -802,8 +806,9 @@ const DataArtikel = () => {
           </label>
 
           <InputTextarea
-            type="text"
-            placeholder="Ringkasan Artikel"
+              autoResize
+              type="text"
+              placeholder="Ringkasan Artikel"
             className="p-input text-lg p-3  rounded"
             value={datas.ringkasan}
             onChange={(e) =>
@@ -825,7 +830,7 @@ const DataArtikel = () => {
             placeholder="Konten Artikel"
             headerTemplate={header}
             onTextChange={(e) => handleTextChange(e.htmlValue || "")}
-            className={`h-full`}
+            style={{ minHeight: '320px', maxHeight: "fit-content" }}
             modules={{
               blotFormatter: {},
             }}

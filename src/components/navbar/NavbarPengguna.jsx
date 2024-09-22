@@ -205,7 +205,7 @@ const NavbarPengguna = () => {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Password diperbarui",
+          detail: "Password Anda diperbarui",
           life: 3000,
         });
         setVisibleChangePassword(false);
@@ -293,7 +293,6 @@ const NavbarPengguna = () => {
         });
         setVisibleUpdateProfile(false);
         setButtonLoading(false);
-        handleDetailProfileModal();
       }
     } catch (error) {
       setButtonLoading(false);
@@ -674,7 +673,6 @@ const NavbarPengguna = () => {
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
-          handleDetailProfileModal();
         }}
         blockScroll={true}
       >

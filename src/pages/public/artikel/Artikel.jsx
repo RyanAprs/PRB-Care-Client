@@ -93,8 +93,8 @@ export default function Artikel() {
 
   const itemTemplate = (data) => {
     return (
-        <div className={`col-12 font-poppins mx-4 md:mb-16 mb-10`} key={data.id}>
-          <div className="flex flex-col gap-4 items-center justify-center border-top-1 surface-border">
+        <div className={`col-12 font-poppins mx-4 mb-6 md:mb-10`} key={data.id}>
+          <div className="flex flex-col  items-center justify-center border-top-1 surface-border">
             <div className="flex flex-col w-full justify-content-center align-items-center flex-1 gap-4 px-2">
               <div className="flex flex-col gap-2 md:gap-4">
 
@@ -139,7 +139,7 @@ export default function Artikel() {
               </div>
             </div>
             <div
-                className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center`}
+                className={`w-20 h-0.5 bg-lightGreen2 flex items-center justify-center mt-6 md:mt-10`}
             ></div>
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function Artikel() {
         <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
           {data.length > 0 ? (
               <div className="flex flex-col  h-full md:py-5 md:px-40">
-                <div className="flex flex-col md:flex-row md:justify-between p-6  items-center justify-center gap-4">
+                <div className="flex flex-col md:flex-row md:justify-between p-6 md:pb-10 items-center justify-center gap-4">
                   <div className="p-inputgroup md:w-1/4 w-full">
                 <span className="p-inputgroup-addon bg-grays dark:bg-darkGrays">
                   <Search size={16} />

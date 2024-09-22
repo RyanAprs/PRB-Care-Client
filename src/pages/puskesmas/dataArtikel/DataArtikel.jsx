@@ -31,7 +31,8 @@ import Quill from "quill";
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { useCallback } from "react";
 import { debounce } from "lodash";
-import { Plus } from "lucide-react";
+import { ImageUp } from "lucide-react";
+import {Ripple} from "primereact/ripple";
 const DataArtikel = () => {
   const handleTextChange = useCallback(
     debounce((htmlValue) => {
@@ -264,10 +265,10 @@ const DataArtikel = () => {
         doc.querySelectorAll("img").forEach((img) => {
           if (
             !img.src.startsWith("data:") &&
-            !img.src.startsWith("http://localhost:3000/static/")
+            !img.src.startsWith(baseUrl)
           ) {
             const imageName = img.src.split("/").pop();
-            img.src = `http://localhost:3000/static/${imageName}`;
+            img.src = baseUrl+imageName;
           }
         });
 
@@ -295,8 +296,10 @@ const DataArtikel = () => {
     try {
       setButtonLoading(true);
       artikelCreateSchema.parse(datas);
+      const clonedData = structuredClone(datas);
+
       const parser = new DOMParser();
-      const doc = parser.parseFromString(datas.isi, "text/html");
+      const doc = parser.parseFromString(clonedData.isi, "text/html");
 
       doc.querySelectorAll("img").forEach((img) => {
         if (!img.src.startsWith("data:")) {
@@ -305,9 +308,9 @@ const DataArtikel = () => {
         }
       });
 
-      datas.isi = doc.body.innerHTML;
+      clonedData.isi = doc.body.innerHTML;
 
-      const response = await updateArtikel(currentId, datas);
+      const response = await updateArtikel(currentId, clonedData);
       if (response.status === 200) {
         toast.current.show({
           severity: "success",
@@ -317,6 +320,7 @@ const DataArtikel = () => {
         });
         setVisible(false);
         setButtonLoading(false);
+
         try {
           setLoading(true);
           const response = await getAllArtikelByAdminPuskesmas(id);
@@ -326,15 +330,15 @@ const DataArtikel = () => {
           setisConnectionError(false);
         } catch (error) {
           if (
-            error.code === "ERR_NETWORK" ||
-            error.code === "ETIMEDOUT" ||
-            error.code === "ECONNABORTED" ||
-            error.code === "ENOTFOUND" ||
-            error.code === "ECONNREFUSED" ||
-            error.code === "EAI_AGAIN" ||
-            error.code === "EHOSTUNREACH" ||
-            error.code === "ECONNRESET" ||
-            error.code === "EPIPE"
+              error.code === "ERR_NETWORK" ||
+              error.code === "ETIMEDOUT" ||
+              error.code === "ECONNABORTED" ||
+              error.code === "ENOTFOUND" ||
+              error.code === "ECONNREFUSED" ||
+              error.code === "EAI_AGAIN" ||
+              error.code === "EHOSTUNREACH" ||
+              error.code === "ECONNRESET" ||
+              error.code === "EPIPE"
           ) {
             setisConnectionError(true);
           }
@@ -516,7 +520,7 @@ const DataArtikel = () => {
 
   const renderHeader = () => {
     return (
-      <span className="ql-formats">
+        <span className="ql-formats">
         <select className="ql-header" aria-label="Heading">
           <option value="1">Heading 1</option>
           <option value="2">Heading 2</option>
@@ -543,51 +547,52 @@ const DataArtikel = () => {
         <button className="ql-code-block" aria-label="Code Block"></button>
 
         <button
-          className="ql-list"
-          value="ordered"
-          aria-label="Ordered List"
+            className="ql-list"
+            value="ordered"
+            aria-label="Ordered List"
         ></button>
         <button
-          className="ql-list"
-          value="bullet"
-          aria-label="Bullet List"
+            className="ql-list"
+            value="bullet"
+            aria-label="Bullet List"
         ></button>
         <button className="ql-indent" value="+1" aria-label="Indent"></button>
         <button className="ql-indent" value="-1" aria-label="Outdent"></button>
         <button className="ql-align" value="" aria-label="Left Align"></button>
         <button
-          className="ql-align"
-          value="center"
-          aria-label="Center Align"
+            className="ql-align"
+            value="center"
+            aria-label="Center Align"
         ></button>
         <button
-          className="ql-align"
-          value="right"
-          aria-label="Right Align"
+            className="ql-align"
+            value="right"
+            aria-label="Right Align"
         ></button>
         <button
-          className="ql-align"
-          value="justify"
-          aria-label="Justify"
+            className="ql-align"
+            value="justify"
+            aria-label="Justify"
         ></button>
 
         <button className="ql-link" aria-label="Link"></button>
+        <button className="ql-video" aria-label="Insert Video"></button>
         <button className="ql-image" aria-label="Insert Image"></button>
         <select className="ql-color" aria-label="Text Color"></select>
         <select
-          className="ql-background"
-          aria-label="Background Color"
+            className="ql-background"
+            aria-label="Background Color"
         ></select>
 
         <button
-          className="ql-script"
-          value="sub"
-          aria-label="Subscript"
+            className="ql-script"
+            value="sub"
+            aria-label="Subscript"
         ></button>
         <button
-          className="ql-script"
-          value="super"
-          aria-label="Superscript"
+            className="ql-script"
+            value="super"
+            aria-label="Superscript"
         ></button>
 
         <button className="ql-clean" aria-label="Clear Formatting"></button>
@@ -669,26 +674,7 @@ const DataArtikel = () => {
             <small className="p-error -mt-3 text-sm">{errors.judul}</small>
           )}
 
-          <label htmlFor="" className="-mb-3">
-            Ringkasan Artikel:
-          </label>
 
-          <InputTextarea
-            type="text"
-            placeholder="Ringkasan Artikel"
-            className="p-input text-lg p-3  rounded"
-            value={datas.ringkasan}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                ringkasan: e.target.value,
-              }))
-            }
-          />
-
-          {errors.ringkasan && (
-            <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
-          )}
 
           <label htmlFor="" className="-mb-3">
             <h3>Banner Artikel:</h3>
@@ -696,50 +682,75 @@ const DataArtikel = () => {
 
           <div className="flex flex-col gap-4">
             <input
-              id="file-upload"
-              ref={fileInputRef}
-              type="file"
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={handleImageChange}
-              className="hidden"
+                id="file-upload"
+                ref={fileInputRef}
+                type="file"
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={handleImageChange}
+                className="hidden"
             />
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer flex items-center w-28 justify-center px-4 py-2 bg-mainGreen text-white rounded-lg hover:bg-darkGreen transition-all"
+                htmlFor="file-upload"
+                className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
             >
-              <Plus size={32} />
+              <Ripple/>
+              <ImageUp/>
             </label>
 
             {!croppedImage && datas.banner && isEditMode && (
-              <img
-                src={`${baseUrl}${datas.banner}`}
-                alt="Banner"
-                style={{ maxWidth: "100%" }}
-              />
+                <div>
+                  <img
+                      src={`${baseUrl}${datas.banner}`}
+                      alt="Banner"
+                      className={`w-full rounded border dark:border-[#2d2d2d]`}
+                  />
+                </div>
             )}
 
             {croppedImage && (
-              <div>
-                <h3>Hasil Cropping:</h3>
-                <img
-                  src={croppedImage}
-                  alt="Cropped"
-                  style={{ maxWidth: "100%" }}
-                />
-              </div>
+                <div>
+                  <img
+                      src={croppedImage}
+                      alt="Cropped"
+                      className={`w-full rounded border dark:border-[#2d2d2d]`}
+                  />
+                </div>
             )}
           </div>
+
+          <label htmlFor="" className="-mb-3">
+            Ringkasan Artikel:
+          </label>
+
+          <InputTextarea
+              autoResize
+              type="text"
+              placeholder="Ringkasan Artikel"
+              className="p-input text-lg p-3  rounded"
+              value={datas.ringkasan}
+              onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    ringkasan: e.target.value,
+                  }))
+              }
+          />
+
+          {errors.ringkasan && (
+              <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
+          )}
+
           <label htmlFor="" className="-mb-3">
             Konten Artikel:
           </label>
           <Editor
-            value={datas.isi || ""}
-            placeholder="Konten Artikel"
-            headerTemplate={header}
-            onTextChange={(e) => handleTextChange(e.htmlValue || "")}
-            className={`h-full`}
-            modules={{
-              blotFormatter: {},
+              value={datas.isi || ""}
+              placeholder="Konten Artikel"
+              headerTemplate={header}
+              onTextChange={(e) => handleTextChange(e.htmlValue || "")}
+              style={{ minHeight: '320px', maxHeight: "fit-content" }}
+              modules={{
+                blotFormatter: {},
             }}
           />
 
@@ -812,7 +823,6 @@ const DataArtikel = () => {
           </div>
         </div>
       </Dialog>
-      ;
       <Dialog
         header="Hapus Data Artikel"
         visible={visibleDelete}

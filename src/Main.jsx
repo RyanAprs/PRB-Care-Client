@@ -20,7 +20,7 @@ function Main() {
             modal: 1100,
             overlay: 1000,
             menu: 1000,
-            tooltip: 1100,
+            tooltip: 1101,
             toast: 2000,
             },
               ripple: true,

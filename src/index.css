@@ -44,71 +44,73 @@ body,
   box-shadow: none;
 }
 
-.p-dropdown:focus {
+body.dark .p-dropdown:focus {
   border-color: #56b588;
 }
 
-.p-dropdown-filter:focus {
+body.dark .p-dropdown-filter:focus {
   border-color: #56b588;
 }
 
-.p-inputtext:focus {
+body.dark .p-inputtext:focus {
   border-color: #56b588;
 }
 
-.p-input:focus {
+body.dark .p-input:focus {
   border-color: #56b588;
 }
 
-.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+body.dark .p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: none;
   border-color: #56b588 !important;
 }
 
-.p-dropdown:focus {
+body.dark .p-dropdown:focus {
   border-color: #56b588;
 }
 
-.p-dropdown-filter:focus {
+body.dark .p-dropdown-filter:focus {
   border-color: #56b588;
 }
 
-.p-inputtext:focus {
+body.dark .p-inputtext:focus {
   border-color: #56b588;
 }
 
-.p-input:focus {
+body.dark .p-input:focus {
   border-color: #56b588;
 }
 
-.p-inputwrapper-focus {
+body.dark .p-inputwrapper-focus {
   border-color: #56b588 !important;
   box-shadow: 0 0 0 0px #56b588 !important;
   outline: 0px solid #56b588 !important;
   outline-offset: 0px;
 }
 
-.p-highlight {
-  background: #56b58946;
+body.dark .p-highlight {
+  background: rgba(86, 161, 126, 0.27);
 }
 
-.p-dropdown:hover {
+body.dark .p-dropdown:hover {
   border-color: #56b588;
 }
 
-.p-dropdown-filter:hover {
+body.dark .p-dropdown-filter:hover {
   border-color: #56b588;
 }
 
-.p-inputtext:hover {
+body.dark .p-inputtext:hover {
   border-color: #56b588;
 }
 
-.p-input:hover {
+body.dark .p-input:hover {
   border-color: #56b588;
 }
+
+
 
 .p-dialog {
   z-index: 1000 !important;
@@ -148,7 +150,6 @@ body,
   border: 0px !important;
 }
 
-
 .text-black{
   color: #495057;
 }
@@ -166,6 +167,8 @@ body.dark {
 }
 .ql-editor {
   font-family: 'Poppins';
+  min-height: 320px;
+  max-height: fit-content;
 }
 
 body{
@@ -174,4 +177,119 @@ body{
   overflow-y: auto;
   overflow-wrap: break-word;
   word-break: break-word;
+}
+.ql-tooltip{
+  z-index: 1200 !important;
+  font-family: 'Poppins';
+}
+.ql-blank, .ql-editor{
+  background-color: rgba(255, 255, 255, 0) !important;
+}
+.ql-editor.ql-blank::before {
+  color: #495057 !important;
+  content: attr(data-placeholder) !important;
+  font-style: normal !important;
+}
+body.dark .ql-editor.ql-blank::before {
+  color: #9b9fa0 !important;
+}
+body.dark .ql-tooltip,
+body.dark .ql-editing {
+  background-color: #1e1e1e !important;
+  color: #e2e2e2 !important;
+  border: 1px solid #383838 !important;
+  box-shadow: none;
+}
+
+body .ql-tooltip a,
+body .ql-editing a {
+  color: #383838 !important;
+}
+
+body.dark .ql-tooltip a,
+body.dark .ql-editing a {
+  color: #e2e2e2 !important;
+}
+
+body.dark .ql-tooltip input,
+body.dark .ql-editing input{
+  border: 1px solid #383838 !important;
+}
+body.dark .ql-tooltip input:focus,
+body.dark .ql-editing input:focus{
+  border: 1px solid #56b588 !important;
+  box-shadow: none;
+  outline: none;
+}
+.ql-tooltip input:focus,
+.ql-editing input:focus{
+  border: 1px solid #56a17e !important;
+  box-shadow: none;
+  outline: none;
+}
+
+.p-dropdown:focus {
+  border-color: #56a17e;
+}
+
+.p-dropdown-filter:focus {
+  border-color: #56a17e;
+}
+
+.p-inputtext:focus {
+  border-color: #56a17e;
+}
+
+.p-input:focus {
+  border-color: #56a17e;
+}
+
+.p-calendar:not(.p-calendar-disabled).p-focus > .p-inputtext {
+  outline: 0 none;
+  outline-offset: 0;
+  box-shadow: none;
+  border-color: #56a17e !important;
+}
+
+.p-dropdown:focus {
+  border-color: #56a17e;
+}
+
+.p-dropdown-filter:focus {
+  border-color: #56a17e;
+}
+
+.p-inputtext:focus {
+  border-color: #56a17e;
+}
+
+.p-input:focus {
+  border-color: #56a17e;
+}
+
+.p-inputwrapper-focus {
+  border-color: #56a17e !important;
+  box-shadow: 0 0 0 0px #56a17e !important;
+  outline: 0px solid #56a17e !important;
+  outline-offset: 0px;
+}
+
+.p-highlight {
+  background: rgba(53, 121, 90, 0.27);
+}
+
+.p-dropdown:hover {
+  border-color: #56a17e;
+}
+
+.p-dropdown-filter:hover {
+  border-color: #56a17e;
+}
+
+.p-inputtext:hover {
+  border-color: #56a17e;
+}
+
+.p-input:hover {
+  border-color: #56a17e;
 }

@@ -172,7 +172,7 @@ const DetailArtikel = () => {
                 <img
                   src={`${baseUrl}${data.banner}`}
                   alt={data.judul}
-                  className="object-covew-full h-full"
+                  className="object-covew-full w-full h-full"
                 />
               </div>
             </div>

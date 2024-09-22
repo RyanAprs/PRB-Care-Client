@@ -351,13 +351,12 @@ const NavbarAdmin = ({ children }) => {
           toast.current.show({
             severity: "success",
             summary: "Berhasil",
-            detail: "Apotek diperbarui",
+            detail: "Data Anda diperbarui",
             life: 3000,
           });
           setButtonLoading(false);
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
-          handleDetailProfileModal();
         }
       } else {
         const updatedDatas = {
@@ -369,17 +368,15 @@ const NavbarAdmin = ({ children }) => {
 
         const response = await updateCurrentPuskesmas(updatedDatas);
         if (response.status === 200) {
-          handleDetailProfileModal();
           toast.current.show({
             severity: "success",
             summary: "Berhasil",
-            detail: "Puskesmas diperbarui",
+            detail: "Data Anda diperbarui",
             life: 3000,
           });
           setButtonLoading(false);
           setIsUpdated(true);
           setVisibleUpdateProfile(false);
-          handleDetailProfileModal();
         }
       }
     } catch (error) {
@@ -432,7 +429,7 @@ const NavbarAdmin = ({ children }) => {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Password diperbarui",
+          detail: "Password Anda diperbarui",
           life: 3000,
         });
         setVisibleChangePassword(false);
@@ -1039,7 +1036,6 @@ const NavbarAdmin = ({ children }) => {
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
-          handleDetailProfileModal();
         }}
         blockScroll={true}
       >
