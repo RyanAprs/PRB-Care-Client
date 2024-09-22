@@ -28,7 +28,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
-import BlotFormatter from "quill-blot-formatter";
+import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { useCallback } from "react";
 import { debounce } from "lodash";
 import { Plus } from "lucide-react";
