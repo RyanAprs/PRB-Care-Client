@@ -29,6 +29,7 @@ export default function ReusableTable({
   role,
   path,
   onDownload,
+    showDownload=true
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -268,15 +269,15 @@ export default function ReusableTable({
     if (field.includes("banner")) {
       if (valueString) {
         return (
-          <img
-            src={`${baseUrl}${valueString}`}
-            alt="banner artikel"
-            className="w-52 h-full"
-          />
+              <img
+                  src={`${baseUrl}${valueString}`}
+                  alt="banner artikel"
+                  className="w-52 h-full mx-auto"
+              />
         );
       } else {
         return (
-          <p className="flex justify-center items-center">Tidak ada gambar</p>
+            <p className="flex justify-center items-center"></p>
         );
       }
     }
@@ -296,6 +297,7 @@ export default function ReusableTable({
         </div>
       );
     }
+
 
     return <span>{valueString}</span>;
   };
@@ -339,7 +341,7 @@ export default function ReusableTable({
             />
             <Button
               onClick={onDownload}
-              className="p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen"
+              className={`p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen ${showDownload ? ``:`hidden`}`}
               label={<FileText />}
             />
           </div>

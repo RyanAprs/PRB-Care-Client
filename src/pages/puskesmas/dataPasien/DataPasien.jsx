@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -456,7 +456,7 @@ const DataPasien = () => {
         </div>
       );
     }
-    return <span>Pilih Pasien</span>;
+    return <span>Pilih Pengguna</span>;
   };
 
   if (loading)
@@ -508,7 +508,7 @@ const DataPasien = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nomor rekam medis:
+            Nomor Rekam Medis:
           </label>
 
           <InputText
@@ -529,7 +529,7 @@ const DataPasien = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih pasien:
+            Pilih Pengguna:
           </label>
 
           <Dropdown
@@ -556,7 +556,7 @@ const DataPasien = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Tanggal periksa:
+            Tanggal Periksa:
           </label>
 
           <Calendar

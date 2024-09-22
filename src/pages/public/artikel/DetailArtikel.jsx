@@ -153,9 +153,9 @@ const DetailArtikel = () => {
   return (
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-6 md:p-10 md:px-48">
-        <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-4 gap-2">
+        <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-2 gap-2">
 
-          <div className="md:text-6xl text-4xl  font-semibold">
+          <div className="md:text-6xl text-4xl  font-semibold md:mb-2">
             {data.judul}
           </div>
           <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">
@@ -166,24 +166,22 @@ const DetailArtikel = () => {
             <span className="text-lg text-justify ">
                   {tanggal}
                 </span>
+
           </div>
-          <div
-              className={`h-0.5 border-[#495057] border-b-2 dark:border-white`}
-          ></div>
+          <div className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}></div>
+
           {data.banner && (
-              <div className="flex flex-col gap-2 md:gap-4">
+              <div className="flex flex-col gap-2 md:gap-2">
 
                 <div className=" w-full h-full flex justify-center items-center">
                   <img
                       src={`${baseUrl}${data.banner}`}
                       alt={data.judul}
-                      className="object-cover w-full h-full"
+                      className="object-covew-full h-full"
                   />
                 </div>
+                <div className={`h-0.5 border-[#495057] border-b-[2px] dark:border-white`}></div>
 
-                <div
-                    className={`h-0.5 border-[#495057] border-b-2 dark:border-white`}
-                ></div>
               </div>
 
           )}

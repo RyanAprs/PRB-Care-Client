@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import {
   convertHumanToUnix,
   convertUnixToHumanForEditData,
@@ -637,7 +637,7 @@ const DataKontrolBalik = () => {
             </>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih pasien:
+            Pilih Pasien:
           </label>
 
           <Dropdown
@@ -670,6 +670,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
+                  autoResize
                 type="text"
                 placeholder="Keluhan"
                 className="p-input text-lg p-3  rounded"
@@ -687,7 +688,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Tinggi badan:
+                Tinggi Badan:
               </label>
 
               <InputText
@@ -708,7 +709,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Berat badan:
+                Berat Badan:
               </label>
 
               <InputText
@@ -729,7 +730,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Tekanan darah:
+                Tekanan Darah:
               </label>
 
               <InputText
@@ -750,7 +751,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Denyut nadi:
+                Denyut Nadi:
               </label>
 
               <InputText
@@ -771,10 +772,11 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Hasil lab:
+                Hasil Lab:
               </label>
 
               <InputTextarea
+                  autoResize
                 type="text"
                 placeholder="Hasil Lab"
                 className="p-input text-lg p-3  rounded"
@@ -792,10 +794,11 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Hasil ekg:
+                Hasil EKG:
               </label>
 
               <InputTextarea
+                  autoResize
                 type="text"
                 placeholder="Hasil EKG"
                 className="p-input text-lg p-3  rounded"
@@ -817,6 +820,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
+                  autoResize
                 type="text"
                 placeholder="Hasil Diagnosa"
                 className="p-input text-lg p-3  rounded"
@@ -837,7 +841,7 @@ const DataKontrolBalik = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Pilih tanggal kontrol:{" "}
+            Pilih Tanggal Kontrol:{" "}
           </label>
 
           <Calendar

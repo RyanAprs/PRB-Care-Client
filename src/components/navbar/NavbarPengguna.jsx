@@ -781,7 +781,7 @@ const NavbarPengguna = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Password lama:
+            Password Lama:
           </label>
 
           <InputText
@@ -802,7 +802,7 @@ const NavbarPengguna = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Password baru:
+            Password Baru:
           </label>
           <InputText
             type="password"
@@ -822,7 +822,7 @@ const NavbarPengguna = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Konfirmasi password:
+            Konfirmasi Password:
           </label>
           <InputText
             type="password"

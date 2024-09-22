@@ -4,7 +4,7 @@ import {AuthContext} from "../../../config/context/AuthContext";
 import {getAllKontrolBalik} from "../../../services/KontrolBalikService";
 import {HandleUnauthorizedPengguna} from "../../../utils/HandleUnauthorized";
 import {ProgressSpinner} from "primereact/progressspinner";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import img from "../../../assets/data_empty.png";

@@ -1,5 +1,5 @@
 import {useContext, useEffect, useState} from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import {getAllPuskesmas} from "../../../services/PuskesmasService";
 import {ProgressSpinner} from "primereact/progressspinner";
 import {useNavigate} from "react-router-dom";

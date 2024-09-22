@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import {
   convertHumanToUnix,
   convertUnixToHumanForEditData,
@@ -618,7 +618,7 @@ const DataPengambilanObat = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Pilih pasien:
+            Pilih Pasien:
           </label>
 
           <Dropdown
@@ -643,7 +643,7 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih obat:
+            Pilih Obat:
           </label>
 
           <Dropdown
@@ -666,7 +666,7 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.idObat}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Jumlah obat:
+            Jumlah Obat:
           </label>
 
           <InputText
@@ -685,7 +685,7 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.jumlah}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Tanggal pengambilan obat:
+            Tanggal Pengambilan Obat:
           </label>
 
           <Calendar
