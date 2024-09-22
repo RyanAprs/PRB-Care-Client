@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { AuthContext } from "../../../config/context/AuthContext";
 import img from "../../../assets/data_empty.png";

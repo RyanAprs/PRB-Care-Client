@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AddressContext } from "../../../config/context/AdressContext";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";

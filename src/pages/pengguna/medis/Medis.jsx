@@ -7,7 +7,7 @@ import img from "../../../assets/data_empty.png";
 import {getAllPasien} from "../../../services/PasienService";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 
 const Medis = () => {

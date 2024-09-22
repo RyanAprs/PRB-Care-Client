@@ -24,14 +24,14 @@ const Home = () => {
                         whileInView="visible"
                         transition={{ duration: 0.6, delay: 0.2 }}
                         variants={fadeInUp}
-                        className="flex flex-col justify-start items-center gap-4 md:w-1/2"
+                        className="flex flex-col justify-start items-center gap-4 md:w-1/2 md:mr-10"
                     >
                         <img src={img} className="md:hidden w-4/5" alt="img" />
                         <h1 className="md:text-6xl text-4xl  font-semibold text-justify md:text-start dark:text-whiteHover">
                             Kesehatan Anda Ada di Ujung Jari Anda
                         </h1>
                         <div className="flex flex-col items-center">
-                            <p className="text-lg text-justify w-full md:pr-10">
+                            <p className="text-lg text-justify w-full ">
                                 PRBCare adalah solusi kesehatan digital Anda yang memastikan
                                 Anda tidak pernah melewatkan waktu penting. Dapatkan notifikasi
                                 otomatis untuk pengambilan obat dan jadwal kontrol balik,
@@ -67,7 +67,7 @@ const Home = () => {
                         whileInView="visible"
                         transition={{ duration: 0.6, delay: 0.2 }}
                         variants={fadeInUp}
-                        src={img} className="md:w-1/3 min-[1980px]:w-1/4 md:block hidden" alt="img"
+                        src={img} className="md:w-1/4 min-[1980px]:w-1/4 md:block hidden" alt="img"
                     />
                 </div>
 
@@ -107,7 +107,7 @@ const Home = () => {
                     variants={fadeInUp}
                     className="p-8 flex md:justify-center justify-start items-center  md:min-h-screen max-h-fit"
                 >
-                    <img src={img2} className="md:w-1/3 mr-10 min-[1980px]:w-1/4 md:block hidden" alt="img" />
+                    <img src={img2} className="md:w-1/4 mr-10 min-[1980px]:w-1/4 md:block hidden" alt="img" />
                     <div className="flex flex-col justify-start items-center gap-4 md:w-1/2">
                         <img src={img2} className="md:hidden w-4/5" alt="img" />
                         <h1 className="md:text-6xl text-4xl  font-semibold text-justify md:text-start dark:text-whiteHover">

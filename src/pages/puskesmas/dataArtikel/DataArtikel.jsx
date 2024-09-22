@@ -2,7 +2,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "../../../config/context/AuthContext";
 import { Toast } from "primereact/toast";
@@ -28,10 +28,11 @@ import { InputTextarea } from "primereact/inputtextarea";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
-import BlotFormatter from "quill-blot-formatter";
+import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { useCallback } from "react";
 import { debounce } from "lodash";
-import { Plus } from "lucide-react";
+import {ImageUp, Plus} from "lucide-react";
+import {Ripple} from "primereact/ripple";
 const DataArtikel = () => {
   const handleTextChange = useCallback(
     debounce((htmlValue) => {
@@ -39,7 +40,7 @@ const DataArtikel = () => {
         ...prev,
         isi: htmlValue,
       }));
-    }, 500),
+    }, 300),
     []
   );
   const ImageFormatAttributesList = ["height", "width", "style"];
@@ -516,7 +517,7 @@ const DataArtikel = () => {
 
   const renderHeader = () => {
     return (
-      <span className="ql-formats">
+        <span className="ql-formats">
         <select className="ql-header" aria-label="Heading">
           <option value="1">Heading 1</option>
           <option value="2">Heading 2</option>
@@ -543,51 +544,52 @@ const DataArtikel = () => {
         <button className="ql-code-block" aria-label="Code Block"></button>
 
         <button
-          className="ql-list"
-          value="ordered"
-          aria-label="Ordered List"
+            className="ql-list"
+            value="ordered"
+            aria-label="Ordered List"
         ></button>
         <button
-          className="ql-list"
-          value="bullet"
-          aria-label="Bullet List"
+            className="ql-list"
+            value="bullet"
+            aria-label="Bullet List"
         ></button>
         <button className="ql-indent" value="+1" aria-label="Indent"></button>
         <button className="ql-indent" value="-1" aria-label="Outdent"></button>
         <button className="ql-align" value="" aria-label="Left Align"></button>
         <button
-          className="ql-align"
-          value="center"
-          aria-label="Center Align"
+            className="ql-align"
+            value="center"
+            aria-label="Center Align"
         ></button>
         <button
-          className="ql-align"
-          value="right"
-          aria-label="Right Align"
+            className="ql-align"
+            value="right"
+            aria-label="Right Align"
         ></button>
         <button
-          className="ql-align"
-          value="justify"
-          aria-label="Justify"
+            className="ql-align"
+            value="justify"
+            aria-label="Justify"
         ></button>
 
         <button className="ql-link" aria-label="Link"></button>
+                  <button className="ql-video" aria-label="Insert Video"></button>
         <button className="ql-image" aria-label="Insert Image"></button>
         <select className="ql-color" aria-label="Text Color"></select>
         <select
-          className="ql-background"
-          aria-label="Background Color"
+            className="ql-background"
+            aria-label="Background Color"
         ></select>
 
         <button
-          className="ql-script"
-          value="sub"
-          aria-label="Subscript"
+            className="ql-script"
+            value="sub"
+            aria-label="Subscript"
         ></button>
         <button
-          className="ql-script"
-          value="super"
-          aria-label="Superscript"
+            className="ql-script"
+            value="super"
+            aria-label="Superscript"
         ></button>
 
         <button className="ql-clean" aria-label="Clear Formatting"></button>
@@ -630,6 +632,7 @@ const DataArtikel = () => {
       <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
+            showDownload={false}
           columns={columns}
           data={data}
           onCreate={handleModalCreate}
@@ -654,19 +657,19 @@ const DataArtikel = () => {
           </label>
 
           <InputText
-            type="text"
-            placeholder="Judul Artikel"
-            className="p-input text-lg p-3  rounded"
-            value={datas.judul}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                judul: e.target.value,
-              }))
-            }
+              type="text"
+              placeholder="Judul Artikel"
+              className="p-input text-lg p-3  rounded"
+              value={datas.judul}
+              onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    judul: e.target.value,
+                  }))
+              }
           />
           {errors.judul && (
-            <small className="p-error -mt-3 text-sm">{errors.judul}</small>
+              <small className="p-error -mt-3 text-sm">{errors.judul}</small>
           )}
 
           <label htmlFor="" className="-mb-3">
@@ -674,97 +677,103 @@ const DataArtikel = () => {
           </label>
 
           <InputTextarea
-            type="text"
-            placeholder="Ringkasan Artikel"
-            className="p-input text-lg p-3  rounded"
-            value={datas.ringkasan}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                ringkasan: e.target.value,
-              }))
-            }
+              type="text"
+              autoResize
+              placeholder="Ringkasan Artikel"
+              className="p-input text-lg p-3  rounded"
+              value={datas.ringkasan}
+              onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    ringkasan: e.target.value,
+                  }))
+              }
           />
 
           {errors.ringkasan && (
-            <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
+              <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
           )}
 
           <label htmlFor="" className="-mb-3">
-            Pilih Banner Artikel:
+            <h3>Banner Artikel:</h3>
           </label>
 
           <div className="flex flex-col gap-4">
             <input
-              id="file-upload"
-              ref={fileInputRef}
-              type="file"
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={handleImageChange}
-              className="hidden"
+                ref={fileInputRef}
+                id="file-upload"
+                type="file"
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={handleImageChange}
+                className="hidden"
             />
             <label
-              htmlFor="file-upload"
-              className="cursor-pointer flex items-center w-28 justify-center px-4 py-2 bg-mainGreen text-white rounded-lg hover:bg-darkGreen transition-all"
+                htmlFor="file-upload"
+                className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
             >
-              <Plus size={32} />
+              <Ripple/>
+              <ImageUp/>
             </label>
 
             {!croppedImage && datas.banner && isEditMode && (
-              <img
-                src={`${baseUrl}${datas.banner}`}
-                alt="Banner"
-                style={{ maxWidth: "100%" }}
-              />
+                <div>
+                  <img
+                      src={`${baseUrl}${datas.banner}`}
+                      alt="Banner"
+                      className={`max-w-full rounded`}
+                  />
+                </div>
+
             )}
 
             {croppedImage && (
-              <div>
-                <h3>Hasil Cropping:</h3>
-                <img
-                  src={croppedImage}
-                  alt="Cropped"
-                  style={{ maxWidth: "100%" }}
-                />
-              </div>
+                <div>
+                  <img
+                      src={croppedImage}
+                      alt="Cropped"
+                      className={`max-w-full rounded`}
+                  />
+                </div>
             )}
           </div>
-
+          <label htmlFor="" className="-mb-3">
+            Konten Artikel:
+          </label>
           <Editor
-            value={datas.isi}
-            headerTemplate={header}
-            placeholder="Isi artikel..."
-            onTextChange={(e) => handleTextChange(e.htmlValue)}
-            className={`h-full`}
-            modules={{
-              blotFormatter: {},
-            }}
+              placeholder="Konten Artikel"
+              value={datas.isi}
+              headerTemplate={header}
+              onTextChange={(e) => handleTextChange(e.htmlValue)}
+              className={`h-full`}
+              modules={{
+                blotFormatter: {},
+              }}
           />
 
           {errors.isi && (
-            <small className="p-error -mt-3 text-sm">{errors.isi}</small>
+              <small className="p-error -mt-3 text-sm">{errors.isi}</small>
           )}
           <Button
-            disabled={isButtonLoading}
-            className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
-            onClick={isEditMode ? handleUpdate : handleCreate}
+              disabled={isButtonLoading}
+              className="bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-4 w-full flex justify-center rounded-xl hover:mainGreen transition-all"
+              onClick={isEditMode ? handleUpdate : handleCreate}
           >
             {isButtonLoading ? (
-              <ProgressSpinner
-                style={{ width: "24px", height: "24px" }}
-                strokeWidth="8"
-                animationDuration="1s"
-                color="white"
-              />
+                <ProgressSpinner
+                    style={{width: "24px", height: "24px"}}
+                    strokeWidth="8"
+                    animationDuration="1s"
+                    color="white"
+                />
             ) : (
-              <p>{isEditMode ? "Edit" : "Simpan"}</p>
+                <p>{isEditMode ? "Edit" : "Simpan"}</p>
             )}
           </Button>
         </div>
       </Dialog>
       <Dialog
-        header="Preview Gambar"
-        visible={visibleCropImage}
+          header="Preview Gambar"
+          visible={visibleCropImage}
         className="md:w-1/2 w-full "
         onHide={handleCloseCropModal}
         blockScroll={true}

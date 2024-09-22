@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import { AddressContext } from "../../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";

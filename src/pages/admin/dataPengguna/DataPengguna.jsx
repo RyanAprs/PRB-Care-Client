@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import ReusableTable from "../../../components/rousableTable/RousableTable";
+import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import DynamicAddress from "../../../components/dynamicAddress/DynamicAddress";
 import { AddressContext } from "../../../config/context/AdressContext";
 import { Toast } from "primereact/toast";
@@ -486,7 +486,7 @@ const DataPengguna = () => {
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Telepon keluarga:
+            Telepon Keluarga:
           </label>
           <InputText
             type="text"
