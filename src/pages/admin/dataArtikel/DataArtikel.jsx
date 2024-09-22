@@ -30,11 +30,10 @@ import { Dropdown } from "primereact/dropdown";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
-import BlotFormatter from "quill-blot-formatter/dist/BlotFormatter";
+import BlotFormatter from "quill-blot-formatter";
 import { useCallback } from "react";
 import { debounce } from "lodash";
-import { ImageUp } from "lucide-react";
-import { Ripple } from "primereact/ripple";
+import { Plus } from "lucide-react";
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
 const DataArtikel = () => {
@@ -77,7 +76,6 @@ const DataArtikel = () => {
     }, 300),
     []
   );
-  var BlockEmbed = Quill.import("blots/block/embed");
 
   const ImageFormatAttributesList = ["height", "width", "style"];
   const allowedStyles = {
@@ -705,7 +703,7 @@ const DataArtikel = () => {
           {!isEditMode && (
             <>
               <label htmlFor="" className="-mb-3">
-                Pilih Puskesmas:
+                Pilih puskesmas:
               </label>
 
               <Dropdown
@@ -774,28 +772,26 @@ const DataArtikel = () => {
             />
             <label
               htmlFor="file-upload"
-              className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
+              className="cursor-pointer flex items-center w-28 justify-center px-4 py-2 bg-mainGreen text-white rounded-lg hover:bg-darkGreen transition-all"
             >
-              <Ripple />
-              <ImageUp />
+              <Plus size={32} />
             </label>
 
             {!croppedImage && datas.banner && isEditMode && (
-              <div>
-                <img
-                  src={`${baseUrl}${datas.banner}`}
-                  alt="Banner"
-                  className={`max-w-full rounded`}
-                />
-              </div>
+              <img
+                src={`${baseUrl}${datas.banner}`}
+                alt="Banner"
+                style={{ maxWidth: "100%" }}
+              />
             )}
 
             {croppedImage && (
               <div>
+                <h3>Hasil Cropping:</h3>
                 <img
                   src={croppedImage}
                   alt="Cropped"
-                  className={`max-w-full rounded`}
+                  style={{ maxWidth: "100%" }}
                 />
               </div>
             )}
@@ -807,7 +803,6 @@ const DataArtikel = () => {
 
           <InputTextarea
             type="text"
-            autoResize
             placeholder="Ringkasan Artikel"
             className="p-input text-lg p-3  rounded"
             value={datas.ringkasan}
@@ -829,9 +824,7 @@ const DataArtikel = () => {
             value={datas.isi || ""}
             placeholder="Konten Artikel"
             headerTemplate={header}
-            onTextChange={
-              (e) => handleTextChange(e.htmlValue || "") 
-            }
+            onTextChange={(e) => handleTextChange(e.htmlValue || "")}
             className={`h-full`}
             modules={{
               blotFormatter: {},
@@ -861,7 +854,7 @@ const DataArtikel = () => {
       </Dialog>
 
       <Dialog
-        header="Crop Gambar"
+        header="Preview Gambar"
         visible={visibleCropImage}
         className="md:w-1/2 w-full "
         onHide={handleCloseCropModal}
