@@ -105,7 +105,7 @@ const HomePengguna = () => {
                 className="flex flex-col justify-start items-center gap-4 md:w-1/2 md:mr-10"
             >
               <img src={img} className="md:hidden w-4/5" alt="img" />
-              <h1 className="md:text-6xl text-4xl font-semibold text-justify dark:text-whiteHover">
+              <h1 className="md:text-6xl text-4xl font-semibold dark:text-whiteHover">
                 {permission !== "granted" || installPromptEvent !== null
                     ? "Selamat Datang Ikuti Instruksi di Bawah Ini untuk Memulai"
                     : "Anda Telah Bergabung dengan PRBCare"}

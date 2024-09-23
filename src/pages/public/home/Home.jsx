@@ -27,7 +27,7 @@ const Home = () => {
                         className="flex flex-col justify-start items-center gap-4 md:w-1/2 md:mr-10"
                     >
                         <img src={img} className="md:hidden w-4/5" alt="img" />
-                        <h1 className="md:text-6xl text-4xl  font-semibold text-justify md:text-start dark:text-whiteHover">
+                        <h1 className="md:text-6xl text-4xl  font-semibold dark:text-whiteHover">
                             Kesehatan Anda Ada di Ujung Jari Anda
                         </h1>
                         <div className="flex flex-col items-center">
@@ -70,36 +70,31 @@ const Home = () => {
                         src={img} className="md:w-1/4 min-[1980px]:w-1/4 md:block hidden" alt="img"
                     />
                 </div>
-
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    variants={fadeInUp}
-                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#131313] md:py-20"
-                >
-                    <h2 className="text-3xl font-semibold dark:text-whiteHover">Fitur Utama Kami</h2>
-                    <div className="flex flex-wrap w-full justify-center gap-7">
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Pengingat Jadwal Kontrol dan Ambil Obat</h3>
-                            <p>fitur pengingat otomatis terkait jadwal pengambilan obat ataupun kontrol balik.</p>
+                <div className={`w-full bg-gray-100 dark:bg-[#131313]`}>
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        transition={{duration: 0.6, delay: 0.2}}
+                        variants={fadeInUp}
+                        className="p-8  flex flex-col items-center gap-7  md:py-20"
+                    >
+                        <h2 className="text-3xl font-semibold dark:text-whiteHover">Fitur Utama Kami</h2>
+                        <div className="flex flex-wrap w-full justify-center gap-7">
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Pengingat Jadwal Kontrol dan Ambil Obat</h3>
+                                <p>Fitur notifikasi pengingat terkait jadwal kontrol balik dan pengambilan obat.</p>
+                            </div>
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Kemudahan Kontrol Kesehatan</h3>
+                                <p>Akses langsung ke data rekam medis dan hasil pemeriksaan kapan saja melalui aplikasi.</p>
+                            </div>
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Artikel Kesehatan Terkini dan Terpercaya</h3>
+                                <p>Temukan artikel terbaru dan terpercaya mengenai kesehatan untuk menambah wawasan.</p>
+                            </div>
                         </div>
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Kemudahan Kontrol Kesehatan</h3>
-                            <p>Akses informasi mengenai hasil pemeriksaan serta pengambilan obat dengan mudah.</p>
-                        </div>
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Laporan Kesehatan Terintegrasi</h3>
-                            <p>Akses langsung ke data rekam medis kapan saja melalui aplikasi kami yang
-                                terintegrasi.</p>
-                        </div>
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Artikel Kesehatan Terkini dan Terpercaya</h3>
-                            <p>Dapatkan artikel terbaru dan terpercaya mengenai kesehatan untuk menambah wawasan.</p>
-                        </div>
-                    </div>
-                </motion.div>
-
+                    </motion.div>
+                </div>
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -107,10 +102,10 @@ const Home = () => {
                     variants={fadeInUp}
                     className="p-8 flex md:justify-center justify-start items-center  md:min-h-screen max-h-fit"
                 >
-                    <img src={img2} className="md:w-1/4 mr-10 min-[1980px]:w-1/4 md:block hidden" alt="img" />
+                    <img src={img2} className="md:w-1/4 mr-10 min-[1980px]:w-1/4 md:block hidden" alt="img"/>
                     <div className="flex flex-col justify-start items-center gap-4 md:w-1/2">
-                        <img src={img2} className="md:hidden w-4/5" alt="img" />
-                        <h1 className="md:text-6xl text-4xl  font-semibold text-justify md:text-start dark:text-whiteHover">
+                        <img src={img2} className="md:hidden w-4/5" alt="img"/>
+                        <h1 className="md:text-6xl text-4xl  font-semibold dark:text-whiteHover">
                             Bergabung Menjadi Mitra PRBCare
                         </h1>
                         <div className="flex flex-col items-center">
@@ -122,7 +117,7 @@ const Home = () => {
                             </p>
                         </div>
                         <div className="text-xl md:text-start flex md:flex-row flex-col items-center gap-4 w-full">
-                            <Link
+                        <Link
                                 to="mailto:prbcaree@gmail.com"
                                 className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                             >
@@ -134,30 +129,34 @@ const Home = () => {
                         </div>
                     </div>
                 </motion.div>
-
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    transition={{ duration: 0.6, delay: 0.2 }}
-                    variants={fadeInUp}
-                    className="p-8 w-full flex flex-col items-center gap-7 bg-gray-100 dark:bg-[#131313] md:py-20 rounded-b-xl"
-                >
-                    <h2 className="text-3xl font-semibold dark:text-whiteHover text-center">Apa Kata Mereka Tentang PRBCare?</h2>
-                    <div className="flex flex-wrap w-full justify-center gap-7">
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Budi Santoso</h3>
-                            <p>"PRBCare sangat membantu saya untuk selalu tepat waktu dalam mengambil obat. Notifikasinya sangat berguna."</p>
+                <div className={`w-full bg-gray-100 dark:bg-[#131313]`}>
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        transition={{duration: 0.6, delay: 0.2}}
+                        variants={fadeInUp}
+                        className="p-8 flex flex-col items-center gap-7  md:py-20 rounded-b-xl"
+                    >
+                        <h2 className="text-3xl font-semibold dark:text-whiteHover text-center">Apa Kata Mereka Tentang
+                            PRBCare?</h2>
+                        <div className="flex flex-wrap w-full justify-center gap-7">
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Budi Santoso</h3>
+                                <p>"PRBCare sangat membantu saya untuk selalu tepat waktu dalam mengambil obat.
+                                    Notifikasinya sangat berguna."</p>
+                            </div>
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Siti Aisyah</h3>
+                                <p>"Kemudahan akses rekam medis benar-benar memudahkan kontrol kesehatan saya."</p>
+                            </div>
+                            <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
+                                <h3 className="text-xl font-semibold mb-3">Andi Pratama</h3>
+                                <p>"PRBCare membantu apotek saya dalam pengelolaan stok obat dengan sangat baik. Sangat
+                                    puas!"</p>
+                            </div>
                         </div>
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Siti Aisyah</h3>
-                            <p>"Kemudahan akses rekam medis benar-benar memudahkan kontrol kesehatan saya."</p>
-                        </div>
-                        <div className="bg-white dark:bg-blackHover p-6 rounded-xl shadow-lg text-center max-w-xs">
-                            <h3 className="text-xl font-semibold mb-3">Andi Pratama</h3>
-                            <p>"PRBCare membantu apotek saya dalam pengelolaan stok obat dengan sangat baik. Sangat puas!"</p>
-                        </div>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

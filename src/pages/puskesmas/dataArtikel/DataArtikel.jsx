@@ -437,7 +437,9 @@ const DataArtikel = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
 
-    const validFormats = ["image/png", "image/jpeg", "image/jpg"];
+    if (!file) return;
+
+    const validFormats = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
     if (!validFormats.includes(file.type)) {
       toast.current.show({
         severity: "error",
@@ -445,6 +447,7 @@ const DataArtikel = () => {
         detail: "Format gambar tidak valid",
       });
       setSelectedImage(null);
+      e.target.value = "";
       return;
     }
 
@@ -453,9 +456,10 @@ const DataArtikel = () => {
         severity: "error",
         summary: "Error",
         detail:
-          "Ukuran gambar terlalu besar, compres atau ganti gambar terlebih dahulu",
+            "Ukuran gambar melebihi 500KB, kompres atau ganti gambar terlebih dahulu",
       });
       setSelectedImage(null);
+      e.target.value = "";
       return;
     }
 
@@ -470,6 +474,8 @@ const DataArtikel = () => {
       setSelectedImage(reader.result);
     };
     reader.readAsDataURL(file);
+
+    e.target.value = "";
   };
 
   const handleCrop = async () => {
