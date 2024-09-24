@@ -333,7 +333,26 @@ const NavbarAdmin = ({ children }) => {
     }
     setBeforeModalLoading(false);
   };
+  const [showToast, setShowToast] = useState(false);
+  const toastLogin = useRef(null);
+  useEffect(() => {
+    if (localStorage.getItem("isLogin") === "true") {
+      setShowToast(true);
+      localStorage.removeItem("isLogin");
+    }
+  }, []);
 
+  useEffect(() => {
+    if (showToast) {
+      toast.current.show({
+        severity: "success",
+        summary: "Berhasil",
+        detail: "Anda berhasil masuk ke sistem",
+        life: 3000,
+      });
+      setShowToast(false);
+    }
+  }, [showToast]);
   const handleUpdateProfile = async () => {
     const formattedWaktuOperasional = formatWaktuOperasional();
     try {
@@ -479,7 +498,10 @@ const NavbarAdmin = ({ children }) => {
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
-
+      <Toast
+          ref={toastLogin}
+          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+      />
       <Sidebar
         className="md:w-1/4 md:block  text-white border-r-white "
         backgroundColor={``}

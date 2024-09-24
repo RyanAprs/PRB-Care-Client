@@ -16,28 +16,7 @@ import useDarkMode from "use-dark-mode";
 
 const DashboardAdmin = () => {
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
-  const toast = useRef(null);
   const navigate = useNavigate();
-  const [showToast, setShowToast] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.getItem("isLogin") === "true") {
-      setShowToast(true);
-      localStorage.removeItem("isLogin");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (showToast) {
-      toast.current.show({
-        severity: "success",
-        summary: "Berhasil",
-        detail: "Anda berhasil masuk ke sistem",
-        life: 1500,
-      });
-      setShowToast(false);
-    }
-  }, [showToast]);
 
   const list = [
     {
@@ -96,10 +75,6 @@ const DashboardAdmin = () => {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 p-4 z-10">
-      <Toast
-        ref={toast}
-        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
-      />
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {list.map((item, index) => (
           <div
