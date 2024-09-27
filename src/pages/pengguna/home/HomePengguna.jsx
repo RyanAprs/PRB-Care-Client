@@ -96,7 +96,7 @@ const HomePengguna = () => {
         <div
             className="flex w-full md:min-h-screen bg-white dark:bg-blackHover rounded-xl md:items-center"
         >
-          <div className="md:p-8 p-6 flex md:justify-center justify-start items-center gap-7">
+          <div className="md:p-8 p-6 flex md:justify-center justify-start items-center">
             <motion.div
                 initial="hidden"
                 whileInView="visible"

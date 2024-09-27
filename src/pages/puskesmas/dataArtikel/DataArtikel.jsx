@@ -502,7 +502,7 @@ const DataArtikel = () => {
           }
         },
         "image/jpeg",
-        1
+          0.9
       );
     }
 

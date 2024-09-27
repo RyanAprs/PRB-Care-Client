@@ -78,17 +78,9 @@ const RegisterPengguna = () => {
 
             const response = await registerPengguna(datas);
             if (response.status === 201) {
-                toast.current.show({
-                    severity: "success",
-                    summary: "Berhasil",
-                    detail: "berhasil melakukan register, silahkan login",
-                    life: 3000,
-                });
-
-                setTimeout(() => {
-                    navigate("/pengguna/login");
-                }, 1500);
+                localStorage.setItem("isRegistered","true")
                 setLoading(false);
+                navigate("/pengguna/login");
             }
         } catch (error) {
             if (error instanceof ZodError) {

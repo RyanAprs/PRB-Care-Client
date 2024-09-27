@@ -14,11 +14,21 @@ export const artikelCreateSchemaSuperAdmin = z.object({
       (val) => val.trim().length > 0,
       "Ringkasan artikel tidak boleh kosong"
     ),
-  isi: z.string().min(1, "Konten artikel tidak boleh kosong"),
-  idAdminPuskesmas: z
-    .number()
-    .int()
-    .positive("Admin Puskesmas tidak boleh kosong"),
+  isi: z
+      .string()
+      .min(1, "Konten artikel tidak boleh kosong")
+      .refine((value) => {
+        const encoder = new TextEncoder();
+        const sizeInMB = encoder.encode(value).length / (1024 * 1024);
+        return sizeInMB <= 50;
+      }, {
+        message: "Konten artikel tidak boleh lebih dari 50MB hapus beberapa gambar baru",
+      }),
+    idAdminPuskesmas: z
+        .number()
+        .int()
+        .positive()
+        .refine((val) => val > 0, "Admin Puskesmas tidak boleh kosong"),
 });
 
 export const artikelCreateSchema = z.object({
@@ -35,5 +45,14 @@ export const artikelCreateSchema = z.object({
       (val) => val.trim().length > 0,
       "Ringkasan artikel tidak boleh kosong"
     ),
-  isi: z.string().min(1, "Konten artikel tidak boleh kosong"),
+  isi: z
+      .string()
+      .min(1, "Konten artikel tidak boleh kosong")
+      .refine((value) => {
+        const encoder = new TextEncoder();
+        const sizeInMB = encoder.encode(value).length / (1024 * 1024);
+        return sizeInMB <= 50;
+      }, {
+        message: "Konten artikel tidak boleh lebih dari 50MB hapus beberapa gambar baru",
+      }),
 });
