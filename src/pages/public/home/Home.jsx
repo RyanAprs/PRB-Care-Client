@@ -95,40 +95,54 @@ const Home = () => {
                         </div>
                     </motion.div>
                 </div>
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    transition={{duration: 0.6, delay: 0.2}}
-                    variants={fadeInUp}
-                    className="p-8 flex md:justify-center justify-start items-center  md:min-h-screen max-h-fit"
+
+                <div
+                    className={`md:p-8 p-6 flex md:min-h-screen max-h-fit md:justify-center justify-start items-center`}
                 >
-                    <img src={img2} className="md:w-1/4 mr-10 min-[1980px]:w-1/4 md:block hidden" alt="img"/>
-                    <div className="flex flex-col justify-start items-center gap-4 md:w-1/2">
+                    <motion.img
+                        initial="hidden"
+                        whileInView="visible"
+                        transition={{duration: 0.6, delay: 0.2}}
+                        variants={fadeInUp}
+                        src={img2} className="md:w-1/4 min-[1980px]:w-1/4 md:block hidden md:mr-10" alt="img"
+                    />
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        transition={{duration: 0.6, delay: 0.2}}
+                        variants={fadeInUp}
+                        className="flex flex-col justify-start items-center gap-4 md:w-1/2"
+                    >
                         <img src={img2} className="md:hidden w-4/5" alt="img"/>
                         <h1 className="md:text-6xl text-4xl  font-semibold dark:text-whiteHover">
                             Bergabung Menjadi Mitra PRBCare
                         </h1>
                         <div className="flex flex-col items-center">
                             <p className="text-lg text-justify w-full ">
-                                PRBCare hadir untuk mempermudah pengelolaan apotek dan puskesmas Anda. Untuk puskesmas,
-                                kami menawarkan fitur unggulan seperti manajemen pasien, kontrol balik, dan pengambilan
-                                obat. Bagi apotek, PRBCare menyederhanakan pengelolaan stok obat dan pengambilan obat.
+                                PRBCare hadir untuk mempermudah pengelolaan apotek dan puskesmas Anda. Untuk
+                                puskesmas,
+                                kami menawarkan fitur unggulan seperti manajemen pasien, kontrol balik, dan
+                                pengambilan
+                                obat. Bagi apotek, PRBCare menyederhanakan pengelolaan stok obat dan pengambilan
+                                obat.
                                 Bergabunglah dengan kami dan tingkatkan kualitas layanan kesehatan Anda.
                             </p>
                         </div>
                         <div className="text-xl md:text-start flex md:flex-row flex-col items-center gap-4 w-full">
-                        <Link
+                            <Link
                                 to="mailto:prbcaree@gmail.com"
                                 className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                             >
                                 <div className="flex gap-2 justify-center items-center text-lg">
                                     Kontak Kami
                                 </div>
-                                <Ripple />
+                                <Ripple/>
                             </Link>
                         </div>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </div>
+
+
                 <div className={`w-full bg-gray-100 dark:bg-[#131313]`}>
                     <motion.div
                         initial="hidden"

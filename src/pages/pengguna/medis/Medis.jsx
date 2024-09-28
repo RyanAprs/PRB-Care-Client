@@ -91,7 +91,7 @@ const Medis = () => {
         {header: "No Rekam Medis", field: "noRekamMedis"},
         {header: "Nama Puskesmas", field: "adminPuskesmas.namaPuskesmas"},
         {header: "Telepon Puskesmas", field: "adminPuskesmas.telepon"},
-        {header: "Tanggal Terdaftar", field: "tanggalDaftar"},
+        {header: "Tanggal Daftar", field: "tanggalDaftar"},
         {header: "Status", field: "status"},
     ];
 

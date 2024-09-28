@@ -154,6 +154,10 @@ body.dark .p-input:hover {
   color: #495057;
 }
 
+.text-justify{
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
 
 body.light-mode {
   background-color: #fff;
@@ -175,8 +179,6 @@ body{
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  overflow-wrap: break-word;
-  word-break: break-word;
 }
 .ql-tooltip{
   z-index: 1200 !important;
@@ -292,4 +294,25 @@ body.dark .ql-editing input:focus{
 
 .p-input:hover {
   border-color: #56a17e;
+}
+
+body.dark .ql-editor[contenteditable="true"] {
+  background-color: #121212 !important;
+}
+
+
+
+body.dark #editor-resizer .toolbar {
+  background-color: #1e1e1e;
+  border-color: #b0b0b0;
+  color: #b0b0b0
+}
+
+body.dark #editor-resizer .toolbar .group a{
+  border-color:  #b0b0b0;
+  color: #b0b0b0;
+}
+
+.ql-editor[contenteditable="false"] {
+  overflow: hidden;
 }

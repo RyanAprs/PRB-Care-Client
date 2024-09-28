@@ -110,6 +110,13 @@ const NavbarAdmin = ({ children }) => {
   const [expanded, setExpanded] = useState(false);
   const [toggle, setToggle] = useState(false);
   const { address } = useContext(AddressContext);
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [children]);
 
   useEffect(() => {
     const formattedAddress = [
@@ -971,7 +978,7 @@ const NavbarAdmin = ({ children }) => {
           </div>
         </div>
 
-        <div className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto    overflow-y-scroll w-full overflow-x-auto">
+        <div  ref={scrollRef} className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto overflow-y-scroll w-full overflow-x-auto">
           {children}
         </div>
       </div>

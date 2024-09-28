@@ -23,26 +23,17 @@ import {
   getArtikelById,
   updateArtikel,
 } from "../../../services/ArtikelService";
-import { artikelCreateSchema } from "../../../validations/ArtikelSchema";
+import {artikelCreateSchema} from "../../../validations/ArtikelSchema";
 import { InputTextarea } from "primereact/inputtextarea";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
-import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import { useCallback } from "react";
-import { debounce } from "lodash";
 import { ImageUp } from "lucide-react";
 import {Ripple} from "primereact/ripple";
+import { Scope } from 'parchment';
+import ResizeModule from "@botom/quill-resize-module";
 const DataArtikel = () => {
-  const handleTextChange = useCallback(
-    debounce((htmlValue) => {
-      setDatas((prev) => ({
-        ...prev,
-        isi: htmlValue,
-      }));
-    }, 300),
-    []
-  );
   const ImageFormatAttributesList = ["height", "width", "style"];
   const allowedStyles = {
     display: ["inline"],
@@ -94,8 +85,80 @@ const DataArtikel = () => {
     }
   }
   Quill.register(ImageFormat, true);
-  Quill.register("modules/blotFormatter", BlotFormatter);
+  Quill.register("modules/resize", ResizeModule);
+  const BlockEmbed = Quill.import('blots/block/embed');
 
+  class VideoBlot extends BlockEmbed {
+    static create(value) {
+      const node = super.create(value);
+      node.setAttribute('contenteditable', 'false');
+      node.setAttribute('frameborder', '0');
+      node.setAttribute('allowfullscreen', true);
+      node.setAttribute('src', this.sanitize(value));
+      return node;
+    }
+
+    static sanitize(url) {
+      return url;
+    }
+
+    static formats(domNode) {
+      const formats = {};
+      const attrs = ['height', 'width', 'style'];
+      attrs.forEach((attr) => {
+        if (domNode.hasAttribute(attr)) {
+          formats[attr] = domNode.getAttribute(attr);
+        }
+      });
+      return formats;
+    }
+
+    format(name, value) {
+      const allowedStyles = {
+        display: ['inline', 'block'],
+        float: ['left', 'right', 'none'],
+        margin: [],
+        'max-width': [],
+        'max-height': [],
+      };
+
+      if (['height', 'width', 'style'].includes(name)) {
+        if (name === 'style' && value) {
+          const styleEntries = value.split(';').map(entry => entry.trim()).filter(Boolean);
+          const newStyles = {};
+
+          styleEntries.forEach(entry => {
+            const [key, val] = entry.split(':').map(item => item.trim());
+            if (allowedStyles[key] && (allowedStyles[key].length === 0 || allowedStyles[key].includes(val))) {
+              newStyles[key] = val;
+            }
+          });
+
+          const styleString = Object.entries(newStyles)
+              .map(([key, val]) => `${key}: ${val}`)
+              .join('; ');
+
+          this.domNode.setAttribute('style', styleString);
+        } else if (value) {
+          this.domNode.setAttribute(name, value);
+        } else {
+          this.domNode.removeAttribute(name);
+        }
+      } else {
+        super.format(name, value);
+      }
+    }
+
+    static value(domNode) {
+      return domNode.getAttribute('src');
+    }
+  }
+
+  VideoBlot.blotName = 'video';
+  VideoBlot.tagName = 'iframe';
+  VideoBlot.scope = Scope.BLOCK_BLOT;
+
+  Quill.register(VideoBlot);
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const { dispatch, token, id } = useContext(AuthContext);
   const [data, setData] = useState([]);
@@ -123,6 +186,11 @@ const DataArtikel = () => {
   const imageRef = useRef(null);
   const cropperRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  const editorContentRef = useRef("");
+  const handleTextChange = useCallback((htmlValue) => {
+    editorContentRef.current = htmlValue;
+  }, []);
 
   const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
@@ -179,6 +247,7 @@ const DataArtikel = () => {
       ringkasan: "",
       banner: "",
     });
+    editorContentRef.current = ""
     setVisible(true);
     setIsEditMode(false);
   };
@@ -186,13 +255,17 @@ const DataArtikel = () => {
   const handleCreate = async () => {
     try {
       setButtonLoading(true);
-      artikelCreateSchema.parse(datas);
+      const dataToSubmit = {
+        ...datas,
+        isi: editorContentRef.current
+      };
+      artikelCreateSchema.parse(dataToSubmit);
       const formData = new FormData();
-      formData.append("judul", datas.judul);
-      formData.append("isi", datas.isi);
-      formData.append("ringkasan", datas.ringkasan);
-      if (datas.banner instanceof Blob) {
-        formData.append("banner", datas.banner);
+      formData.append("judul", dataToSubmit.judul);
+      formData.append("isi", dataToSubmit.isi);
+      formData.append("ringkasan", dataToSubmit.ringkasan);
+      if (dataToSubmit.banner instanceof Blob) {
+        formData.append("banner", dataToSubmit.banner);
       }
       const response = await createArtikel(formData);
 
@@ -281,6 +354,7 @@ const DataArtikel = () => {
           ringkasan: dataResponse.ringkasan,
           banner: dataResponse.banner,
         });
+        editorContentRef.current = dataResponse.isi
         setCurrentId(data.id);
         setIsEditMode(true);
         setVisible(true);
@@ -294,9 +368,14 @@ const DataArtikel = () => {
 
   const handleUpdate = async () => {
     try {
+      console.log(editorContentRef.current)
       setButtonLoading(true);
-      artikelCreateSchema.parse(datas);
-      const clonedData = structuredClone(datas);
+      const dataToSubmit = {
+        ...datas,
+        isi: editorContentRef.current
+      };
+      artikelCreateSchema.parse(dataToSubmit);
+      const clonedData = structuredClone(dataToSubmit);
 
       const parser = new DOMParser();
       const doc = parser.parseFromString(clonedData.isi, "text/html");
@@ -347,6 +426,7 @@ const DataArtikel = () => {
         }
       }
     } catch (error) {
+      console.log("apa"+error)
       setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
@@ -750,14 +830,23 @@ const DataArtikel = () => {
             Konten Artikel:
           </label>
           <Editor
-              value={datas.isi || ""}
+              value={datas.isi}
+              key={isEditMode ? `edit-${currentId}` : 'create'}
               placeholder="Konten Artikel"
               headerTemplate={header}
               onTextChange={(e) => handleTextChange(e.htmlValue || "")}
               style={{ minHeight: '320px', maxHeight: "fit-content" }}
               modules={{
-                blotFormatter: {},
-            }}
+                resize: {
+                  locale: {
+                    altTip: "Hold down the alt key to zoom",
+                    floatLeft: "Left",
+                    floatRight: "Right",
+                    center: "Center",
+                    restore: "Restore",
+                  },
+                }
+              }}
           />
 
           {errors.isi && (

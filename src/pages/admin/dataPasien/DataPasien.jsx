@@ -440,7 +440,7 @@ const DataPasien = () => {
     { header: "Nomor Rekam Medis", field: "noRekamMedis" },
     { header: "Nama Pasien", field: "pengguna.namaLengkap" },
     { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
-    { header: "Tanggal Periksa", field: "tanggalDaftar" },
+    { header: "Tanggal Daftar", field: "tanggalDaftar" },
     { header: "Status", field: "status" },
   ];
 
@@ -616,13 +616,13 @@ const DataPasien = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Tanggal Periksa:
+            Tanggal Daftar:
           </label>
 
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"
-            placeholder="Pilih Tanggal Periksa"
+            placeholder="Pilih Tanggal Daftar"
             value={selectedDate}
             onChange={handleCalendarChange}
             showIcon

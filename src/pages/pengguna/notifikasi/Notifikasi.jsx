@@ -146,7 +146,7 @@ const Notifikasi = () => {
         <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen max-h-fit">
             <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl">
                     {notifikasiList.length > 0 ? (
-                        <div className="flex flex-col gap-4 overflow-y-auto h-full p-6">
+                        <div className="flex flex-col gap-4 overflow-y-auto h-full md:p-11 p-6">
                             <div className="flex md:justify-end justify-center mb-4 gap-2">
                                 <Dropdown
                                     value={sortOrder}
