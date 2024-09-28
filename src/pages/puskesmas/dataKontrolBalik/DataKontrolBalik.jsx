@@ -8,7 +8,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
-import { Dropdown } from "primereact/dropdown";
+import CustomDropdown from "../../../components/customDropdown/CustomDropdown.jsx";
 import { Toast } from "primereact/toast";
 import {
   createKontrolBalik,
@@ -634,7 +634,7 @@ const DataKontrolBalik = () => {
             Pilih Pasien:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
             filter

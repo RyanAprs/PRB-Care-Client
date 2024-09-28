@@ -26,7 +26,7 @@ import {
 } from "../../../services/ArtikelService";
 import { InputTextarea } from "primereact/inputtextarea";
 import { getAllPuskesmas } from "../../../services/PuskesmasService";
-import { Dropdown } from "primereact/dropdown";
+import CustomDropdown from "../../../components/customDropdown/CustomDropdown.jsx";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
@@ -714,7 +714,7 @@ const DataArtikel = () => {
                 Pilih puskesmas:
               </label>
 
-              <Dropdown
+              <CustomDropdown
                 value={
                   adminPuskesmas && adminPuskesmas.length > 0
                     ? adminPuskesmas.find(

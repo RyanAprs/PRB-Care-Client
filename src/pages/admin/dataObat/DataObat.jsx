@@ -3,7 +3,7 @@ import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Dropdown } from "primereact/dropdown";
+import CustomDropdown from "../../../components/customDropdown/CustomDropdown.jsx";
 import { ZodError } from "zod";
 import { Toast } from "primereact/toast";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
@@ -423,7 +423,7 @@ const DataObat = () => {
             Pilih apotek:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={
               dataAdminApotek && dataAdminApotek.length > 0
                 ? dataAdminApotek.find(

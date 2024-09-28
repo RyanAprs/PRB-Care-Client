@@ -3,7 +3,7 @@ import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import { Dropdown } from "primereact/dropdown";
+import CustomDropdown from "../../../components/customDropdown/CustomDropdown.jsx";
 import {
   convertHumanToUnix,
   convertUnixToHumanForEditData,
@@ -560,7 +560,7 @@ const DataPasien = () => {
             Pilih Pengguna:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={
               pengguna.find((pengguna) => pengguna.id === datas.idPengguna) ||
               null
@@ -586,7 +586,7 @@ const DataPasien = () => {
             Pilih Puskesmas:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={
               adminPuskesmas && adminPuskesmas.length > 0
                 ? adminPuskesmas.find(

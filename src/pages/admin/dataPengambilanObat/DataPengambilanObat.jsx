@@ -5,7 +5,7 @@ import {
   convertUnixToHumanForEditData,
 } from "../../../utils/DateConverter";
 import { ProgressSpinner } from "primereact/progressspinner";
-import { Dropdown } from "primereact/dropdown";
+import CustomDropdown from "../../../components/customDropdown/CustomDropdown.jsx";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
@@ -621,7 +621,7 @@ const DataPengambilanObat = () => {
             Pilih Pasien:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={pasien.find((p) => p.id === datas.idPasien) || null}
             options={pasien}
             filter
@@ -646,7 +646,7 @@ const DataPengambilanObat = () => {
             Pilih Obat:
           </label>
 
-          <Dropdown
+          <CustomDropdown
             value={obat.find((o) => o.id === datas.idObat) || null}
             options={obat}
             filter
