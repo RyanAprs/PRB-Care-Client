@@ -73,12 +73,9 @@ export function NotificationProvider({ children }) {
     useEffect(() => {
         const handleMessage = (payload) => {
             const {
-                title,
                 namaLengkap,
                 namaApotek,
                 namaPuskesmas,
-                namaObat,
-                jumlahObat,
                 tanggalPengambilan,
                 tanggalKontrol,
                 tanggalBatal,
@@ -95,8 +92,8 @@ export function NotificationProvider({ children }) {
                 tanggalBatalLocal = convertUnixTimestampToLocalTime(
                     parseInt(tanggalBatal)
                 );
-                notificationTitle = title;
-                notificationBody = `${namaLengkap}, jadwal pengambilan obat ${namaObat} (${jumlahObat}×) anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
+                notificationTitle = "PRBCare - Ambil Obat";
+                notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
             } else if (namaPuskesmas) {
                 tanggalAmbilLocal = convertUnixTimestampToLocalTime(
                     parseInt(tanggalKontrol)
@@ -104,7 +101,7 @@ export function NotificationProvider({ children }) {
                 tanggalBatalLocal = convertUnixTimestampToLocalTime(
                     parseInt(tanggalBatal)
                 );
-                notificationTitle = title;
+                notificationTitle = "PRBCare - Kontrol Balik";
                 notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol di puskesmas ${namaPuskesmas} pada ${tanggalAmbilLocal}. Pastikan datang pada jam operasional.`;
             }
 
