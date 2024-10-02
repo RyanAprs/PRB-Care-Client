@@ -39,6 +39,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
+import {InputNumber} from "primereact/inputnumber";
 const DataKontrolBalik = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
@@ -611,17 +612,19 @@ const DataKontrolBalik = () => {
                 Nomor Atrean:
               </label>
 
-              <InputText
-                type="number"
-                placeholder="Nomor Antrean"
-                className="p-input  text-lg p-3  rounded"
-                value={datas.noAntrean}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    noAntrean: Number(e.target.value),
-                  }))
-                }
+              <InputNumber
+                  useGrouping={false}
+                  showButtons
+                  min={0}
+                  placeholder="Nomor Antrean"
+                  className="p-input text-lg rounded"
+                  value={datas.noAntrean}
+                  onChange={(e) =>
+                      setDatas((prev) => ({
+                        ...prev,
+                        noAntrean: parseInt(e.value, 10) || 0,
+                      }))
+                  }
               />
               {errors.noAntrean && (
                 <small className="p-error -mt-3 text-sm">
@@ -679,17 +682,19 @@ const DataKontrolBalik = () => {
                 Tinggi Badan:
               </label>
 
-              <InputText
-                type="number"
-                placeholder="Tinggi Badan"
-                className="p-input  text-lg p-3  rounded"
-                value={datas.tinggiBadan}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    tinggiBadan: Number(e.target.value),
-                  }))
-                }
+              <InputNumber
+                  useGrouping={false}
+                  showButtons
+                  min={0}
+                  placeholder="Tinggi Badan"
+                  className="p-input text-lg rounded"
+                  value={datas.tinggiBadan}
+                  onChange={(e) =>
+                      setDatas((prev) => ({
+                        ...prev,
+                        tinggiBadan: parseInt(e.value, 10) || 0,
+                      }))
+                  }
               />
               {errors.tinggiBadan && (
                 <small className="p-error -mt-3 text-sm">
@@ -700,17 +705,19 @@ const DataKontrolBalik = () => {
                 Berat Badan:
               </label>
 
-              <InputText
-                type="number"
-                placeholder="Berat Badan"
-                className="p-input text-lg p-3  rounded"
-                value={datas.beratBadan}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    beratBadan: Number(e.target.value),
-                  }))
-                }
+              <InputNumber
+                  useGrouping={false}
+                  showButtons
+                  min={0}
+                  placeholder="Berat Badan"
+                  className="p-input text-lg rounded"
+                  value={datas.beratBadan}
+                  onChange={(e) =>
+                      setDatas((prev) => ({
+                        ...prev,
+                        beratBadan: parseInt(e.value, 10) || 0,
+                      }))
+                  }
               />
               {errors.beratBadan && (
                 <small className="p-error -mt-3 text-sm">
@@ -742,17 +749,19 @@ const DataKontrolBalik = () => {
                 Denyut Nadi:
               </label>
 
-              <InputText
-                type="number"
-                placeholder="Denyut Nadi"
-                className="p-input text-lg p-3  rounded"
-                value={datas.denyutNadi}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    denyutNadi: Number(e.target.value),
-                  }))
-                }
+              <InputNumber
+                  useGrouping={false}
+                  showButtons
+                  min={0}
+                  placeholder="Denyut Nadi"
+                  className="p-input text-lg rounded"
+                  value={datas.denyutNadi}
+                  onChange={(e) =>
+                      setDatas((prev) => ({
+                        ...prev,
+                        denyutNadi: parseInt(e.value, 10) || 0,
+                      }))
+                  }
               />
               {errors.denyutNadi && (
                 <small className="p-error -mt-3 text-sm">

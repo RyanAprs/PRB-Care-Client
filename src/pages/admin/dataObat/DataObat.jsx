@@ -30,6 +30,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import { getAllApotek } from "../../../services/ApotekService";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import {InputNumber} from "primereact/inputnumber";
 
 const DataObat = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -474,15 +475,17 @@ const DataObat = () => {
             Jumlah obat:
           </label>
 
-          <InputText
-            type="number"
-            placeholder="Jumlah"
-            className="p-input text-lg p-3  rounded"
+          <InputNumber
+            useGrouping={false}
+            showButtons
+            min={0}
+            placeholder="Jumlah Obat"
+            className="p-input text-lg rounded"
             value={datas.jumlah}
             onChange={(e) =>
               setDatas((prev) => ({
                 ...prev,
-                jumlah: parseInt(e.target.value, 10) || 0,
+                jumlah: parseInt(e.value, 10) || 0,
               }))
             }
           />

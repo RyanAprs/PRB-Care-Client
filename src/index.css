@@ -316,3 +316,11 @@ body.dark #editor-resizer .toolbar .group a{
 .ql-editor[contenteditable="false"] {
   overflow: hidden;
 }
+
+.p-inputnumber-input{
+  padding:  12px;
+  width:80% !important;
+}
+input.p-inputtext.p-component[readonly][role="combobox"]{
+  padding:  12px;
+}

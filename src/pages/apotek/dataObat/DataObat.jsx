@@ -28,6 +28,7 @@ import { AuthContext } from "../../../config/context/AuthContext";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import {InputNumber} from "primereact/inputnumber";
 
 const DataObat = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -388,17 +389,19 @@ const DataObat = () => {
             Jumlah Obat:
           </label>
 
-          <InputText
-            type="number"
-            placeholder="Jumlah"
-            className="p-input text-lg p-3  rounded"
-            value={datas.jumlah}
-            onChange={(e) =>
-              setDatas((prev) => ({
-                ...prev,
-                jumlah: parseInt(e.target.value, 10) || 0,
-              }))
-            }
+          <InputNumber
+              useGrouping={false}
+              showButtons
+              min={0}
+              placeholder="Jumlah Obat"
+              className="p-input text-lg rounded"
+              value={datas.jumlah}
+              onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    jumlah: parseInt(e.value, 10) || 0,
+                  }))
+              }
           />
           {errors.jumlah && (
             <small className="p-error -mt-3 text-sm">{errors.jumlah}</small>

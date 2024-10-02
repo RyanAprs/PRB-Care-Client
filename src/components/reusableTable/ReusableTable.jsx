@@ -297,8 +297,9 @@ export default function ReusableTable({
         </div>
       );
     }
-
-
+    if (field.includes("jumlah") && valueString === "") {
+        return <span>0</span>;
+    }
     return <span>{valueString}</span>;
   };
 
