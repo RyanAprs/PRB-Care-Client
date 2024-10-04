@@ -324,3 +324,10 @@ body.dark #editor-resizer .toolbar .group a{
 input.p-inputtext.p-component[readonly][role="combobox"]{
   padding:  12px;
 }
+
+body.dark .logo-prbcare {
+  fill: white !important;
+}
+body .logo-prbcare {
+  fill: #495057 !important;
+}

@@ -22,7 +22,7 @@ import {
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Menu as Menuk } from "primereact/menu";
-import icon from "../../assets/prbcare.svg";
+import icon from "../../assets/prbcare.png";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { AuthContext } from "../../config/context/AuthContext";
 import { Dialog } from "primereact/dialog";
