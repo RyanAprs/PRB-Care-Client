@@ -9,6 +9,7 @@ import PublicRoute from "./config/routes/PublicRoute";
 import { NotificationProvider } from "./config/context/NotificationContext.jsx";
 import {InstallPromptProvider} from "./config/context/InstallPromptContext.jsx";
 import ScrollToTop from './components/scrollToTop/ScrollToTop.jsx';
+import {NotificationSetupProvider} from "@/config/context/NotificationSetupContext.jsx";
 
 window.global = window;
 
@@ -17,6 +18,7 @@ function App() {
       <InstallPromptProvider>
         <AuthContextProvider>
           <NotificationProvider>
+            <NotificationSetupProvider>
             <Router>
               <ScrollToTop>
                 <Routes>
@@ -29,6 +31,7 @@ function App() {
                 </Routes>
               </ScrollToTop>
             </Router>
+            </NotificationSetupProvider>
           </NotificationProvider>
         </AuthContextProvider>
         </InstallPromptProvider>

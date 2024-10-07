@@ -86,6 +86,8 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
       if (response.status === 200) {
         if (loginAdmin) {
           localStorage.setItem("selectedRole", selectedRole);
+        }else {
+          localStorage.setItem("needRegisterDevice", "true");
         }
 
         dispatch({
