@@ -63,6 +63,7 @@ const PublicFooter = () => {
                     </Link>
                     <Link
                         className=""
+                        target="_blank"
                         to="/kebijakan-privasi"
                     >
                         Kebijakan Privasi
