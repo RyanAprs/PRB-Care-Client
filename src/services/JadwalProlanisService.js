@@ -33,6 +33,27 @@ export const getAllJadwalProlanis = async () => {
   return formattedData;
 };
 
+export const getAllJadwalProlanisByAdminPuskesmas = async (
+  idAdminPuskesmas
+) => {
+  const response = await axios.get(`${API_BASE_URI}/api/prolanis`, {
+    params: { idAdminPuskesmas },
+    ...getRequestHeaders(),
+  });
+
+  if (!response.data || !response.data.data) {
+    return [];
+  }
+
+  const formattedData = response.data.data.map((item) => ({
+    ...item,
+    waktuMulai: convertUnixToHumanHour(item.waktuMulai),
+    waktuSelesai: convertUnixToHumanHour(item.waktuSelesai),
+  }));
+
+  return formattedData;
+};
+
 export const getJadwalProlanisById = async (id) => {
   try {
     const response = await axios.get(
