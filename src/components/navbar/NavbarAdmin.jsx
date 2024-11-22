@@ -718,9 +718,9 @@ const NavbarAdmin = ({ children }) => {
                 icon={<Calendar />}
                 component={
                   <Link
-                    to="/admin/data-jadwal-prolanis"
+                    to="/admin/data-prolanis"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-jadwal-prolanis"
+                      location.pathname === "/admin/data-prolanis"
                         ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
@@ -801,9 +801,9 @@ const NavbarAdmin = ({ children }) => {
                 icon={<Calendar />}
                 component={
                   <Link
-                    to="/puskesmas/data-jadwal-prolanis"
+                    to="/puskesmas/data-prolanis"
                     className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-jadwal-prolanis"
+                      location.pathname === "/puskesmas/data-prolanis"
                         ? "bg-mainGreen"
                         : ""
                     } rounded ${expanded ? "mx-2" : ""} transition-all`}
@@ -942,7 +942,7 @@ const NavbarAdmin = ({ children }) => {
                   ? "Ambil Obat"
                   : ""}
                 {location.pathname === "/admin/data-artikel" ? "Artikel" : ""}
-                {location.pathname === "/admin/data-jadwal-prolanis"
+                {location.pathname === "/admin/data-prolanis"
                   ? "Jadwal Prolanis"
                   : ""}
               </h1>
@@ -960,7 +960,7 @@ const NavbarAdmin = ({ children }) => {
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
                   ? "Ambil Obat"
                   : ""}
-                {location.pathname === "/puskesmas/data-jadwal-prolanis"
+                {location.pathname === "/puskesmas/data-prolanis"
                   ? "Jadwal Prolanis"
                   : ""}
                 {location.pathname === "/puskesmas/data-artikel"

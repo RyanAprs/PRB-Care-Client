@@ -167,7 +167,7 @@ const AdminRoute = () => {
         }
       />
       <Route
-        path="/data-jadwal-prolanis"
+        path="/data-prolanis"
         element={
           <PrivateRoute role="admin">
             <NavbarAdmin>

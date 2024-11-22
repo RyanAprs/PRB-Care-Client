@@ -107,7 +107,7 @@ const PuskesmasRoute = () => {
         }
       />
       <Route
-        path="/data-jadwal-prolanis"
+        path="/data-prolanis"
         element={
           <PrivateRoute role="nakes">
             <NavbarAdmin>
