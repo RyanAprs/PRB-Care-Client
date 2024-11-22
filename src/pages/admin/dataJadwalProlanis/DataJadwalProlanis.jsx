@@ -13,6 +13,13 @@ import { InputTextarea } from "primereact/inputtextarea";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import { convertHumanToUnix } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
+import { jadwalProlanisCreateSchemaSuperAdmin } from "../../../validations/JadwalProlanisSchema";
+import {
+  createJadwalProlanis,
+  getAllJadwalProlanis,
+} from "../../../services/JadwalProlanisService";
+import { ZodError } from "zod";
+import { handleApiError } from "../../../utils/ApiErrorHandlers";
 
 const DataJadwalProlanis = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -24,8 +31,8 @@ const DataJadwalProlanis = () => {
   const [datas, setDatas] = useState({
     idAdminPuskesmas: "",
     deskripsi: "",
-    waktu_mulai: null,
-    waktu_selesai: null,
+    waktu_mulai: "",
+    waktu_selesai: "",
   });
   const [selectedDate, setSelectedDate] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -38,8 +45,6 @@ const DataJadwalProlanis = () => {
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(null);
   const [adminPuskesmas, setAdminPuskesmas] = useState([]);
-  const [selectedWaktuMulai, setSelectedWaktuMulai] = useState(null);
-  const [selectedWaktuSelesai, setSelectedWaktuSelesai] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -74,7 +79,6 @@ const DataJadwalProlanis = () => {
 
   const handleModalCreate = async () => {
     setErrors({});
-
     setDatas({
       idAdminPuskesmas: 0,
       deskripsi: "",
@@ -106,17 +110,59 @@ const DataJadwalProlanis = () => {
       setLoading(false);
     }
   };
-  const handleCreate = () => {
-    console.log({ datas });
-  };
-
-  const handleCalendarChange = (e) => {
-    setSelectedDate(e.value);
-    const unixTimestamp = convertHumanToUnix(e.value);
-    setDatas((prev) => ({
-      ...prev,
-      tanggalDaftar: unixTimestamp,
-    }));
+  const handleCreate = async () => {
+    try {
+      setIsButtonLoading(true);
+      jadwalProlanisCreateSchemaSuperAdmin.parse(datas);
+      console.log(datas);
+      //   const response = await createJadwalProlanis(datas);
+      //   if (response.status === 201) {
+      //     toast.current.show({
+      //       severity: "success",
+      //       summary: "Berhasil",
+      //       detail: "Data pasien ditambahkan",
+      //       life: 3000,
+      //     });
+      //     setVisible(false);
+      //     setIsButtonLoading(false);
+      //     try {
+      //       setLoading(true);
+      //       const response = await getAllJadwalProlanis();
+      //       setData(response);
+      //       setLoading(false);
+      //       setisConnectionError(false);
+      //     } catch (error) {
+      //       if (
+      //         error.code === "ERR_NETWORK" ||
+      //         error.code === "ETIMEDOUT" ||
+      //         error.code === "ECONNABORTED" ||
+      //         error.code === "ENOTFOUND" ||
+      //         error.code === "ECONNREFUSED" ||
+      //         error.code === "EAI_AGAIN" ||
+      //         error.code === "EHOSTUNREACH" ||
+      //         error.code === "ECONNRESET" ||
+      //         error.code === "EPIPE"
+      //       ) {
+      //         setisConnectionError(true);
+      //       }
+      //       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      //       setLoading(false);
+      //     }
+      //   }
+    } catch (error) {
+      setIsButtonLoading(false);
+      if (error instanceof ZodError) {
+        const newErrors = {};
+        error.errors.forEach((e) => {
+          newErrors[e.path[0]] = e.message;
+        });
+        setErrors(newErrors);
+      } else {
+        setVisible(false);
+        HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+        handleApiError(error, toast);
+      }
+    }
   };
 
   const handleModalUpdate = () => {};
@@ -269,35 +315,48 @@ const DataJadwalProlanis = () => {
           </label>
 
           <div className="flex gap-4">
-            <div className="w-full">
-              <Calendar
-                className=" w-full"
-                value={datas.waktu_mulai}
-                onChange={(e) => {
-                  setDatas((prev) => ({
-                    ...prev,
-                    waktu_mulai: e.value,
-                  }));
-                }}
-                timeOnly
-                placeholder="Pilih Waktu Mulai"
-                showTime
-              />
+            <div className="flex flex-col ">
+              <div className="w-full">
+                <Calendar
+                  className=" w-full"
+                  value={datas.waktu_mulai}
+                  onChange={(e) => {
+                    setDatas((prev) => ({
+                      ...prev,
+                      waktu_mulai: e.value,
+                    }));
+                  }}
+                  timeOnly
+                  placeholder="Pilih Waktu Mulai"
+                  showTime
+                />
+              </div>
+              {errors.waktu_mulai && (
+                <small className="p-error text-sm">{errors.waktu_mulai}</small>
+              )}
             </div>
-            <div className="w-full">
-              <Calendar
-                className=" w-full"
-                value={datas.waktu_selesai}
-                onChange={(e) => {
-                  setDatas((prev) => ({
-                    ...prev,
-                    waktu_selesai: e.value,
-                  }));
-                }}
-                timeOnly
-                placeholder="Pilih Waktu Selesai"
-                showTime
-              />
+
+            <div className="flex flex-col ">
+              <div className="w-full">
+                <Calendar
+                  className=" w-full"
+                  value={datas.waktu_selesai}
+                  onChange={(e) => {
+                    setDatas((prev) => ({
+                      ...prev,
+                      waktu_selesai: e.value,
+                    }));
+                  }}
+                  timeOnly
+                  placeholder="Pilih Waktu Selesai"
+                  showTime
+                />
+              </div>
+              {errors.waktu_selesai && (
+                <small className="p-error text-sm">
+                  {errors.waktu_selesai}
+                </small>
+              )}
             </div>
           </div>
 
