@@ -49,7 +49,6 @@ const DataJadwalProlanis = () => {
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(null);
-  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
   const [selectedWaktuMulai, setSelectedWaktuMulai] = useState(null);
   const [selectedWaktuSelesai, setSelectedWaktuSelesai] = useState(null);
   const [visibleDone, setVisibleDone] = useState(false);
@@ -70,8 +69,6 @@ const DataJadwalProlanis = () => {
 
   const fetchData = async () => {
     try {
-      console.log(id);
-
       setLoading(true);
       const response = await getAllJadwalProlanisByAdminPuskesmas(id);
       console.log(response);
@@ -114,28 +111,6 @@ const DataJadwalProlanis = () => {
     });
     setVisible(true);
     setIsEditMode(false);
-    try {
-      const responsePuskesmas = await getAllPuskesmas();
-      setAdminPuskesmas(responsePuskesmas);
-      setLoading(false);
-    } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      setLoading(false);
-    }
   };
 
   const handleCreate = async () => {
@@ -196,15 +171,6 @@ const DataJadwalProlanis = () => {
   const handleModalUpdate = async (data) => {
     setBeforeModalLoading(true);
     setErrors({});
-    try {
-      const response = await getAllPuskesmas();
-      setAdminPuskesmas(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      setLoading(false);
-    }
     try {
       const dataResponse = await getJadwalProlanisById(data.id);
 
