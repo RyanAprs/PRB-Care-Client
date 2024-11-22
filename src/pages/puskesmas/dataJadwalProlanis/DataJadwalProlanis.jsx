@@ -7,13 +7,15 @@ import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
 import CustomDropdown from "../../../components/customDropdown/CustomDropdown";
 import { Dialog } from "primereact/dialog";
-import { getAllPuskesmas } from "../../../services/PuskesmasService";
-import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
+import {
+  HandleUnauthorizedAdminPuskesmas,
+  HandleUnauthorizedAdminSuper,
+} from "../../../utils/HandleUnauthorized";
 import { InputTextarea } from "primereact/inputtextarea";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import { convertHumanToUnix } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
-import { jadwalProlanisCreateSchemaSuperAdmin } from "../../../validations/JadwalProlanisSchema";
+import { jadwalProlanisCreateSchema } from "../../../validations/JadwalProlanisSchema";
 import {
   createJadwalProlanis,
   getAllJadwalProlanis,
@@ -44,7 +46,6 @@ const DataJadwalProlanis = () => {
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setIsButtonLoading] = useState(null);
-  const [adminPuskesmas, setAdminPuskesmas] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -68,7 +69,7 @@ const DataJadwalProlanis = () => {
       ) {
         setisConnectionError(true);
       }
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       setLoading(false);
     }
   };
@@ -80,40 +81,17 @@ const DataJadwalProlanis = () => {
   const handleModalCreate = async () => {
     setErrors({});
     setDatas({
-      idAdminPuskesmas: 0,
       deskripsi: "",
       waktu_mulai: 0,
       waktu_selesai: 0,
     });
     setVisible(true);
     setIsEditMode(false);
-    try {
-      const responsePuskesmas = await getAllPuskesmas();
-      setAdminPuskesmas(responsePuskesmas);
-      setLoading(false);
-    } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
-    }
   };
   const handleCreate = async () => {
     try {
       setIsButtonLoading(true);
-      jadwalProlanisCreateSchemaSuperAdmin.parse(datas);
+      jadwalProlanisCreateSchema.parse(datas);
       console.log(datas);
       //   const response = await createJadwalProlanis(datas);
       //   if (response.status === 201) {
@@ -145,7 +123,7 @@ const DataJadwalProlanis = () => {
       //       ) {
       //         setisConnectionError(true);
       //       }
-      //       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      //       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       //       setLoading(false);
       //     }
       //   }
@@ -184,25 +162,6 @@ const DataJadwalProlanis = () => {
     { key: "berlangsung", label: "Berlangsung" },
     { key: "selesai", label: "Selesai" },
   ];
-
-  const itemTemplatePuskesmas = (option) => {
-    return (
-      <div>
-        {option.namaPuskesmas} - {option.telepon}
-      </div>
-    );
-  };
-
-  const valueTemplatePuskesmas = (option) => {
-    if (option) {
-      return (
-        <div>
-          {option.namaPuskesmas} - {option.telepon}
-        </div>
-      );
-    }
-    return <span>Pilih Puskesmas</span>;
-  };
 
   if (loading)
     return (
@@ -251,43 +210,6 @@ const DataJadwalProlanis = () => {
         blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
-          {!isEditMode && (
-            <>
-              <label htmlFor="" className="-mb-3">
-                Pilih puskesmas:
-              </label>
-
-              <CustomDropdown
-                value={
-                  adminPuskesmas && adminPuskesmas.length > 0
-                    ? adminPuskesmas.find(
-                        (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
-                      ) || null
-                    : null
-                }
-                filter
-                options={adminPuskesmas || []}
-                optionLabel="namaPuskesmas"
-                itemTemplate={itemTemplatePuskesmas}
-                valueTemplate={valueTemplatePuskesmas}
-                placeholder="Pilih Puskesmas"
-                className="p-2 rounded"
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    idAdminPuskesmas: e.value.id,
-                  }))
-                }
-              />
-
-              {errors.idAdminPuskesmas && (
-                <small className="p-error -mt-3 text-sm">
-                  {errors.idAdminPuskesmas}
-                </small>
-              )}
-            </>
-          )}
-
           <label htmlFor="" className="-mb-3">
             Deskripsi Kegiatan:
           </label>

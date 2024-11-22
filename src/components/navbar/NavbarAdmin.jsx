@@ -798,6 +798,22 @@ const NavbarAdmin = ({ children }) => {
               </MenuItem>
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3"}`}
+                icon={<Calendar />}
+                component={
+                  <Link
+                    to="/puskesmas/data-jadwal-prolanis"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/puskesmas/data-jadwal-prolanis"
+                        ? "bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Jadwal Prolanis
+              </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3"}`}
                 icon={<ScrollText />}
                 component={
                   <Link
@@ -943,6 +959,9 @@ const NavbarAdmin = ({ children }) => {
                   : ""}
                 {location.pathname === "/puskesmas/data-pengambilan-obat"
                   ? "Ambil Obat"
+                  : ""}
+                {location.pathname === "/puskesmas/data-jadwal-prolanis"
+                  ? "Jadwal Prolanis"
                   : ""}
                 {location.pathname === "/puskesmas/data-artikel"
                   ? "Artikel"
