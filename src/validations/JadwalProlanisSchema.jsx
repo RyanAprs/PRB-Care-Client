@@ -14,12 +14,12 @@ export const jadwalProlanisCreateSchemaSuperAdmin = z.object({
     .int()
     .positive()
     .refine((val) => val > 0, "Admin Puskesmas tidak boleh kosong"),
-  waktu_mulai: z
+  waktuMulai: z
     .number()
     .int()
     .positive()
     .refine((val) => val > 0, "Waktu mulai tidak boleh kosong"),
-  waktu_selesai: z
+  waktuSelesai: z
     .number()
     .int()
     .positive()
@@ -35,12 +35,12 @@ export const jadwalProlanisCreateSchema = z.object({
       (val) => val.trim().length > 0,
       "Deskripsi Kegiatan tidak boleh kosong"
     ),
-  waktu_mulai: z
+  waktuMulai: z
     .number()
     .int()
     .positive()
     .refine((val) => val > 0, "Waktu mulai tidak boleh kosong"),
-  waktu_selesai: z
+  waktuSelesai: z
     .number()
     .int()
     .positive()

@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { convertUnixToHuman } from "../utils/DateConverter";
+import { convertUnixToHumanHour } from "../utils/DateConverter";
 
 const API_BASE_URI = import.meta.env.VITE_API_BASE_URI;
 
@@ -17,7 +17,7 @@ const getRequestHeaders = () => {
 
 export const getAllJadwalProlanis = async () => {
   const response = await axios.get(
-    `${API_BASE_URI}/api/jadwal-prolanis   `,
+    `${API_BASE_URI}/api/prolanis   `,
     getRequestHeaders()
   );
   if (!response.data || !response.data.data) {
@@ -26,8 +26,8 @@ export const getAllJadwalProlanis = async () => {
 
   const formattedData = response.data.data.map((item) => ({
     ...item,
-    waktu_mulai: convertUnixToHuman(item.waktu_mulai),
-    waktu_selesai: convertUnixToHuman(item.waktu_selesai),
+    waktuMulai: convertUnixToHumanHour(item.waktuMulai),
+    waktuSelesai: convertUnixToHumanHour(item.waktuSelesai),
   }));
 
   return formattedData;
@@ -36,7 +36,7 @@ export const getAllJadwalProlanis = async () => {
 export const getJadwalProlanisById = async (id) => {
   try {
     const response = await axios.get(
-      `${API_BASE_URI}/api/jadwal-prolanis/${id}`,
+      `${API_BASE_URI}/api/prolanis/${id}`,
       getRequestHeaders()
     );
     return response.data.data;
@@ -49,11 +49,10 @@ export const getJadwalProlanisById = async (id) => {
 export const createJadwalProlanis = async (datas) => {
   try {
     const response = await axios.post(
-      `${API_BASE_URI}/api/jadwal-prolanis`,
+      `${API_BASE_URI}/api/prolanis`,
       datas,
       getRequestHeaders()
     );
-    console.log("Response: ", response.data);
     return response;
   } catch (error) {
     console.error(
@@ -66,7 +65,7 @@ export const createJadwalProlanis = async (datas) => {
 
 export const updateJadwalProlanis = async (id, datas) => {
   const response = await axios.patch(
-    `${API_BASE_URI}/api/jadwal-prolanis/${id}`,
+    `${API_BASE_URI}/api/prolanis/${id}`,
     datas,
     getRequestHeaders()
   );
@@ -75,7 +74,7 @@ export const updateJadwalProlanis = async (id, datas) => {
 
 export const deleteJadwalProlanis = async (id) => {
   const response = await axios.delete(
-    `${API_BASE_URI}/api/jadwal-prolanis/${id}`,
+    `${API_BASE_URI}/api/prolanis/${id}`,
     getRequestHeaders()
   );
   return response;
@@ -83,7 +82,7 @@ export const deleteJadwalProlanis = async (id) => {
 
 export const JadwalProlanisDone = async (id) => {
   const response = await axios.patch(
-    `${API_BASE_URI}/api/jadwal-prolanis/${id}/selesai`,
+    `${API_BASE_URI}/api/prolanis/${id}/selesai`,
     {},
     getRequestHeaders()
   );

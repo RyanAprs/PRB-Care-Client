@@ -29,7 +29,7 @@ export default function ReusableTable({
   role,
   path,
   onDownload,
-    showDownload=true
+  showDownload = true,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -213,6 +213,39 @@ export default function ReusableTable({
           </Button>
         </div>
       );
+    } else if (status === "aktif" && role === "admin") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button
+            size="sm"
+            className="p-2  md:text-lg text-sm rounded-xl"
+            severity="warning"
+            onClick={() => onEdit(rowData)}
+          >
+            <Edit style={{ color: "var(--surface-0) !important" }} />
+          </Button>
+          <Button
+            size="sm"
+            className="p-2  md:text-lg text-sm rounded-xl"
+            onClick={() => onDone(rowData)}
+          >
+            <CircleCheckBig />
+          </Button>
+        </div>
+      );
+    } else if (status === "selesai" && role === "admin") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button
+            size="sm"
+            className="p-2  md:text-lg text-sm rounded-xl"
+            severity="danger"
+            onClick={() => onDelete(rowData)}
+          >
+            <Trash2 />
+          </Button>
+        </div>
+      );
     } else {
       return (
         <div className="flex justify-center gap-2">
@@ -269,16 +302,14 @@ export default function ReusableTable({
     if (field.includes("banner")) {
       if (valueString) {
         return (
-              <img
-                  src={`${baseUrl}${valueString}`}
-                  alt="banner artikel"
-                  className="w-52 h-full mx-auto"
-              />
+          <img
+            src={`${baseUrl}${valueString}`}
+            alt="banner artikel"
+            className="w-52 h-full mx-auto"
+          />
         );
       } else {
-        return (
-            <p className="flex justify-center items-center"></p>
-        );
+        return <p className="flex justify-center items-center"></p>;
       }
     }
     if (
@@ -289,7 +320,7 @@ export default function ReusableTable({
       field === "hasilEkg" ||
       field === "hasilDiagnosa" ||
       field === "waktuOperasional" ||
-        field === "judul"
+      field === "judul"
     ) {
       return (
         <div className="max-w-96 max-h-36 overflow-x-auto break-words whitespace-normal">
@@ -298,7 +329,7 @@ export default function ReusableTable({
       );
     }
     if (field.includes("jumlah") && valueString === "") {
-        return <span>0</span>;
+      return <span>0</span>;
     }
     return <span>{valueString}</span>;
   };
@@ -342,7 +373,9 @@ export default function ReusableTable({
             />
             <Button
               onClick={onDownload}
-              className={`p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen ${showDownload ? ``:`hidden`}`}
+              className={`p-2 rounded-xl bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen ${
+                showDownload ? `` : `hidden`
+              }`}
               label={<FileText />}
             />
           </div>
