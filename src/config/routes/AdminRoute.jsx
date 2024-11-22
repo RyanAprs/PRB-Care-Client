@@ -16,6 +16,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import Footer from "../../components/footer/Footer";
 import NoNavbar from "../../components/navbar/NoNavbar";
 import DataArtikel from "../../pages/admin/dataArtikel/DataArtikel";
+import DataJadwalProlanis from "../../pages/admin/dataJadwalProlanis/DataJadwalProlanis";
 
 const PrivateRoute = ({ children, role }) => {
   const { token, role: userRole } = useContext(AuthContext);
@@ -160,6 +161,17 @@ const AdminRoute = () => {
           <PrivateRoute role="admin">
             <NavbarAdmin>
               <DataArtikel />
+              <Footer />
+            </NavbarAdmin>
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/data-jadwal-prolanis"
+        element={
+          <PrivateRoute role="admin">
+            <NavbarAdmin>
+              <DataJadwalProlanis />
               <Footer />
             </NavbarAdmin>
           </PrivateRoute>

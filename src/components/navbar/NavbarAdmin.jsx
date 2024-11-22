@@ -18,6 +18,7 @@ import {
   LockKeyhole,
   UserPlus,
   ScrollText,
+  Calendar,
 } from "lucide-react";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
@@ -506,8 +507,8 @@ const NavbarAdmin = ({ children }) => {
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
       <Toast
-          ref={toastLogin}
-          position={window.innerWidth <= 767 ? "top-center" : "top-right"}
+        ref={toastLogin}
+        position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
       <Sidebar
         className="md:w-1/4 md:block  text-white border-r-white "
@@ -648,7 +649,6 @@ const NavbarAdmin = ({ children }) => {
               >
                 Pasien
               </MenuItem>
-
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3"}`}
                 icon={<Stethoscope />}
@@ -712,6 +712,22 @@ const NavbarAdmin = ({ children }) => {
                 }
               >
                 Artikel
+              </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3"}`}
+                icon={<Calendar />}
+                component={
+                  <Link
+                    to="/admin/data-jadwal-prolanis"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/admin/data-jadwal-prolanis"
+                        ? "bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Jadwal Prolanis
               </MenuItem>
             </>
           ) : role === "nakes" ? (
@@ -910,6 +926,9 @@ const NavbarAdmin = ({ children }) => {
                   ? "Ambil Obat"
                   : ""}
                 {location.pathname === "/admin/data-artikel" ? "Artikel" : ""}
+                {location.pathname === "/admin/data-jadwal-prolanis"
+                  ? "Jadwal Prolanis"
+                  : ""}
               </h1>
             )}
 
@@ -978,7 +997,10 @@ const NavbarAdmin = ({ children }) => {
           </div>
         </div>
 
-        <div  ref={scrollRef} className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto overflow-y-scroll w-full overflow-x-auto">
+        <div
+          ref={scrollRef}
+          className="flex-grow bg-gray-200 dark:bg-black dark:text-white h-auto overflow-y-scroll w-full overflow-x-auto"
+        >
           {children}
         </div>
       </div>
