@@ -1,7 +1,7 @@
 import img from "../../../assets/home.png";
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Button } from "primereact/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Ripple } from "primereact/ripple";
 import { useInstallPrompt } from "../../../config/context/InstallPromptContext.jsx";
 import useDarkMode from "use-dark-mode";
@@ -9,6 +9,11 @@ import { motion } from "framer-motion";
 import { Toast } from "primereact/toast";
 import { useNotificationSetup } from "../../../config/context/NotificationSetupContext.jsx";
 import Marquee from "../../../components/marquee/Marquee.jsx";
+import { ProgressSpinner } from "primereact/progressspinner";
+import ErrorConnection from "../../../components/errorConnection/ErrorConnection.jsx";
+import { AuthContext } from "../../../config/context/AuthContext.jsx";
+import { getAllJadwalProlanisAktif } from "../../../services/JadwalProlanisService.js";
+import { HandleUnauthorizedPengguna } from "../../../utils/HandleUnauthorized.jsx";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -20,12 +25,60 @@ const HomePengguna = () => {
   const { permission, handleNotificationSetup } = useNotificationSetup();
   const { installPromptEvent, promptInstall } = useInstallPrompt();
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { token } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [isConnectionError, setisConnectionError] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await getAllJadwalProlanisAktif();
+      setData(response);
+      setLoading(false);
+      setisConnectionError(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+      }
+      setLoading(false);
+      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
+    }
+  };
+
   useEffect(() => {
     if (localStorage.getItem("isLogin") === "true") {
       handleNotificationSetup();
       localStorage.removeItem("isLogin");
     }
-  }, []);
+    fetchData();
+  }, [token, navigate, dispatch]);
+
+  if (loading) {
+    return (
+      <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays max-h-fit min-h-screen  flex justify-center items-center">
+        <div className="p-8 w-full max-h-fit min-h-screen flex items-center justify-center  bg-white dark:bg-blackHover rounded-xl">
+          <ProgressSpinner />
+        </div>
+      </div>
+    );
+  }
+
+  if (isConnectionError) {
+    return <ErrorConnection fetchData={fetchData} />;
+  }
 
   const handleToast = () => {
     toast.current.show({
@@ -54,7 +107,7 @@ const HomePengguna = () => {
           >
             <img src={img} className="md:hidden w-4/5" alt="img" />
             <div className="md:block  w-full overflow-hidden">
-              <Marquee />
+              <Marquee data={data} />
             </div>
             <h1 className="md:text-6xl text-4xl font-semibold dark:text-whiteHover">
               {permission !== "granted" || installPromptEvent !== null
