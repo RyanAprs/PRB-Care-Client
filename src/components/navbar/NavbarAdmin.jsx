@@ -699,22 +699,6 @@ const NavbarAdmin = ({ children }) => {
               </MenuItem>
               <MenuItem
                 className={`${expanded ? "mb-2" : "mb-3"}`}
-                icon={<ScrollText />}
-                component={
-                  <Link
-                    to="/admin/data-artikel"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-artikel"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Artikel
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
                 icon={<Calendar />}
                 component={
                   <Link
@@ -728,6 +712,22 @@ const NavbarAdmin = ({ children }) => {
                 }
               >
                 Jadwal Prolanis
+              </MenuItem>
+              <MenuItem
+                className={`${expanded ? "mb-2" : "mb-3"}`}
+                icon={<ScrollText />}
+                component={
+                  <Link
+                    to="/admin/data-artikel"
+                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
+                      location.pathname === "/admin/data-artikel"
+                        ? "bg-mainGreen"
+                        : ""
+                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
+                  ></Link>
+                }
+              >
+                Artikel
               </MenuItem>
             </>
           ) : role === "nakes" ? (

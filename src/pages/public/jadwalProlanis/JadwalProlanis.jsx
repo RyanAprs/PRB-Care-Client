@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
-import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../config/context/AuthContext";
@@ -9,8 +8,9 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import { Button } from "primereact/button";
+import { getAllJadwalProlanisAktif } from "../../../services/JadwalProlanisService.js";
 
-const DataPuskesmas = () => {
+const JadwalProlanis = () => {
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,15 +20,21 @@ const DataPuskesmas = () => {
   const [isConnectionError, setIsConnectionError] = useState(false);
 
   const customSort = (a, b) => {
-    if (a.namaPuskesmas < b.namaPuskesmas) return -1;
-    if (a.namaPuskesmas > b.namaPuskesmas) return 1;
+    const statusOrder = ["aktif", "selesai"];
+
+    if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
+      return -1;
+    if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
+    if (a.waktuMulai < b.waktuMulai) return 1;
+    if (a.waktuMulai > b.waktuMulai) return -1;
+
     return 0;
   };
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await getAllPuskesmas();
+      const response = await getAllJadwalProlanisAktif();
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
@@ -65,7 +71,7 @@ const DataPuskesmas = () => {
   const handleDownload = () => {
     const doc = new jsPDF();
 
-    doc.text("Data Puskesmas", 20, 10);
+    doc.text("Data Prolanis", 20, 10);
 
     const tableColumn = columns.map((col) => col.header);
 
@@ -86,14 +92,14 @@ const DataPuskesmas = () => {
       startY: 20,
     });
 
-    doc.save("data-puskesmas.pdf");
+    doc.save("data-prolanis.pdf");
   };
 
   const columns = [
-    { field: "namaPuskesmas", header: "Nama Puskesmas" },
-    { field: "telepon", header: "Telepon" },
-    { field: "alamat", header: "Alamat" },
-    { field: "waktuOperasional", header: "Waktu Operasional" },
+    { header: "Deskripsi Kegiatan", field: "deskripsi" },
+    { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
+    { header: "Waktu Mulai", field: "waktuMulai" },
+    { header: "Waktu Selesai", field: "waktuSelesai" },
   ];
 
   if (loading)
@@ -156,4 +162,4 @@ const DataPuskesmas = () => {
   );
 };
 
-export default DataPuskesmas;
+export default JadwalProlanis;

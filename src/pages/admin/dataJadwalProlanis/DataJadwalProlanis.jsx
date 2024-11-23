@@ -28,6 +28,8 @@ import {
 import { ZodError } from "zod";
 import { handleApiError } from "../../../utils/ApiErrorHandlers";
 import ModalLoading from "../../../components/modalLoading/ModalLoading";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const DataJadwalProlanis = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -60,10 +62,8 @@ const DataJadwalProlanis = () => {
     if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
       return -1;
     if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
-    if (a.waktuMulai < b.waktuMulai) return -1;
-    if (a.waktuMulai > b.waktuMulai) return 1;
-    if (a.waktuSelesai < b.waktuSelesai) return -1;
-    if (a.waktuSelesai > b.waktuSelesai) return 1;
+    if (a.waktuMulai < b.waktuMulai) return 1;
+    if (a.waktuMulai > b.waktuMulai) return -1;
 
     return 0;
   };
@@ -343,6 +343,7 @@ const DataJadwalProlanis = () => {
       setIsButtonLoading(false);
     }
   };
+
   const handleModalDone = async (data) => {
     setBeforeModalLoading(true);
     setCurrentId(data.id);
@@ -394,6 +395,34 @@ const DataJadwalProlanis = () => {
       setIsButtonLoading(false);
     }
   };
+
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Prolanis", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-prolanis.pdf");
+  };
+
   const columns = [
     { header: "Deskripsi Kegiatan", field: "deskripsi" },
     { header: "Puskesmas", field: "adminPuskesmas.namaPuskesmas" },
@@ -452,13 +481,13 @@ const DataJadwalProlanis = () => {
       />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
-          showDownload={false}
           columns={columns}
           data={data}
           onCreate={handleModalCreate}
           onEdit={handleModalUpdate}
           onDelete={handleModalDelete}
           onDone={handleModalDone}
+          onDownload={handleDownload}
           statuses={statuses}
           role={"admin"}
         />
@@ -476,41 +505,37 @@ const DataJadwalProlanis = () => {
         blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
-          {!isEditMode && (
-            <>
-              <label htmlFor="" className="-mb-3">
-                Pilih puskesmas:
-              </label>
+          <label htmlFor="" className="-mb-3">
+            Pilih puskesmas:
+          </label>
 
-              <CustomDropdown
-                value={
-                  adminPuskesmas && adminPuskesmas.length > 0
-                    ? adminPuskesmas.find(
-                        (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
-                      ) || null
-                    : null
-                }
-                filter
-                options={adminPuskesmas || []}
-                optionLabel="namaPuskesmas"
-                itemTemplate={itemTemplatePuskesmas}
-                valueTemplate={valueTemplatePuskesmas}
-                placeholder="Pilih Puskesmas"
-                className="p-2 rounded"
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    idAdminPuskesmas: e.value.id,
-                  }))
-                }
-              />
+          <CustomDropdown
+            value={
+              adminPuskesmas && adminPuskesmas.length > 0
+                ? adminPuskesmas.find(
+                    (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
+                  ) || null
+                : null
+            }
+            filter
+            options={adminPuskesmas || []}
+            optionLabel="namaPuskesmas"
+            itemTemplate={itemTemplatePuskesmas}
+            valueTemplate={valueTemplatePuskesmas}
+            placeholder="Pilih Puskesmas"
+            className="p-2 rounded"
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                idAdminPuskesmas: e.value.id,
+              }))
+            }
+          />
 
-              {errors.idAdminPuskesmas && (
-                <small className="p-error -mt-3 text-sm">
-                  {errors.idAdminPuskesmas}
-                </small>
-              )}
-            </>
+          {errors.idAdminPuskesmas && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.idAdminPuskesmas}
+            </small>
           )}
 
           <label htmlFor="" className="-mb-3">
@@ -553,9 +578,10 @@ const DataJadwalProlanis = () => {
                       waktuMulai: convertDate,
                     }));
                   }}
-                  timeOnly
                   placeholder="Pilih Waktu Mulai"
                   showTime
+                  hourFormat="24"
+                  locale="id"
                 />
               </div>
               {errors.waktuMulai && (
@@ -570,15 +596,17 @@ const DataJadwalProlanis = () => {
                   value={selectedWaktuSelesai}
                   onChange={(e) => {
                     setSelectedWaktuSelesai(e.value);
+
                     const convertDate = convertHumanToUnix(e.value);
                     setDatas((prev) => ({
                       ...prev,
                       waktuSelesai: convertDate,
                     }));
                   }}
-                  timeOnly
                   placeholder="Pilih Waktu Selesai"
                   showTime
+                  hourFormat="24"
+                  locale="id"
                 />
               </div>
               {errors.waktuSelesai && (

@@ -14,6 +14,8 @@ export const convertUnixToHumanHour = (unixTimestamp) => {
   const date = new Date(unixTimestamp * 1000);
 
   return date.toLocaleTimeString("id-ID", {
+    month: "long",
+    day: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
   });

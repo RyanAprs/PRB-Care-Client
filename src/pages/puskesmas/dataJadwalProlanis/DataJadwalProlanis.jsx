@@ -5,9 +5,7 @@ import { Toast } from "primereact/toast";
 import ReusableTable from "../../../components/reusableTable/ReusableTable";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
-import CustomDropdown from "../../../components/customDropdown/CustomDropdown";
 import { Dialog } from "primereact/dialog";
-import { getAllPuskesmas } from "../../../services/PuskesmasService";
 import { InputTextarea } from "primereact/inputtextarea";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import {
@@ -15,6 +13,8 @@ import {
   convertUnixToHumanForEditData,
 } from "../../../utils/DateConverter";
 import { Calendar } from "primereact/calendar";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 import {
   createJadwalProlanis,
@@ -59,10 +59,8 @@ const DataJadwalProlanis = () => {
     if (statusOrder.indexOf(a.status) < statusOrder.indexOf(b.status))
       return -1;
     if (statusOrder.indexOf(a.status) > statusOrder.indexOf(b.status)) return 1;
-    if (a.waktuMulai < b.waktuMulai) return -1;
-    if (a.waktuMulai > b.waktuMulai) return 1;
-    if (a.waktuSelesai < b.waktuSelesai) return -1;
-    if (a.waktuSelesai > b.waktuSelesai) return 1;
+    if (a.waktuMulai < b.waktuMulai) return 1;
+    if (a.waktuMulai > b.waktuMulai) return -1;
 
     return 0;
   };
@@ -71,8 +69,6 @@ const DataJadwalProlanis = () => {
     try {
       setLoading(true);
       const response = await getAllJadwalProlanisByAdminPuskesmas(id);
-      console.log(response);
-
       const sortedData = response.sort(customSort);
       setData(sortedData);
       setLoading(false);
@@ -312,6 +308,7 @@ const DataJadwalProlanis = () => {
       setIsButtonLoading(false);
     }
   };
+
   const handleModalDone = async (data) => {
     setBeforeModalLoading(true);
     setCurrentId(data.id);
@@ -363,6 +360,34 @@ const DataJadwalProlanis = () => {
       setIsButtonLoading(false);
     }
   };
+
+  const handleDownload = () => {
+    const doc = new jsPDF();
+
+    doc.text("Data Prolanis", 20, 10);
+
+    const tableColumn = columns.map((col) => col.header);
+
+    const tableRows = data.map((item) => {
+      return columns.map((col) => {
+        const fields = col.field.split(".");
+        let value = item;
+        fields.forEach((field) => {
+          value = value ? value[field] : "";
+        });
+        return value || "-";
+      });
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.save("data-prolanis.pdf");
+  };
+
   const columns = [
     { header: "Deskripsi Kegiatan", field: "deskripsi" },
     { header: "Waktu Mulai", field: "waktuMulai" },
@@ -374,25 +399,6 @@ const DataJadwalProlanis = () => {
     { key: "aktif", label: "Aktif" },
     { key: "selesai", label: "Selesai" },
   ];
-
-  const itemTemplatePuskesmas = (option) => {
-    return (
-      <div>
-        {option.namaPuskesmas} - {option.telepon}
-      </div>
-    );
-  };
-
-  const valueTemplatePuskesmas = (option) => {
-    if (option) {
-      return (
-        <div>
-          {option.namaPuskesmas} - {option.telepon}
-        </div>
-      );
-    }
-    return <span>Pilih Puskesmas</span>;
-  };
 
   if (loading)
     return (
@@ -420,13 +426,13 @@ const DataJadwalProlanis = () => {
       />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
-          showDownload={false}
           columns={columns}
           data={data}
           onCreate={handleModalCreate}
           onEdit={handleModalUpdate}
           onDelete={handleModalDelete}
           onDone={handleModalDone}
+          onDownload={handleDownload}
           statuses={statuses}
           role={"admin"}
         />
@@ -484,9 +490,10 @@ const DataJadwalProlanis = () => {
                       waktuMulai: convertDate,
                     }));
                   }}
-                  timeOnly
                   placeholder="Pilih Waktu Mulai"
                   showTime
+                  hourFormat="24"
+                  locale="id"
                 />
               </div>
               {errors.waktuMulai && (
@@ -501,15 +508,17 @@ const DataJadwalProlanis = () => {
                   value={selectedWaktuSelesai}
                   onChange={(e) => {
                     setSelectedWaktuSelesai(e.value);
+
                     const convertDate = convertHumanToUnix(e.value);
                     setDatas((prev) => ({
                       ...prev,
                       waktuSelesai: convertDate,
                     }));
                   }}
-                  timeOnly
                   placeholder="Pilih Waktu Selesai"
                   showTime
+                  hourFormat="24"
+                  locale="id"
                 />
               </div>
               {errors.waktuSelesai && (

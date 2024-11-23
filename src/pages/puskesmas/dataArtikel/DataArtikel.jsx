@@ -23,15 +23,15 @@ import {
   getArtikelById,
   updateArtikel,
 } from "../../../services/ArtikelService";
-import {artikelCreateSchema} from "../../../validations/ArtikelSchema";
+import { artikelCreateSchema } from "../../../validations/ArtikelSchema";
 import { InputTextarea } from "primereact/inputtextarea";
 import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 import Quill from "quill";
 import { useCallback } from "react";
 import { ImageUp } from "lucide-react";
-import {Ripple} from "primereact/ripple";
-import { Scope } from 'parchment';
+import { Ripple } from "primereact/ripple";
+import { Scope } from "parchment";
 import ResizeModule from "@botom/quill-resize-module";
 const DataArtikel = () => {
   const ImageFormatAttributesList = ["height", "width", "style"];
@@ -86,15 +86,15 @@ const DataArtikel = () => {
   }
   Quill.register(ImageFormat, true);
   Quill.register("modules/resize", ResizeModule);
-  const BlockEmbed = Quill.import('blots/block/embed');
+  const BlockEmbed = Quill.import("blots/block/embed");
 
   class VideoBlot extends BlockEmbed {
     static create(value) {
       const node = super.create(value);
-      node.setAttribute('contenteditable', 'false');
-      node.setAttribute('frameborder', '0');
-      node.setAttribute('allowfullscreen', true);
-      node.setAttribute('src', this.sanitize(value));
+      node.setAttribute("contenteditable", "false");
+      node.setAttribute("frameborder", "0");
+      node.setAttribute("allowfullscreen", true);
+      node.setAttribute("src", this.sanitize(value));
       return node;
     }
 
@@ -104,7 +104,7 @@ const DataArtikel = () => {
 
     static formats(domNode) {
       const formats = {};
-      const attrs = ['height', 'width', 'style'];
+      const attrs = ["height", "width", "style"];
       attrs.forEach((attr) => {
         if (domNode.hasAttribute(attr)) {
           formats[attr] = domNode.getAttribute(attr);
@@ -115,30 +115,37 @@ const DataArtikel = () => {
 
     format(name, value) {
       const allowedStyles = {
-        display: ['inline', 'block'],
-        float: ['left', 'right', 'none'],
+        display: ["inline", "block"],
+        float: ["left", "right", "none"],
         margin: [],
-        'max-width': [],
-        'max-height': [],
+        "max-width": [],
+        "max-height": [],
       };
 
-      if (['height', 'width', 'style'].includes(name)) {
-        if (name === 'style' && value) {
-          const styleEntries = value.split(';').map(entry => entry.trim()).filter(Boolean);
+      if (["height", "width", "style"].includes(name)) {
+        if (name === "style" && value) {
+          const styleEntries = value
+            .split(";")
+            .map((entry) => entry.trim())
+            .filter(Boolean);
           const newStyles = {};
 
-          styleEntries.forEach(entry => {
-            const [key, val] = entry.split(':').map(item => item.trim());
-            if (allowedStyles[key] && (allowedStyles[key].length === 0 || allowedStyles[key].includes(val))) {
+          styleEntries.forEach((entry) => {
+            const [key, val] = entry.split(":").map((item) => item.trim());
+            if (
+              allowedStyles[key] &&
+              (allowedStyles[key].length === 0 ||
+                allowedStyles[key].includes(val))
+            ) {
               newStyles[key] = val;
             }
           });
 
           const styleString = Object.entries(newStyles)
-              .map(([key, val]) => `${key}: ${val}`)
-              .join('; ');
+            .map(([key, val]) => `${key}: ${val}`)
+            .join("; ");
 
-          this.domNode.setAttribute('style', styleString);
+          this.domNode.setAttribute("style", styleString);
         } else if (value) {
           this.domNode.setAttribute(name, value);
         } else {
@@ -150,12 +157,12 @@ const DataArtikel = () => {
     }
 
     static value(domNode) {
-      return domNode.getAttribute('src');
+      return domNode.getAttribute("src");
     }
   }
 
-  VideoBlot.blotName = 'video';
-  VideoBlot.tagName = 'iframe';
+  VideoBlot.blotName = "video";
+  VideoBlot.tagName = "iframe";
   VideoBlot.scope = Scope.BLOCK_BLOT;
 
   Quill.register(VideoBlot);
@@ -247,7 +254,7 @@ const DataArtikel = () => {
       ringkasan: "",
       banner: "",
     });
-    editorContentRef.current = ""
+    editorContentRef.current = "";
     setVisible(true);
     setIsEditMode(false);
   };
@@ -257,7 +264,7 @@ const DataArtikel = () => {
       setButtonLoading(true);
       const dataToSubmit = {
         ...datas,
-        isi: editorContentRef.current
+        isi: editorContentRef.current,
       };
       artikelCreateSchema.parse(dataToSubmit);
       const formData = new FormData();
@@ -336,12 +343,9 @@ const DataArtikel = () => {
         const doc = parser.parseFromString(dataResponse.isi, "text/html");
 
         doc.querySelectorAll("img").forEach((img) => {
-          if (
-            !img.src.startsWith("data:") &&
-            !img.src.startsWith(baseUrl)
-          ) {
+          if (!img.src.startsWith("data:") && !img.src.startsWith(baseUrl)) {
             const imageName = img.src.split("/").pop();
-            img.src = baseUrl+imageName;
+            img.src = baseUrl + imageName;
           }
         });
 
@@ -354,7 +358,7 @@ const DataArtikel = () => {
           ringkasan: dataResponse.ringkasan,
           banner: dataResponse.banner,
         });
-        editorContentRef.current = dataResponse.isi
+        editorContentRef.current = dataResponse.isi;
         setCurrentId(data.id);
         setIsEditMode(true);
         setVisible(true);
@@ -368,11 +372,11 @@ const DataArtikel = () => {
 
   const handleUpdate = async () => {
     try {
-      console.log(editorContentRef.current)
+      console.log(editorContentRef.current);
       setButtonLoading(true);
       const dataToSubmit = {
         ...datas,
-        isi: editorContentRef.current
+        isi: editorContentRef.current,
       };
       artikelCreateSchema.parse(dataToSubmit);
       const clonedData = structuredClone(dataToSubmit);
@@ -409,15 +413,15 @@ const DataArtikel = () => {
           setisConnectionError(false);
         } catch (error) {
           if (
-              error.code === "ERR_NETWORK" ||
-              error.code === "ETIMEDOUT" ||
-              error.code === "ECONNABORTED" ||
-              error.code === "ENOTFOUND" ||
-              error.code === "ECONNREFUSED" ||
-              error.code === "EAI_AGAIN" ||
-              error.code === "EHOSTUNREACH" ||
-              error.code === "ECONNRESET" ||
-              error.code === "EPIPE"
+            error.code === "ERR_NETWORK" ||
+            error.code === "ETIMEDOUT" ||
+            error.code === "ECONNABORTED" ||
+            error.code === "ENOTFOUND" ||
+            error.code === "ECONNREFUSED" ||
+            error.code === "EAI_AGAIN" ||
+            error.code === "EHOSTUNREACH" ||
+            error.code === "ECONNRESET" ||
+            error.code === "EPIPE"
           ) {
             setisConnectionError(true);
           }
@@ -426,7 +430,7 @@ const DataArtikel = () => {
         }
       }
     } catch (error) {
-      console.log("apa"+error)
+      console.log("apa" + error);
       setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
@@ -536,7 +540,7 @@ const DataArtikel = () => {
         severity: "error",
         summary: "Error",
         detail:
-            "Ukuran gambar melebihi 500KB, kompres atau ganti gambar terlebih dahulu",
+          "Ukuran gambar melebihi 500KB, kompres atau ganti gambar terlebih dahulu",
       });
       setSelectedImage(null);
       e.target.value = "";
@@ -582,7 +586,7 @@ const DataArtikel = () => {
           }
         },
         "image/jpeg",
-          0.9
+        0.9
       );
     }
 
@@ -606,7 +610,7 @@ const DataArtikel = () => {
 
   const renderHeader = () => {
     return (
-        <span className="ql-formats">
+      <span className="ql-formats">
         <select className="ql-header" aria-label="Heading">
           <option value="1">Heading 1</option>
           <option value="2">Heading 2</option>
@@ -633,32 +637,32 @@ const DataArtikel = () => {
         <button className="ql-code-block" aria-label="Code Block"></button>
 
         <button
-            className="ql-list"
-            value="ordered"
-            aria-label="Ordered List"
+          className="ql-list"
+          value="ordered"
+          aria-label="Ordered List"
         ></button>
         <button
-            className="ql-list"
-            value="bullet"
-            aria-label="Bullet List"
+          className="ql-list"
+          value="bullet"
+          aria-label="Bullet List"
         ></button>
         <button className="ql-indent" value="+1" aria-label="Indent"></button>
         <button className="ql-indent" value="-1" aria-label="Outdent"></button>
         <button className="ql-align" value="" aria-label="Left Align"></button>
         <button
-            className="ql-align"
-            value="center"
-            aria-label="Center Align"
+          className="ql-align"
+          value="center"
+          aria-label="Center Align"
         ></button>
         <button
-            className="ql-align"
-            value="right"
-            aria-label="Right Align"
+          className="ql-align"
+          value="right"
+          aria-label="Right Align"
         ></button>
         <button
-            className="ql-align"
-            value="justify"
-            aria-label="Justify"
+          className="ql-align"
+          value="justify"
+          aria-label="Justify"
         ></button>
 
         <button className="ql-link" aria-label="Link"></button>
@@ -666,19 +670,19 @@ const DataArtikel = () => {
         <button className="ql-image" aria-label="Insert Image"></button>
         <select className="ql-color" aria-label="Text Color"></select>
         <select
-            className="ql-background"
-            aria-label="Background Color"
+          className="ql-background"
+          aria-label="Background Color"
         ></select>
 
         <button
-            className="ql-script"
-            value="sub"
-            aria-label="Subscript"
+          className="ql-script"
+          value="sub"
+          aria-label="Subscript"
         ></button>
         <button
-            className="ql-script"
-            value="super"
-            aria-label="Superscript"
+          className="ql-script"
+          value="super"
+          aria-label="Superscript"
         ></button>
 
         <button className="ql-clean" aria-label="Clear Formatting"></button>
@@ -721,6 +725,7 @@ const DataArtikel = () => {
       <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
+          showDownload={false}
           columns={columns}
           data={data}
           onCreate={handleModalCreate}
@@ -760,47 +765,45 @@ const DataArtikel = () => {
             <small className="p-error -mt-3 text-sm">{errors.judul}</small>
           )}
 
-
-
           <label htmlFor="" className="-mb-3">
             <h3>Banner Artikel:</h3>
           </label>
 
           <div className="flex flex-col gap-4">
             <input
-                id="file-upload"
-                ref={fileInputRef}
-                type="file"
-                accept="image/png, image/jpeg, image/jpg"
-                onChange={handleImageChange}
-                className="hidden"
+              id="file-upload"
+              ref={fileInputRef}
+              type="file"
+              accept="image/png, image/jpeg, image/jpg"
+              onChange={handleImageChange}
+              className="hidden"
             />
             <label
-                htmlFor="file-upload"
-                className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
+              htmlFor="file-upload"
+              className="p-ripple cursor-pointer bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen p-2 w-fit flex justify-center rounded-xl hover:mainGreen transition-all"
             >
-              <Ripple/>
-              <ImageUp/>
+              <Ripple />
+              <ImageUp />
             </label>
 
             {!croppedImage && datas.banner && isEditMode && (
-                <div>
-                  <img
-                      src={`${baseUrl}${datas.banner}`}
-                      alt="Banner"
-                      className={`w-full rounded border dark:border-[#2d2d2d]`}
-                  />
-                </div>
+              <div>
+                <img
+                  src={`${baseUrl}${datas.banner}`}
+                  alt="Banner"
+                  className={`w-full rounded border dark:border-[#2d2d2d]`}
+                />
+              </div>
             )}
 
             {croppedImage && (
-                <div>
-                  <img
-                      src={croppedImage}
-                      alt="Cropped"
-                      className={`w-full rounded border dark:border-[#2d2d2d]`}
-                  />
-                </div>
+              <div>
+                <img
+                  src={croppedImage}
+                  alt="Cropped"
+                  className={`w-full rounded border dark:border-[#2d2d2d]`}
+                />
+              </div>
             )}
           </div>
 
@@ -809,44 +812,44 @@ const DataArtikel = () => {
           </label>
 
           <InputTextarea
-              autoResize
-              type="text"
-              placeholder="Ringkasan Artikel"
-              className="p-input text-lg p-3  rounded"
-              value={datas.ringkasan}
-              onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    ringkasan: e.target.value,
-                  }))
-              }
+            autoResize
+            type="text"
+            placeholder="Ringkasan Artikel"
+            className="p-input text-lg p-3  rounded"
+            value={datas.ringkasan}
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                ringkasan: e.target.value,
+              }))
+            }
           />
 
           {errors.ringkasan && (
-              <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
+            <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
           )}
 
           <label htmlFor="" className="-mb-3">
             Konten Artikel:
           </label>
           <Editor
-              value={datas.isi}
-              key={isEditMode ? `edit-${currentId}` : 'create'}
-              placeholder="Konten Artikel"
-              headerTemplate={header}
-              onTextChange={(e) => handleTextChange(e.htmlValue || "")}
-              style={{ minHeight: '320px', maxHeight: "fit-content" }}
-              modules={{
-                resize: {
-                  locale: {
-                    altTip: "Hold down the alt key to zoom",
-                    floatLeft: "Left",
-                    floatRight: "Right",
-                    center: "Center",
-                    restore: "Restore",
-                  },
-                }
-              }}
+            value={datas.isi}
+            key={isEditMode ? `edit-${currentId}` : "create"}
+            placeholder="Konten Artikel"
+            headerTemplate={header}
+            onTextChange={(e) => handleTextChange(e.htmlValue || "")}
+            style={{ minHeight: "320px", maxHeight: "fit-content" }}
+            modules={{
+              resize: {
+                locale: {
+                  altTip: "Hold down the alt key to zoom",
+                  floatLeft: "Left",
+                  floatRight: "Right",
+                  center: "Center",
+                  restore: "Restore",
+                },
+              },
+            }}
           />
 
           {errors.isi && (

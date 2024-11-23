@@ -12,6 +12,7 @@ import DataPuskesmas from "../../pages/public/dataPuskesmas/DataPuskesmas";
 import DataApotek from "../../pages/public/dataApotek/DataApotek";
 import Artikel from "../../pages/public/artikel/Artikel";
 import DetailArtikel from "../../pages/public/artikel/DetailArtikel";
+import JadwalProlanis from "../../pages/public/jadwalProlanis/JadwalProlanis";
 
 const PrivateRoute = ({ children, role }) => {
   const { token } = useContext(AuthContext);
@@ -62,6 +63,16 @@ const PublicRoute = () => {
           <>
             <NavbarPublicPage />
             <DataApotek />
+            <PublicFooter />
+          </>
+        }
+      />
+      <Route
+        path="/prolanis"
+        element={
+          <>
+            <NavbarPublicPage />
+            <JadwalProlanis />
             <PublicFooter />
           </>
         }
