@@ -365,6 +365,29 @@ const DataArtikel = () => {
       cropperRef.current.destroy();
       cropperRef.current = null;
     }
+
+    try {
+      const responsePuskesmas = await getAllPuskesmas();
+      setAdminPuskesmas(responsePuskesmas);
+      setLoading(false);
+    } catch (error) {
+      if (
+        error.code === "ERR_NETWORK" ||
+        error.code === "ETIMEDOUT" ||
+        error.code === "ECONNABORTED" ||
+        error.code === "ENOTFOUND" ||
+        error.code === "ECONNREFUSED" ||
+        error.code === "EAI_AGAIN" ||
+        error.code === "EHOSTUNREACH" ||
+        error.code === "ECONNRESET" ||
+        error.code === "EPIPE"
+      ) {
+        setisConnectionError(true);
+        setVisible(false);
+      }
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      setLoading(false);
+    }
     try {
       const dataResponse = await getArtikelById(data.id);
       if (dataResponse.isi) {
@@ -793,41 +816,37 @@ const DataArtikel = () => {
         blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
-          {!isEditMode && (
-            <>
-              <label htmlFor="" className="-mb-3">
-                Pilih puskesmas:
-              </label>
+          <label htmlFor="" className="-mb-3">
+            Pilih puskesmas:
+          </label>
 
-              <CustomDropdown
-                value={
-                  adminPuskesmas && adminPuskesmas.length > 0
-                    ? adminPuskesmas.find(
-                        (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
-                      ) || null
-                    : null
-                }
-                filter
-                options={adminPuskesmas || []}
-                optionLabel="namaPuskesmas"
-                itemTemplate={itemTemplatePuskesmas}
-                valueTemplate={valueTemplatePuskesmas}
-                placeholder="Pilih Puskesmas"
-                className="p-2 rounded"
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    idAdminPuskesmas: e.value.id,
-                  }))
-                }
-              />
+          <CustomDropdown
+            value={
+              adminPuskesmas && adminPuskesmas.length > 0
+                ? adminPuskesmas.find(
+                    (puskesmas) => puskesmas.id === datas.idAdminPuskesmas
+                  ) || null
+                : null
+            }
+            filter
+            options={adminPuskesmas || []}
+            optionLabel="namaPuskesmas"
+            itemTemplate={itemTemplatePuskesmas}
+            valueTemplate={valueTemplatePuskesmas}
+            placeholder="Pilih Puskesmas"
+            className="p-2 rounded"
+            onChange={(e) =>
+              setDatas((prev) => ({
+                ...prev,
+                idAdminPuskesmas: e.value.id,
+              }))
+            }
+          />
 
-              {errors.idAdminPuskesmas && (
-                <small className="p-error -mt-3 text-sm">
-                  {errors.idAdminPuskesmas}
-                </small>
-              )}
-            </>
+          {errors.idAdminPuskesmas && (
+            <small className="p-error -mt-3 text-sm">
+              {errors.idAdminPuskesmas}
+            </small>
           )}
 
           <label htmlFor="" className="-mb-3">
