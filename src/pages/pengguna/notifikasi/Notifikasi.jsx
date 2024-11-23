@@ -70,9 +70,9 @@ const Notifikasi = () => {
 
     useEffect(() => {
         const sortedNotifications = [...rawNotifikasiList].sort((a, b) => {
-            return sortOrder === 1
-                ? b.timestamp - a.timestamp
-                : a.timestamp - b.timestamp;
+            return sortOrder === 2
+                ? a.timestamp - b.timestamp
+                : b.timestamp - a.timestamp;
         });
         setNotifikasiList(sortedNotifications);
     }, [sortOrder, rawNotifikasiList]);
