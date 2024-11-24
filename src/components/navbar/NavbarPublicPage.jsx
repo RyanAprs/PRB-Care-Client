@@ -1,6 +1,13 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { HomeIcon, Hospital, HousePlus, LogIn, ScrollText } from "lucide-react";
+import {
+  Calendar,
+  HomeIcon,
+  Hospital,
+  HousePlus,
+  LogIn,
+  ScrollText,
+} from "lucide-react";
 import { ThemeSwitcher } from "../themeSwitcher/ThemeSwitcher";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
@@ -174,6 +181,18 @@ const NavbarPublicPage = () => {
             <HousePlus size={25} />
 
             <div className="text-sm">Apotek</div>
+          </Link>
+          <Link
+            to={"/data-prolanis"}
+            className={`flex flex-col items-center justify-center transition-all  ${
+              location.pathname === "/data-prolanis"
+                ? "opacity-100"
+                : "opacity-50"
+            }`}
+          >
+            <Calendar size={25} />
+
+            <div className="text-sm">Prolanis</div>
           </Link>
           <Link
             to={"/artikel"}
