@@ -147,7 +147,7 @@ const NavbarPublicPage = () => {
         className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-8"
         style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.05)" }}
       >
-        <div className="flex  justify-between items-center mx-2">
+        <div className="flex gap-5 justify-center items-center mx-2">
           <Link
             to={"/"}
             className={`flex flex-col items-center justify-center transition-all  ${
@@ -183,11 +183,9 @@ const NavbarPublicPage = () => {
             <div className="text-sm">Apotek</div>
           </Link>
           <Link
-            to={"/data-prolanis"}
+            to={"/prolanis"}
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/data-prolanis"
-                ? "opacity-100"
-                : "opacity-50"
+              location.pathname === "/prolanis" ? "opacity-100" : "opacity-50"
             }`}
           >
             <Calendar size={25} />
