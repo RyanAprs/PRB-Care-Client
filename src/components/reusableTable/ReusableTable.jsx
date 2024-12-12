@@ -320,10 +320,11 @@ export default function ReusableTable({
       field === "hasilEkg" ||
       field === "hasilDiagnosa" ||
       field === "waktuOperasional" ||
-      field === "judul"
+      field === "judul" ||
+      field === "deskripsi"
     ) {
       return (
-        <div className="max-w-96 max-h-36 overflow-x-auto break-words whitespace-normal">
+        <div className="max-w-[700px] max-h-36 overflow-x-auto break-words whitespace-normal">
           {valueString}
         </div>
       );
