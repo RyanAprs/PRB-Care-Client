@@ -273,7 +273,7 @@ const DataJadwalProlanis = () => {
         toast.current.show({
           severity: "success",
           summary: "Berhasil",
-          detail: "Data kontrol balik dihapus",
+          detail: "Data Prolanis dihapus",
           life: 3000,
         });
         try {
@@ -547,7 +547,7 @@ const DataJadwalProlanis = () => {
       </Dialog>
 
       <Dialog
-        header="Hapus Data Kontrol Balik"
+        header="Hapus Data Prolanis"
         visible={visibleDelete}
         className="md:w-1/2 w-full"
         onHide={() => {
@@ -587,7 +587,7 @@ const DataJadwalProlanis = () => {
       </Dialog>
 
       <Dialog
-        header="Pasien Selesai Kontrol Balik"
+        header="Pasien Selesai Prolanis"
         visible={visibleDone}
         className="md:w-1/2 w-full "
         onHide={() => {
