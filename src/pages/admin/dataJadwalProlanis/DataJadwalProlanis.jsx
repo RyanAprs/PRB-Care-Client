@@ -494,7 +494,7 @@ const DataJadwalProlanis = () => {
       </div>
 
       <Dialog
-        header={isEditMode ? "Ubah Data Artikel" : "Tambah Data Artikel"}
+        header={isEditMode ? "Ubah Data Prolanis" : "Tambah Data Prolanis"}
         visible={visible}
         maximizable
         className="md:w-1/2 w-full"

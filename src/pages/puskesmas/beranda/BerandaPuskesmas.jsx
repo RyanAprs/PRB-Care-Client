@@ -1,4 +1,4 @@
-import {ShoppingCart, Stethoscope, UserPlus,ScrollText} from "lucide-react";
+import {ShoppingCart, Stethoscope, UserPlus,ScrollText, Calendar} from "lucide-react";
 import {Card} from "primereact/card";
 import {useNavigate} from "react-router-dom";
 import {Ripple} from 'primereact/ripple';
@@ -28,6 +28,12 @@ const DashboardPuskesmas = () => {
             title: "Ambil Obat",
             desc: "Kelola data ambil obat",
             route: "/puskesmas/data-pengambilan-obat",
+        },
+        {
+            icon: <Calendar size={54} strokeWidth={1.2}/>,
+            title: "Jadwal Prolanis",
+            desc: "Kelola data jadwal prolanis",
+            route: "/puskesmas/data-prolanis",
         },
         {
             icon: <ScrollText size={54} strokeWidth={1.2}/>,
