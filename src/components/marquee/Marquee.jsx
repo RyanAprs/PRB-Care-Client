@@ -1,8 +1,6 @@
 import ReactMarquee from "react-fast-marquee";
 
 const Marquee = ({ data }) => {
-
-
   return (
     <div className={`w-full flex-col md:flex-row gap-2 ${data.length > 0 ? "flex":"hidden"}` }>
       <ReactMarquee gradient={false} speed={50} className={`border-y-[3px] py-2`}>

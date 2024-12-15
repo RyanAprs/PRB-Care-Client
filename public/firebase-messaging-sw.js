@@ -66,9 +66,14 @@ messaging.onBackgroundMessage((payload) => {
     tanggalPengambilan,
     tanggalKontrol,
     tanggalBatal,
+    tanggalMulai,
+    tanggalSelesai,
   } = payload.data;
 
-  let tanggalAmbilLocal, tanggalBatalLocal;
+  let tanggalAmbilLocal,
+    tanggalBatalLocal,
+    tanggalMulaiLocal,
+    tanggalSelesaiLocal;
   let notificationTitle, notificationBody;
 
   if (namaApotek) {
@@ -85,7 +90,14 @@ messaging.onBackgroundMessage((payload) => {
       timestamp: Date.now(),
     };
     storeNotificationData(notificationData);
-  } else if (namaPuskesmas) {
+  } else if (namaPuskesmas && tanggalMulai && tanggalSelesai) {
+    tanggalMulaiLocal = convertUnixTimestampToLocalTime(parseInt(tanggalMulai));
+    tanggalSelesaiLocal = convertUnixTimestampToLocalTime(
+      parseInt(tanggalSelesai)
+    );
+    notificationTitle = "PRBCare - Prolanis";
+    notificationBody = `Terdapat jadwal Prolanis pada ${tanggalMulaiLocal} sampai ${tanggalSelesaiLocal} di ${namaPuskesmas}. Pasien dimohon hadir jika berkenan.`;
+  } else if (namaPuskesmas && tanggalKontrol) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
       parseInt(tanggalKontrol)
     );
@@ -103,7 +115,7 @@ messaging.onBackgroundMessage((payload) => {
 
   const notificationOptions = {
     body: notificationBody,
-    icon: '/assets/prbcare.png'
+    icon: "/assets/prbcare.png",
   };
 
   self.registration.showNotification(notificationTitle, notificationOptions);
