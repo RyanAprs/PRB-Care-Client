@@ -39,14 +39,13 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
-import {InputNumber} from "primereact/inputnumber";
+import { InputNumber } from "primereact/inputnumber";
 const DataKontrolBalik = () => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const { dispatch } = useContext(AuthContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
-    noAntrean: 0,
     idPasien: "",
     tinggiBadan: 0,
     beratBadan: 0,
@@ -122,7 +121,6 @@ const DataKontrolBalik = () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
-      noAntrean: 0,
       idPasien: 0,
       tinggiBadan: 0,
       beratBadan: 0,
@@ -244,7 +242,6 @@ const DataKontrolBalik = () => {
         );
         setSelectedDate(convertDate);
         setDatas({
-          noAntrean: dataResponse.noAntrean,
           idPasien: dataResponse.idPasien,
           tanggalKontrol: dataResponse.tanggalKontrol,
           tinggiBadan: dataResponse.tinggiBadan,
@@ -513,7 +510,6 @@ const DataKontrolBalik = () => {
 
   const columns = [
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
-    { header: "No Antrean", field: "noAntrean" },
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
 
@@ -606,33 +602,6 @@ const DataKontrolBalik = () => {
         blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
-          {isEditMode && (
-            <>
-              <label htmlFor="" className="-mb-3">
-                Nomor Atrean:
-              </label>
-
-              <InputNumber
-                  useGrouping={false}
-                  showButtons
-                  min={0}
-                  placeholder="Nomor Antrean"
-                  className="p-input text-lg rounded"
-                  value={datas.noAntrean}
-                  onChange={(e) =>
-                      setDatas((prev) => ({
-                        ...prev,
-                        noAntrean: parseInt(e.value, 10) || 0,
-                      }))
-                  }
-              />
-              {errors.noAntrean && (
-                <small className="p-error -mt-3 text-sm">
-                  {errors.noAntrean}
-                </small>
-              )}
-            </>
-          )}
           <label htmlFor="" className="-mb-3">
             Pilih Pasien:
           </label>
@@ -666,7 +635,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
-                  autoResize
+                autoResize
                 type="text"
                 placeholder="Keluhan"
                 className="p-input text-lg p-3  rounded"
@@ -683,18 +652,18 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputNumber
-                  useGrouping={false}
-                  showButtons
-                  min={0}
-                  placeholder="Tinggi Badan"
-                  className="p-input text-lg rounded"
-                  value={datas.tinggiBadan}
-                  onChange={(e) =>
-                      setDatas((prev) => ({
-                        ...prev,
-                        tinggiBadan: parseInt(e.value, 10) || 0,
-                      }))
-                  }
+                useGrouping={false}
+                showButtons
+                min={0}
+                placeholder="Tinggi Badan"
+                className="p-input text-lg rounded"
+                value={datas.tinggiBadan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    tinggiBadan: parseInt(e.value, 10) || 0,
+                  }))
+                }
               />
               {errors.tinggiBadan && (
                 <small className="p-error -mt-3 text-sm">
@@ -706,18 +675,18 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputNumber
-                  useGrouping={false}
-                  showButtons
-                  min={0}
-                  placeholder="Berat Badan"
-                  className="p-input text-lg rounded"
-                  value={datas.beratBadan}
-                  onChange={(e) =>
-                      setDatas((prev) => ({
-                        ...prev,
-                        beratBadan: parseInt(e.value, 10) || 0,
-                      }))
-                  }
+                useGrouping={false}
+                showButtons
+                min={0}
+                placeholder="Berat Badan"
+                className="p-input text-lg rounded"
+                value={datas.beratBadan}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    beratBadan: parseInt(e.value, 10) || 0,
+                  }))
+                }
               />
               {errors.beratBadan && (
                 <small className="p-error -mt-3 text-sm">
@@ -750,18 +719,18 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputNumber
-                  useGrouping={false}
-                  showButtons
-                  min={0}
-                  placeholder="Denyut Nadi"
-                  className="p-input text-lg rounded"
-                  value={datas.denyutNadi}
-                  onChange={(e) =>
-                      setDatas((prev) => ({
-                        ...prev,
-                        denyutNadi: parseInt(e.value, 10) || 0,
-                      }))
-                  }
+                useGrouping={false}
+                showButtons
+                min={0}
+                placeholder="Denyut Nadi"
+                className="p-input text-lg rounded"
+                value={datas.denyutNadi}
+                onChange={(e) =>
+                  setDatas((prev) => ({
+                    ...prev,
+                    denyutNadi: parseInt(e.value, 10) || 0,
+                  }))
+                }
               />
               {errors.denyutNadi && (
                 <small className="p-error -mt-3 text-sm">
@@ -773,7 +742,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
-                  autoResize
+                autoResize
                 type="text"
                 placeholder="Hasil Lab"
                 className="p-input text-lg p-3  rounded"
@@ -795,7 +764,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
-                  autoResize
+                autoResize
                 type="text"
                 placeholder="Hasil EKG"
                 className="p-input text-lg p-3  rounded"
@@ -817,7 +786,7 @@ const DataKontrolBalik = () => {
               </label>
 
               <InputTextarea
-                  autoResize
+                autoResize
                 type="text"
                 placeholder="Hasil Diagnosa"
                 className="p-input text-lg p-3  rounded"

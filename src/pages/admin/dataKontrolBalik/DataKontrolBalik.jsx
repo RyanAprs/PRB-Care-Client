@@ -47,7 +47,6 @@ const DataKontrolBalik = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [datas, setDatas] = useState({
-    noAntrean: 0,
     idPasien: "",
     tinggiBadan: 0,
     beratBadan: 0,
@@ -122,7 +121,6 @@ const DataKontrolBalik = () => {
     setErrors({});
     setSelectedDate(null);
     setDatas({
-      noAntrean: 0,
       idPasien: 0,
       tinggiBadan: 0,
       beratBadan: 0,
@@ -245,7 +243,6 @@ const DataKontrolBalik = () => {
         );
         setSelectedDate(convertDate);
         setDatas({
-          noAntrean: dataResponse.noAntrean,
           idPasien: dataResponse.idPasien,
           tanggalKontrol: dataResponse.tanggalKontrol,
           tinggiBadan: dataResponse.tinggiBadan,
@@ -520,7 +517,6 @@ const DataKontrolBalik = () => {
     { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
     { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
-    { header: "Nomor Antrean", field: "noAntrean" },
     { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },
@@ -612,32 +608,6 @@ const DataKontrolBalik = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
-          {isEditMode && (
-            <>
-              <label htmlFor="" className="-mb-3">
-                Nomor Atrean:
-              </label>
-              <InputNumber
-                useGrouping={false}
-                showButtons
-                min={0}
-                placeholder="Nomor Antrean"
-                className="p-input text-lg rounded"
-                value={datas.noAntrean}
-                onChange={(e) =>
-                  setDatas((prev) => ({
-                    ...prev,
-                    noAntrean: parseInt(e.value, 10) || 0,
-                  }))
-                }
-              />
-              {errors.noAntrean && (
-                <small className="p-error -mt-3 text-sm">
-                  {errors.noAntrean}
-                </small>
-              )}
-            </>
-          )}
           <label htmlFor="" className="-mb-3">
             Pilih Pasien:
           </label>
