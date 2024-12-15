@@ -31,6 +31,7 @@ import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import WaktuOperasional from "../../../components/waktuOperasional/WaktuOperasional";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import { Password } from "primereact/password";
 
 const DataPuskesmas = () => {
   const toast = useRef(null);
@@ -463,10 +464,10 @@ const DataPuskesmas = () => {
           <label htmlFor="" className="-mb-3">
             Password:
           </label>
-          <InputText
-            type="password"
+          <Password
+            feedback={false}
+            toggleMask
             placeholder="Password"
-            className="p-input text-lg p-3 rounded"
             value={datas.password}
             onChange={(e) =>
               setDatas((prev) => ({

@@ -60,6 +60,8 @@ import { useModalUpdate } from "../../config/context/ModalUpdateContext";
 import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import img from "/src/assets/sun-tornado.svg";
+import { Password } from "primereact/password";
+
 const NavbarAdmin = ({ children }) => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
@@ -1221,11 +1223,11 @@ const NavbarAdmin = ({ children }) => {
             Password Lama:
           </label>
 
-          <InputText
-            type="password"
+          <Password
+            toggleMask
             placeholder="Password Lama"
-            className="p-input text-lg p-3  rounded"
             value={dataPassword.currentPassword}
+            feedback={false}
             onChange={(e) =>
               setDataPassword((prev) => ({
                 ...prev,
@@ -1233,6 +1235,7 @@ const NavbarAdmin = ({ children }) => {
               }))
             }
           />
+
           {errors.currentPassword && (
             <small className="p-error -mt-3 text-sm">
               {errors.currentPassword}
@@ -1241,10 +1244,10 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Password Baru:
           </label>
-          <InputText
-            type="password"
+          <Password
+            feedback={false}
+            toggleMask
             placeholder="Password Baru"
-            className="p-input text-lg p-3  rounded"
             value={dataPassword.newPassword}
             onChange={(e) =>
               setDataPassword((prev) => ({
@@ -1261,10 +1264,10 @@ const NavbarAdmin = ({ children }) => {
           <label htmlFor="" className="-mb-3">
             Konfirmasi Password:
           </label>
-          <InputText
-            type="password"
+          <Password
+            feedback={false}
+            toggleMask
             placeholder="Konfirmasi Password Baru"
-            className="p-input text-lg p-3  rounded"
             value={dataPassword.confirmPassword}
             onChange={(e) =>
               setDataPassword((prev) => ({

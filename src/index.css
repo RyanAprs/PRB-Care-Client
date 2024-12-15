@@ -110,11 +110,9 @@ body.dark .p-input:hover {
   border-color: #56b588;
 }
 
-
-
 .p-dialog {
   z-index: 1000 !important;
-  border: 0
+  border: 0;
 }
 
 .p-dialog-mask {
@@ -150,11 +148,11 @@ body.dark .p-input:hover {
   border: 0px !important;
 }
 
-.text-black{
+.text-black {
   color: #495057;
 }
 
-.text-justify{
+.text-justify {
   overflow-wrap: break-word;
   word-break: break-word;
 }
@@ -170,21 +168,22 @@ body.dark {
   color: white;
 }
 .ql-editor {
-  font-family: 'Poppins';
+  font-family: "Poppins";
   min-height: 320px;
   max-height: fit-content;
 }
 
-body{
+body {
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 }
-.ql-tooltip{
+.ql-tooltip {
   z-index: 1200 !important;
-  font-family: 'Poppins';
+  font-family: "Poppins";
 }
-.ql-blank, .ql-editor{
+.ql-blank,
+.ql-editor {
   background-color: rgba(255, 255, 255, 0) !important;
 }
 .ql-editor.ql-blank::before {
@@ -214,17 +213,17 @@ body.dark .ql-editing a {
 }
 
 body.dark .ql-tooltip input,
-body.dark .ql-editing input{
+body.dark .ql-editing input {
   border: 1px solid #383838 !important;
 }
 body.dark .ql-tooltip input:focus,
-body.dark .ql-editing input:focus{
+body.dark .ql-editing input:focus {
   border: 1px solid #56b588 !important;
   box-shadow: none;
   outline: none;
 }
 .ql-tooltip input:focus,
-.ql-editing input:focus{
+.ql-editing input:focus {
   border: 1px solid #56a17e !important;
   box-shadow: none;
   outline: none;
@@ -300,16 +299,14 @@ body.dark .ql-editor[contenteditable="true"] {
   background-color: #121212 !important;
 }
 
-
-
 body.dark #editor-resizer .toolbar {
   background-color: #1e1e1e;
   border-color: #b0b0b0;
-  color: #b0b0b0
+  color: #b0b0b0;
 }
 
-body.dark #editor-resizer .toolbar .group a{
-  border-color:  #b0b0b0;
+body.dark #editor-resizer .toolbar .group a {
+  border-color: #b0b0b0;
   color: #b0b0b0;
 }
 
@@ -317,12 +314,12 @@ body.dark #editor-resizer .toolbar .group a{
   overflow: hidden;
 }
 
-.p-inputnumber-input{
-  padding:  12px;
-  width:80% !important;
+.p-inputnumber-input {
+  padding: 12px;
+  width: 80% !important;
 }
-input.p-inputtext.p-component[readonly][role="combobox"]{
-  padding:  12px;
+input.p-inputtext.p-component[readonly][role="combobox"] {
+  padding: 12px;
 }
 
 body.dark .logo-prbcare {
@@ -330,4 +327,21 @@ body.dark .logo-prbcare {
 }
 body .logo-prbcare {
   fill: #495057 !important;
+}
+
+.p-password-input {
+  width: 100%;
+  padding: 1rem;
+  padding-right: 3rem;
+}
+.p-icon-field {
+  width: 100%;
+}
+.p-input-icon {
+  margin-right: 10px;
+}
+.p-input-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
