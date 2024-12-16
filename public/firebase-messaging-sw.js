@@ -97,6 +97,12 @@ messaging.onBackgroundMessage((payload) => {
     );
     notificationTitle = "PRBCare - Prolanis";
     notificationBody = `Terdapat jadwal Prolanis pada ${tanggalMulaiLocal} sampai ${tanggalSelesaiLocal} di ${namaPuskesmas}. Silahkan hadir jika berkenan.`;
+    const notificationData = {
+      title: notificationTitle,
+      body: notificationBody,
+      timestamp: Date.now(),
+    };
+    storeNotificationData(notificationData);
   } else if (namaPuskesmas && tanggalKontrol) {
     tanggalAmbilLocal = convertUnixTimestampToLocalTime(
       parseInt(tanggalKontrol)

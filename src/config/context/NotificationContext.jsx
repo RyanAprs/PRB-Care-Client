@@ -89,7 +89,6 @@ export function NotificationProvider({ children }) {
       let tanggalBatalLocal = "";
       let tanggalMulaiLocal = "";
       let tanggalSelesaiLocal = "";
-      let notificationData = {};
 
       if (namaApotek) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
@@ -100,12 +99,6 @@ export function NotificationProvider({ children }) {
         );
         notificationTitle = "PRBCare - Ambil Obat";
         notificationBody = `${namaLengkap}, jadwal pengambilan obat anda di apotek ${namaApotek} mulai ${tanggalAmbilLocal} hingga ${tanggalBatalLocal}. Pastikan datang pada jam operasional.`;
-        const notificationData = {
-          title: notificationTitle,
-          body: notificationBody,
-          timestamp: Date.now(),
-        };
-        storeNotificationData(notificationData);
       } else if (namaPuskesmas && tanggalMulai && tanggalSelesai) {
         tanggalMulaiLocal = convertUnixToHumanHour(parseInt(tanggalMulai));
         tanggalSelesaiLocal = convertUnixToHumanHour(parseInt(tanggalSelesai));
@@ -120,12 +113,6 @@ export function NotificationProvider({ children }) {
         );
         notificationTitle = "PRBCare - Kontrol Balik";
         notificationBody = `${namaLengkap}, anda memiliki jadwal kontrol di puskesmas ${namaPuskesmas} pada ${tanggalAmbilLocal}. Pastikan datang pada jam operasional.`;
-        const notificationData = {
-          title: notificationTitle,
-          body: notificationBody,
-          timestamp: Date.now(),
-        };
-        storeNotificationData(notificationData);
       }
 
       if (navigator.serviceWorker) {
@@ -136,6 +123,13 @@ export function NotificationProvider({ children }) {
           });
         });
       }
+
+      const notificationData = {
+        title: notificationTitle,
+        body: notificationBody,
+        timestamp: Date.now(),
+      };
+      storeNotificationData(notificationData);
 
       setNotifications((prev) => [...prev, notificationData]);
     };
