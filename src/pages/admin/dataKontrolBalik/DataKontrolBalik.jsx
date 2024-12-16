@@ -592,6 +592,7 @@ const DataKontrolBalik = () => {
           statuses={statuses}
           role="admin"
           onDownload={handleDownload}
+          path={"kontrol"}
         />
       </div>
 

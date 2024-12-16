@@ -584,6 +584,7 @@ const DataKontrolBalik = () => {
           onCancelled={handleModalCancelled}
           statuses={statuses}
           role="admin"
+          path={"kontrol"}
           onDownload={handleDownload}
         />
       </div>

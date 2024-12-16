@@ -92,6 +92,27 @@ export default function ReusableTable({
           </Button>
         </div>
       );
+    } else if (status === "selesai" && role === "admin" && path === "kontrol") {
+      return (
+        <div className="flex justify-center gap-2">
+          <Button
+            size="sm"
+            className="p-2  md:text-lg text-sm rounded-xl"
+            severity="warning"
+            onClick={() => onEdit(rowData)}
+          >
+            <Edit style={{ color: "var(--surface-0) !important" }} />
+          </Button>
+          <Button
+            size="sm"
+            className="p-2  md:text-lg text-sm rounded-xl"
+            severity="danger"
+            onClick={() => onDelete(rowData)}
+          >
+            <Trash2 />
+          </Button>
+        </div>
+      );
     } else if (role === "apoteker" && status === "diambil") {
       return (
         <>
@@ -230,19 +251,6 @@ export default function ReusableTable({
             onClick={() => onDone(rowData)}
           >
             <CircleCheckBig />
-          </Button>
-        </div>
-      );
-    } else if (status === "selesai" && role === "admin") {
-      return (
-        <div className="flex justify-center gap-2">
-          <Button
-            size="sm"
-            className="p-2  md:text-lg text-sm rounded-xl"
-            severity="danger"
-            onClick={() => onDelete(rowData)}
-          >
-            <Trash2 />
           </Button>
         </div>
       );
