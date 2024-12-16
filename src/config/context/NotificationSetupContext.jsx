@@ -55,7 +55,7 @@ export const NotificationSetupProvider = ({ children }) => {
             "/firebase-messaging-sw.js",
             { scope: "/" }
           );
-
+          await navigator.serviceWorker.ready;
           const currentToken = await getToken(messaging, {
             vapidKey: `${VITE_VAPID_KEY}`,
             serviceWorkerRegistration: registration,

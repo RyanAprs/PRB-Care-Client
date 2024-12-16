@@ -110,7 +110,7 @@ export function NotificationProvider({ children }) {
         tanggalMulaiLocal = convertUnixToHumanHour(parseInt(tanggalMulai));
         tanggalSelesaiLocal = convertUnixToHumanHour(parseInt(tanggalSelesai));
         notificationTitle = "PRBCare - Prolanis";
-        notificationBody = `Terdapat jadwal Prolanis pada ${tanggalMulaiLocal} sampai ${tanggalSelesaiLocal} di ${namaPuskesmas}. Pasien dimohon hadir jika berkenan.`;
+        notificationBody = `Terdapat jadwal Prolanis pada ${tanggalMulaiLocal} sampai ${tanggalSelesaiLocal} di ${namaPuskesmas}. Silahkan hadir jika berkenan.`;
       } else if (namaPuskesmas && tanggalKontrol) {
         tanggalAmbilLocal = convertUnixTimestampToLocalTime(
           parseInt(tanggalKontrol)
