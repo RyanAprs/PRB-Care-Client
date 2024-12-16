@@ -2,6 +2,8 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import { updateCurrentTokenPerangkatPengguna } from "@/services/PenggunaService.js";
+import { ProgressSpinner } from "primereact/progressspinner"; 
+
 const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
 const firebaseConfig = {
   apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
@@ -24,6 +26,7 @@ export const NotificationSetupProvider = ({ children }) => {
   const [permission, setPermission] = useState(
     typeof Notification !== "undefined" ? Notification.permission : "granted"
   );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (
@@ -51,6 +54,7 @@ export const NotificationSetupProvider = ({ children }) => {
 
       if (Notification.permission === "granted") {
         if ("serviceWorker" in navigator) {
+          setLoading(true); 
           const registration = await navigator.serviceWorker.register(
             "/firebase-messaging-sw.js",
             { scope: "/" }
@@ -70,6 +74,7 @@ export const NotificationSetupProvider = ({ children }) => {
           } else {
             console.log("No registration token available.");
           }
+          setLoading(false);
         }
       } else if (Notification.permission === "denied") {
         setPermission("denied");
@@ -77,6 +82,7 @@ export const NotificationSetupProvider = ({ children }) => {
       }
     } catch (error) {
       console.log("Error in handleNotificationSetup:", error);
+      setLoading(false); 
     }
   };
 
@@ -102,6 +108,28 @@ export const NotificationSetupProvider = ({ children }) => {
       value={{ permission, handleNotificationSetup }}
     >
       {children}
+      {loading && (
+        <div
+          className={`fixed flex item-center justify-center bg-[#ffffff] dark:bg-[#1e1e1e]`}
+          data-pc-section="mask"
+          style={{
+            height: "100%",
+            width: "100%",
+            left: 0,
+            top: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+          }}
+        >
+          <div className="flex flex-col items-center justify-center">
+          <p className="text-lg">Tunggu Sebentar</p>
+          <ProgressSpinner />
+          <p className="text-lg">Menyiapkan Akun Anda</p>
+          </div>
+          
+        </div>
+      )}
     </NotificationSetupContext.Provider>
   );
 };
