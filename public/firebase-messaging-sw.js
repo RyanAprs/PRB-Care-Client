@@ -91,10 +91,8 @@ messaging.onBackgroundMessage((payload) => {
     };
     storeNotificationData(notificationData);
   } else if (namaPuskesmas && tanggalMulai && tanggalSelesai) {
-    tanggalMulaiLocal = convertUnixTimestampToLocalTime(parseInt(tanggalMulai));
-    tanggalSelesaiLocal = convertUnixTimestampToLocalTime(
-      parseInt(tanggalSelesai)
-    );
+    tanggalMulaiLocal = convertUnixToHumanHour(parseInt(tanggalMulai));
+    tanggalSelesaiLocal = convertUnixToHumanHour(parseInt(tanggalSelesai));
     notificationTitle = "PRBCare - Prolanis";
     notificationBody = `Terdapat jadwal Prolanis pada ${tanggalMulaiLocal} sampai ${tanggalSelesaiLocal} di ${namaPuskesmas}. Silahkan hadir jika berkenan.`;
     const notificationData = {
@@ -137,3 +135,13 @@ function convertUnixTimestampToLocalTime(timestamp) {
   });
   return localDate;
 }
+function  convertUnixToHumanHour(unixTimestamp){
+  const date = new Date(unixTimestamp * 1000);
+
+  return date.toLocaleTimeString("id-ID", {
+    month: "long",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
