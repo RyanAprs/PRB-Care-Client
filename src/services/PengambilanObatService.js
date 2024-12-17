@@ -25,14 +25,10 @@ export const getAllPengambilanObat = async () => {
     return [];
   }
 
-  console.log(response.data.data);
-
   const formattedData = response.data.data.map((item) => ({
     ...item,
     tanggalPengambilan: convertUnixToHuman(item.tanggalPengambilan),
   }));
-
-  console.log(formattedData);
 
   return formattedData;
 };

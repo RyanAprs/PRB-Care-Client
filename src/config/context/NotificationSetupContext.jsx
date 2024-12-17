@@ -5,14 +5,15 @@ import { updateCurrentTokenPerangkatPengguna } from "@/services/PenggunaService.
 import { ProgressSpinner } from "primereact/progressspinner"; 
 
 const VITE_VAPID_KEY = import.meta.env.VITE_VAPID_KEY;
+// contoh config, ganti konfigurasi firebase ini dengan milikmu sendiri
 const firebaseConfig = {
-  apiKey: "AIzaSyCD3Ev4h06VRpvizQAsmI0G8VIiaVjNxnw",
-  authDomain: "prb-care-v1-70a29.firebaseapp.com",
-  projectId: "prb-care-v1-70a29",
-  storageBucket: "prb-care-v1-70a29.appspot.com",
-  messagingSenderId: "665778315877",
-  appId: "1:665778315877:web:0271e8ba4b02529d951c8c",
-  measurementId: "G-122Y1K7VRS",
+  apiKey: "AIzaSyC39SjqXEGlXRS_L1rnXShncUScaH9XTp4",
+  authDomain: "prbcare-b4b05.firebaseapp.com",
+  projectId: "prbcare-b4b05",
+  storageBucket: "prbcare-b4b05.firebasestorage.app",
+  messagingSenderId: "192172579834",
+  appId: "1:192172579834:web:a08abd10a89027f432a243",
+  measurementId: "G-ST7G32LS2Q"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);

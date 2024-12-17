@@ -7,6 +7,13 @@ import { PrimeReactProvider } from "primereact/api";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import { ModalUpdateProvider } from "./config/context/ModalUpdateContext.jsx";
 
+const mode = import.meta.env.VITE_MODE;
+if (mode === "production") {
+  console.log = function () {};
+  console.warn = function () {};
+  console.error = function () {};
+}
+
 function Main() {
   const helmetContext = {};
   const darkMode = useDarkMode(false, { classNameDark: "dark" });
