@@ -339,10 +339,23 @@ body .logo-prbcare {
   width: 100%;
 }
 .p-input-icon {
-  margin-right: 10px;
+  margin-right: 8px;
 }
+
+.p-input-icon svg{
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.p-input-icon svg:active{
+  outline: 0 none;
+}
+
 .p-input-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.rfm-marquee{
+  min-width: 100%;
 }

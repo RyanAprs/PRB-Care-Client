@@ -108,6 +108,17 @@ export const NotificationSetupProvider = ({ children }) => {
       value={{ permission, handleNotificationSetup }}
     >
       {children}
+      {useEffect(() => {
+        if (loading) {
+          document.body.style.overflow = "hidden";
+        } else {
+          document.body.style.overflow = "";
+        }
+        return () => {
+          document.body.style.overflow = "";
+        };
+      }, [loading])}
+  
       {loading && (
         <div
           className={`fixed flex item-center justify-center bg-[#ffffff] dark:bg-[#1e1e1e]`}
@@ -123,11 +134,10 @@ export const NotificationSetupProvider = ({ children }) => {
           }}
         >
           <div className="flex flex-col items-center justify-center">
-          <p className="text-lg">Tunggu Sebentar</p>
-          <ProgressSpinner />
-          <p className="text-lg">Menyiapkan Akun Anda</p>
+            <p className="text-lg">Tunggu Sebentar</p>
+            <ProgressSpinner />
+            <p className="text-lg">Menyiapkan Akun Anda</p>
           </div>
-          
         </div>
       )}
     </NotificationSetupContext.Provider>
