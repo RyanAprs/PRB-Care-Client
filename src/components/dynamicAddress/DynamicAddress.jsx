@@ -2,6 +2,8 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Button } from "primereact/button";
 
 const ADDRESS_URI = import.meta.env.VITE_ADDRESS_API_URI;
 
@@ -11,6 +13,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
   const [currentWidth, setCurrentWidth] = useState();
+  const [isConnectionError, setisConnectionError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const ref = useRef();
   const { address, setAddress } = useContext(AddressContext);
 
@@ -28,42 +32,100 @@ const DynamicAddress = ({ reset, prevAddress }) => {
     }
   }, [reset, prevAddress, setAddress]);
 
+  const fetchProvinces = async () => {
+    setisConnectionError(false);
+    try {
+      setLoading(true);
+      const response = await fetch(`${ADDRESS_URI}/provinces.json`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setProvinces(data);
+      setLoading(false);
+    } catch (error) {
+      setisConnectionError(true);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetch(`${ADDRESS_URI}/provinces.json`)
-      .then((response) => {
+    fetchProvinces();
+  }, []);
+
+  const fetchRegencies = async () => {
+    setisConnectionError(false);
+    if (address.provinsiId) {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `${ADDRESS_URI}/regencies/${address.provinsiId}.json`
+        );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        return response.json();
-      })
-      .then((data) => setProvinces(data))
-      .catch((error) => {
-        console.error("Error fetching provinces:", error);
-      });
-  }, []);
+        const data = await response.json();
+        setRegencies(data);
+        setLoading(false);
+      } catch (error) {
+        setisConnectionError(true);
+        setLoading(false);
+      }
+    }
+  };
 
   useEffect(() => {
-    if (address.provinsiId) {
-      fetch(`${ADDRESS_URI}/regencies/${address.provinsiId}.json`)
-        .then((response) => response.json())
-        .then((data) => setRegencies(data));
-    }
+    fetchRegencies();
   }, [address.provinsiId]);
 
-  useEffect(() => {
+  const fetchDistricts = async () => {
+    setisConnectionError(false);
     if (address.kabupatenId) {
-      fetch(`${ADDRESS_URI}/districts/${address.kabupatenId}.json`)
-        .then((response) => response.json())
-        .then((data) => setDistricts(data));
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `${ADDRESS_URI}/districts/${address.kabupatenId}.json`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDistricts(data);
+        setLoading(false);
+      } catch (error) {
+        setisConnectionError(true);
+        setLoading(false);
+      }
     }
-  }, [address.kabupatenId]);
+  };
 
   useEffect(() => {
+    fetchDistricts();
+  }, [address.kabupatenId]);
+
+  const fetchVillages = async () => {
+    setisConnectionError(false);
     if (address.kecamatanId) {
-      fetch(`${ADDRESS_URI}/villages/${address.kecamatanId}.json`)
-        .then((response) => response.json())
-        .then((data) => setVillages(data));
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `${ADDRESS_URI}/villages/${address.kecamatanId}.json`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setVillages(data);
+        setLoading(false);
+      } catch (error) {
+        setisConnectionError(true);
+        setLoading(false);
+      }
     }
+  };
+
+  useEffect(() => {
+    fetchVillages();
   }, [address.kecamatanId]);
 
   const handleProvinceChange = (e) => {
@@ -121,111 +183,140 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       [name]: value,
     }));
   };
+
   useEffect(() => {
     const element = ref.current.getElement();
     setCurrentWidth(element.clientWidth);
   }, [ref]);
+
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
-      <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
-        <Dropdown
-          value={address.provinsiId || ""}
-          options={provinces.map((prov) => ({
-            label: prov.name,
-            value: prov.id,
-          }))}
-          onChange={handleProvinceChange}
-          placeholder="Pilih Provinsi"
-          filter
-          className="w-full p-2 text-sm"
-          required
-          ref={ref}
-          pt={{
-            panel: {
-              style: {
-                ...(currentWidth ? { width: currentWidth } : {}),
-              },
-            },
+      {isConnectionError ? (
+        <Button
+          label="Coba Lagi"
+          icon="pi pi-refresh"
+          className="bg-extraLightGreen"
+          onClick={() => {
+            setProvinces([]);
+            fetchProvinces();
           }}
         />
-        {address.provinsiId && (
-          <Dropdown
-            value={address.kabupatenId || ""}
-            options={regencies.map((reg) => ({
-              label: reg.name,
-              value: reg.id,
-            }))}
-            onChange={handleRegencyChange}
-            placeholder="Pilih Kabupaten"
-            filter
-            className="w-full p-2 text-sm "
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
-                },
-              },
-            }}
-          />
-        )}
-        {address.kabupatenId && (
-          <Dropdown
-            value={address.kecamatanId || ""}
-            options={districts.map((dist) => ({
-              label: dist.name,
-              value: dist.id,
-            }))}
-            onChange={handleDistrictChange}
-            placeholder="Pilih Kecamatan"
-            filter
-            className="w-full p-2 text-sm"
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
-                },
-              },
-            }}
-          />
-        )}
-        {address.kecamatanId && (
-          <Dropdown
-            value={address.desaId || ""}
-            options={villages.map((village) => ({
-              label: village.name,
-              value: village.id,
-            }))}
-            onChange={handleVillageChange}
-            placeholder="Pilih Desa"
-            filter
-            className="w-full p-2 text-sm "
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
-                },
-              },
-            }}
-          />
-        )}
-        {address.desaId && (
-          <InputText
-            type="text"
-            value={address.detail || ""}
-            placeholder="Detail Alamat"
-            name="detail"
-            onChange={handleInputChange}
-            className="w-full p-3 text-slg "
-            required
-          />
-        )}
-      </div>
+      ) : (
+        <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
+          {loading ? (
+            <ProgressSpinner
+              style={{ width: "24px", height: "24px" }}
+              strokeWidth="8"
+              animationDuration="1s"
+              color="white"
+            />
+          ) : (
+            <>
+              <Dropdown
+                value={address.provinsiId || ""}
+                options={provinces.map((prov) => ({
+                  label: prov.name,
+                  value: prov.id,
+                }))}
+                disabled={isConnectionError || loading}
+                onChange={handleProvinceChange}
+                placeholder="Pilih Provinsi"
+                filter
+                className="w-full p-2 text-sm"
+                required
+                ref={ref}
+                pt={{
+                  panel: {
+                    style: {
+                      ...(currentWidth ? { width: currentWidth } : {}),
+                    },
+                  },
+                }}
+              />
+              {address.provinsiId && (
+                <Dropdown
+                  value={address.kabupatenId || ""}
+                  options={regencies.map((reg) => ({
+                    label: reg.name,
+                    value: reg.id,
+                  }))}
+                  disabled={isConnectionError || loading}
+                  onChange={handleRegencyChange}
+                  placeholder="Pilih Kabupaten"
+                  filter
+                  className="w-full p-2 text-sm "
+                  required
+                  ref={ref}
+                  pt={{
+                    panel: {
+                      style: {
+                        ...(currentWidth ? { width: currentWidth } : {}),
+                      },
+                    },
+                  }}
+                />
+              )}
+              {address.kabupatenId && (
+                <Dropdown
+                  value={address.kecamatanId || ""}
+                  options={districts.map((dist) => ({
+                    label: dist.name,
+                    value: dist.id,
+                  }))}
+                  disabled={isConnectionError || loading}
+                  onChange={handleDistrictChange}
+                  placeholder="Pilih Kecamatan"
+                  filter
+                  className="w-full p-2 text-sm"
+                  required
+                  ref={ref}
+                  pt={{
+                    panel: {
+                      style: {
+                        ...(currentWidth ? { width: currentWidth } : {}),
+                      },
+                    },
+                  }}
+                />
+              )}
+              {address.kecamatanId && (
+                <Dropdown
+                  value={address.desaId || ""}
+                  options={villages.map((village) => ({
+                    label: village.name,
+                    value: village.id,
+                  }))}
+                  disabled={isConnectionError || loading}
+                  onChange={handleVillageChange}
+                  placeholder="Pilih Desa"
+                  filter
+                  className="w-full p-2 text-sm "
+                  required
+                  ref={ref}
+                  pt={{
+                    panel: {
+                      style: {
+                        ...(currentWidth ? { width: currentWidth } : {}),
+                      },
+                    },
+                  }}
+                />
+              )}
+              {address.desaId && (
+                <InputText
+                  type="text"
+                  value={address.detail || ""}
+                  placeholder="Detail Alamat"
+                  name="detail"
+                  onChange={handleInputChange}
+                  className="w-full p-3 text-slg "
+                  required
+                />
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
