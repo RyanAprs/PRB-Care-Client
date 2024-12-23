@@ -410,7 +410,7 @@ const DataPengguna = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama pengguna:
+            Nama Pengguna:
           </label>
           <InputText
             type="text"
@@ -507,7 +507,7 @@ const DataPengguna = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Alamat
+            Alamat:
           </label>
           <DynamicAddress
             {...(isEditMode

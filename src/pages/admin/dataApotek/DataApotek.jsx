@@ -428,7 +428,7 @@ const DataApotek = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama apotek:
+            Nama Apotek:
           </label>
           <InputText
             type="text"
