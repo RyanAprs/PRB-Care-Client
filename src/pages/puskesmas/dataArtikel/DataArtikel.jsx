@@ -430,7 +430,7 @@ const DataArtikel = () => {
         }
       }
     } catch (error) {
-      console.log("apa" + error);
+      console.log(error);
       setButtonLoading(false);
       if (error instanceof ZodError) {
         const newErrors = {};
@@ -746,7 +746,7 @@ const DataArtikel = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Judul Artikel:
+            Judul Artikel
           </label>
 
           <InputText
@@ -766,7 +766,7 @@ const DataArtikel = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            <h3>Banner Artikel:</h3>
+            <h3>Banner Artikel</h3>
           </label>
 
           <div className="flex flex-col gap-4">
@@ -808,7 +808,7 @@ const DataArtikel = () => {
           </div>
 
           <label htmlFor="" className="-mb-3">
-            Ringkasan Artikel:
+            Ringkasan Artikel
           </label>
 
           <InputTextarea
@@ -830,7 +830,7 @@ const DataArtikel = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Konten Artikel:
+            Konten Artikel
           </label>
           <Editor
             value={datas.isi}

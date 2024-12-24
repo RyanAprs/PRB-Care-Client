@@ -421,7 +421,7 @@ const DataObat = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Pilih apotek:
+            Pilih Apotek
           </label>
 
           <CustomDropdown
@@ -453,7 +453,7 @@ const DataObat = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Nama obat:
+            Nama Obat
           </label>
 
           <InputText
@@ -472,7 +472,7 @@ const DataObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.namaObat}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Jumlah obat:
+            Jumlah Obat
           </label>
 
           <InputNumber

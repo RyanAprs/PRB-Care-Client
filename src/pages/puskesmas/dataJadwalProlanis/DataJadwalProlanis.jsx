@@ -451,7 +451,7 @@ const DataJadwalProlanis = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Deskripsi Kegiatan:
+            Deskripsi Kegiatan
           </label>
 
           <InputTextarea
@@ -473,7 +473,7 @@ const DataJadwalProlanis = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Waktu Pelaksanaan:
+            Waktu Pelaksanaan
           </label>
 
           <div className="flex gap-4 md:flex-row flex-col">

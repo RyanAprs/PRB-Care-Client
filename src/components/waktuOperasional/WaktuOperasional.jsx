@@ -67,8 +67,9 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
   }, [inputs, setWaktuOperasionalList]);
 
   return (
-    <div className="flex flex-col w-full gap-2">
-      <h3>Waktu Operasional:</h3>
+    <div className="flex flex-col w-full">
+      <h3>Waktu Operasional</h3>
+      <div className="flex flex-col gap-2">
       {inputs.map((input, index) => (
         <div
           key={index}
@@ -128,6 +129,8 @@ const WaktuOperasional = ({ setWaktuOperasionalList }) => {
           </div>
         </div>
       ))}
+      </div>
+      
     </div>
   );
 };

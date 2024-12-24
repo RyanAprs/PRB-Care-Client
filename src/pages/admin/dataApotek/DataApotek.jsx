@@ -428,7 +428,7 @@ const DataApotek = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama Apotek:
+            Nama Apotek
           </label>
           <InputText
             type="text"
@@ -446,7 +446,7 @@ const DataApotek = () => {
             <small className="p-error -mt-3 text-sm">{errors.namaApotek}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Username:
+            Username
           </label>
           <InputText
             type="text"
@@ -464,7 +464,7 @@ const DataApotek = () => {
             <small className="p-error -mt-3 text-sm">{errors.username}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Password:
+            Password
           </label>
           <Password
             feedback={false}
@@ -478,14 +478,14 @@ const DataApotek = () => {
               }))
             }
           />
-          <span className="text-sm -mt-4">
-            {isEditMode ? "*Kosongkan password jika tidak ingin diubah" : null}
+          <span className="text-[0.85rem] -mt-3">
+            {isEditMode ? "Kosongkan password jika tidak ingin diubah" : null}
           </span>
           {errors.password && (
             <small className="p-error -mt-3 text-sm">{errors.password}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Telepon:
+            Telepon
           </label>
           <InputText
             type="text"
@@ -503,15 +503,15 @@ const DataApotek = () => {
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <DynamicAddress
             {...(isEditMode
               ? { prevAddress: prevAddress }
               : { reset: resetAddress })}
           />
-          <span className="text-sm -mt-4">
-            {isEditMode ? "*Kosongkan alamat jika tidak ingin diubah" : null}
+          <span className="text-[0.85rem] -mt-3">
+            {isEditMode ? "Kosongkan alamat jika tidak ingin diubah" : null}
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
@@ -521,12 +521,9 @@ const DataApotek = () => {
               setWaktuOperasionalList={setWaktuOperasionalList}
             />
           </div>
-          <span className="text-sm -mt-4">
-            {isEditMode
-              ? "*Kosongkan waktu operasional jika tidak ingin diubah"
-              : null}
+          <span className="text-[0.85rem] -mt-3">
+            {isEditMode ? "Kosongkan waktu operasional jika tidak ingin diubah" : null}
           </span>
-
           {errors.waktuOperasional && (
             <small className="p-error -mt-3 text-sm">
               {errors.waktuOperasional}

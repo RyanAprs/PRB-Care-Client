@@ -536,7 +536,7 @@ const DataPasien = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nomor Rekam Medis:
+            Nomor Rekam Medis
           </label>
 
           <InputText
@@ -557,7 +557,7 @@ const DataPasien = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih Pengguna:
+            Pilih Pengguna
           </label>
 
           <CustomDropdown
@@ -583,7 +583,7 @@ const DataPasien = () => {
             <small className="p-error -mt-3 text-sm">{errors.idPengguna}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih Puskesmas:
+            Pilih Puskesmas
           </label>
 
           <CustomDropdown
@@ -616,7 +616,7 @@ const DataPasien = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Tanggal Daftar:
+            Tanggal Daftar
           </label>
 
           <Calendar

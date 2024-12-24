@@ -604,7 +604,7 @@ const DataKontrolBalik = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Pilih Pasien:
+            Pilih Pasien
           </label>
 
           <CustomDropdown
@@ -632,7 +632,7 @@ const DataKontrolBalik = () => {
           {isEditMode && (
             <>
               <label htmlFor="" className="-mb-3">
-                Keluhan:
+                Keluhan
               </label>
 
               <InputTextarea
@@ -649,7 +649,7 @@ const DataKontrolBalik = () => {
                 }
               />
               <label htmlFor="" className="-mb-3">
-                Tinggi Badan:
+                Tinggi Badan
               </label>
 
               <InputNumber
@@ -672,7 +672,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Berat Badan:
+                Berat Badan
               </label>
 
               <InputNumber
@@ -695,7 +695,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Tekanan Darah:
+                Tekanan Darah
               </label>
 
               <InputText
@@ -716,7 +716,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Denyut Nadi:
+                Denyut Nadi
               </label>
 
               <InputNumber
@@ -739,7 +739,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Hasil Lab:
+                Hasil Lab
               </label>
 
               <InputTextarea
@@ -761,7 +761,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Hasil EKG:
+                Hasil EKG
               </label>
 
               <InputTextarea
@@ -783,7 +783,7 @@ const DataKontrolBalik = () => {
                 </small>
               )}
               <label htmlFor="" className="-mb-3">
-                Hasil Diagnosa:
+                Hasil Diagnosa
               </label>
 
               <InputTextarea
@@ -814,7 +814,7 @@ const DataKontrolBalik = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Pilih Tanggal Kontrol:{" "}
+            Tanggal Kontrol{" "}
           </label>
 
           <Calendar

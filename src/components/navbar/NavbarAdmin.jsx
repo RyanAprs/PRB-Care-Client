@@ -546,11 +546,11 @@ const NavbarAdmin = ({ children }) => {
                     alt="LOGO PRB CARE"
                     className={`${
                       expanded ? "hidden" : "block"
-                    } w-auto px-2 max-h-20 mt-3 `}
+                    } w-auto px-2 max-h-24 mt-3 mb-3 `}
                   />
-                  <h1 className={`text-center ${expanded ? "mb-2" : "mb-3"}`}>
+                  {/* <h1 className={`text-center ${expanded ? "mb-2" : "mb-3"}`}>
                     {expanded ? " " : "PRBCare"}
-                  </h1>
+                  </h1> */}
                 </div>
               </>
 
@@ -558,7 +558,7 @@ const NavbarAdmin = ({ children }) => {
                 src={icon}
                 alt="LOGO PRB CARE"
                 className={`${
-                  expanded ? "block mb-5" : "hidden"
+                  expanded ? "block mb-5 mt-2" : "hidden"
                 } w-auto px-2 max-h-20`}
               />
 
@@ -1040,7 +1040,7 @@ const NavbarAdmin = ({ children }) => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}:
+            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}
           </label>
           <InputText
             type="text"
@@ -1055,7 +1055,7 @@ const NavbarAdmin = ({ children }) => {
           />
 
           <label htmlFor="" className="-mb-3">
-            Telepon:
+            Telepon
           </label>
           <InputText
             type="text"
@@ -1070,7 +1070,7 @@ const NavbarAdmin = ({ children }) => {
           />
 
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
             <p className="text-[#989da0] dark:text-[#6e6e6e]">
@@ -1081,7 +1081,7 @@ const NavbarAdmin = ({ children }) => {
           </div>
 
           <label htmlFor="" className="-mb-3">
-            Waktu Operasional:
+            Waktu Operasional
           </label>
           <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
             {isApotekUpdate
@@ -1113,7 +1113,7 @@ const NavbarAdmin = ({ children }) => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}:
+            {isApotekUpdate ? "Nama Apotek" : "Nama Puskesmas"}
           </label>
           <InputText
             type="text"
@@ -1141,7 +1141,7 @@ const NavbarAdmin = ({ children }) => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Telepon:
+            Telepon
           </label>
           <InputText
             type="text"
@@ -1164,11 +1164,11 @@ const NavbarAdmin = ({ children }) => {
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <DynamicAddress prevAddress={prevAddress} />
-          <span className="text-sm -mt-4">
-            *Kosongkan alamat jika tidak ingin diubah
+          <span className="text-[0.85rem] -mt-3">
+            Kosongkan alamat jika tidak ingin diubah
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
@@ -1178,10 +1178,9 @@ const NavbarAdmin = ({ children }) => {
               setWaktuOperasionalList={setWaktuOperasionalList}
             />
           </div>
-          <span className="text-sm -mt-4">
-            *Kosongkan waktu operasional jika tidak ingin diubah
+          <span className="text-[0.85rem] -mt-3">
+          Kosongkan waktu operasional jika tidak ingin diubah
           </span>
-
           {errors.waktuOperasional && (
             <small className="p-error -mt-3 text-sm">
               {errors.waktuOperasional}
@@ -1208,7 +1207,7 @@ const NavbarAdmin = ({ children }) => {
 
       {/* Modal ubah password */}
       <Dialog
-        header={"Ubah Password"}
+        header={"Ganti Password"}
         visible={visibleChangePassword}
         maximizable
         className="md:w-1/2 w-full "
@@ -1220,7 +1219,7 @@ const NavbarAdmin = ({ children }) => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Password Lama:
+            Password Lama
           </label>
 
           <Password
@@ -1242,7 +1241,7 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Password Baru:
+            Password Baru
           </label>
           <Password
             feedback={false}
@@ -1262,7 +1261,7 @@ const NavbarAdmin = ({ children }) => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Konfirmasi Password:
+            Konfirmasi Password
           </label>
           <Password
             feedback={false}

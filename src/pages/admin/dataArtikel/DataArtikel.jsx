@@ -817,7 +817,7 @@ const DataArtikel = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Pilih puskesmas:
+            Pilih Puskesmas
           </label>
 
           <CustomDropdown
@@ -850,7 +850,7 @@ const DataArtikel = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Judul Artikel:
+            Judul Artikel
           </label>
 
           <InputText
@@ -870,7 +870,7 @@ const DataArtikel = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            <h3>Banner Artikel:</h3>
+            <h3>Banner Artikel</h3>
           </label>
 
           <div className="flex flex-col gap-4">
@@ -912,7 +912,7 @@ const DataArtikel = () => {
           </div>
 
           <label htmlFor="" className="-mb-3">
-            Ringkasan Artikel:
+            Ringkasan Artikel
           </label>
 
           <InputTextarea
@@ -933,7 +933,7 @@ const DataArtikel = () => {
             <small className="p-error -mt-3 text-sm">{errors.ringkasan}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Konten Artikel:
+            Konten Artikel
           </label>
           <Editor
             value={datas.isi}

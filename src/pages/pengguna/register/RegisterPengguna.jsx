@@ -114,7 +114,7 @@ const RegisterPengguna = () => {
         <div className="flex flex-col w-full justify-center items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={`200`}
+            width={`190`}
             viewBox="0 0 850 890"
           >
             <g transform="translate(5, 5) scale(0.98)">
@@ -137,11 +137,11 @@ const RegisterPengguna = () => {
         </div>
         <div className="flex flex-col w-full gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama Lengkap:
+            Nama Lengkap
           </label>
           <InputText
             type="text"
-            className="p-input text-lg p-4 rounded"
+            className="p-input text-lg p-3 rounded"
             placeholder="Nama Lengkap"
             value={datas.namaLengkap}
             onChange={(e) =>
@@ -155,11 +155,11 @@ const RegisterPengguna = () => {
             </span>
           )}
           <label htmlFor="" className="-mb-3">
-            Nomor Telepon:
+            Nomor Telepon
           </label>
           <InputText
             type="text"
-            className="p-input text-lg p-4 rounded"
+            className="p-input text-lg p-3 rounded"
             placeholder="Nomor Telepon"
             value={datas.telepon}
             onChange={(e) =>
@@ -171,11 +171,11 @@ const RegisterPengguna = () => {
             <span className="text-red-500 -mt-3 text-sm">{errors.telepon}</span>
           )}
           <label htmlFor="" className="-mb-3">
-            Nomor Telepon Keluarga:
+            Nomor Telepon Keluarga
           </label>
           <InputText
             type="text"
-            className="p-input text-lg p-4 rounded"
+            className="p-input text-lg p-3 rounded"
             placeholder="Nomor Telepon Keluarga"
             value={datas.teleponKeluarga}
             onChange={(e) =>
@@ -189,11 +189,11 @@ const RegisterPengguna = () => {
             </span>
           )}
           <label htmlFor="" className="-mb-3">
-            Username:
+            Username
           </label>
           <InputText
             type="text"
-            className="p-input text-lg p-4 rounded"
+            className="p-input text-lg p-3 rounded"
             placeholder="Username"
             value={datas.username}
             onChange={(e) =>
@@ -207,7 +207,7 @@ const RegisterPengguna = () => {
             </span>
           )}
           <label htmlFor="" className="-mb-3">
-            Password:
+            Password
           </label>
           <Password
             feedback={false}
@@ -225,7 +225,7 @@ const RegisterPengguna = () => {
             </span>
           )}
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <DynamicAddress reset={resetAddress} />
           {errors.alamat && (

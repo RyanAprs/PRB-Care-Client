@@ -355,7 +355,7 @@ export default function ReusableTable({
               type="search"
               value={globalFilter}
               onChange={onGlobalFilterChange}
-              placeholder="Search..."
+              placeholder="Cari..."
               className=""
             />
           </div>

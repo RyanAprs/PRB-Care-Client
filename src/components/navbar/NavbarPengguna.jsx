@@ -638,7 +638,7 @@ const NavbarPengguna = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama Pengguna
+            Nama Lengkap
           </label>
           <InputText
             type="text"
@@ -648,7 +648,7 @@ const NavbarPengguna = () => {
             value={detailDataPengguna.namaLengkap}
           />
           <label htmlFor="" className="-mb-3">
-            Telepon:
+            Telepon
           </label>
           <InputText
             type="text"
@@ -658,7 +658,7 @@ const NavbarPengguna = () => {
             value={detailDataPengguna.telepon}
           />
           <label htmlFor="" className="-mb-3">
-            Telepon Keluarga:
+            Telepon Keluarga
           </label>
           <InputText
             type="text"
@@ -668,7 +668,7 @@ const NavbarPengguna = () => {
             value={detailDataPengguna.teleponKeluarga}
           />
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <div className="text-lg p-3 rounded bg-[#fbfbfc] dark:bg-[#282828] text-[#989da0] dark:text-[#6e6e6e] border dark:border-none min-h-14">
             <p className="text-[#989da0] dark:text-[#6e6e6e]">
@@ -697,7 +697,7 @@ const NavbarPengguna = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama Lengkap:
+            Nama Lengkap
           </label>
           <InputText
             type="text"
@@ -718,7 +718,7 @@ const NavbarPengguna = () => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Telepon:
+            Telepon
           </label>
           <InputText
             type="text"
@@ -736,7 +736,7 @@ const NavbarPengguna = () => {
             <small className="p-error -mt-3 text-sm">{errors.telepon}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Telepon Keluarga:
+            Telepon Keluarga
           </label>
           <InputText
             type="text"
@@ -756,11 +756,11 @@ const NavbarPengguna = () => {
             </small>
           )}
           <label htmlFor="" className="-mb-3">
-            Alamat:
+            Alamat
           </label>
           <DynamicAddress prevAddress={prevAddress} />
-          <span className="text-sm -mt-4">
-            *Kosongkan alamat jika tidak ingin diubah
+          <span className="text-[0.85rem] -mt-3">
+            Kosongkan alamat jika tidak ingin diubah
           </span>
           {errors.alamat && (
             <small className="p-error -mt-3 text-sm">{errors.alamat}</small>
@@ -786,7 +786,7 @@ const NavbarPengguna = () => {
 
       {/* Modal ubah password */}
       <Dialog
-        header={"Ubah Password"}
+        header={"Ganti Password"}
         visible={visibleChangePassword}
         maximizable
         className="md:w-1/2 w-full "

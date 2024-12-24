@@ -145,7 +145,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
         <div className="flex justify-center items-center flex-col w-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width={`200`}
+            width={`190`}
             viewBox="0 0 850 890"
           >
             <g transform="translate(5, 5) scale(0.98)">
@@ -170,12 +170,12 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full">
           <label htmlFor="" className="-mb-3">
-            Username:
+            Username
           </label>
           <InputText
             type="text"
             placeholder="Username"
-            className="p-input text-lg p-4 rounded"
+            className="p-input text-lg p-3 rounded"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -186,7 +186,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           )}
 
           <label htmlFor="" className="-mb-3">
-            Password:
+            Password
           </label>
           <Password
             toggleMask
@@ -205,7 +205,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
           {loginAdmin && (
             <>
               <label htmlFor="" className="-mb-3">
-                Role:
+                Role
               </label>
               <Dropdown
                 value={selectedRole}
@@ -213,7 +213,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 options={roles}
                 optionLabel="name"
                 placeholder="Pilih Role"
-                className="p-input text-lg p-2 rounded"
+                className="p-input text-lg p-1 rounded"
               />
               {errors.selectedRole && (
                 <small className="p-error text-red-500 text-sm -mt-3">

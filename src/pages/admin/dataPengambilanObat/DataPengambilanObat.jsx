@@ -619,7 +619,7 @@ const DataPengambilanObat = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Pilih Pasien:
+            Pilih Pasien
           </label>
 
           <CustomDropdown
@@ -644,7 +644,7 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Pilih Obat:
+            Pilih Obat
           </label>
 
           <CustomDropdown
@@ -667,7 +667,7 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.idObat}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Jumlah Obat:
+            Jumlah Obat
           </label>
 
           <InputNumber
@@ -688,13 +688,13 @@ const DataPengambilanObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.jumlah}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Tanggal Pengambilan Obat:
+            Tanggal Pengambilan Obat
           </label>
 
           <Calendar
             id="buttondisplay"
             className="p-input text-lg rounded"
-            placeholder="Pilih Tanggal Pengambilan"
+            placeholder="Pilih Tanggal Pengambilan Obat"
             value={selectedDate}
             onChange={handleCalendarChange}
             showIcon

@@ -367,7 +367,7 @@ const DataObat = () => {
       >
         <div className="flex flex-col p-4 gap-4">
           <label htmlFor="" className="-mb-3">
-            Nama Obat:
+            Nama Obat
           </label>
 
           <InputText
@@ -386,7 +386,7 @@ const DataObat = () => {
             <small className="p-error -mt-3 text-sm">{errors.namaObat}</small>
           )}
           <label htmlFor="" className="-mb-3">
-            Jumlah Obat:
+            Jumlah Obat
           </label>
 
           <InputNumber
