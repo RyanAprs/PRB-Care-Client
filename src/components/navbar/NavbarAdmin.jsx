@@ -33,6 +33,7 @@ import useDarkMode from "use-dark-mode";
 import { Toast } from "primereact/toast";
 import { superAdminChangePasswordSchema } from "../../validations/SuperAdminSchema";
 import { ZodError } from "zod";
+import CustomMenuItem from "../customMenuItem/CustomMenuItem";
 import {
   handleApiError,
   handleChangePasswordError,
@@ -120,7 +121,14 @@ const NavbarAdmin = ({ children }) => {
       scrollRef.current.scrollTop = 0;
     }
   }, [children]);
-
+  useEffect(() => {
+    const menuLabels = document.querySelectorAll('.ps-menu-label');
+    if (!expanded && menuLabels.length > 0) {
+      menuLabels.forEach((menuLabel) => {
+        menuLabel.style.display = 'block';
+      });
+    }
+  }, [expanded]);
   useEffect(() => {
     const formattedAddress = [
       address.detail,
@@ -537,7 +545,7 @@ const NavbarAdmin = ({ children }) => {
         >
           <Menu>
             <div
-              className={`flex flex-col  font-semibold text-lg mb-2 items-center mt-0.5 justify-center`}
+              className={`flex flex-col  font-semibold text-lg  items-center mt-0.5 justify-center`}
             >
               <>
                 <div>
@@ -546,11 +554,8 @@ const NavbarAdmin = ({ children }) => {
                     alt="LOGO PRB CARE"
                     className={`${
                       expanded ? "hidden" : "block"
-                    } w-auto px-2 max-h-24 mt-3 mb-3 `}
+                    } w-auto px-2 max-h-[80px] mt-3 mb-3 `}
                   />
-                  {/* <h1 className={`text-center ${expanded ? "mb-2" : "mb-3"}`}>
-                    {expanded ? " " : "PRBCare"}
-                  </h1> */}
                 </div>
               </>
 
@@ -558,329 +563,138 @@ const NavbarAdmin = ({ children }) => {
                 src={icon}
                 alt="LOGO PRB CARE"
                 className={`${
-                  expanded ? "block mb-5 mt-2" : "hidden"
-                } w-auto px-2 max-h-20`}
+                  expanded ? "block mb-3 mt-3" : "hidden"
+                } w-auto px-2 max-h-14`}
               />
 
-              <hr
-                className={`w-full border-b border-lightGreen ${
-                  expanded ? "hidden" : "mb-1"
-                }`}
-              />
+                <div className={`border-t-2  h-[2px] ${expanded?"mb-2":"mb-3"} border-[#40916c] ${expanded ? "w-[80%]" : "w-full"}`}>
+        
+                </div>
             </div>
           </Menu>
           {role === "admin" ? (
             <>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<LayoutGrid />}
-                component={
-                  <Link
-                    to="/admin/beranda"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/beranda"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Beranda
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Beranda"}
+                link={"/admin/beranda"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Hospital />}
-                component={
-                  <Link
-                    to="/admin/data-puskesmas"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-puskesmas"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Puskesmas
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Puskesmas"}
+                link={"/admin/data-puskesmas"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<HousePlus />}
-                component={
-                  <Link
-                    to="/admin/data-apotek"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-apotek"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Apotek
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Apotek"}
+                link={"/admin/data-apotek"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<User />}
-                component={
-                  <Link
-                    to="/admin/data-pengguna"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-pengguna"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Pengguna
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Pengguna"}
+                link={"/admin/data-pengguna"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<UserPlus />}
-                component={
-                  <Link
-                    to="/admin/data-pasien"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-pasien"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Pasien
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Pasien"}
+                link={"/admin/data-pasien"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Stethoscope />}
-                component={
-                  <Link
-                    to="/admin/data-kontrol-balik"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-kontrol-balik"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Kontrol Balik
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Kontrol Balik"}
+                link={"/admin/data-kontrol-balik"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Pill />}
-                component={
-                  <Link
-                    to="/admin/data-obat"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-obat"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Obat
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Obat"}
+                link={"/admin/data-obat"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<ShoppingCart />}
-                component={
-                  <Link
-                    to="/admin/data-pengambilan-obat"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-pengambilan-obat"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Ambil Obat
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Ambil Obat"}
+                link={"/admin/data-pengambilan-obat"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Calendar />}
-                component={
-                  <Link
-                    to="/admin/data-prolanis"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-prolanis"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Jadwal Prolanis
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Prolanis"}
+                link={"/admin/data-prolanis"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<ScrollText />}
-                component={
-                  <Link
-                    to="/admin/data-artikel"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/admin/data-artikel"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Artikel
-              </MenuItem>
+                label={"Artikel"}
+                link={"/admin/data-artikel"}
+              />
+              
             </>
           ) : role === "nakes" ? (
             <>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<LayoutGrid />}
-                component={
-                  <Link
-                    to="/puskesmas/beranda"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/beranda"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Beranda
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Beranda"}
+                link={"/puskesmas/beranda"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<UserPlus />}
-                component={
-                  <Link
-                    to="/puskesmas/data-pasien"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-pasien"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Pasien
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Pasien"}
+                link={"/puskesmas/data-pasien"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Stethoscope />}
-                component={
-                  <Link
-                    to="/puskesmas/data-kontrol-balik"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-kontrol-balik"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Kontrol Balik
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Kontrol Balik"}
+                link={"/puskesmas/data-kontrol-balik"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<ShoppingCart />}
-                component={
-                  <Link
-                    to="/puskesmas/data-pengambilan-obat"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-pengambilan-obat"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Ambil Obat
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Ambil Obat"}
+                link={"/puskesmas/data-pengambilan-obat"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Calendar />}
-                component={
-                  <Link
-                    to="/puskesmas/data-prolanis"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-prolanis"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Jadwal Prolanis
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Prolanis"}
+                link={"/puskesmas/data-prolanis"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<ScrollText />}
-                component={
-                  <Link
-                    to="/puskesmas/data-artikel"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/puskesmas/data-artikel"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Artikel
-              </MenuItem>
+                label={"Artikel"}
+                link={"/puskesmas/data-artikel"}
+              />
             </>
           ) : (
             <>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<LayoutGrid />}
-                component={
-                  <Link
-                    to="/apotek/beranda"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/apotek/beranda"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Beranda
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Beranda"}
+                link={"/apotek/beranda"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<Pill />}
-                component={
-                  <Link
-                    to="/apotek/data-obat"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/apotek/data-obat"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Obat
-              </MenuItem>
-              <MenuItem
-                className={`${expanded ? "mb-2" : "mb-3"}`}
+                label={"Obat"}
+                link={"/apotek/data-obat"}
+              />
+              <CustomMenuItem
+                expanded={expanded}
                 icon={<ShoppingCart />}
-                component={
-                  <Link
-                    to="/apotek/data-pengambilan-obat"
-                    className={`flex  hover:bg-lightGreen dark:hover:bg-mainGreen ${
-                      location.pathname === "/apotek/data-pengambilan-obat"
-                        ? "bg-mainGreen"
-                        : ""
-                    } rounded ${expanded ? "mx-2" : ""} transition-all`}
-                  ></Link>
-                }
-              >
-                Ambil Obat
-              </MenuItem>
+                label={"Ambil Obat"}
+                link={"/apotek/data-pengambilan-obat"}
+              />
             </>
           )}
         </Menu>
@@ -888,7 +702,7 @@ const NavbarAdmin = ({ children }) => {
 
       <div className="flex flex-col w-full overflow-hidden ">
         {/* Navbar */}
-        <div className="flex items-center px-6  w-full z-40 shadow-md  dark:shadow-none dark:shadow-blackHover dark:bg-blackHover dark:text-white bg-white text-black">
+        <div className="flex items-center px-6  w-full z-40 navbar-top  dark:bg-blackHover dark:text-white bg-white text-black">
           <div className="flex py-6 w-full items-center gap-4">
             <Button
               severity="secondary"
@@ -945,7 +759,7 @@ const NavbarAdmin = ({ children }) => {
                   : ""}
                 {location.pathname === "/admin/data-artikel" ? "Artikel" : ""}
                 {location.pathname === "/admin/data-prolanis"
-                  ? "Jadwal Prolanis"
+                  ? "Prolanis"
                   : ""}
               </h1>
             )}
@@ -963,7 +777,7 @@ const NavbarAdmin = ({ children }) => {
                   ? "Ambil Obat"
                   : ""}
                 {location.pathname === "/puskesmas/data-prolanis"
-                  ? "Jadwal Prolanis"
+                  ? "Prolanis"
                   : ""}
                 {location.pathname === "/puskesmas/data-artikel"
                   ? "Artikel"
@@ -1012,7 +826,7 @@ const NavbarAdmin = ({ children }) => {
               key={key}
               className={` ${
                 isMenuVisible ? "visible" : "hidden"
-              } dark:bg-blackHover shadow-md absolute top-[80px] right-0 `}
+              } dark:bg-blackHover shadow-md absolute top-[80px] right-0 navbar-top`}
               model={role === "admin" ? itemsAdmin : itemsNotAdmin}
             ></Menuk>
           </div>

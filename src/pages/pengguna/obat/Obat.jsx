@@ -4,11 +4,11 @@ import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../../../config/context/AuthContext";
 import {ProgressSpinner} from "primereact/progressspinner";
 import {getAllPengambilanObat} from "../../../services/PengambilanObatService";
-import img from "../../../assets/data_empty.png";
 import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import EmptyData from "../../../components/emptyData/EmptyData";
 
 const Obat = () => {
     const [data, setData] = useState([]);
@@ -127,16 +127,7 @@ const Obat = () => {
                             />
                         </div>
                     ) : (
-                        <div
-                            className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
-                            <img src={img} className="w-52" alt="img"/>
-                            <div>
-                                Belum Ada Data
-                                <p className="font-medium text-xl">
-                                    Data akan muncul di sini ketika tersedia.
-                                </p>
-                            </div>
-                        </div>
+                        <EmptyData/>
                     )}
                 </div>
             </div>

@@ -8,6 +8,10 @@ import { convertUnixToHuman } from "../../../utils/DateConverter";
 import { Editor } from "primereact/editor";
 import Quill from "quill";
 import { Scope } from 'parchment';
+import { BreadCrumb } from 'primereact/breadcrumb';
+import {
+  ScrollText,
+} from "lucide-react";
 const preloadQuill = () => {
   return import("quill");
 };
@@ -230,8 +234,10 @@ const DetailArtikel = () => {
   return (
     <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays min-h-screen text-[#495057] dark:text-white max-h-fit">
       <div className="min-h-screen max-h-fit bg-white dark:bg-blackHover rounded-xl p-6 md:p-10 md:px-48">
-        <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-2 gap-2">
-          <div className="md:text-6xl text-4xl  font-semibold md:mb-2">
+        <div className="flex flex-col w-full justify-content-center align-items-center flex-1 md:gap-2 gap-2 ">
+        <BreadCrumb model={[{ label: <h1 className="leading-tight">{data.judul}</h1> }]} home={{ icon:<ScrollText/>, command: (e) => {e.originalEvent.preventDefault();navigate("/artikel");}}} 
+        className="font-poppins "  />
+          <div className="md:text-6xl text-4xl font-semibold md:mb-2">
             {data.judul}
           </div>
           <div className="flex md:flex-row flex-col md:gap-2 justify-start md:items-center items-start">

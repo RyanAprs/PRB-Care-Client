@@ -31,8 +31,8 @@ const DashboardPuskesmas = () => {
         },
         {
             icon: <Calendar size={54} strokeWidth={1.2}/>,
-            title: "Jadwal Prolanis",
-            desc: "Kelola data jadwal prolanis",
+            title: "Prolanis",
+            desc: "Kelola data prolanis",
             route: "/puskesmas/data-prolanis",
         },
         {

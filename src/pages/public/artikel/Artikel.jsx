@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { DataView } from "primereact/dataview";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import img from "../../../assets/data_empty.png";
 import { Dropdown } from "primereact/dropdown";
 import { getAllArtikel } from "../../../services/ArtikelService";
 import { AuthContext } from "../../../config/context/AuthContext";
@@ -10,6 +9,8 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
 import { InputText } from "primereact/inputtext";
 import { Search } from "lucide-react";
+import EmptyData from "../../../components/emptyData/EmptyData";
+import LoginRequired from "../../../components/loginRequired/LoginRequired";
 
 const baseUrl = `${import.meta.env.VITE_API_BASE_URI}/static/`;
 
@@ -171,21 +172,7 @@ export default function Artikel() {
 
   if (!login) {
     return (
-        <div className="md:p-4 p-2 dark:bg-black bg-whiteGrays h-screen flex justify-center items-center">
-          <div className="p-8 w-full h-full flex flex-col items-center justify-center bg-white dark:bg-blackHover rounded-xl">
-            <div className="flex h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl">
-              Login Untuk Akses
-              <p className="font-medium text-xl">
-                Lakukan login terlebih dahulu untuk melihat data.
-              </p>
-              <Button
-                  label="Login"
-                  onClick={() => navigate("/pengguna/login")}
-                  className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen  md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
-              />
-            </div>
-          </div>
-        </div>
+        <LoginRequired />
     );
   }
 
@@ -202,7 +189,7 @@ export default function Artikel() {
                     <InputText
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search..."
+                        placeholder="Cari..."
                         className="p-inputtext-sm p-2"
                     />
                   </div>
@@ -230,15 +217,7 @@ export default function Artikel() {
                 />
               </div>
           ) : (
-              <div className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
-                <img src={img} className="w-52" alt="img" />
-                <div>
-                  Belum Ada Data
-                  <p className="font-medium text-xl">
-                    Data akan muncul di sini ketika tersedia.
-                  </p>
-                </div>
-              </div>
+            <EmptyData/>
           )}
         </div>
       </div>

@@ -3,12 +3,12 @@ import {HandleUnauthorizedPengguna} from "../../../utils/HandleUnauthorized";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from "../../../config/context/AuthContext";
 import {ProgressSpinner} from "primereact/progressspinner";
-import img from "../../../assets/data_empty.png";
 import {getAllPasien} from "../../../services/PasienService";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 import ReusableTable from "../../../components/reusableTable/ReusableTable.jsx";
 import ErrorConnection from "../../../components/errorConnection/ErrorConnection";
+import EmptyData from "../../../components/emptyData/EmptyData";
 
 const Medis = () => {
     const [data, setData] = useState([]);
@@ -126,16 +126,7 @@ const Medis = () => {
                             />
                         </div>
                     ) : (
-                        <div
-                            className="flex  h-screen flex-col items-center justify-center text-center font-bold gap-3 text-3xl  ">
-                            <img src={img} className="w-52" alt="img"/>
-                            <div>
-                                Belum Ada Data
-                                <p className="font-medium text-xl">
-                                    Data akan muncul di sini ketika tersedia.
-                                </p>
-                            </div>
-                        </div>
+                        <EmptyData/>
                     )}
                 </div>
             </div>

@@ -184,7 +184,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
             value: prov.id,
           }))}
           onChange={handleProvinceChange}
-          disabled={provinsiLoading}
+          loading = {provinsiLoading}
           placeholder={provinsiLoading ? "Memuat Data..." : "Pilih Provinsi"}
           filter
           className="w-full p-2 text-sm"
@@ -206,7 +206,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: reg.id,
             }))}
             onChange={handleRegencyChange}
-            disabled={kabupatenLoading}
+            loading = {kabupatenLoading}
             placeholder={kabupatenLoading ? "Memuat Data..." : "Pilih Kabupaten"}
             filter
             className="w-full p-2 text-sm "
@@ -229,7 +229,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: dist.id,
             }))}
             onChange={handleDistrictChange}
-            disabled={kecamatanLoading}
+            loading = {kecamatanLoading}
             placeholder={kecamatanLoading ? "Memuat Data..." : "Pilih Kecamatan"}
             filter
             className="w-full p-2 text-sm"
@@ -252,7 +252,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: village.id,
             }))}
             onChange={handleVillageChange}
-            disabled={desaLoading}
+            loading = {desaLoading}
             placeholder={desaLoading ? "Memuat Data..." : "Pilih Desa/Kelurahan"}
             filter
             className="w-full p-2 text-sm "

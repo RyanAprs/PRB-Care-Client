@@ -87,7 +87,7 @@ const PublicFooter = () => {
             </div>
 
             <div
-                className="mx-4 border-t-[1px] flex flex-col  gap-4  border-[#495057] dark:border-white mt-12 pt-1 pb-[68px] md:pb-0 text-center text-sm">
+                className="mx-4 border-t-[1px] flex flex-col  gap-4  border-[#aeb0b5] dark:border-white  mt-12 pt-1 pb-[68px] md:pb-0 text-center text-sm">
                 <h1 className="flex gap-1 items-center justify-center">
                     &copy; {new Date().getFullYear()} PRBCare. All rights reserved.
                 </h1>

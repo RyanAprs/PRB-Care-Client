@@ -363,3 +363,31 @@ body .logo-prbcare {
 .rfm-marquee{
   min-width: 100%;
 }
+.ps-menu-icon{
+  margin: 0 !important;
+}
+
+.ps-menu-label {
+  display: none;
+  flex-grow: 0 !important;
+}
+
+.ps-menuitem-root{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body .bottom-navbar{
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+}
+body.dark .bottom-navbar{
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.5);
+}
+
+body .navbar-top{
+  box-shadow: 0 4px 6px rgba(0, 4, 0, 0.1);
+}
+body.dark .navbar-top{
+  box-shadow: 0 4px 6px rgba(0, 4, 0, 0.5);
+}

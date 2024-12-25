@@ -374,7 +374,16 @@ const NavbarPengguna = () => {
   return (
     <>
       <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
-      <header className="font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
+      <header className=" font-poppins top-0 left-0 right-0 z-50 flex justify-between  items-center py-4 md:py-6 px-5 md:px-10 transition-colors ">
+        <div className="flex items-center justify-center font-poppins text-2xl gap-1">
+          <svg
+            width={`50`}
+            viewBox="0 0 850 890"
+          >
+          </svg>
+        </div>
+      </header>
+      <header className="fixed navbar-top font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
         <Toast
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
@@ -519,13 +528,12 @@ const NavbarPengguna = () => {
           key={key}
           className={` ${
             isMenuVisible ? "visible" : "hidden"
-          } absolute  right-0 `}
+          } fixed  right-0 navbar-top `}
           model={items}
         />
       </div>
       <div
-        className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white shadow-lg p-3 px-4"
-        style={{ boxShadow: "0 -4px 6px rgba(0, 0, 0, 0.05)" }}
+        className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white bottom-navbar p-3 px-4"
       >
         <div className="flex  justify-between items-center ">
           <Link
