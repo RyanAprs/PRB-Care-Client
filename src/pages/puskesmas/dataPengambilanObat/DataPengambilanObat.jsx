@@ -179,7 +179,9 @@ const DataPengambilanObat = () => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleCreatePengambilanObatError(error, toast);
+            } else {
         setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);
@@ -231,12 +233,10 @@ const DataPengambilanObat = () => {
     try {
       setButtonLoading(true);
       pengambilanObatUpdateSchema.parse(datas);
-
       const updatedData = {
         ...datas,
         tanggalPengambilan: convertHumanToUnix(selectedDate),
       };
-
       const response = await updatePengambilanObat(currentId, updatedData);
 
       if (response.status === 200) {
@@ -246,7 +246,6 @@ const DataPengambilanObat = () => {
           detail: "Data pengembalian obat diperbarui",
           life: 3000,
         });
-
         setVisible(false);
         setButtonLoading(false);
         try {
@@ -282,7 +281,9 @@ const DataPengambilanObat = () => {
           newErrors[e.path[0]] = e.message;
         });
         setErrors(newErrors);
-      } else {
+      }else if (error.response && error.response.status === 409) {
+        handleCreatePengambilanObatError(error, toast);
+            } else {
         setVisible(false);
         HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
         handleCreatePengambilanObatError(error, toast);

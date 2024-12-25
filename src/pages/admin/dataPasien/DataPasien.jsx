@@ -336,6 +336,7 @@ const DataPasien = () => {
       handleDeleteError(error, toast, title);
     } finally {
       setButtonLoading(false);
+      setVisibleDelete(false);
     }
   };
 
