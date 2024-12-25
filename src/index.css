@@ -382,12 +382,12 @@ body .bottom-navbar{
   box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
 }
 body.dark .bottom-navbar{
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.3);
 }
 
 body .navbar-top{
   box-shadow: 0 4px 6px rgba(0, 4, 0, 0.1);
 }
 body.dark .navbar-top{
-  box-shadow: 0 4px 6px rgba(0, 4, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 4, 0, 0.3);
 }

@@ -61,7 +61,13 @@ const DataApotek = () => {
     };
 
     useEffect(() => {
-        fetchData();
+        const cookies = document.cookie; 
+        const hasToken = cookies.split('; ').some(cookie => cookie.startsWith('token='));
+        if (hasToken) {
+            fetchData();
+        }else{
+            setLoading(false);
+        }
     }, [token, navigate, dispatch]);
     const handleDownload = () => {
         const doc = new jsPDF();

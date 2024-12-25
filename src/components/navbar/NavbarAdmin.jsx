@@ -304,53 +304,35 @@ const NavbarAdmin = ({ children }) => {
   const { setIsUpdated } = useModalUpdate();
 
   const handleUpdateProfileModal = async () => {
-    setBeforeModalLoading(true);
     setVisibleDetailProfile(false);
     setErrors({});
     if (role === "nakes") {
       setIsApotekUpdate(false);
-      try {
-        const dataResponse = await getCurrentAdminPuskesmas();
-        setPrevAddress(dataResponse.alamat);
-        setPrevWaktuOperasional(dataResponse.waktuOperasional);
-        if (dataResponse) {
-          setDataPuskesmas({
-            namaPuskesmas: dataResponse.namaPuskesmas,
-            alamat: dataResponse.alamat,
-            telepon: dataResponse.telepon,
-            waktuOperasional: dataResponse.waktuOperasional,
-          });
-        }
-        setVisibleUpdateProfile(true);
-      } catch (error) {
-        HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-        handleApiError(error, toast);
-      }
+      setPrevAddress(detailDataPuskesmas.alamat);
+      setPrevWaktuOperasional(detailDataPuskesmas.waktuOperasional);
+      setDataPuskesmas({
+        namaPuskesmas: detailDataPuskesmas.namaPuskesmas,
+        alamat: detailDataPuskesmas.alamat,
+        telepon: detailDataPuskesmas.telepon,
+        waktuOperasional: detailDataPuskesmas.waktuOperasional,
+      });
+      setVisibleUpdateProfile(true);
     }
 
     if (role === "apoteker") {
       setIsApotekUpdate(true);
-      try {
-        const dataResponse = await getCurrentAdminApotek();
-        setPrevWaktuOperasional(dataResponse.waktuOperasional);
-        setPrevAddress(dataResponse.alamat);
-
-        if (dataResponse) {
-          setDataApotek({
-            namaApotek: dataResponse.namaApotek,
-            alamat: dataResponse.alamat,
-            telepon: dataResponse.telepon,
-            waktuOperasional: dataResponse.waktuOperasional,
-          });
-        }
-        setVisibleUpdateProfile(true);
-      } catch (error) {
-        HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
-        handleApiError(error, toast);
-      }
+      setPrevWaktuOperasional(detailDataApotek.waktuOperasional);
+      setPrevAddress(detailDataApotek.alamat);
+      setDataApotek({
+        namaApotek: detailDataApotek.namaApotek,
+        alamat: detailDataApotek.alamat,
+        telepon: detailDataApotek.telepon,
+        waktuOperasional: detailDataApotek.waktuOperasional,
+      });
+      setVisibleUpdateProfile(true);
     }
-    setBeforeModalLoading(false);
   };
+  
   const [showToast, setShowToast] = useState(false);
   const toastLogin = useRef(null);
   useEffect(() => {

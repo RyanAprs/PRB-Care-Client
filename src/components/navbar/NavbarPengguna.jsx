@@ -251,27 +251,16 @@ const NavbarPengguna = () => {
   };
 
   const handleUpdateProfileModal = async () => {
-    setBeforeModalLoading(true);
     setErrors({});
     setVisibleDetailProfile(false);
-    try {
-      const dataResponse = await getCurrentPengguna();
-      setPrevAddress(dataResponse.alamat);
-      if (dataResponse) {
-        setDataPengguna({
-          namaLengkap: dataResponse.namaLengkap,
-          alamat: dataResponse.alamat,
-          telepon: dataResponse.telepon,
-          teleponKeluarga: dataResponse.teleponKeluarga,
-        });
-      }
-      setVisibleUpdateProfile(true);
-    } catch (error) {
-      HandleUnauthorizedPengguna(error.response, dispatch, navigate);
-      handleApiError(error, toast);
-    } finally {
-      setBeforeModalLoading(false);
-    }
+    setPrevAddress(detailDataPengguna.alamat);
+    setDataPengguna({
+      namaLengkap: detailDataPengguna.namaLengkap,
+      alamat: detailDataPengguna.alamat,
+      telepon: detailDataPengguna.telepon,
+      teleponKeluarga: detailDataPengguna.teleponKeluarga,
+    });
+    setVisibleUpdateProfile(true);
   };
 
   const handleUpdateProfile = async () => {
