@@ -1,6 +1,5 @@
 import {MoonStar , Sun} from 'lucide-react';
 import useDarkMode from 'use-dark-mode';
-import {Ripple} from 'primereact/ripple';
 import {Button} from 'primereact/button';
 export const ThemeSwitcher = ({className = ''}) => {
     const darkMode = useDarkMode(false, {classNameDark: "dark"});

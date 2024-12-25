@@ -118,6 +118,7 @@ const DataKontrolBalik = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -132,30 +133,16 @@ const DataKontrolBalik = () => {
       keluhan: "",
       tanggalKontrol: 0,
     });
-    setVisible(true);
-    setIsEditMode(false);
     try {
       const response = await getAllPasienAktif();
       setPasien(response);
-      setLoading(false);
+      setVisible(true);
+      setIsEditMode(false);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -228,15 +215,8 @@ const DataKontrolBalik = () => {
     try {
       const response = await getAllPasienAktif();
       setPasien(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
-    }
-    try {
-      const dataResponse = await getKontrolBalikById(data.id);
 
+      const dataResponse = await getKontrolBalikById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
           dataResponse.tanggalKontrol

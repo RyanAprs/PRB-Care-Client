@@ -100,6 +100,7 @@ const DataJadwalProlanis = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setSelectedWaktuMulai(null);
     setSelectedWaktuSelesai(null);
@@ -109,30 +110,16 @@ const DataJadwalProlanis = () => {
       waktuMulai: 0,
       waktuSelesai: 0,
     });
-    setVisible(true);
-    setIsEditMode(false);
     try {
       const responsePuskesmas = await getAllPuskesmas();
       setAdminPuskesmas(responsePuskesmas);
-      setLoading(false);
+      setIsEditMode(false);
+      setVisible(true);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -196,15 +183,8 @@ const DataJadwalProlanis = () => {
     try {
       const response = await getAllPuskesmas();
       setAdminPuskesmas(response);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
-    }
-    try {
-      const dataResponse = await getJadwalProlanisById(data.id);
 
+      const dataResponse = await getJadwalProlanisById(data.id);
       if (dataResponse) {
         const convertDate = {
           waktuMulai: convertUnixToHumanForEditData(dataResponse.waktuMulai),
@@ -462,7 +442,7 @@ const DataJadwalProlanis = () => {
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
         />
-        <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
+        
         <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
           <ProgressSpinner />
         </div>
@@ -479,6 +459,7 @@ const DataJadwalProlanis = () => {
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
           columns={columns}

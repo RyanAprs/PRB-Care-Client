@@ -93,37 +93,23 @@ const DataObat = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setDatas({
       namaObat: "",
       jumlah: 0,
       idAdminApotek: 0,
     });
-    setVisible(true);
-    setIsEditMode(false);
-
     try {
       const responseApotek = await getAllApotek();
       setDataAdminApotek(responseApotek);
-      setLoading(false);
+      setIsEditMode(false);
+      setVisible(true);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -187,12 +173,6 @@ const DataObat = () => {
     try {
       const responseApotek = await getAllApotek();
       setDataAdminApotek(responseApotek);
-      setLoading(false);
-    } catch (error) {
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
-    }
-    try {
       const dataResponse = await getObatById(data.id);
       if (dataResponse) {
         setDatas({
@@ -201,8 +181,8 @@ const DataObat = () => {
           idAdminApotek: dataResponse.idAdminApotek,
         });
         setCurrentId(data.id);
-        setVisible(true);
         setIsEditMode(true);
+        setVisible(true);
       }
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);

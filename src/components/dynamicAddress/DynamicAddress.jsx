@@ -13,11 +13,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   const [currentWidth, setCurrentWidth] = useState();
   const ref = useRef();
   const { address, setAddress } = useContext(AddressContext);
-  
-  const [provinsiLoading, setProvinsiLoading] = useState(false);
-  const [kabupatenLoading, setKabupatenLoading] = useState(false);
-  const [kecamatanLoading, setKecamatanLoading] = useState(false);
-  const [desaLoading, setDesaLoading] = useState(false);
+
+  const [optLoading, setOptLoading] = useState(false);
 
   useEffect(() => {
     if (reset) {
@@ -33,9 +30,9 @@ const DynamicAddress = ({ reset, prevAddress }) => {
     }
   }, [reset, prevAddress, setAddress]);
 
-  const fetchProvincesWithRetry = async (url) => {
-    let retries = true; 
-    let result = null;  
+  const fetchWithRetry = async (url) => {
+    let retries = true;
+    let result = null;
     while (retries) {
       try {
         const response = await fetch(url);
@@ -44,60 +41,45 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         }
         const data = await response.json();
         result = data;
-        retries = false; 
+        retries = false;
       } catch (error) {
         console.error("Error fetching data, retrying...", error);
-        await new Promise((resolve) => setTimeout(resolve, 2000)); 
+        await new Promise((resolve) => setTimeout(resolve, 3000));
       }
     }
-    return result; 
+    return result;
   };
 
   useEffect(() => {
     const fetchProvinces = async () => {
-      setProvinsiLoading(true); 
-      const data = await fetchProvincesWithRetry(`${ADDRESS_URI}/provinces.json`); 
-      setProvinces(data);
-      setProvinsiLoading(false); 
+        setOptLoading(true);
+        const data = await fetchWithRetry(`${ADDRESS_URI}/provinces.json`);
+        setProvinces(data);
+        setOptLoading(false);
     };
     fetchProvinces();
   }, []);
 
-  useEffect(() => {
-    const fetchRegencies = async () => {
-      if (address.provinsiId) {
-        setKabupatenLoading(true); 
-        const data = await fetchProvincesWithRetry(`${ADDRESS_URI}/regencies/${address.provinsiId}.json`);
-        setRegencies(data);
-        setKabupatenLoading(false);
-      }
-    };
-    fetchRegencies();
-  }, [address.provinsiId]);
-  
-  useEffect(() => {
-    const fetchDistricts = async () => {
-      if (address.kabupatenId) {
-        setKecamatanLoading(true);
-        const data = await fetchProvincesWithRetry(`${ADDRESS_URI}/districts/${address.kabupatenId}.json`);
-        setDistricts(data);
-        setKecamatanLoading(false);
-      }
-    };
-    fetchDistricts();
-  }, [address.kabupatenId]);
-  
-  useEffect(() => {
-    const fetchVillages = async () => {
-      if (address.kecamatanId) {
-        setDesaLoading(true);
-        const data = await fetchProvincesWithRetry(`${ADDRESS_URI}/villages/${address.kecamatanId}.json`);
-        setVillages(data);
-        setDesaLoading(false);
-      }
-    };
-    fetchVillages();
-  }, [address.kecamatanId]);
+  const fetchRegencies = async (provinsiId) => {
+      setOptLoading(true);
+      const data = await fetchWithRetry(`${ADDRESS_URI}/regencies/${provinsiId}.json`);
+      setRegencies(data);
+      setOptLoading(false);
+  };
+
+  const fetchDistricts = async (kabupatenId) => {
+      setOptLoading(true);
+      const data = await fetchWithRetry(`${ADDRESS_URI}/districts/${kabupatenId}.json`);
+      setDistricts(data);
+      setOptLoading(false);
+  };
+
+  const fetchVillages = async (kecamatanId) => {
+    setOptLoading(true);
+    const data = await fetchWithRetry(`${ADDRESS_URI}/villages/${kecamatanId}.json`);
+    setVillages(data);
+    setOptLoading(false);
+  };
 
   const handleProvinceChange = (e) => {
     const provinsiId = e.value;
@@ -106,18 +88,19 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       setAddress((prev) => ({
         ...prev,
         provinsi: province.name,
-        provinsiId: provinsiId,
-        kabupaten: "",   
-        kabupatenId: null, 
-        kecamatan: "",   
-        kecamatanId: null, 
-        desa: "",       
-        desaId: null,   
-        detail: "",  
+        provinsiId,
+        kabupaten: "",
+        kabupatenId: null,
+        kecamatan: "",
+        kecamatanId: null,
+        desa: "",
+        desaId: null,
+        detail: "",
       }));
+      fetchRegencies(provinsiId);
     }
   };
-  
+
   const handleRegencyChange = (e) => {
     const kabupatenId = e.value;
     const regency = regencies.find((reg) => reg.id === kabupatenId);
@@ -125,16 +108,17 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       setAddress((prev) => ({
         ...prev,
         kabupaten: regency.name,
-        kabupatenId: kabupatenId,
-        kecamatan: "",   
-        kecamatanId: null, 
-        desa: "",        
-        desaId: null,    
-        detail: "",  
+        kabupatenId,
+        kecamatan: "",
+        kecamatanId: null,
+        desa: "",
+        desaId: null,
+        detail: "",
       }));
+      fetchDistricts(kabupatenId); 
     }
   };
-  
+
   const handleDistrictChange = (e) => {
     const kecamatanId = e.value;
     const district = districts.find((dist) => dist.id === kecamatanId);
@@ -142,14 +126,15 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       setAddress((prev) => ({
         ...prev,
         kecamatan: district.name,
-        kecamatanId: kecamatanId,
-        desa: "",        
-        desaId: null,   
-        detail: "",   
+        kecamatanId,
+        desa: "",
+        desaId: null,
+        detail: "",
       }));
+      fetchVillages(kecamatanId); 
     }
   };
-  
+
   const handleVillageChange = (e) => {
     const desaId = e.value;
     const village = villages.find((village) => village.id === desaId);
@@ -157,11 +142,11 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       setAddress((prev) => ({
         ...prev,
         desa: village.name,
-        desaId: desaId,
+        desaId,
       }));
     }
   };
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setAddress((prev) => ({
@@ -169,7 +154,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       [name]: value,
     }));
   };
-  
+
   useEffect(() => {
     const element = ref.current.getElement();
     setCurrentWidth(element.clientWidth);
@@ -184,8 +169,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
             value: prov.id,
           }))}
           onChange={handleProvinceChange}
-          loading = {provinsiLoading}
-          placeholder={provinsiLoading ? "Memuat Data..." : "Pilih Provinsi"}
+          loading = {optLoading}
+          placeholder={optLoading ? "Memuat Data..." : "Pilih Provinsi"}
           filter
           className="w-full p-2 text-sm"
           required
@@ -206,8 +191,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: reg.id,
             }))}
             onChange={handleRegencyChange}
-            loading = {kabupatenLoading}
-            placeholder={kabupatenLoading ? "Memuat Data..." : "Pilih Kabupaten"}
+            loading = {optLoading}
+            placeholder={optLoading ? "Memuat Data..." : "Pilih Kabupaten"}
             filter
             className="w-full p-2 text-sm "
             required
@@ -229,8 +214,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: dist.id,
             }))}
             onChange={handleDistrictChange}
-            loading = {kecamatanLoading}
-            placeholder={kecamatanLoading ? "Memuat Data..." : "Pilih Kecamatan"}
+            loading = {optLoading}
+            placeholder={optLoading ? "Memuat Data..." : "Pilih Kecamatan"}
             filter
             className="w-full p-2 text-sm"
             required
@@ -252,8 +237,8 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               value: village.id,
             }))}
             onChange={handleVillageChange}
-            loading = {desaLoading}
-            placeholder={desaLoading ? "Memuat Data..." : "Pilih Desa/Kelurahan"}
+            loading = {optLoading}
+            placeholder={optLoading ? "Memuat Data..." : "Pilih Desa/Kelurahan"}
             filter
             className="w-full p-2 text-sm "
             required

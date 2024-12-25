@@ -117,10 +117,10 @@ const NavbarAdmin = ({ children }) => {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    if (scrollRef.current) {
+    if (scrollRef.current ) {
       scrollRef.current.scrollTop = 0;
     }
-  }, [children]);
+  }, [location]);
   useEffect(() => {
     const menuLabels = document.querySelectorAll('.ps-menu-label');
     if (!expanded && menuLabels.length > 0) {
@@ -545,7 +545,7 @@ const NavbarAdmin = ({ children }) => {
                 src={icon}
                 alt="LOGO PRB CARE"
                 className={`${
-                  expanded ? "block mb-3 mt-3" : "hidden"
+                  expanded ? "block mb-2 mt-2" : "hidden"
                 } w-auto px-2 max-h-14`}
               />
 

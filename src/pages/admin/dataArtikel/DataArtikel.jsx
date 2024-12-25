@@ -247,6 +247,7 @@ const DataArtikel = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setCroppedImage(null);
     setSelectedImage(null);
@@ -262,30 +263,16 @@ const DataArtikel = () => {
       banner: "",
     });
     editorContentRef.current = "";
-    setVisible(true);
-    setIsEditMode(false);
     try {
       const responsePuskesmas = await getAllPuskesmas();
       setAdminPuskesmas(responsePuskesmas);
-      setLoading(false);
+      setIsEditMode(false);
+      setVisible(true);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -365,30 +352,9 @@ const DataArtikel = () => {
       cropperRef.current.destroy();
       cropperRef.current = null;
     }
-
     try {
       const responsePuskesmas = await getAllPuskesmas();
       setAdminPuskesmas(responsePuskesmas);
-      setLoading(false);
-    } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-      setLoading(false);
-    }
-    try {
       const dataResponse = await getArtikelById(data.id);
       if (dataResponse.isi) {
         const parser = new DOMParser();
@@ -403,7 +369,6 @@ const DataArtikel = () => {
 
         dataResponse.isi = doc.body.innerHTML;
       }
-
       if (dataResponse) {
         setDatas({
           idAdminPuskesmas: dataResponse.adminPuskesmas.id,

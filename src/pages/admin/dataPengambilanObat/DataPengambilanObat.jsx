@@ -113,7 +113,7 @@ const DataPengambilanObat = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
-    setIsEditMode(false);
+    setBeforeModalLoading(true);
     setSelectedDate(null);
     setErrors({});
     setDatas({
@@ -122,31 +122,18 @@ const DataPengambilanObat = () => {
       jumlah: 0,
       tanggalPengambilan: 0,
     });
-    setVisible(true);
     try {
       const responseObat = await getAllObat();
       setObat(responseObat);
       const responsePasien = await getAllPasienAktif();
       setPasien(responsePasien);
-      setLoading(false);
+      setIsEditMode(false);
+      setVisible(true);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
-      setLoading(false);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -223,13 +210,6 @@ const DataPengambilanObat = () => {
       setObat(responseObat);
       const responsePasien = await getAllPasienAktif();
       setPasien(responsePasien);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setLoading(false);
-      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
-    }
-    try {
       const dataResponse = await getPengambilanObatById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
