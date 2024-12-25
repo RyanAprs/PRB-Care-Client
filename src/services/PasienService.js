@@ -32,6 +32,7 @@ export const getAllPasien = async () => {
 };
 
 export const getAllPasienAktif = async () => {
+    try {
     const response = await axios.get(
         `${API_BASE_URI}/api/pasien?status=aktif`,
         getRequestHeaders()
@@ -41,6 +42,10 @@ export const getAllPasienAktif = async () => {
         tanggalDaftar: convertUnixToHuman(item.tanggalDaftar),
     }));
     return formatedData;
+} catch (error) {
+    console.error("API call error:", error);
+    throw error;
+}
 };
 
 export const getPasienById = async (id) => {

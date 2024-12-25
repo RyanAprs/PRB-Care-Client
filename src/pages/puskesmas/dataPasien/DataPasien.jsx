@@ -106,6 +106,7 @@ const DataPasien = () => {
   }, [token, navigate, dispatch]);
 
   const handleModalCreate = async () => {
+    setBeforeModalLoading(true);
     setErrors({});
     setSelectedDate(null);
     setDatas({
@@ -113,30 +114,16 @@ const DataPasien = () => {
       idPengguna: 0,
       tanggalDaftar: 0,
     });
-    setVisible(true);
-    setIsEditMode(false);
     try {
       const responsePengguna = await getAllPengguna();
       setPengguna(responsePengguna);
-      setLoading(false);
+      setIsEditMode(false);
+      setVisible(true);
     } catch (error) {
-      if (
-        error.code === "ERR_NETWORK" ||
-        error.code === "ETIMEDOUT" ||
-        error.code === "ECONNABORTED" ||
-        error.code === "ENOTFOUND" ||
-        error.code === "ECONNREFUSED" ||
-        error.code === "EAI_AGAIN" ||
-        error.code === "EHOSTUNREACH" ||
-        error.code === "ECONNRESET" ||
-        error.code === "EPIPE"
-      ) {
-        setisConnectionError(true);
-        setVisible(false);
-      }
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      setLoading(false);
+      handleApiError(error, toast);
     }
+    setBeforeModalLoading(false);
   };
 
   const handleCreate = async () => {
@@ -209,13 +196,6 @@ const DataPasien = () => {
     try {
       const responsePengguna = await getAllPengguna();
       setPengguna(responsePengguna);
-
-      setLoading(false);
-    } catch (error) {
-      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
-      setLoading(false);
-    }
-    try {
       const dataResponse = await getPasienById(data.id);
       if (dataResponse) {
         const convertDate = convertUnixToHumanForEditData(
@@ -237,6 +217,7 @@ const DataPasien = () => {
     }
     setBeforeModalLoading(false);
   };
+  
   const handleUpdate = async () => {
     try {
       setButtonLoading(true);

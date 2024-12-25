@@ -407,7 +407,6 @@ const DataJadwalProlanis = () => {
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
         />
-        <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
         <div className="bg-white min-h-screen dark:bg-blackHover p-4 rounded-xl flex items-center justify-center">
           <ProgressSpinner />
         </div>
@@ -424,6 +423,7 @@ const DataJadwalProlanis = () => {
         ref={toast}
         position={window.innerWidth <= 767 ? "top-center" : "top-right"}
       />
+      <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
       <div className="bg-white min-h-screen dark:bg-blackHover rounded-xl">
         <ReusableTable
           columns={columns}

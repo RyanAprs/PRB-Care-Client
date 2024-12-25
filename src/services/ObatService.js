@@ -15,6 +15,7 @@ const getRequestHeaders = () => {
 };
 
 export const getAllObat = async () => {
+    try{
     const response = await axios.get(
         `${API_BASE_URI}/api/obat`,
         getRequestHeaders()
@@ -24,6 +25,10 @@ export const getAllObat = async () => {
     }
 
     return response.data.data;
+} catch (error) {
+    console.error("API call error:", error);
+    throw error;
+}
 };
 
 export const getObatById = async (id) => {
