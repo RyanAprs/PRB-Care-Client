@@ -37,6 +37,9 @@ export const getAllPasienAktif = async () => {
         `${API_BASE_URI}/api/pasien?status=aktif`,
         getRequestHeaders()
     );
+    if (!response.data || !response.data.data) {
+        return [];
+    }
     const formatedData = response.data.data.map((item) => ({
         ...item,
         tanggalDaftar: convertUnixToHuman(item.tanggalDaftar),

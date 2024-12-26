@@ -57,6 +57,7 @@ const DataKontrolBalik = () => {
     keluhan: "",
     tanggalKontrol: 0,
   });
+  const [selesaiEditMode, setSelesaiEditMode] = useState(false);
   const [pasien, setPasien] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
@@ -85,6 +86,11 @@ const DataKontrolBalik = () => {
 
     return 0;
   };
+  const [dataPasien, setDataPasien] = useState({
+    noRekamMedis: "",
+    namaLengkap: "",
+    telepon: "",
+  });
 
   const fetchData = async () => {
     try {
@@ -133,10 +139,12 @@ const DataKontrolBalik = () => {
       keluhan: "",
       tanggalKontrol: 0,
     });
+    
     try {
       const response = await getAllPasienAktif();
       setPasien(response);
       setIsEditMode(false);
+      setSelesaiEditMode(false);
       setVisible(true);
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
@@ -235,11 +243,55 @@ const DataKontrolBalik = () => {
         });
         setCurrentId(data.id);
         setIsEditMode(true);
+        setSelesaiEditMode(false);
         setVisible(true);
       }
     } catch (error) {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleKontrolBalikError(error, toast);
+    }
+    setBeforeModalLoading(false);
+  };
+
+  const handleModalSelesaiUpdate = async (data) => {
+    setBeforeModalLoading(true);
+    setErrors({});
+    try {
+      const dataResponse = await getKontrolBalikById(data.id);
+      if (dataResponse) {
+        const convertDate = convertUnixToHumanForEditData(
+          dataResponse.tanggalKontrol
+        );
+        setSelectedDate(convertDate);
+        setDatas({
+          idPasien: dataResponse.idPasien,
+          tanggalKontrol: dataResponse.tanggalKontrol,
+          tinggiBadan: dataResponse.tinggiBadan,
+          beratBadan: dataResponse.beratBadan,
+          tekananDarah: dataResponse.tekananDarah,
+          denyutNadi: dataResponse.denyutNadi,
+          hasilLab: dataResponse.hasilLab,
+          hasilEkg: dataResponse.hasilEkg,
+          hasilDiagnosa: dataResponse.hasilDiagnosa,
+          keluhan: dataResponse.keluhan,
+        });
+
+        setDataPasien(
+          {
+            noRekamMedis: dataResponse.pasien.noRekamMedis,
+            namaLengkap: dataResponse.pasien.pengguna.namaLengkap,
+            telepon: dataResponse.pasien.pengguna.telepon,
+          }
+        );
+
+        setCurrentId(data.id);
+        setSelesaiEditMode(true);
+        setIsEditMode(true);
+        setVisible(true);
+      }
+    } catch (error) {
+      HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
+      handleApiError(error, toast);
     }
     setBeforeModalLoading(false);
   };
@@ -562,6 +614,7 @@ const DataKontrolBalik = () => {
           onDelete={handleModalDelete}
           onDone={handleModalDone}
           onCancelled={handleModalCancelled}
+          onEditKontrolSelesai={handleModalSelesaiUpdate}
           statuses={statuses}
           role="admin"
           path={"kontrol"}
@@ -583,6 +636,20 @@ const DataKontrolBalik = () => {
         blockScroll={true}
       >
         <div className="flex flex-col p-4 gap-4">
+        {selesaiEditMode ? (
+              <>
+                <label htmlFor="" className="-mb-3">
+            Nama Pasien
+          </label>
+          <InputText
+                type="text"
+                disabled
+                className="p-input text-lg p-3  rounded"
+                value={`${dataPasien.namaLengkap} - ${dataPasien.noRekamMedis}`}
+              />
+              </>
+            ) : (
+          <>
           <label htmlFor="" className="-mb-3">
             Pilih Pasien
           </label>
@@ -603,7 +670,7 @@ const DataKontrolBalik = () => {
                 idPasien: selectedPasien.id,
               }));
             }}
-          />
+          /></>)}
 
           {errors.idPasien && (
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>

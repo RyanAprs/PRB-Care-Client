@@ -29,6 +29,7 @@ export default function ReusableTable({
   role,
   path,
   onDownload,
+  onEditKontrolSelesai,
   showDownload = true,
 }) {
   const [globalFilter, setGlobalFilter] = useState("");
@@ -99,7 +100,7 @@ export default function ReusableTable({
             size="sm"
             className="p-2  md:text-lg text-sm rounded-xl"
             severity="warning"
-            onClick={() => onEdit(rowData)}
+            onClick={() => onEditKontrolSelesai(rowData)}
           >
             <Edit style={{ color: "var(--surface-0) !important" }} />
           </Button>

@@ -30,7 +30,10 @@ import {
   handleDoneError,
   handleKontrolBalikError,
 } from "../../../utils/ApiErrorHandlers";
-import { getAllPasienAktif } from "../../../services/PasienService";
+import { getAllPasienAktif} from "../../../services/PasienService";
+import {
+  getPenggunaById,
+} from "../../../services/PenggunaService";
 import { useNavigate } from "react-router-dom";
 import { HandleUnauthorizedAdminSuper } from "../../../utils/HandleUnauthorized";
 import { AuthContext } from "../../../config/context/AuthContext";
@@ -58,6 +61,13 @@ const DataKontrolBalik = () => {
     keluhan: "",
     tanggalKontrol: 0,
   });
+  const [dataPasien, setDataPasien] = useState({
+    noRekamMedis: "",
+    namaLengkap: "",
+    telepon: "",
+    namaPuskesmas: "",
+    teleponPuskesmas: "",
+  });
   const [pasien, setPasien] = useState([]);
   const [visible, setVisible] = useState(false);
   const [visibleDelete, setVisibleDelete] = useState(false);
@@ -74,6 +84,7 @@ const DataKontrolBalik = () => {
   const navigate = useNavigate();
   const [isConnectionError, setisConnectionError] = useState(false);
   const [isButtonLoading, setButtonLoading] = useState(null);
+  const [selesaiEditMode, setSelesaiEditMode] = useState(false);
 
   const customSort = (a, b) => {
     const statusOrder = ["menunggu", "selesai", "batal"];
@@ -136,8 +147,9 @@ const DataKontrolBalik = () => {
     try {
       const response = await getAllPasienAktif();
       setPasien(response);
-      setVisible(true);
       setIsEditMode(false);
+      setSelesaiEditMode(false);
+      setVisible(true);
     } catch (error) {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleApiError(error, toast);
@@ -235,6 +247,7 @@ const DataKontrolBalik = () => {
           keluhan: dataResponse.keluhan,
         });
         setCurrentId(data.id);
+        setSelesaiEditMode(false);
         setIsEditMode(true);
         setVisible(true);
       }
@@ -244,6 +257,54 @@ const DataKontrolBalik = () => {
     }
     setBeforeModalLoading(false);
   };
+
+  const handleModalSelesaiUpdate = async (data) => {
+    setBeforeModalLoading(true);
+    setErrors({});
+    try {
+      
+
+      const dataResponse = await getKontrolBalikById(data.id);
+      if (dataResponse) {
+        const convertDate = convertUnixToHumanForEditData(
+          dataResponse.tanggalKontrol
+        );
+        setSelectedDate(convertDate);
+        setDatas({
+          idPasien: dataResponse.idPasien,
+          tanggalKontrol: dataResponse.tanggalKontrol,
+          tinggiBadan: dataResponse.tinggiBadan,
+          beratBadan: dataResponse.beratBadan,
+          tekananDarah: dataResponse.tekananDarah,
+          denyutNadi: dataResponse.denyutNadi,
+          hasilLab: dataResponse.hasilLab,
+          hasilEkg: dataResponse.hasilEkg,
+          hasilDiagnosa: dataResponse.hasilDiagnosa,
+          keluhan: dataResponse.keluhan,
+        });
+
+        setDataPasien(
+          {
+            noRekamMedis: dataResponse.pasien.noRekamMedis,
+            namaLengkap: dataResponse.pasien.pengguna.namaLengkap,
+            telepon: dataResponse.pasien.pengguna.telepon,
+            namaPuskesmas: dataResponse.pasien.adminPuskesmas.namaPuskesmas,
+            teleponPuskesmas: dataResponse.pasien.adminPuskesmas.telepon,
+          }
+        );
+
+        setCurrentId(data.id);
+        setSelesaiEditMode(true);
+        setIsEditMode(true);
+        setVisible(true);
+      }
+    } catch (error) {
+      HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
+      handleApiError(error, toast);
+    }
+    setBeforeModalLoading(false);
+  };
+
 
   const handleUpdate = async () => {
     try {
@@ -569,6 +630,7 @@ const DataKontrolBalik = () => {
           onDelete={handleModalDelete}
           onDone={handleModalDone}
           onCancelled={handleModalCancelled}
+          onEditKontrolSelesai={handleModalSelesaiUpdate}
           statuses={statuses}
           role="admin"
           onDownload={handleDownload}
@@ -589,7 +651,21 @@ const DataKontrolBalik = () => {
         }}
       >
         <div className="flex flex-col p-4 gap-4">
-          <label htmlFor="" className="-mb-3">
+          {
+            selesaiEditMode ? (
+              <>
+                <label htmlFor="" className="-mb-3">
+            Nama Pasien
+          </label>
+          <InputText
+                type="text"
+                disabled
+                className="p-input text-lg p-3  rounded"
+                value={`${dataPasien.namaLengkap} - ${dataPasien.noRekamMedis}, ${dataPasien.namaPuskesmas} - ${dataPasien.teleponPuskesmas}`}
+              />
+              </>
+            ):
+            <><label htmlFor="" className="-mb-3">
             Pilih Pasien
           </label>
 
@@ -610,7 +686,9 @@ const DataKontrolBalik = () => {
               }));
             }}
             blockScroll={true}
-          />
+          /></>
+            
+          }
 
           {errors.idPasien && (
             <small className="p-error -mt-3 text-sm">{errors.idPasien}</small>
