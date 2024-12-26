@@ -2,6 +2,10 @@ import { useState, useEffect, useContext, useRef } from "react";
 import { AddressContext } from "../../config/context/AdressContext";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
+import {
+  RotateCcw
+} from "lucide-react";
+import { Button } from "primereact/button";
 
 const ADDRESS_URI = import.meta.env.VITE_ADDRESS_API_URI;
 
@@ -13,8 +17,19 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   const [currentWidth, setCurrentWidth] = useState();
   const ref = useRef();
   const { address, setAddress } = useContext(AddressContext);
+  const [desaUnlocked, setDesaUnlocked] = useState(false);
 
-  const [optLoading, setOptLoading] = useState(false);
+  const [provLoading, setProvLoading] = useState(false);
+  const [regLoading, setRegLoading] = useState(false);
+  const [distLoading, setDistLoading] = useState(false);
+  const [villLoading, setVillLoading] = useState(false);
+
+  const [provErr, setProvErr] = useState(false);
+  const [regErr, setRegErr] = useState(false);
+  const [distErr, setDistErr] = useState(false);
+  const [villErr, setVillErr] = useState(false);
+
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   useEffect(() => {
     if (reset) {
@@ -30,55 +45,55 @@ const DynamicAddress = ({ reset, prevAddress }) => {
     }
   }, [reset, prevAddress, setAddress]);
 
-  const fetchWithRetry = async (url) => {
-    let retries = true;
-    let result = null;
-    while (retries) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        result = data;
-        retries = false;
-      } catch (error) {
-        console.error("Error fetching data, retrying...", error);
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+  const fetchWithResult = async (url,setErrState) => {
+    setButtonLoading(true);
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+      const result = await response.json();
+      setErrState(false);
+      return result;
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      setErrState(true);
+      return [];
+    }finally{
+      setButtonLoading(false);
     }
-    return result;
   };
-
-  useEffect(() => {
-    const fetchProvinces = async () => {
-        setOptLoading(true);
-        const data = await fetchWithRetry(`${ADDRESS_URI}/provinces.json`);
+  const fetchProvinces = async () => {
+        setProvLoading(true);
+        const data = await fetchWithResult(`${ADDRESS_URI}/provinces.json`,setProvErr);
         setProvinces(data);
-        setOptLoading(false);
+        setProvLoading(false);
     };
+  useEffect(() => {
+    
     fetchProvinces();
   }, []);
 
   const fetchRegencies = async (provinsiId) => {
-      setOptLoading(true);
-      const data = await fetchWithRetry(`${ADDRESS_URI}/regencies/${provinsiId}.json`);
+      setRegLoading(true);
+      const data = await fetchWithResult(`${ADDRESS_URI}/regencies/${provinsiId}.json`,setRegErr);
       setRegencies(data);
-      setOptLoading(false);
+      setRegLoading(false);
   };
 
   const fetchDistricts = async (kabupatenId) => {
-      setOptLoading(true);
-      const data = await fetchWithRetry(`${ADDRESS_URI}/districts/${kabupatenId}.json`);
+      setDistLoading(true);
+      const data = await fetchWithResult(`${ADDRESS_URI}/districts/${kabupatenId}.json`, setDistErr);
       setDistricts(data);
-      setOptLoading(false);
+      setDistLoading(false);
   };
 
   const fetchVillages = async (kecamatanId) => {
-    setOptLoading(true);
-    const data = await fetchWithRetry(`${ADDRESS_URI}/villages/${kecamatanId}.json`);
+    setVillLoading(true);
+    const data = await fetchWithResult(`${ADDRESS_URI}/villages/${kecamatanId}.json` ,setVillErr);
     setVillages(data);
-    setOptLoading(false);
+    setDesaUnlocked(true);
+    setVillLoading(false);
   };
 
   const handleProvinceChange = (e) => {
@@ -95,7 +110,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         kecamatanId: null,
         desa: "",
         desaId: null,
-        detail: "",
+        
       }));
       fetchRegencies(provinsiId);
     }
@@ -113,7 +128,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         kecamatanId: null,
         desa: "",
         desaId: null,
-        detail: "",
+        
       }));
       fetchDistricts(kabupatenId); 
     }
@@ -129,7 +144,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
         kecamatanId,
         desa: "",
         desaId: null,
-        detail: "",
+        
       }));
       fetchVillages(kecamatanId); 
     }
@@ -162,97 +177,138 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
       <div className="h-auto w-full flex flex-col gap-4 items-center justify-center">
-        <Dropdown
-          value={address.provinsiId || ""}
-          options={provinces.map((prov) => ({
-            label: prov.name,
-            value: prov.id,
-          }))}
-          onChange={handleProvinceChange}
-          loading = {optLoading}
-          placeholder={optLoading ? "Memuat Data..." : "Pilih Provinsi"}
-          filter
-          className="w-full p-2 text-sm"
-          required
-          ref={ref}
-          pt={{
-            panel: {
-              style: {
-                ...(currentWidth ? { width: currentWidth } : {}),
-              },
-            },
-          }}
-        />
-        {address.provinsiId && (
-          <Dropdown
-            value={address.kabupatenId || ""}
-            options={regencies.map((reg) => ({
-              label: reg.name,
-              value: reg.id,
-            }))}
-            onChange={handleRegencyChange}
-            loading = {optLoading}
-            placeholder={optLoading ? "Memuat Data..." : "Pilih Kabupaten"}
-            filter
-            className="w-full p-2 text-sm "
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
+        <div className="p-inputgroup">
+            <Dropdown
+              value={address.provinsiId || ""}
+              options={provinces.map((prov) => ({
+                label: prov.name,
+                value: prov.id,
+              }))}
+              onChange={handleProvinceChange}
+              loading = {provLoading}
+              placeholder={provLoading 
+                ? "Memuat Data..." 
+                : regErr 
+                    ? "Gagal Memuat Data" 
+                    : "Pilih Kabupaten"}
+              disabled = {provErr}
+              filter
+              className="w-full p-2 text-sm"
+              required
+              ref={ref}
+              pt={{
+                panel: {
+                  style: {
+                    ...(currentWidth ? { width: currentWidth } : {}),
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+            <Button onClick={fetchProvinces} disabled={buttonLoading} icon={<RotateCcw/>} className={`${provErr?"":"hidden"} w-16 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`} />
+        </div>
+        
+        
+        
+        {address.provinsiId && (
+          <div className="p-inputgroup">
+            <Dropdown
+              value={address.kabupatenId || ""}
+              options={regencies.map((reg) => ({
+                label: reg.name,
+                value: reg.id,
+              }))}
+              onChange={handleRegencyChange}
+              loading = {regLoading}
+              placeholder={regLoading 
+                ? "Memuat Data..." 
+                : regErr 
+                    ? "Gagal Memuat Data" 
+                    : "Pilih Kabupaten"}
+              disabled = {regErr}
+              filter
+              className="w-full p-2 text-sm"
+              required
+              ref={ref}
+              pt={{
+                panel: {
+                  style: {
+                    ...(currentWidth ? { width: currentWidth } : {}),
+                  },
+                },
+              }}
+            />
+            <Button onClick={
+              () => fetchRegencies(address.provinsiId)
+            } disabled={buttonLoading}  icon={<RotateCcw/>} className={`${regErr?"":"hidden"} w-16 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`} />
+        </div>
         )}
         {address.kabupatenId && (
-          <Dropdown
-            value={address.kecamatanId || ""}
-            options={districts.map((dist) => ({
-              label: dist.name,
-              value: dist.id,
-            }))}
-            onChange={handleDistrictChange}
-            loading = {optLoading}
-            placeholder={optLoading ? "Memuat Data..." : "Pilih Kecamatan"}
-            filter
-            className="w-full p-2 text-sm"
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
+          <div className="p-inputgroup">
+            <Dropdown
+              value={address.kecamatanId || ""}
+              options={districts.map((dist) => ({
+                label: dist.name,
+                value: dist.id,
+              }))}
+              onChange={handleDistrictChange}
+              loading = {distLoading}
+              placeholder={distLoading 
+                ? "Memuat Data..." 
+                : distErr 
+                    ? "Gagal Memuat Data" 
+                    : "Pilih Kecamatan"}
+              disabled = {distErr}
+              filter
+              className="w-full p-2 text-sm"
+              required
+              ref={ref}
+              pt={{
+                panel: {
+                  style: {
+                    ...(currentWidth ? { width: currentWidth } : {}),
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+            <Button onClick={
+              () => fetchDistricts(address.kabupatenId)
+            } disabled={buttonLoading} icon={<RotateCcw/>} className={`${distErr?"":"hidden"} w-16 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`} />
+        </div>
         )}
         {address.kecamatanId && (
-          <Dropdown
-            value={address.desaId || ""}
-            options={villages.map((village) => ({
-              label: village.name,
-              value: village.id,
-            }))}
-            onChange={handleVillageChange}
-            loading = {optLoading}
-            placeholder={optLoading ? "Memuat Data..." : "Pilih Desa/Kelurahan"}
-            filter
-            className="w-full p-2 text-sm "
-            required
-            ref={ref}
-            pt={{
-              panel: {
-                style: {
-                  ...(currentWidth ? { width: currentWidth } : {}),
+          <div className="p-inputgroup">
+            <Dropdown
+              value={address.desaId || ""}
+              options={villages.map((vill) => ({
+                label: vill.name,
+                value: vill.id,
+              }))}
+              onChange={handleVillageChange}
+              loading = {villLoading}
+              placeholder={villLoading 
+                ? "Memuat Data..." 
+                : villErr 
+                    ? "Gagal Memuat Data" 
+                    : "Pilih Desa"}
+              disabled = {villErr}
+              filter
+              className="w-full p-2 text-sm"
+              required
+              ref={ref}
+              pt={{
+                panel: {
+                  style: {
+                    ...(currentWidth ? { width: currentWidth } : {}),
+                  },
                 },
-              },
-            }}
-          />
+              }}
+            />
+            <Button onClick={
+              () => fetchVillages(address.kecamatanId)
+            } disabled={buttonLoading}  icon={<RotateCcw/>} className={`${villErr?"":"hidden"} w-16 bg-mainGreen text-white dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen`} />
+        </div>
         )}
-        {address.desaId && (
+        {desaUnlocked && (
                 <InputText
                   type="text"
                   value={address.detail || ""}
