@@ -340,6 +340,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };
@@ -393,6 +394,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleCancelled(false);
       setButtonLoading(false);
     }
   };

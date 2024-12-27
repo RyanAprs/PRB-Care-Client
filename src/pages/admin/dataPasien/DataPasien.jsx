@@ -335,8 +335,8 @@ const DataPasien = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
-      setButtonLoading(false);
       setVisibleDelete(false);
+      setButtonLoading(false);
     }
   };
 
@@ -389,6 +389,7 @@ const DataPasien = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleDone(false);
       setButtonLoading(false);
     }
   };

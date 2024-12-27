@@ -305,6 +305,7 @@ const DataJadwalProlanis = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleApiError(error, toast);
     } finally {
+      setVisibleDelete(false);
       setIsButtonLoading(false);
     }
   };
@@ -357,6 +358,7 @@ const DataJadwalProlanis = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleApiError(error, toast);
     } finally {
+      setVisibleDone(false);
       setIsButtonLoading(false);
     }
   };

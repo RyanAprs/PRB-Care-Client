@@ -296,6 +296,7 @@ const DataObat = () => {
       handleDeleteError(error, toast, title);
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };

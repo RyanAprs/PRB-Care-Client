@@ -346,6 +346,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };
@@ -399,6 +400,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleDone(false);
       setButtonLoading(false);
     }
   };
@@ -451,6 +453,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleCancelled(false);
       setButtonLoading(false);
     }
   };

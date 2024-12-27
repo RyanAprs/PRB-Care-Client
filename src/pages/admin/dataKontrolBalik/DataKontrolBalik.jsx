@@ -415,6 +415,7 @@ const DataKontrolBalik = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };
@@ -469,6 +470,7 @@ const DataKontrolBalik = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleDone(false);
       setButtonLoading(false);
     }
   };
@@ -523,6 +525,7 @@ const DataKontrolBalik = () => {
       HandleUnauthorizedAdminSuper(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleCancelled(false);
       setButtonLoading(false);
     }
   };
@@ -555,9 +558,10 @@ const DataKontrolBalik = () => {
   };
 
   const columns = [
-    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
-    { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Tanggal Kontrol", field: "tanggalKontrol" },
+    { header: "Nama Pasien", field: "pasien.pengguna.namaLengkap" },
+    { header: "No Rekam Medis", field: "pasien.noRekamMedis" },
+    { header: "Nama Puskesmas", field: "pasien.adminPuskesmas.namaPuskesmas" },
     { header: "Keluhan", field: "keluhan" },
     { header: "Berat Badan", field: "beratBadan" },
     { header: "Tinggi Badan", field: "tinggiBadan" },

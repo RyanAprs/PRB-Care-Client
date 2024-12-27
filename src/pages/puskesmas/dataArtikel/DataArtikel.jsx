@@ -494,6 +494,7 @@ const DataArtikel = () => {
       HandleUnauthorizedAdminPuskesmas(error.response, dispatch, navigate);
       handleDeleteError(error, toast, title);
     } finally {
+      setVisibleDelete(false);
       setButtonLoading(false);
     }
   };

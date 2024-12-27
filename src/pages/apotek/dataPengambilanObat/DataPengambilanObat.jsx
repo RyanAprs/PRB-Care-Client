@@ -122,6 +122,7 @@ const DataPengambilanObat = () => {
       HandleUnauthorizedAdminApotek(error.response, dispatch, navigate);
       handleDoneError(error, toast);
     } finally {
+      setVisibleDone(false);
       setButtonLoading(false);
     }
   };
