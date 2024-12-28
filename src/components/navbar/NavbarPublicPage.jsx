@@ -17,11 +17,11 @@ const NavbarPublicPage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/pengguna/login");
+    navigate("/login");
   };
   return (
     <>
-      <header className=" font-poppins top-0 left-0 right-0 z-50 flex justify-between  items-center py-4 md:py-6 px-5 md:px-10 transition-colors ">
+      <header className=" font-poppins top-0 left-0 right-0 z-50 flex justify-between  items-center py-4 cstm:py-6 px-5 cstm:px-10 transition-colors ">
         <div className="flex items-center justify-center font-poppins text-2xl gap-1">
           <svg
             width={`50`}
@@ -31,7 +31,7 @@ const NavbarPublicPage = () => {
         </div>
       </header>
 
-      <header className="fixed navbar-top font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
+      <header className="fixed navbar-top font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 cstm:py-6 px-5 cstm:px-10 transition-colors duration-300 ">
         <Toast
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
@@ -63,7 +63,7 @@ const NavbarPublicPage = () => {
         </div>
 
         <div className="flex gap-10 items-center text-xl ">
-          <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
+          <div className="cstm:flex gap-10 items-center text-xl hidden text-black dark:text-white">
             <Link
               to={"/"}
               className="mx-auto transition-all flex flex-col items-center justify-center"
@@ -135,7 +135,7 @@ const NavbarPublicPage = () => {
               </h1>
             </Link>
           </div>
-          <div className="relative flex gap-2 md:gap-2 items-center justify-center">
+          <div className="relative flex gap-2 cstm:gap-2 items-center justify-center">
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2">
@@ -154,9 +154,9 @@ const NavbarPublicPage = () => {
       </header>
                   
       <div
-        className="bottom-navbar fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white p-3 px-4 "
+        className="bottom-navbar fixed z-50 cstm:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white p-3 px-4 "
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center md:px-32">
           <Link
             to={"/"}
             className={`flex flex-col items-center justify-center transition-all  ${

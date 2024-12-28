@@ -80,7 +80,7 @@ const RegisterPengguna = () => {
       if (response.status === 201) {
         localStorage.setItem("isRegistered", "true");
         setLoading(false);
-        navigate("/pengguna/login");
+        navigate("/login");
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -299,7 +299,7 @@ const RegisterPengguna = () => {
             <div className="flex w-full gap-1 items-center justify-center">
               Sudah punya akun?
               <Link
-                to="/pengguna/login"
+                to="/login"
                 className="text-mainGreen font-semibold"
               >
                 masuk

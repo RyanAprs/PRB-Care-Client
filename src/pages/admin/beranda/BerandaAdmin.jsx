@@ -107,7 +107,7 @@ const DashboardAdmin = () => {
             />
             <Card
               key={index}
-              className="min-w-10  flex flex-col items-center justify-center cursor-pointer "
+              className="min-w-10 h-full flex flex-col items-center justify-center cursor-pointer "
               style={{ fontFamily: "Poppins" }}
             >
               <div className="flex flex-col items-center justify-center h-full">

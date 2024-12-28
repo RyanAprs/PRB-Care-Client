@@ -149,7 +149,7 @@ const NavbarPengguna = () => {
   }, [notifications]);
 
   useEffect(() => {
-    if (location.pathname === "/pengguna/notifikasi") {
+    if (location.pathname === "/notifikasi") {
       markAllAsRead();
     } else {
       getNotificationsFromDB();
@@ -182,7 +182,7 @@ const NavbarPengguna = () => {
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
-    navigate("/pengguna/beranda");
+    navigate("/beranda");
   };
 
   const handleModalChangePassword = () => {
@@ -363,7 +363,7 @@ const NavbarPengguna = () => {
   return (
     <>
       <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
-      <header className=" font-poppins top-0 left-0 right-0 z-50 flex justify-between  items-center py-4 md:py-6 px-5 md:px-10 transition-colors ">
+      <header className=" font-poppins top-0 left-0 right-0 z-50 flex justify-between  items-center py-4 cstm:py-6 px-5 cstm:px-10 transition-colors ">
         <div className="flex items-center justify-center font-poppins text-2xl gap-1">
           <svg
             width={`50`}
@@ -372,7 +372,7 @@ const NavbarPengguna = () => {
           </svg>
         </div>
       </header>
-      <header className="fixed navbar-top font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 md:py-6 px-5 md:px-10 transition-colors duration-300 ">
+      <header className="fixed navbar-top font-poppins top-0 left-0 right-0 z-50 flex justify-between bg-white dark:bg-blackHover text-white items-center py-4 cstm:py-6 px-5 cstm:px-10 transition-colors duration-300 ">
         <Toast
           ref={toast}
           position={window.innerWidth <= 767 ? "top-center" : "top-right"}
@@ -407,14 +407,14 @@ const NavbarPengguna = () => {
         </Link>
 
         <div className="flex gap-10 items-center text-xl ">
-          <div className="md:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
+          <div className="cstm:flex gap-10 items-center text-xl  hidden text-black dark:text-white">
             <Link
-              to={"/pengguna/beranda"}
+              to={"/beranda"}
               className="mx-auto transition-all flex flex-col items-center justify-center"
             >
               <h1
                 className={
-                  location.pathname === "/pengguna/beranda"
+                  location.pathname === "/beranda"
                     ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
@@ -423,12 +423,12 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/pengguna/medis"
+              to="/medis"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
                 className={
-                  location.pathname === "/pengguna/medis"
+                  location.pathname === "/medis"
                     ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
@@ -437,12 +437,12 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/pengguna/kontrol"
+              to="/kontrol"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
                 className={
-                  location.pathname === "/pengguna/kontrol"
+                  location.pathname === "/kontrol"
                     ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
@@ -451,12 +451,12 @@ const NavbarPengguna = () => {
               </h1>
             </Link>
             <Link
-              to="/pengguna/obat"
+              to="/obat"
               className=" transition-all flex flex-col items-center justify-center"
             >
               <h1
                 className={
-                  location.pathname === "/pengguna/obat"
+                  location.pathname === "/obat"
                     ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
@@ -466,12 +466,12 @@ const NavbarPengguna = () => {
             </Link>
 
             <Link
-              to="/pengguna/notifikasi"
+              to="/notifikasi"
               className="transition-all flex flex-col items-center justify-center relative"
             >
               <h1
                 className={
-                  location.pathname === "/pengguna/notifikasi"
+                  location.pathname === "/notifikasi"
                     ? "dark:text-lightGreen text-mainGreen"
                     : ""
                 }
@@ -485,7 +485,7 @@ const NavbarPengguna = () => {
               )}
             </Link>
           </div>
-          <div className="relative flex gap-2 md:gap-2 items-center justify-center">
+          <div className="relative flex gap-2 cstm:gap-2 items-center justify-center">
             <ThemeSwitcher />
             <div className="flex items-center gap-2">
               <Button
@@ -522,13 +522,13 @@ const NavbarPengguna = () => {
         />
       </div>
       <div
-        className="fixed z-50 md:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white bottom-navbar p-3 px-4"
+        className="fixed z-50 cstm:hidden -bottom-1 left-0 right-0 dark:bg-blackHover bg-white dark:text-white bottom-navbar p-3 px-4"
       >
-        <div className="flex  justify-between items-center ">
+        <div className="flex  justify-between items-center md:px-32">
           <Link
-            to={"/pengguna/beranda"}
+            to={"/beranda"}
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/pengguna/beranda"
+              location.pathname === "/beranda"
                 ? "opacity-100"
                 : "opacity-50"
             }`}
@@ -538,9 +538,9 @@ const NavbarPengguna = () => {
             <div className="text-sm">Beranda</div>
           </Link>
           <Link
-            to="/pengguna/medis"
+            to="/medis"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/pengguna/medis"
+              location.pathname === "/medis"
                 ? "opacity-100"
                 : "opacity-50"
             }`}
@@ -549,9 +549,9 @@ const NavbarPengguna = () => {
             <div className="text-sm">Medis</div>
           </Link>
           <Link
-            to="/pengguna/kontrol"
+            to="/kontrol"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/pengguna/kontrol"
+              location.pathname === "/kontrol"
                 ? "opacity-100"
                 : "opacity-50"
             }`}
@@ -560,9 +560,9 @@ const NavbarPengguna = () => {
             <div className="text-sm">Kontrol</div>
           </Link>
           <Link
-            to="/pengguna/obat"
+            to="/obat"
             className={`flex flex-col items-center justify-center transition-all  ${
-              location.pathname === "/pengguna/obat"
+              location.pathname === "/obat"
                 ? "opacity-100"
                 : "opacity-50"
             }`}
@@ -572,9 +572,9 @@ const NavbarPengguna = () => {
           </Link>
 
           <Link
-            to="/pengguna/notifikasi"
+            to="/notifikasi"
             className={`flex flex-col items-center justify-center transition-all relative ${
-              location.pathname === "/pengguna/notifikasi"
+              location.pathname === "/notifikasi"
                 ? "opacity-100"
                 : "opacity-50"
             }`}
@@ -594,7 +594,7 @@ const NavbarPengguna = () => {
       <Dialog
         header="Logout"
         visible={visibleLogout}
-        className="md:w-1/2 w-full "
+        className="cstm:w-1/2 w-full "
         onHide={() => {
           if (!visibleLogout) return;
           setVisibleLogout(false);
@@ -626,7 +626,7 @@ const NavbarPengguna = () => {
         header={"Profile Pengguna"}
         visible={visibleDetailProfile}
         maximizable
-        className="md:w-1/2 w-full"
+        className="cstm:w-1/2 w-full"
         onHide={() => {
           if (!visibleDetailProfile) return;
           setVisibleDetailProfile(false);
@@ -685,7 +685,7 @@ const NavbarPengguna = () => {
         header="Edit Profile "
         visible={visibleUpdateProfile}
         maximizable
-        className="md:w-1/2 w-full"
+        className="cstm:w-1/2 w-full"
         onHide={() => {
           if (!visibleUpdateProfile) return;
           setVisibleUpdateProfile(false);
@@ -786,7 +786,7 @@ const NavbarPengguna = () => {
         header={"Ganti Password"}
         visible={visibleChangePassword}
         maximizable
-        className="md:w-1/2 w-full "
+        className="cstm:w-1/2 w-full "
         onHide={() => {
           if (!visibleChangePassword) return;
           setVisibleChangePassword(false);

@@ -62,6 +62,7 @@ import WaktuOperasional from "../waktuOperasional/WaktuOperasional";
 import ModalLoading from "/src/components/modalLoading/ModalLoading.jsx";
 import img from "/src/assets/sun-tornado.svg";
 import { Password } from "primereact/password";
+import { set } from "lodash";
 
 const NavbarAdmin = ({ children }) => {
   const [beforeModalLoading, setBeforeModalLoading] = useState(false);
@@ -153,9 +154,7 @@ const NavbarAdmin = ({ children }) => {
     }
   }, [address, isApotekUpdate]);
 
-  const handleSidebarToggle = () => {
-    setToggle(!toggle);
-  };
+ 
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
@@ -490,7 +489,24 @@ const NavbarAdmin = ({ children }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
+  const [togel, setTogel] = useState(false);
+  useEffect(() => {
+    const checkViewportWidth = () => {
+      if (document.documentElement.clientWidth <= 768) {
+        setExpanded(false);
+      } else {
+        setTogel(false);
+      }
+    };
+    checkViewportWidth();
+    window.addEventListener('resize', checkViewportWidth);
+    return () => {
+      window.removeEventListener('resize', checkViewportWidth);
+    };
+  }, []);
+  const handleSidebarToggle = () => {
+    setTogel(!togel);
+  };
   return (
     <div className="flex h-screen w-full">
       <ModalLoading className={beforeModalLoading ? `` : `hidden`} />
@@ -507,7 +523,7 @@ const NavbarAdmin = ({ children }) => {
         backgroundColor={``}
         collapsed={toggle ? false : expanded}
         breakPoint={"md"}
-        toggled={toggle}
+        toggled={togel}
         onBackdropClick={handleSidebarToggle}
         image={`${img}`}
       >
@@ -689,10 +705,10 @@ const NavbarAdmin = ({ children }) => {
             <Button
               severity="secondary"
               onClick={() => {
-                setToggle(!toggle);
+                setTogel(!togel);
               }}
               text
-              className="p-1 rounded-full cursor-pointer md:hidden"
+              className="p-1 rounded-full cursor-pointer mdm:hidden"
               label={
                 <AlignJustify
                   strokeWidth={1.5}
@@ -707,7 +723,7 @@ const NavbarAdmin = ({ children }) => {
                 setExpanded(!expanded);
               }}
               text
-              className="p-1 rounded-full cursor-pointer hidden md:block"
+              className="p-1 rounded-full cursor-pointer hidden mdm:block"
               label={
                 expanded ? (
                   <ArrowRight

@@ -22,7 +22,7 @@ const PrivateRoute = ({children, role}) => {
     }
 
     if (userRole !== role) {
-        return <Navigate to="/page/not-found"/>;
+        return <><NoNavbar/><NotFound/></>;
     }
 
     return children;
@@ -88,7 +88,6 @@ const ApotekRoute = () => {
                     </PrivateRoute>
                 }
             />
-            <Route path="/page/not-found" element={<><NoNavbar/><NotFound/></>}/>
             <Route path="*" element={<><NoNavbar/><NotFound/></>}/>
         </Routes>
     );

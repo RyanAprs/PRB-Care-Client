@@ -37,7 +37,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const loginUser = location.pathname === "/pengguna/login";
+  const loginUser = location.pathname === "/login";
   const loginAdmin = location.pathname === "/admin/login";
 
   const navigateAdmin = "/admin/beranda";
@@ -276,7 +276,7 @@ const LoginForm = ({ title, API_URI, navigateUser, role }) => {
                 <div className="flex w-full gap-1 items-center justify-center">
                   Belum punya akun?
                   <Link
-                    to="/pengguna/register"
+                    to="/register"
                     className="text-mainGreen font-semibold"
                   >
                     daftar

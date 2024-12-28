@@ -21,7 +21,7 @@ const PrivateRoute = ({ children, role }) => {
   }
 
   if (userRole !== role) {
-    return <Navigate to="/page/not-found" />;
+    return <><NoNavbar/><NotFound/></>;
   }
 
   return children;
@@ -115,15 +115,6 @@ const PuskesmasRoute = () => {
               <Footer />
             </NavbarAdmin>
           </PrivateRoute>
-        }
-      />
-      <Route
-        path="/page/not-found"
-        element={
-          <>
-            <NoNavbar />
-            <NotFound />
-          </>
         }
       />
       <Route

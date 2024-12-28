@@ -63,18 +63,21 @@ const DynamicAddress = ({ reset, prevAddress }) => {
       setButtonLoading(false);
     }
   };
+
   const fetchProvinces = async () => {
-        setProvLoading(true);
-        const data = await fetchWithResult(`${ADDRESS_URI}/provinces.json`,setProvErr);
-        setProvinces(data);
-        setProvLoading(false);
-    };
+      setProvErr(false);
+      setProvLoading(true);
+      const data = await fetchWithResult(`${ADDRESS_URI}/provinces.json`,setProvErr);
+      setProvinces(data);
+      setProvLoading(false);
+  };
+
   useEffect(() => {
-    
     fetchProvinces();
   }, []);
 
   const fetchRegencies = async (provinsiId) => {
+      setRegErr(false);
       setRegLoading(true);
       const data = await fetchWithResult(`${ADDRESS_URI}/regencies/${provinsiId}.json`,setRegErr);
       setRegencies(data);
@@ -82,6 +85,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   };
 
   const fetchDistricts = async (kabupatenId) => {
+      setDistErr(false);
       setDistLoading(true);
       const data = await fetchWithResult(`${ADDRESS_URI}/districts/${kabupatenId}.json`, setDistErr);
       setDistricts(data);
@@ -89,6 +93,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
   };
 
   const fetchVillages = async (kecamatanId) => {
+    setVillErr(false);
     setVillLoading(true);
     const data = await fetchWithResult(`${ADDRESS_URI}/villages/${kecamatanId}.json` ,setVillErr);
     setVillages(data);
@@ -188,7 +193,7 @@ const DynamicAddress = ({ reset, prevAddress }) => {
               loading = {provLoading}
               placeholder={provLoading 
                 ? "Memuat Data..." 
-                : regErr 
+                : provErr 
                     ? "Gagal Memuat Data" 
                     : "Pilih Kabupaten"}
               disabled = {provErr}

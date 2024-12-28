@@ -13,7 +13,7 @@ const LoginRequired = () => {
                     </p>
                     <Button
                         label="Login"
-                        onClick={() => navigate("/pengguna/login")}
+                        onClick={() => navigate("/login")}
                         className="bg-mainGreen py-2 dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                     />
                 </div>

@@ -33,7 +33,7 @@ const LoginPengguna = () => {
             />
             <LoginForm
                 API_URI={API_URI}
-                navigateUser="/pengguna/beranda"
+                navigateUser="/beranda"
                 role="pengguna"
                 title="Pengguna"
             />

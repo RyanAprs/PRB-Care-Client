@@ -17,8 +17,10 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        "cstm": "950px",
       },
     },
+    
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -95,6 +97,10 @@ module.exports = {
       },
       fontWeight: {
         medium: 500,
+      },
+      screens: {
+        "cstm": "950px",
+        "mdm": "769px",
       },
     },
   },

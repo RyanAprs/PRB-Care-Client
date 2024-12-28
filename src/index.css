@@ -18,8 +18,11 @@ body,
 .p-datatable,
 .p-dialog {
   font-family: "Poppins", sans-serif !important;
+  word-break: break-word;
 }
-
+header{
+  word-break: normal;
+}
 #p-datatable {
   background-color: red;
 }

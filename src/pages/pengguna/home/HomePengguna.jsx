@@ -153,12 +153,12 @@ const HomePengguna = () => {
                 kami.
               </p>
             </div>
-            <div className="text-xl md:text-start flex md:flex-row flex-col justify-start items-center gap-4 w-full">
+            <div className="text-xl md:text-start flex cstm:flex-row flex-col justify-start items-center gap-4 w-full">
               {permission === "granted" && installPromptEvent === null ? (
-                <div className="flex md:flex-row flex-col gap-2 md:w-auto w-full">
+                <div className="flex cstm:flex-row flex-col gap-2 cstm:w-auto w-full">
                   <Link
                     to="/data-puskesmas"
-                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                   >
                     <div className="flex gap-2 justify-center items-center text-lg">
                       Cari Puskesmas
@@ -167,7 +167,7 @@ const HomePengguna = () => {
                   </Link>
                   <Link
                     to="/data-apotek"
-                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                   >
                     <div className="flex gap-2 justify-center items-center text-lg">
                       Cari Apotek
@@ -176,7 +176,7 @@ const HomePengguna = () => {
                   </Link>
                   <Link
                     to="/prolanis"
-                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                   >
                     <div className="flex gap-2 justify-center items-center text-lg ">
                       Jadwal Prolanis
@@ -185,7 +185,7 @@ const HomePengguna = () => {
                   </Link>
                   <Link
                     to="/artikel"
-                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
+                    className="p-ripple bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl"
                   >
                     <div className="flex gap-2 justify-center items-center text-lg ">
                       Artikel Kesehatan
@@ -204,7 +204,7 @@ const HomePengguna = () => {
                     }
                     className={`${
                       permission === "granted" ? "hidden" : ""
-                    } bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                    } bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                     label={
                       <div className="flex gap-2 justify-center items-center text-lg">
                         Aktifkan Notifikasi
@@ -217,7 +217,7 @@ const HomePengguna = () => {
                       permission !== "granted" || installPromptEvent === null
                         ? "hidden"
                         : ""
-                    } bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full md:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
+                    } bg-mainGreen dark:bg-extraLightGreen dark:text-black hover:bg-mainDarkGreen dark:hover:bg-lightGreen w-full cstm:w-auto flex items-center justify-center gap-2 transition-all text-white p-4 rounded-xl`}
                     label={
                       <div className="flex gap-2 justify-center items-center text-lg">
                         Install PRBCare
